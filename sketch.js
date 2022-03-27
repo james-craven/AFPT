@@ -1,5 +1,3 @@
-
-
 var runtime;                     // Run Slider
 var runnum;                      // Run time in seconds
 var runmintxt;                   // Textbox for run
@@ -70,6 +68,7 @@ var selectValue;
 
 function createSliders() {
   pushSel = createSelect();
+  pushSel.parent('sketch-holder');
   pushSel.position(10, 195);
   pushSel.option('Pushups');
   pushSel.option('Hand-Release');
@@ -78,6 +77,7 @@ function createSliders() {
   pushSel.changed(selectChange);
 
   sitSel = createSelect();
+  sitSel.parent('sketch-holder');
   sitSel.position(10, 295);
   sitSel.option('Situps');
   sitSel.option('Plank');
@@ -87,6 +87,7 @@ function createSliders() {
   sitSel.changed(selectChange);
   
   runSel = createSelect();
+  runSel.parent('sketch-holder');
   runSel.position(10, 395);
   runSel.option('1.5 Mile');
   runSel.option('Shuttle');
@@ -96,27 +97,34 @@ function createSliders() {
   
   runnum=new Time(0,0);
   pushups =createSlider(0, pushmax, 0, 1)
+  pushups.parent('sketch-holder');
   pushups.position(170,208); 
   pushups.size(175,15);
   hrpush = createSlider(0, hrmax, 0, 1)
+  hrpush.parent('sketch-holder');
   hrpush.position(170,208);
   hrpush.size(175,15);
   hrpush.hide();
   situps =createSlider(0, sitmax, 0, 1)
+  situps.parent('sketch-holder');
   situps.position(170,305);
   situps.size(175,15);
   rsitups = createSlider(0, rsitmax, 0, 1)
+  rsitups.parent('sketch-holder');
   rsitups.position(170,305);
   rsitups.size(175,15);
   rsitups.hide();
   planks = createSlider(0, plankmax, 0, 1)
+  planks.parent('sketch-holder');
   planks.position(170, 305);
   planks.size(135,15);
   planks.hide();
   runtime =createSlider(runmin, runmax, 0, 1)
+  runtime.parent('sketch-holder');
   runtime.position(40,450);
   runtime.size(350,15);
   shuttleRun = createSlider(0, shuttleMax, 0, 1)
+  shuttleRun.parent('sketch-holder');
   shuttleRun.position(40,450);
   shuttleRun.size(350,15);
   shuttleRun.hide();
@@ -126,6 +134,7 @@ function createSliders() {
   plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec,2);
   
   pushtxt = createInput();
+  pushtxt.parent('sketch-holder');
   pushtxt.addClass('text-box');
   pushtxt.position(365, 195);
   pushtxt.size(20, 20);
@@ -133,6 +142,7 @@ function createSliders() {
   pushups.input(pushChange);
   
   hrpushtxt = createInput();
+  hrpushtxt.parent('sketch-holder');
   hrpushtxt.addClass('text-box');
   hrpushtxt.position(365, 195);
   hrpushtxt.size(20, 20);
@@ -142,6 +152,7 @@ function createSliders() {
   
   
   sittxt = createInput();
+  sittxt.parent('sketch-holder');
   sittxt.addClass('text-box');
   sittxt.position(365, 295);
   sittxt.size(20, 20);
@@ -149,6 +160,7 @@ function createSliders() {
   situps.input(sitChange);
   
   rsittxt = createInput();
+  rsittxt.parent('sketch-holder');
   rsittxt.addClass('text-box');
   rsittxt.position(365, 295);
   rsittxt.size(20, 20);
@@ -158,12 +170,14 @@ function createSliders() {
 
   var runMinimum = runTime(runmin);
   runmintxt = createInput();
+  runmintxt.parent('sketch-holder');
   runmintxt.addClass('text-box');
   runmintxt.position (290, 395);
   runmintxt.size(20, 20);
   runmintxt.value(runMinimum.minutes);
   runmintxt.hide();
   runsectxt = createInput();
+  runsectxt.parent('sketch-holder');
   runsectxt.addClass('text-box');
   runsectxt.position(345, 395); //245
   runsectxt.size(20, 20);
@@ -172,12 +186,14 @@ function createSliders() {
   runtime.input(runChange);
   
   plankmintxt = createInput();
+  plankmintxt.parent('sketch-holder');
   plankmintxt.addClass('text-box');
   plankmintxt.position(310, 295);
   plankmintxt.size(20,20);
   plankmintxt.value(0);
   plankmintxt.hide();
   planksectxt = createInput();
+  planksectxt.parent('sketch-holder');
   planksectxt.addClass('text-box');
   planksectxt.position(365, 295);
   planksectxt.size(20,20);
@@ -186,6 +202,7 @@ function createSliders() {
   planks.input(plankChange);
   
   shuttletxt = createInput();
+  shuttletxt.parent('sketch-holder');
   shuttletxt.addClass('text-box');
   shuttletxt.position(290, 395);
   shuttletxt.size(22,20);
@@ -198,7 +215,8 @@ function createSliders() {
 
 
 function setup() {
-  createCanvas(500, 750);  
+  let c = createCanvas(500, 750);  
+  c.parent('sketch-holder');
   
   ageSel = createSelect();
   ageSel.position(10, 85);
@@ -222,21 +240,24 @@ function setup() {
   ageSel.option('Male >60');
   ageSel.selected('Female 18-24');
   ageSel.changed(ageChange);
-  
+  ageSel.parent('sketch-holder');
   
   minMaxValueAge()
   
   butt = createButton("CALCULATE SCORE");
+  butt.parent('sketch-holder');
   butt.addClass('text-box');
   butt.position(240, 85);
   butt.mousePressed(calcButton);
   
   scoreChartBtn = createButton("See PT Score Charts");
+  scoreChartBtn.parent('sketch-holder');
   scoreChartBtn.addClass('text-box');
   scoreChartBtn.position(240, 615);
   scoreChartBtn.mousePressed(scoreChartBtnPressed);
   
   resetBtn = createButton("Reset Values");
+  resetBtn.parent('sketch-holder');
   resetBtn.addClass('text-box');
   resetBtn.position(290, 555); //240,555
   resetBtn.mousePressed(ageChange);
