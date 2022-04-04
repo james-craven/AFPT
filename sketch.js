@@ -2129,6 +2129,7 @@ function selectChange() {
     runsectxt.show();
     shuttleRun.hide();
     shuttleAudioBtn.hide();
+    isAudioActive = false;
     
   } else if (runSel.value() == 'Shuttle') {
     runtime.hide();
