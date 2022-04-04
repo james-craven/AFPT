@@ -260,6 +260,7 @@ function setup() {
   shuttleAudioBtn.addClass('text-box');
   shuttleAudioBtn.hide();
   shuttleAudio = select("#shuttle-audio");
+  shuttleAudio.parent('sketch-holder');
   shuttleAudioBtn.mousePressed(toggleMusicPlayer);
   
   scoreChartBtn = createButton("See PT Score Charts");
