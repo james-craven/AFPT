@@ -1,3 +1,7 @@
+var shuttleAudioBtn;
+var shuttleAudio;
+var isAudioActive = false;
+
 var runtime;                     // Run Slider
 var runnum;                      // Run time in seconds
 var runmintxt;                   // Textbox for run
@@ -250,6 +254,14 @@ function setup() {
   butt.position(240, 85);
   butt.mousePressed(calcButton);
   
+  shuttleAudioBtn = createButton("Shuttle Audio");
+  shuttleAudioBtn.parent('sketch-holder');
+  shuttleAudioBtn.position(210, 395);
+  shuttleAudioBtn.addClass('text-box');
+  shuttleAudioBtn.hide();
+  shuttleAudio = select("#shuttle-audio");
+  shuttleAudioBtn.mousePressed(toggleMusicPlayer);
+  
   scoreChartBtn = createButton("See PT Score Charts");
   scoreChartBtn.parent('sketch-holder');
   scoreChartBtn.addClass('text-box');
@@ -269,7 +281,13 @@ function setup() {
 
 function draw() {
   clear();
-
+  
+  if (isAudioActive) {
+    shuttleAudio.show();
+  } else {
+    shuttleAudio.hide();
+  }
+  
   textSize(15);
   stroke('white');
   strokeWeight(.5);
@@ -2614,4 +2632,12 @@ function minMaxValueAge() {
 
 function scoreChartBtnPressed() {
   window.open('https://www.afpc.af.mil/Career-Management/Fitness-Program/', '_blank')
+}
+
+function toggleMusicPlayer() {
+  if (isAudioActive) {
+    isAudioActive = false;
+  } else {
+    isAudioActive = true;
+  }
 }
