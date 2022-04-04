@@ -208,7 +208,7 @@ function createSliders() {
   shuttletxt = createInput();
   shuttletxt.parent('sketch-holder');
   shuttletxt.addClass('text-box');
-  shuttletxt.position(290, 395);
+  shuttletxt.position(365, 395);
   shuttletxt.size(22,20);
   shuttletxt.value(0);
   shuttletxt.hide();
