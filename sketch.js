@@ -2127,6 +2127,7 @@ function selectChange() {
     runsectxt.value(runMinimum.sec);
     runsectxt.show();
     shuttleRun.hide();
+    shuttleAudioBtn.hide();
     
   } else if (runSel.value() == 'Shuttle') {
     runtime.hide();
@@ -2134,6 +2135,7 @@ function selectChange() {
     runsectxt.hide();
     shuttletxt.show();
     shuttleRun.show();
+    shuttleAudioBtn.show();
     runText = 'Shuttles: ';
     shuttlevalue = shuttleRun.value();
   }
