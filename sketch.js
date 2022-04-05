@@ -1,6 +1,19 @@
+
+var pushImg;
+
 var shuttleAudioBtn;
 var shuttleAudio;
 var isAudioActive = false;
+
+var strengthAbsLink = "./Score Chart jpgs/female_lessthan25_Strength_Abs.jpg";
+var cardioLink = "./Score Chart jpgs/female_lessthan25_cardio.jpg"
+
+var canvasContainer;
+var isModalActive = false;
+
+var modal;
+var closeBtnModal;
+
 
 var runtime;                     // Run Slider
 var runnum;                      // Run time in seconds
@@ -213,6 +226,14 @@ function createSliders() {
   shuttletxt.value(0);
   shuttletxt.hide();
   shuttleRun.input(shuttleChange);
+
+  pushImg = createImg(strengthAbsLink, "");
+  pushImg.parent(modal);
+  pushImg.position(-40, 0);
+
+  cardioImg = createImg(cardioLink, "");
+  cardioImg.parent(modal);
+  cardioImg.position(-40, 0);
 }
 
 
@@ -275,10 +296,33 @@ function setup() {
   resetBtn.position(290, 555); //240,555
   resetBtn.mousePressed(ageChange);
   
+
+  pushInfoBtn = createImg(infoIcon, ""); //infoIcon found in tm.js
+  pushInfoBtn.parent('sketch-holder');
+  pushInfoBtn.position(25, 160);
+  pushInfoBtn.id('pushBtn');
+  pushInfoBtn.mousePressed(pushInfoClick);
+
+  sitInfoBtn = createImg(infoIcon, "");
+  sitInfoBtn.parent('sketch-holder');
+  sitInfoBtn.position(25, 260);
+  sitInfoBtn.id('pushBtn');
+  sitInfoBtn.mousePressed(pushInfoClick);
+
+  cardioInfoBtn = createImg(infoIcon, "");
+  cardioInfoBtn.parent('sketch-holder');
+  cardioInfoBtn.position(25, 360);
+  cardioInfoBtn.id('pushBtn');
+  cardioInfoBtn.mousePressed(cardioInfoClick);
+
+  modal = select("#modal");
+  closeBtnModal = select(".close-btn");
+  canvasContainer = select("#sketch-holder");
+  closeBtnModal.mousePressed(toggleModal);
+
+
   createSliders();
-  
-  
-}
+}  
 
 function draw() {
   clear();
@@ -287,6 +331,14 @@ function draw() {
     shuttleAudio.show();
   } else {
     shuttleAudio.hide();
+  }
+
+  if (isModalActive) {
+    canvasContainer.hide();
+    modal.show();
+  } else {
+    canvasContainer.show();
+    modal.hide();
   }
   
   textSize(15);
@@ -2334,7 +2386,8 @@ function removeSliders() {
   plankmintxt.remove();
   planksectxt.remove();
   shuttletxt.remove();
-  
+  pushImg.remove();
+  cardioImg.remove();
 }
 
 function ageChange() {
@@ -2376,6 +2429,8 @@ function minMaxValueAge() {
     runmax = 950;
     shuttleMin = 36;
     shuttleMax = 100;
+    strengthAbsLink = "./Score Chart jpgs/male_lessthan25_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/male_lessthan25_Run_Shuttle.jpg";
   } else if (age == 'Male 25-29') {
     pushmin = 27;
     pushmax = 62;
@@ -2391,6 +2446,8 @@ function minMaxValueAge() {
     runmax = 982;
     shuttleMin = 33;
     shuttleMax = 97;
+    strengthAbsLink = "./Score Chart jpgs/male_25-29_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/male_25-29_cardio.jpg";
   } else if (age == 'Male 30-34') {
     pushmin = 24;
     pushmax = 57;
@@ -2406,6 +2463,8 @@ function minMaxValueAge() {
     runmax = 1017;
     shuttleMin = 30;
     shuttleMax = 94;
+    strengthAbsLink = "./Score Chart jpgs/male_30-34_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/male_30-34_cardio.jpg";
   } else if (age == 'Male 35-39') {
     pushmin = 21;
     pushmax = 51;
@@ -2421,6 +2480,8 @@ function minMaxValueAge() {
     runmax = 1054;
     shuttleMin = 36;
     shuttleMax = 100;
+    strengthAbsLink = "./Score Chart jpgs/male_35-39_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/male_35-39_cardio.jpg";
   } else if (age == 'Male 40-44') {
     pushmin = 18;
     pushmax = 44;
@@ -2436,6 +2497,8 @@ function minMaxValueAge() {
     runmax = 1094;
     shuttleMin = 24;
     shuttleMax = 88;
+    strengthAbsLink = "./Score Chart jpgs/male_40-44_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/male_40-44_Run_Shuttle.jpg";
   } else if (age == 'Male 45-49') {
     pushmin = 15;
     pushmax = 44;
@@ -2451,6 +2514,8 @@ function minMaxValueAge() {
     runmax = 1136;
     shuttleMin = 22;
     shuttleMax = 86;
+    strengthAbsLink = "./Score Chart jpgs/male_45-49_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/male_45-49_cardio.jpg";
   } else if (age == 'Male 50-54') {
     pushmin = 12;
     pushmax = 36;
@@ -2466,6 +2531,8 @@ function minMaxValueAge() {
     runmax = 1233;
     shuttleMin = 16;
     shuttleMax = 80;
+    strengthAbsLink = "./Score Chart jpgs/male_50-54_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/male_50-54_cardio.jpg";
   } else if (age == 'Male 55-59') {
     pushmin = 12;
     pushmax = 33;
@@ -2481,6 +2548,8 @@ function minMaxValueAge() {
     runmax = 1288;
     shuttleMin = 13;
     shuttleMax = 77;
+    strengthAbsLink = "./Score Chart jpgs/male_55-59_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/male_55-59_cardio.jpg";
   } else if (age == 'Male >60') {
     pushmin = 11;
     pushmax = 30;
@@ -2496,6 +2565,8 @@ function minMaxValueAge() {
     runmax = 1348;
     shuttleMin = 10;
     shuttleMax = 71;
+    strengthAbsLink = "./Score Chart jpgs/male_over60_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/male_over60_cardio.jpg";
   } else if (age == 'Female 18-24') {
     pushmin = 15;
     pushmax = 47;
@@ -2511,6 +2582,8 @@ function minMaxValueAge() {
     runmax = hms('18:56');
     shuttleMin = 22;
     shuttleMax = 83;
+    strengthAbsLink = "./Score Chart jpgs/female_lessthan25_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/female_lessthan25_cardio.jpg";
   } else if (age == 'Female 25-29') {
     pushmin = 14;
     pushmax = 47;
@@ -2526,6 +2599,8 @@ function minMaxValueAge() {
     runmax = 1190;
     shuttleMin = 19;
     shuttleMax = 80;
+    strengthAbsLink = "./Score Chart jpgs/female_25-29_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/female_25-29_cardio.jpg";
   } else if (age == 'Female 30-34') {
     pushmin = 11;
     pushmax = 46;
@@ -2541,6 +2616,8 @@ function minMaxValueAge() {
     runmax = 1235;
     shuttleMin = 16;
     shuttleMax = 77;
+    strengthAbsLink = "./Score Chart jpgs/female_30-34_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/female_30-34_cardio.jpg";
   } else if (age == 'Female 35-39') {
     pushmin = 10;
     pushmax = 42;
@@ -2556,6 +2633,8 @@ function minMaxValueAge() {
     runmax = 1290;
     shuttleMin = 13;
     shuttleMax = 74;
+    strengthAbsLink = "./Score Chart jpgs/female_35-39_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/female_35-39_cardio.jpg";
   } else if (age == 'Female 40-44') {
     pushmin = 8;
     pushmax = 38;
@@ -2571,6 +2650,8 @@ function minMaxValueAge() {
     runmax = 1350;
     shuttleMin = 10;
     shuttleMax = 71;
+    strengthAbsLink = "./Score Chart jpgs/female_40-44_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/female_40-44_cardio.jpg";
   } else if (age == 'Female 45-49') {
     pushmin = 7;
     pushmax = 37;
@@ -2586,6 +2667,8 @@ function minMaxValueAge() {
     runmax = 1420;
     shuttleMin = 7;
     shuttleMax = 68;
+    strengthAbsLink = "./Score Chart jpgs/female_45-49_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/female_45-49_cardio.jpg";
   } else if (age == 'Female 50-54') {
     pushmin = 6;
     pushmax = 35;
@@ -2601,6 +2684,8 @@ function minMaxValueAge() {
     runmax = 1490;
     shuttleMin = 5;
     shuttleMax = 56;
+    strengthAbsLink = "./Score Chart jpgs/female_50-54_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/female_50-54_cardio.jpg";
   } else if (age == 'Female 55-59') {
     pushmin = 5;
     pushmax = 28;
@@ -2616,6 +2701,8 @@ function minMaxValueAge() {
     runmax = 1570;
     shuttleMin = 2;
     shuttleMax = 54;
+    strengthAbsLink = "./Score Chart jpgs/female_55-59_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/female_55-59_cardio.jpg";
   } else if (age == 'Female >60') {
     pushmin = 4;
     pushmax = 21;
@@ -2631,6 +2718,8 @@ function minMaxValueAge() {
     runmax = 1650;
     shuttleMin = 1;
     shuttleMax = 48;
+    strengthAbsLink = "./Score Chart jpgs/female_over60_Strength_Abs.jpg";
+    cardioLink = "./Score Chart jpgs/female_over60_cardio.jpg";
   }
 }
 
@@ -2643,5 +2732,31 @@ function toggleMusicPlayer() {
     isAudioActive = false;
   } else {
     isAudioActive = true;
+  }
+}
+
+function pushInfoClick() {
+  if (isModalActive) {
+    isModalActive = false;
+  } else {
+    isModalActive = true;
+  }
+  cardioImg.hide();
+  pushImg.show();
+}
+function cardioInfoClick() {
+  if (isModalActive) {
+    isModalActive = false;
+  } else {
+    isModalActive = true;
+  }
+  pushImg.hide();
+  cardioImg.show();
+}
+function toggleModal() {
+  if (isModalActive) {
+    isModalActive = false;
+  } else {
+    isModalActive = true;
   }
 }
