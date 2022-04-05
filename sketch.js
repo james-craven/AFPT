@@ -2597,8 +2597,8 @@ function minMaxValueAge() {
     rsitmax = 45;
     plankmin = 50;
     plankmax = 205;
-    runmin = 635;
-    runmax = 1190;
+    runmin = hms('10:37');
+    runmax = hms('19:43');
     shuttleMin = 19;
     shuttleMax = 80;
     strengthAbsLink = "./Score Chart jpgs/female_25-29_Strength_Abs.jpg";
@@ -2614,8 +2614,8 @@ function minMaxValueAge() {
     rsitmax = 44;
     plankmin = 45;
     plankmax = 200;
-    runmin = 651;
-    runmax = 1235;
+    runmin = hms('10:51');
+    runmax = hms('22:33');
     shuttleMin = 16;
     shuttleMax = 77;
     strengthAbsLink = "./Score Chart jpgs/female_30-34_Strength_Abs.jpg";
@@ -2631,8 +2631,8 @@ function minMaxValueAge() {
     rsitmax = 43;
     plankmin = 45;
     plankmax = 195;
-    runmin = 660;
-    runmax = 1290;
+    runmin = hms('11:06');
+    runmax = hms('21:28');
     shuttleMin = 13;
     shuttleMax = 74;
     strengthAbsLink = "./Score Chart jpgs/female_35-39_Strength_Abs.jpg";
@@ -2648,8 +2648,8 @@ function minMaxValueAge() {
     rsitmax = 42;
     plankmin = 35;
     plankmax = 190;
-    runmin = 680;
-    runmax = 1350;
+    runmin = hms('11:22');
+    runmax = hms('22:28');
     shuttleMin = 10;
     shuttleMax = 71;
     strengthAbsLink = "./Score Chart jpgs/female_40-44_Strength_Abs.jpg";
@@ -2665,8 +2665,8 @@ function minMaxValueAge() {
     rsitmax = 40;
     plankmin = 30;
     plankmax = 185;
-    runmin = 690;
-    runmax = 1420;
+    runmin = hms('11:38');
+    runmax = hms('23:34');
     shuttleMin = 7;
     shuttleMax = 68;
     strengthAbsLink = "./Score Chart jpgs/female_45-49_Strength_Abs.jpg";
@@ -2682,8 +2682,8 @@ function minMaxValueAge() {
     rsitmax = 39;
     plankmin = 25;
     plankmax = 180;
-    runmin = 770;
-    runmax = 1490;
+    runmin = hms('12:53');
+    runmax = hms('24:46');
     shuttleMin = 5;
     shuttleMax = 56;
     strengthAbsLink = "./Score Chart jpgs/female_50-54_Strength_Abs.jpg";
@@ -2699,8 +2699,8 @@ function minMaxValueAge() {
     rsitmax = 38;
     plankmin = 20;
     plankmax = 175;
-    runmin = 790;
-    runmax = 1570;
+    runmin = hms('13:34');
+    runmax = hms('26:06');
     shuttleMin = 2;
     shuttleMax = 54;
     strengthAbsLink = "./Score Chart jpgs/female_55-59_Strength_Abs.jpg";
@@ -2716,8 +2716,8 @@ function minMaxValueAge() {
     rsitmax = 32;
     plankmin = 15;
     plankmax = 170;
-    runmin = 835;
-    runmax = 1650;
+    runmin = hms('14:00');
+    runmax = hms('27:27');
     shuttleMin = 1;
     shuttleMax = 48;
     strengthAbsLink = "./Score Chart jpgs/female_over60_Strength_Abs.jpg";
