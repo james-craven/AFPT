@@ -601,12 +601,12 @@ function hamrLevel() {
   
   var level = 5;
   
-  if (shuttleRun.value() >= 95) level=hamrLevels[0]; //level 11
-  else if (shuttleRun.value() >= 84 && shuttleRun.value() <95) level=hamrLevels[1]; //level 10
-  else if (shuttleRun.value() >= 73 && shuttleRun.value() <84) level=hamrLevels[2]; //level 9
-  else if (shuttleRun.value() >= 62 && shuttleRun.value() <73) level=hamrLevels[3]; //level 8
-  else if (shuttleRun.value() >= 52 && shuttleRun.value() <62) level=hamrLevels[4]; //level 7
-  else if (shuttleRun.value() >= 42 && shuttleRun.value() <52) level=hamrLevels[5]; //level 6
+  if (shuttleRun.value() >= 93) level=hamrLevels[0]; //level 11
+  else if (shuttleRun.value() >= 84 && shuttleRun.value() <93) level=hamrLevels[1]; //level 10
+  else if (shuttleRun.value() >= 73 && shuttleRun.value() <82) level=hamrLevels[2]; //level 9
+  else if (shuttleRun.value() >= 62 && shuttleRun.value() <71) level=hamrLevels[3]; //level 8
+  else if (shuttleRun.value() >= 52 && shuttleRun.value() <61) level=hamrLevels[4]; //level 7
+  else if (shuttleRun.value() >= 42 && shuttleRun.value() <51) level=hamrLevels[5]; //level 6
   else if (shuttleRun.value() >= 33 && shuttleRun.value() <42) level=hamrLevels[6]; //level 5
   else if (shuttleRun.value() >= 24 && shuttleRun.value() <33) level=hamrLevels[7]; //level 4
   else if (shuttleRun.value() >= 16 && shuttleRun.value() <24) level=hamrLevels[8]; //level 3
