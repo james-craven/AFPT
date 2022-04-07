@@ -317,8 +317,9 @@ function setup() {
   cardioInfoBtn.id('pushBtn');
   cardioInfoBtn.mousePressed(cardioInfoClick);
 
-  appInfoIcon = createImg(infoIcon, "");
+  appInfoIcon = createImg("Info", "");
   appInfoIcon.parent('sketch-holder');
+  appInfoIcon.addClass('text-box');
   appInfoIcon.position(178, 85);
   appInfoIcon.id("appInfoBtn");
   appInfoIcon.mousePressed(appInfoClick);
