@@ -13,7 +13,7 @@ var cardioLink = "./Score Chart jpgs/female_lessthan25_cardio.jpg"
 
 var canvasContainer;
 var isModalActive = false;
-var isModal2Active = true;
+var isModal2Active = false;
 
 var modal;
 var modal2;
