@@ -621,16 +621,16 @@ function hamrShuttles() {
   
   var shuttles = 1;
   
-  var levelMax = [7, 15, 23, 32, 41, 52, 61, 72, 83, 94, 106];
+  var levelMax = [7, 15, 23, 32, 41, 50, 60, 70, 81, 92, 104];
   
   if (hamrLevel() == 1) shuttles = shuttleRun.value() - levelMax[0] +7;
   if (hamrLevel() == 2) shuttles = shuttleRun.value() - levelMax[1] +8;
   if (hamrLevel() == 3) shuttles = shuttleRun.value() - levelMax[2] +8;
   if (hamrLevel() == 4) shuttles = shuttleRun.value() - levelMax[3] +9;
   if (hamrLevel() == 5) shuttles = shuttleRun.value() - levelMax[4] +9;
-  if (hamrLevel() == 6) shuttles = shuttleRun.value() - levelMax[5] +11;
+  if (hamrLevel() == 6) shuttles = shuttleRun.value() - levelMax[5] +9;
   if (hamrLevel() == 7) shuttles = shuttleRun.value() - levelMax[6] +10;
-  if (hamrLevel() == 8) shuttles = shuttleRun.value() - levelMax[7] +11;
+  if (hamrLevel() == 8) shuttles = shuttleRun.value() - levelMax[7] +10;
   if (hamrLevel() == 9) shuttles = shuttleRun.value() - levelMax[8] +11;
   if (hamrLevel() == 10) shuttles = shuttleRun.value() - levelMax[9] +11;
   if (hamrLevel() == 11) shuttles = shuttleRun.value() - levelMax[10] +12;
