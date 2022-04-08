@@ -340,7 +340,7 @@ function setup() {
   closeBtnModal2 = select(".close-btn2");
   closeBtnModal2.mousePressed(appInfoClick);
 
-  shuttleChartsBtn = createButton("Shuttle Info Charts");
+  shuttleChartsBtn = createButton(hello);
   shuttleChartsBtn.parent('sketch-holder');
   shuttleChartsBtn.addClass('text-box');
   shuttleChartsBtn.position(190, 395);
