@@ -10,6 +10,7 @@ var isAudioActive = false;
 
 var strengthAbsLink = "./Score Chart jpgs/female_lessthan25_Strength_Abs.jpg";
 var cardioLink = "./Score Chart jpgs/female_lessthan25_cardio.jpg"
+var shuttleLink = "./Score Chart jpgs/shuttleScores.jpg"
 
 var canvasContainer;
 var isModalActive = false;
@@ -240,6 +241,10 @@ function createSliders() {
   cardioImg = createImg(cardioLink, "");
   cardioImg.parent(modal);
   cardioImg.position(-40, 0);
+  
+  shuttleImg = createImg(shuttleLink, "");
+  shuttleImg.parent(modal);
+  shuttleImg.position(-40, 0);
 }
 
 
@@ -335,6 +340,13 @@ function setup() {
   closeBtnModal2 = select(".close-btn2");
   closeBtnModal2.mousePressed(appInfoClick);
 
+  shuttleChartsBtn = createButton("Shuttle Info Charts");
+  shuttleChartsBtn.parent('sketch-holder');
+  shuttleChartsBtn.addClass('text-box');
+  shuttleChartsBtn.position(190, 395);
+  shuttleChartsBtn.mousePressed(showShuttleCharts);
+  shuttleChartsBtn.hide();
+  
   createSliders();
 }  
 
@@ -2760,6 +2772,7 @@ function pushInfoClick() {
     isModalActive = true;
   }
   cardioImg.hide();
+  shuttleImg.hide();
   pushImg.show();
 }
 function cardioInfoClick() {
@@ -2769,6 +2782,7 @@ function cardioInfoClick() {
     isModalActive = true;
   }
   pushImg.hide();
+  shuttleImg.hide();
   cardioImg.show();
 }
 
@@ -2787,4 +2801,15 @@ function toggleModal() {
   } else {
     isModalActive = true;
   }
+}
+
+function showShuttleCharts() {
+  if (isModalActive) {
+    isModalActive = false;
+  } else {
+    isModalActive = true;
+  }
+  pushImg.hide();
+  shuttleImg.show();
+  cardioImg.hide();
 }
