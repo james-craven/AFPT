@@ -43,7 +43,6 @@ var hrpush;
 var hrpushnum;
 var hrpushtxt;
 
-var runValue;
 var plankValue = 0;
 
 var situps;                      // Situp Slider
@@ -60,7 +59,7 @@ var plankmintxt; //plank mins
 var planktime; //total plank time in seconds
 
 
-var butt;                        // Button to submit text box calculation
+var calculateBtn;                        // Button to submit text box calculation
 
 var pushmin;
 var pushmax;
@@ -87,8 +86,6 @@ var shuttlevalue;
 var rscore=0;
 var sscore=0;
 var pscore=0;
-
-var selectValue;
 
 function createSliders() {
   pushSel = createSelect();
@@ -152,8 +149,6 @@ function createSliders() {
   shuttleRun.position(40,450);
   shuttleRun.size(350,15);
   shuttleRun.hide();
-  
-  runValue = runTime(runtime.value()).minutes + ":" + nf(runTime(runtime.value()).sec,2);
   
   plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec,2);
   
@@ -256,7 +251,7 @@ function setup() {
   
   ageSel = createSelect();
   ageSel.position(10, 85);
-  ageSel.option('Female 18-24');
+  ageSel.option('Female < 25');
   ageSel.option('Female 25-29');
   ageSel.option('Female 30-34');
   ageSel.option('Female 35-39');
@@ -265,7 +260,7 @@ function setup() {
   ageSel.option('Female 50-54');
   ageSel.option('Female 55-59');
   ageSel.option('Female >60');
-  ageSel.option('Male 18-24');
+  ageSel.option('Male < 25');
   ageSel.option('Male 25-29');
   ageSel.option('Male 30-34');
   ageSel.option('Male 35-39');
@@ -274,18 +269,18 @@ function setup() {
   ageSel.option('Male 50-54');
   ageSel.option('Male 55-59');
   ageSel.option('Male >60');
-  ageSel.selected('Female 18-24');
+  ageSel.selected('Female < 25');
   ageSel.changed(ageChange);
   ageSel.parent('sketch-holder');
   
   minMaxValueAge()
   
-  butt = createButton("CALCULATE SCORE");
-  butt.parent('sketch-holder');
-  butt.addClass('text-box');
-  butt.id('calculateScoreBtn');
-  butt.position(240, 85);
-  butt.mousePressed(calcButton);
+  calculateBtn = createButton("CALCULATE SCORE");
+  calculateBtn.parent('sketch-holder');
+  calculateBtn.addClass('text-box');
+  calculateBtn.id('calculateScoreBtn');
+  calculateBtn.position(240, 85);
+  calculateBtn.mousePressed(calcBtnClick);
   
   shuttleAudioBtn = createButton("Shuttle Audio");
   shuttleAudioBtn.parent('sketch-holder');
@@ -295,14 +290,11 @@ function setup() {
   shuttleAudio.parent('sketch-holder');
   shuttleAudioBtn.mousePressed(toggleMusicPlayer);
   
-
-  
   resetBtn = createButton("Reset Values");
   resetBtn.parent('sketch-holder');
   resetBtn.addClass('text-box');
   resetBtn.position(290, 555); //240,555
   resetBtn.mousePressed(ageChange);
-  
 
   pushInfoBtn = createImg(infoIcon, ""); //infoIcon found in tm.js
   pushInfoBtn.parent('sketch-holder');
@@ -340,7 +332,7 @@ function setup() {
   closeBtnModal2 = select(".close-btn2");
   closeBtnModal2.mousePressed(appInfoClick);
 
-  shuttleChartsBtn = createButton("Shuttle Score Card");
+  shuttleChartsBtn = createButton("Shuttle Info Charts");
   shuttleChartsBtn.parent('sketch-holder');
   shuttleChartsBtn.addClass('text-box');
   shuttleChartsBtn.position(190, 395);
@@ -348,6 +340,9 @@ function setup() {
   shuttleChartsBtn.hide();
   
   createSliders();
+
+  setScoreArrays();
+
 }  
 
 function draw() {
@@ -526,7 +521,6 @@ function draw() {
   rsitnum=rsitups.value();
   runnum=runTime(runtime.value());
   plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec,2);
-  runValue = runTime(runtime.value()).minutes + ":" + nf(runTime(runtime.value()).sec,2);
   shuttlevalue = shuttleRun.value();
   
   if (runSel.value() == '1.5 Mile') {
@@ -675,8 +669,8 @@ var seconds=0;
 
   
 minutes=floor(secs/60);
-seconds=secs- (minutes*60);
-  //console.log(seconds);
+seconds=secs-(minutes*60);
+  // console.log(minutes + " : " + seconds);
   
 var tot = new Time(minutes, seconds);
   
@@ -685,1471 +679,33 @@ return tot;
 
 function runScore(secs)
 {
-  var runPoints = [];
-  var age = ageSel.value();
-  var points = 0;
-  
-  if (age == 'Male 18-24') {
-    runPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 46.5, 44, 41, 38, 35, 0];
-    if (secs<= 552)points=runPoints[0];
-    else if (secs<= 574) points=runPoints[1];
-    else if (secs<= 585) points=runPoints[2];
-    else if (secs<= 598) points=runPoints[3];
-    else if (secs<= 610) points=runPoints[4]
-    else if (secs<= 623) points=runPoints[5];
-    else if (secs<= 637) points=runPoints[6];
-    else if (secs<= 651) points=runPoints[7];
-    else if (secs<= 666) points=runPoints[8];
-    else if (secs<= 682) points=runPoints[9];
-    else if (secs<= 698) points=runPoints[10];
-    else if (secs<= 716) points=runPoints[11];
-    else if (secs<= 734) points=runPoints[12];
-    else if (secs<= 753) points=runPoints[13];
-    else if (secs<= 773) points=runPoints[14];
-    else if (secs<= 794) points=runPoints[15];
-    else if (secs<= 816) points=runPoints[16];
-    else if (secs<= 840) points=runPoints[17];
-    else if (secs<= 865) points=runPoints[18];
-    else if (secs<= 892) points=runPoints[19];
-    else if (secs<= 920) points=runPoints[20];
-    else if (secs<= 950) points=runPoints[21];
-    if (secs> 950) points=runPoints[22];
-  } else if (age == 'Male 25-29') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 46.5, 44, 41, 38, 35, 0];
-  
-    if (secs<= 562)points=runPoints[0];
-    else if (secs<= 585) points=runPoints[1];
-    else if (secs<= 598) points=runPoints[2];
-    else if (secs<= 610) points=runPoints[3]
-    else if (secs<= 623) points=runPoints[4];
-    else if (secs<= 637) points=runPoints[5];
-    else if (secs<= 651) points=runPoints[6];
-    else if (secs<= 666) points=runPoints[7];
-    else if (secs<= 682) points=runPoints[8];
-    else if (secs<= 698) points=runPoints[9];
-    else if (secs<= 716) points=runPoints[10];
-    else if (secs<= 734) points=runPoints[11];
-    else if (secs<= 753) points=runPoints[12];
-    else if (secs<= 773) points=runPoints[13];
-    else if (secs<= 794) points=runPoints[14];
-    else if (secs<= 816) points=runPoints[15];
-    else if (secs<= 840) points=runPoints[16];
-    else if (secs<= 865) points=runPoints[17];
-    else if (secs<= 892) points=runPoints[18];
-    else if (secs<= 920) points=runPoints[19];
-    else if (secs<= 950) points=runPoints[20];
-    else if (secs<= 982) points=runPoints[21];  
-    if (secs> 982) points=runPoints[22];
-  } else if (age == 'Male 30-34') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45.5, 43, 40.5, 38, 35, 0];
-    
-    if (secs<= 574)points=runPoints[0];
-    else if (secs<= 598) points=runPoints[1];
-    else if (secs<= 610) points=runPoints[2]
-    else if (secs<= 623) points=runPoints[3];
-    else if (secs<= 637) points=runPoints[4];
-    else if (secs<= 651) points=runPoints[5];
-    else if (secs<= 666) points=runPoints[6];
-    else if (secs<= 682) points=runPoints[7];
-    else if (secs<= 698) points=runPoints[8];
-    else if (secs<= 716) points=runPoints[9];
-    else if (secs<= 734) points=runPoints[10];
-    else if (secs<= 753) points=runPoints[11];
-    else if (secs<= 773) points=runPoints[12];
-    else if (secs<= 794) points=runPoints[13];
-    else if (secs<= 816) points=runPoints[14];
-    else if (secs<= 840) points=runPoints[15];
-    else if (secs<= 865) points=runPoints[16];
-    else if (secs<= 892) points=runPoints[17];
-    else if (secs<= 920) points=runPoints[18];
-    else if (secs<= 950) points=runPoints[19];
-    else if (secs<= 982) points=runPoints[20]; 
-    else if (secs<= 1017) points=runPoints[21];   
-    if (secs> 1017) points=runPoints[22];
-  } else if (age == 'Male 35-39') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45.5, 43, 40.5, 38, 35, 0];
-    
-    if (secs<= 585)points=runPoints[0];
-    else if (secs<= 610) points=runPoints[1]
-    else if (secs<= 623) points=runPoints[2];
-    else if (secs<= 637) points=runPoints[3];
-    else if (secs<= 651) points=runPoints[4];
-    else if (secs<= 666) points=runPoints[5];
-    else if (secs<= 682) points=runPoints[6];
-    else if (secs<= 698) points=runPoints[7];
-    else if (secs<= 716) points=runPoints[8];
-    else if (secs<= 734) points=runPoints[9];
-    else if (secs<= 753) points=runPoints[10];
-    else if (secs<= 773) points=runPoints[11];
-    else if (secs<= 794) points=runPoints[12];
-    else if (secs<= 816) points=runPoints[13];
-    else if (secs<= 840) points=runPoints[14];
-    else if (secs<= 865) points=runPoints[15];
-    else if (secs<= 892) points=runPoints[16];
-    else if (secs<= 920) points=runPoints[17];
-    else if (secs<= 950) points=runPoints[18];
-    else if (secs<= 982) points=runPoints[19]; 
-    else if (secs<= 1017) points=runPoints[20];
-    else if (secs<= 1053) points=runPoints[21];  
-    if (secs> 1053) points=runPoints[22];
-  } else if (age == 'Male 40-44') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 46.5, 44, 41, 38, 35, 0];
-    
-    if (secs<= 598)points=runPoints[0];
-    else if (secs<= 623) points=runPoints[1];
-    else if (secs<= 637) points=runPoints[2];
-    else if (secs<= 651) points=runPoints[3];
-    else if (secs<= 666) points=runPoints[4];
-    else if (secs<= 682) points=runPoints[5];
-    else if (secs<= 698) points=runPoints[6];
-    else if (secs<= 716) points=runPoints[7];
-    else if (secs<= 734) points=runPoints[8];
-    else if (secs<= 753) points=runPoints[9];
-    else if (secs<= 773) points=runPoints[10];
-    else if (secs<= 794) points=runPoints[11];
-    else if (secs<= 816) points=runPoints[12];
-    else if (secs<= 840) points=runPoints[13];
-    else if (secs<= 865) points=runPoints[14];
-    else if (secs<= 892) points=runPoints[15];
-    else if (secs<= 920) points=runPoints[16];
-    else if (secs<= 950) points=runPoints[17];
-    else if (secs<= 982) points=runPoints[18]; 
-    else if (secs<= 1017) points=runPoints[19];
-    else if (secs<= 1053) points=runPoints[20];
-    else if (secs<= 1094) points=runPoints[21];
-    if (secs> 1094) points=runPoints[22];
-  } else if(age == 'Male 45-49') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 46.5, 44, 41, 38, 35, 0];
-    
-    if (secs<= 610)points=runPoints[0];
-    else if (secs<= 623) points=runPoints[1];
-    else if (secs<= 651) points=runPoints[2];
-    else if (secs<= 666) points=runPoints[3];
-    else if (secs<= 682) points=runPoints[4];
-    else if (secs<= 698) points=runPoints[5];
-    else if (secs<= 716) points=runPoints[6];
-    else if (secs<= 734) points=runPoints[7];
-    else if (secs<= 753) points=runPoints[8];
-    else if (secs<= 773) points=runPoints[9];
-    else if (secs<= 794) points=runPoints[10];
-    else if (secs<= 816) points=runPoints[11];
-    else if (secs<= 840) points=runPoints[12];
-    else if (secs<= 865) points=runPoints[13];
-    else if (secs<= 892) points=runPoints[14];
-    else if (secs<= 920) points=runPoints[15];
-    else if (secs<= 950) points=runPoints[16];
-    else if (secs<= 982) points=runPoints[17]; 
-    else if (secs<= 1017) points=runPoints[18];
-    else if (secs<= 1053) points=runPoints[19];
-    else if (secs<= 1094) points=runPoints[20];
-    else if (secs<= 1136) points=runPoints[21];  
-    if (secs> 1136) points=runPoints[22];
-  } else if(age == 'Male 50-54') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45.5, 43, 40.5, 38, 35, 0];
-    
-    if (secs<= 637)points=runPoints[0];
-    else if (secs<= 666) points=runPoints[1];
-    else if (secs<= 682) points=runPoints[2];
-    else if (secs<= 698) points=runPoints[3];
-    else if (secs<= 716) points=runPoints[4];
-    else if (secs<= 734) points=runPoints[5];
-    else if (secs<= 753) points=runPoints[6];
-    else if (secs<= 773) points=runPoints[7];
-    else if (secs<= 794) points=runPoints[8];
-    else if (secs<= 816) points=runPoints[9];
-    else if (secs<= 840) points=runPoints[10];
-    else if (secs<= 865) points=runPoints[11];
-    else if (secs<= 892) points=runPoints[12];
-    else if (secs<= 920) points=runPoints[13];
-    else if (secs<= 950) points=runPoints[14];
-    else if (secs<= 982) points=runPoints[15]; 
-    else if (secs<= 1017) points=runPoints[16];
-    else if (secs<= 1054) points=runPoints[17];
-    else if (secs<= 1094) points=runPoints[18];
-    else if (secs<= 1136) points=runPoints[19];
-    else if (secs<= 1183) points=runPoints[20];
-    else if (secs<= 1233) points=runPoints[21];   
-    if (secs> 1233) points=runPoints[22];
-  } else if(age == 'Male 55-59') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45.5, 43, 40.5, 38, 35, 0];
-    
-    if (secs<= 651)points=runPoints[0];
-    else if (secs<= 682) points=runPoints[1];
-    else if (secs<= 698) points=runPoints[2];
-    else if (secs<= 716) points=runPoints[3];
-    else if (secs<= 734) points=runPoints[4];
-    else if (secs<= 753) points=runPoints[5];
-    else if (secs<= 773) points=runPoints[6];
-    else if (secs<= 794) points=runPoints[7];
-    else if (secs<= 816) points=runPoints[8];
-    else if (secs<= 840) points=runPoints[9];
-    else if (secs<= 865) points=runPoints[10];
-    else if (secs<= 892) points=runPoints[11];
-    else if (secs<= 920) points=runPoints[12];
-    else if (secs<= 950) points=runPoints[13];
-    else if (secs<= 982) points=runPoints[14]; 
-    else if (secs<= 1017) points=runPoints[15];
-    else if (secs<= 1053) points=runPoints[16];
-    else if (secs<= 1094) points=runPoints[17];
-    else if (secs<= 1136) points=runPoints[18];
-    else if (secs<= 1183) points=runPoints[19];
-    else if (secs<= 1233) points=runPoints[20];
-    else if (secs<= 1288) points=runPoints[21];     
-    if (secs> 1288) points=runPoints[22];
-  } else if(age == 'Male >60') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 52.5, 51, 49.5, 47, 44.5, 41.5, 38.5, 35, 0];
-    
-    if (secs<= 682)points=runPoints[0];
-    else if (secs<= 716) points=runPoints[1];
-    else if (secs<= 734) points=runPoints[2];
-    else if (secs<= 753) points=runPoints[3];
-    else if (secs<= 773) points=runPoints[4];
-    else if (secs<= 794) points=runPoints[5];
-    else if (secs<= 816) points=runPoints[6];
-    else if (secs<= 840) points=runPoints[7];
-    else if (secs<= 865) points=runPoints[8];
-    else if (secs<= 892) points=runPoints[9];
-    else if (secs<= 920) points=runPoints[10];
-    else if (secs<= 950) points=runPoints[11];
-    else if (secs<= 982) points=runPoints[12]; 
-    else if (secs<= 1017) points=runPoints[13];
-    else if (secs<= 1054) points=runPoints[14];
-    else if (secs<= 1094) points=runPoints[15];
-    else if (secs<= 1136) points=runPoints[16];
-    else if (secs<= 1183) points=runPoints[17];
-    else if (secs<= 1233) points=runPoints[18];
-    else if (secs<= 1288) points=runPoints[19];     
-    else if (secs<= 1348) points=runPoints[20]; 
-    if (secs> 1348) points=runPoints[21];
-    
-  } else if (age == 'Female 18-24') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 46, 42.5, 39, 35, 0];
-    
-    if (secs<= 623)points=runPoints[0];
-    else if (secs<= 651) points=runPoints[1];
-    else if (secs<= 666) points=runPoints[2];
-    else if (secs<= 682) points=runPoints[3];
-    else if (secs<= 698) points=runPoints[4]
-    else if (secs<= 716) points=runPoints[5];
-    else if (secs<= 734) points=runPoints[6];
-    else if (secs<= 753) points=runPoints[7];
-    else if (secs<= 773) points=runPoints[8];
-    else if (secs<= 794) points=runPoints[9];
-    else if (secs<= 816) points=runPoints[10];
-    else if (secs<= 840) points=runPoints[11];
-    else if (secs<= 865) points=runPoints[12];
-    else if (secs<= 892) points=runPoints[13];
-    else if (secs<= 920) points=runPoints[14];
-    else if (secs<= 950) points=runPoints[15];
-    else if (secs<= 982) points=runPoints[16];
-    else if (secs<= 1017) points=runPoints[17];
-    else if (secs<= 1054) points=runPoints[18];
-    else if (secs<= 1094) points=runPoints[19];
-    else if (secs<= 1136) points=runPoints[20];
-    //else if (secs<= 950) points=runPoints[21];
-    if (secs> 1136) points=runPoints[21];
-    
-  } else if (age == 'Female 25-29') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 45.5, 42, 38.5, 35, 0];
-      
-    if (secs<= 637)points=runPoints[0];
-    else if (secs<= 666) points=runPoints[1];
-    else if (secs<= 682) points=runPoints[2];
-    else if (secs<= 698) points=runPoints[3]
-    else if (secs<= 716) points=runPoints[4];
-    else if (secs<= 734) points=runPoints[5];
-    else if (secs<= 753) points=runPoints[6];
-    else if (secs<= 773) points=runPoints[7];
-    else if (secs<= 794) points=runPoints[8];
-    else if (secs<= 816) points=runPoints[9];
-    else if (secs<= 840) points=runPoints[10];
-    else if (secs<= 865) points=runPoints[11];
-    else if (secs<= 892) points=runPoints[12];
-    else if (secs<= 920) points=runPoints[13];
-    else if (secs<= 950) points=runPoints[14];
-    else if (secs<= 982) points=runPoints[15];
-    else if (secs<= 1017) points=runPoints[16];
-    else if (secs<= 1053) points=runPoints[17];
-    else if (secs<= 1094) points=runPoints[18];
-    else if (secs<= 1136) points=runPoints[19];
-    else if (secs<= 1183) points=runPoints[20];
-    if (secs> 1183) points=runPoints[21];
-    
-  } else if (age == 'Female 30-34') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 52.5, 51, 49.5, 47, 44.5, 42, 38.5, 35, 0];
-    
-    if (secs<= 651)points=runPoints[0];
-    else if (secs<= 682) points=runPoints[1];
-    else if (secs<= 698) points=runPoints[2]
-    else if (secs<= 716) points=runPoints[3];
-    else if (secs<= 734) points=runPoints[4];
-    else if (secs<= 753) points=runPoints[5];
-    else if (secs<= 773) points=runPoints[6];
-    else if (secs<= 794) points=runPoints[7];
-    else if (secs<= 816) points=runPoints[8];
-    else if (secs<= 840) points=runPoints[9];
-    else if (secs<= 865) points=runPoints[10];
-    else if (secs<= 892) points=runPoints[11];
-    else if (secs<= 920) points=runPoints[12];
-    else if (secs<= 950) points=runPoints[13];
-    else if (secs<= 982) points=runPoints[14];
-    else if (secs<= 1017) points=runPoints[15];
-    else if (secs<= 1054) points=runPoints[16];
-    else if (secs<= 1094) points=runPoints[17];
-    else if (secs<= 1136) points=runPoints[18];
-    else if (secs<= 1183) points=runPoints[19];
-    else if (secs<= 1233) points=runPoints[20];  
-    if (secs> 1233) points=runPoints[21];
-    
-  } else if (age == 'Female 35-39') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 52.5, 51, 49.5, 47, 44, 41, 38, 35, 0];
-    
-    if (secs<= 666)points=runPoints[0];
-    else if (secs<= 698) points=runPoints[1]
-    else if (secs<= 716) points=runPoints[2];
-    else if (secs<= 734) points=runPoints[3];
-    else if (secs<= 753) points=runPoints[4];
-    else if (secs<= 773) points=runPoints[5];
-    else if (secs<= 794) points=runPoints[6];
-    else if (secs<= 816) points=runPoints[7];
-    else if (secs<= 840) points=runPoints[8];
-    else if (secs<= 865) points=runPoints[9];
-    else if (secs<= 892) points=runPoints[10];
-    else if (secs<= 920) points=runPoints[11];
-    else if (secs<= 950) points=runPoints[12];
-    else if (secs<= 982) points=runPoints[13];
-    else if (secs<= 1017) points=runPoints[14];
-    else if (secs<= 1053) points=runPoints[15];
-    else if (secs<= 1094) points=runPoints[16];
-    else if (secs<= 1136) points=runPoints[17];
-    else if (secs<= 1183) points=runPoints[18];
-    else if (secs<= 1233) points=runPoints[19];
-    else if (secs<= 1288) points=runPoints[20];  
-    if (secs> 1288) points=runPoints[21];
-    
-  } else if (age == 'Female 40-44') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45.5, 42, 38.5, 35, 0];
-    
-    if (secs<= 682)points=runPoints[0];
-    else if (secs<= 716) points=runPoints[1];
-    else if (secs<= 734) points=runPoints[2];
-    else if (secs<= 753) points=runPoints[3];
-    else if (secs<= 773) points=runPoints[4];
-    else if (secs<= 794) points=runPoints[5];
-    else if (secs<= 816) points=runPoints[6];
-    else if (secs<= 840) points=runPoints[7];
-    else if (secs<= 865) points=runPoints[8];
-    else if (secs<= 892) points=runPoints[9];
-    else if (secs<= 920) points=runPoints[10];
-    else if (secs<= 950) points=runPoints[11];
-    else if (secs<= 982) points=runPoints[12];
-    else if (secs<= 1017) points=runPoints[13];
-    else if (secs<= 1053) points=runPoints[14];
-    else if (secs<= 1094) points=runPoints[15];
-    else if (secs<= 1136) points=runPoints[16];
-    else if (secs<= 1183) points=runPoints[17];
-    else if (secs<= 1233) points=runPoints[18];
-    else if (secs<= 1288) points=runPoints[19];  
-    else if (secs<= 1348) points=runPoints[20];    
-    if (secs> 1348) points=runPoints[21];
-    
-  } else if (age == 'Female 45-49') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45, 42, 38.5, 35, 0];
-    
-    if (secs<= 698)points=runPoints[0];
-    else if (secs<= 734) points=runPoints[1];
-    else if (secs<= 753) points=runPoints[2];
-    else if (secs<= 773) points=runPoints[3];
-    else if (secs<= 794) points=runPoints[4];
-    else if (secs<= 816) points=runPoints[5];
-    else if (secs<= 840) points=runPoints[6];
-    else if (secs<= 865) points=runPoints[7];
-    else if (secs<= 892) points=runPoints[8];
-    else if (secs<= 920) points=runPoints[9];
-    else if (secs<= 950) points=runPoints[10];
-    else if (secs<= 982) points=runPoints[11];
-    else if (secs<= 1017) points=runPoints[12];
-    else if (secs<= 1053) points=runPoints[13];
-    else if (secs<= 1094) points=runPoints[14];
-    else if (secs<= 1136) points=runPoints[15];
-    else if (secs<= 1183) points=runPoints[16];
-    else if (secs<= 1233) points=runPoints[17];
-    else if (secs<= 1288) points=runPoints[18];  
-    else if (secs<= 1348) points=runPoints[19];
-    else if (secs<= 1414) points=runPoints[20];  
-    if (secs> 1414) points=runPoints[21];
-    
-  } else if (age == 'Female 50-54') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 53.5, 52, 49.5, 46, 42.5, 39, 35, 0];
-    
-    if (secs<= 773)points=runPoints[0];
-    else if (secs<= 816) points=runPoints[1];
-    else if (secs<= 840) points=runPoints[2];
-    else if (secs<= 865) points=runPoints[3];
-    else if (secs<= 892) points=runPoints[4];
-    else if (secs<= 920) points=runPoints[5];
-    else if (secs<= 950) points=runPoints[6];
-    else if (secs<= 982) points=runPoints[7];
-    else if (secs<= 1017) points=runPoints[8];
-    else if (secs<= 1053) points=runPoints[9];
-    else if (secs<= 1094) points=runPoints[10];
-    else if (secs<= 1136) points=runPoints[11];
-    else if (secs<= 1183) points=runPoints[12];
-    else if (secs<= 1233) points=runPoints[13];
-    else if (secs<= 1288) points=runPoints[14];  
-    else if (secs<= 1348) points=runPoints[15];
-    else if (secs<= 1414) points=runPoints[16];
-    else if (secs<= 1486) points=runPoints[17];   
-    if (secs> 1486) points=runPoints[18];
-    
-  } else if (age == 'Female 55-59') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 53.5, 52, 49, 46, 43, 39, 35, 0];
-    
-    if (secs<= 794)points=runPoints[0];
-    else if (secs<= 840) points=runPoints[1];
-    else if (secs<= 865) points=runPoints[2];
-    else if (secs<= 892) points=runPoints[3];
-    else if (secs<= 920) points=runPoints[4];
-    else if (secs<= 950) points=runPoints[5];
-    else if (secs<= 982) points=runPoints[6];
-    else if (secs<= 1017) points=runPoints[7];
-    else if (secs<= 1053) points=runPoints[8];
-    else if (secs<= 1094) points=runPoints[9];
-    else if (secs<= 1136) points=runPoints[10];
-    else if (secs<= 1183) points=runPoints[11];
-    else if (secs<= 1233) points=runPoints[12];
-    else if (secs<= 1288) points=runPoints[13];  
-    else if (secs<= 1348) points=runPoints[14];
-    else if (secs<= 1414) points=runPoints[15];
-    else if (secs<= 1486) points=runPoints[16];
-    else if (secs<= 1566) points=runPoints[17];
-    if (secs> 1566) points=runPoints[18];
-    
-  } else if (age == 'Female >60') {
-    runPoints=[60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 54, 52.5, 51, 47, 43, 39, 35, 0];
-    
-    if (secs<= 840)points=runPoints[0];
-    else if (secs<= 892) points=runPoints[1];
-    else if (secs<= 920) points=runPoints[2];
-    else if (secs<= 950) points=runPoints[3];
-    else if (secs<= 982) points=runPoints[4];
-    else if (secs<= 1017) points=runPoints[5];
-    else if (secs<= 1054) points=runPoints[6];
-    else if (secs<= 1094) points=runPoints[7];
-    else if (secs<= 1136) points=runPoints[8];
-    else if (secs<= 1183) points=runPoints[9];
-    else if (secs<= 1233) points=runPoints[10];
-    else if (secs<= 1288) points=runPoints[11];  
-    else if (secs<= 1348) points=runPoints[12];
-    else if (secs<= 1414) points=runPoints[13];
-    else if (secs<= 1486) points=runPoints[14];
-    else if (secs<= 1566) points=runPoints[15];
-    else if (secs<= 1647) points=runPoints[16];  
-    if (secs> 1647) points=runPoints[17];
-  }
-  
-  return points; 
+  return calculateRunScore(secs,scoreArrays.cardio);
 }
 
 function plankScore(secs) {
-  var plankPoint=[];
-  var plankpoints = 0;
-  var age = ageSel.value();
-  
-  //This function converts time string to seconds so I dont have to do the math for the times. I wish i would've thought of this before all the run times but it will be implemented in female planks and shuttles.
-function hms(str) {
-    var p = str.split(':'),
-        s = 0, m = 1;
-
-    while (p.length > 0) {
-        if (p[0] == '') p[0] = 0;
-        s += m * parseInt(p.pop(), 10);
-        m *= 60;
-    }
-    return s;
-}
-  
-  if (age == 'Male 18-24') {
-      plankPoint=[20.0, 19.7, 19.3, 18.9, 18.5, 18.0, 16.7, 15.3, 14.0, 13.3, 11.3, 10.0];
-    
-    if (secs>= 215) plankpoints=plankPoint[0]; //3:35
-    else if (secs>= 210) plankpoints=plankPoint[1]; //3:30
-    else if (secs>= 205) plankpoints=plankPoint[2]; //3:25
-    else if (secs>= 198) plankpoints=plankPoint[3];  //3:18
-    else if (secs>= 192) plankpoints=plankPoint[4]; //3:12
-    else if (secs>= 185) plankpoints=plankPoint[5]; //3:05
-    else if (secs>= 165) plankpoints=plankPoint[6]; //2:45
-    else if (secs>= 145) plankpoints=plankPoint[7]; //2:25
-    else if (secs>= 125) plankpoints=plankPoint[8]; //2:05
-    else if (secs>= 115) plankpoints=plankPoint[9]; //1:55
-    else if (secs>= 85) plankpoints=plankPoint[10]; //1:25
-    else if (secs>= 65) plankpoints=plankPoint[11]; //1:05
-    
-  } else if (age == 'Male 25-29') {
-    plankPoint=[20.0, 19.7, 19.3, 18.9, 18.2, 18.0, 16.7, 15.3, 14.0, 12.7, 11.3, 10.0];
-    
-    if (secs>= 210) plankpoints=plankPoint[0];
-    else if (secs>= 205) plankpoints=plankPoint[1];
-    else if (secs>= 200) plankpoints=plankPoint[2];
-    else if (secs>= 194) plankpoints=plankPoint[3];
-    else if (secs>= 183) plankpoints=plankPoint[4];
-    else if (secs>= 180) plankpoints=plankPoint[5];
-    else if (secs>= 160) plankpoints=plankPoint[6];
-    else if (secs>= 140) plankpoints=plankPoint[7];
-    else if (secs>= 120) plankpoints=plankPoint[8];
-    else if (secs>= 100) plankpoints=plankPoint[9];
-    else if (secs>= 80) plankpoints=plankPoint[10];
-    else if (secs>= 60) plankpoints=plankPoint[11];
-    
-  } else if (age == 'Male 30-34') {
-    plankPoint=[20.0, 19.7, 19.3, 18.9, 18.5, 18.0, 16.7, 15.3, 14.0, 12.7, 11.3, 10.0];
-    
-    if (secs>= 210) plankpoints=plankPoint[0]; //3:25
-    else if (secs>= 200) plankpoints=plankPoint[1]; //3:20
-    else if (secs>= 195) plankpoints=plankPoint[2]; //3:15
-    else if (secs>= 189) plankpoints=plankPoint[3]; //3:09
-    else if (secs>= 182) plankpoints=plankPoint[4]; //3:02
-    else if (secs>= 175) plankpoints=plankPoint[5]; //2:55
-    else if (secs>= 155) plankpoints=plankPoint[6]; //2:35
-    else if (secs>= 135) plankpoints=plankPoint[7]; //2:15
-    else if (secs>= 115) plankpoints=plankPoint[8]; //1:55
-    else if (secs>= 95) plankpoints=plankPoint[9]; // 1:35
-    else if (secs>= 75) plankpoints=plankPoint[10]; //1:15
-    else if (secs>= 55) plankpoints=plankPoint[11]; //0:55
-    
-  } else if (age == 'Male 35-39') {
-    plankPoint=[20.0, 19.7, 19.3, 18.9, 18.5, 18.0, 16.7, 15.3, 14.0, 12.7, 11.3, 10.0];
-    
-    if (secs>= 200) plankpoints=plankPoint[0]; //3:20 
-    else if (secs>= 195) plankpoints=plankPoint[1]; //3:15 
-    else if (secs>= 190) plankpoints=plankPoint[2]; //3:10 
-    else if (secs>= 184) plankpoints=plankPoint[3]; //3:04 
-    else if (secs>= 177) plankpoints=plankPoint[4]; //2:57 
-    else if (secs>= 170) plankpoints=plankPoint[5]; //2:50 
-    else if (secs>= 150) plankpoints=plankPoint[6]; //2:30 
-    else if (secs>= 130) plankpoints=plankPoint[7]; //2:10 
-    else if (secs>= 110) plankpoints=plankPoint[8]; //1:50 
-    else if (secs>= 90) plankpoints=plankPoint[9]; //1:30 
-    else if (secs>= 70) plankpoints=plankPoint[10]; //1:10 
-    else if (secs>= 50) plankpoints=plankPoint[11]; //0:50 
-    
-  } else if (age == 'Male 40-44') {
-    plankPoint=[20.0, 19.7, 19.3, 18.9, 18.5, 18.0, 16.7, 15.3, 14.0, 12.7, 11.3, 10.0];
-    
-    if (secs>= 195) plankpoints=plankPoint[0]; //3:15 5
-    else if (secs>= 190) plankpoints=plankPoint[1]; //3:10 5
-    else if (secs>= 185) plankpoints=plankPoint[2]; //3:05 5
-    else if (secs>= 179) plankpoints=plankPoint[3]; //2:59 5
-    else if (secs>= 172) plankpoints=plankPoint[4]; //2:52 5
-    else if (secs>= 165) plankpoints=plankPoint[5]; //2:45 5
-    else if (secs>= 145) plankpoints=plankPoint[6]; //2:25 5
-    else if (secs>= 125) plankpoints=plankPoint[7]; //2:05 5
-    else if (secs>= 105) plankpoints=plankPoint[8]; //1:45 5
-    else if (secs>= 85) plankpoints=plankPoint[9]; //1:25 5
-    else if (secs>= 65) plankpoints=plankPoint[10]; //1:05 5
-    else if (secs>= 45) plankpoints=plankPoint[11]; //0:45 5
-    
-  } else if (age == 'Male 45-49') {
-    plankPoint=[20.0, 19.7, 19.3, 18.9, 18.5, 18.0, 16.7, 15.3, 14.0, 12.7, 11.3, 10.0];
-    
-    if (secs>= 195-5) plankpoints=plankPoint[0]; //3:10 5
-    else if (secs>= 190-5) plankpoints=plankPoint[1]; //3:05 5
-    else if (secs>= 185-5) plankpoints=plankPoint[2]; //3:00 5
-    else if (secs>= 179-5) plankpoints=plankPoint[3]; //2:54 5
-    else if (secs>= 172-5) plankpoints=plankPoint[4]; //2:47 5
-    else if (secs>= 165-5) plankpoints=plankPoint[5]; //2:40 5
-    else if (secs>= 145-5) plankpoints=plankPoint[6]; //2:20 5
-    else if (secs>= 125-5) plankpoints=plankPoint[7]; //2:00 5
-    else if (secs>= 105-5) plankpoints=plankPoint[8]; //1:40 5
-    else if (secs>= 85-5) plankpoints=plankPoint[9]; //1:20 5
-    else if (secs>= 65-5) plankpoints=plankPoint[10]; //1:00 5
-    else if (secs>= 45-5) plankpoints=plankPoint[11]; //0:40 5
-    
-  } else if (age == 'Male 50-54') {
-    plankPoint=[20.0, 19.7, 19.3, 18.9, 18.5, 18.0, 16.7, 15.3, 14.0, 12.7, 11.3, 10.0];
-    
-    if (secs>= 190) plankpoints=plankPoint[0]; //3:10 5
-    else if (secs>= 185-5) plankpoints=plankPoint[1]; //3:05 5
-    else if (secs>= 180-5) plankpoints=plankPoint[2]; //3:00 5
-    else if (secs>= 172-5) plankpoints=plankPoint[3]; //2:54 5
-    else if (secs>= 167-5) plankpoints=plankPoint[4]; //2:47 5
-    else if (secs>= 160-5) plankpoints=plankPoint[5]; //2:40 5
-    else if (secs>= 140-5) plankpoints=plankPoint[6]; //2:20 5
-    else if (secs>= 120-5) plankpoints=plankPoint[7]; //2:00 5
-    else if (secs>= 100-5) plankpoints=plankPoint[8]; //1:40 5
-    else if (secs>= 80-5) plankpoints=plankPoint[9]; //1:20 5
-    else if (secs>= 60-5) plankpoints=plankPoint[10]; //1:00 5
-    else if (secs>= 40-5) plankpoints=plankPoint[11]; //0:40 5
-    
-  } else if (age == 'Male 55-59') {
-    plankPoint=[20.0, 19.7, 19.3, 18.9, 18.5, 18.0, 16.7, 15.3, 14.0, 12.7, 11.3, 10.0];
-    
-    if (secs>= 180) plankpoints=plankPoint[0]; //3:10 5
-    else if (secs>= 175) plankpoints=plankPoint[1]; //3:05 5
-    else if (secs>= 170) plankpoints=plankPoint[2]; //3:00 5
-    else if (secs>= 162) plankpoints=plankPoint[3]; //2:54 5
-    else if (secs>= 157) plankpoints=plankPoint[4]; //2:47 5
-    else if (secs>= 150) plankpoints=plankPoint[5]; //2:40 5
-    else if (secs>= 130) plankpoints=plankPoint[6]; //2:20 5
-    else if (secs>= 110) plankpoints=plankPoint[7]; //2:00 5
-    else if (secs>= 90) plankpoints=plankPoint[8]; //1:40 5
-    else if (secs>= 70) plankpoints=plankPoint[9]; //1:20 5
-    else if (secs>= 50) plankpoints=plankPoint[10]; //1:00 5
-    else if (secs>= 30) plankpoints=plankPoint[11]; //0:40 5
-    
-  } else if (age == 'Male >60') {
-    plankPoint=[20.0, 19.7, 19.3, 18.9, 18.5, 18.0, 16.7, 16.0, 14.0, 12.7, 11.3, 10.0];
-    
-    if (secs>= 175) plankpoints=plankPoint[0]; 
-    else if (secs>= 170) plankpoints=plankPoint[1]; 
-    else if (secs>= 165) plankpoints=plankPoint[2]; 
-    else if (secs>= 159) plankpoints=plankPoint[3]; //2:39
-    else if (secs>= 152) plankpoints=plankPoint[4]; 
-    else if (secs>= 145) plankpoints=plankPoint[5]; 
-    else if (secs>= 125) plankpoints=plankPoint[6]; 
-    else if (secs>= 115) plankpoints=plankPoint[7]; 
-    else if (secs>= 85) plankpoints=plankPoint[8]; 
-    else if (secs>= 65) plankpoints=plankPoint[9]; 
-    else if (secs>= 45) plankpoints=plankPoint[10]; 
-    else if (secs>= 25) plankpoints=plankPoint[11]; 
-    
-  } else if (age == 'Female 18-24') {
-      plankPoint=[20.0,19.0,18.7,18.5,18.3,15.9,15.2,14.4,12.1,11.3,10.5,10.3,10.0];
-    if (secs>= 210) plankpoints=plankPoint[0];
-    else if (secs>= 205) plankpoints=plankPoint[1]; 
-    else if (secs>= 198) plankpoints=plankPoint[2]; 
-    else if (secs>= 192) plankpoints=plankPoint[3]; 
-    else if (secs>= 185) plankpoints=plankPoint[4];  
-    else if (secs>= 165) plankpoints=plankPoint[5];
-    else if (secs>= 145) plankpoints=plankPoint[6];
-    else if (secs>= 125) plankpoints=plankPoint[7]; 
-    else if (secs>= 105) plankpoints=plankPoint[8]; 
-    else if (secs>= 85) plankpoints=plankPoint[9]; 
-    else if (secs>= 65) plankpoints=plankPoint[10]; 
-    else if (secs>= 60) plankpoints=plankPoint[11]; 
-    else if (secs>= hms(':55')) plankpoints=plankPoint[12];
-    
-  } else if (age == 'Female 25-29') {
-    plankPoint=[20.0, 19.8,19.6,19.3,19.1,16.9,16.2,15.5,13.3,12.5,11.8,10.2,10.0];
-    if (secs>= hms('3:25')) plankpoints=plankPoint[0];
-    else if (secs>= hms('3:20')) plankpoints=plankPoint[1];
-    else if (secs>= hms('3:14')) plankpoints=plankPoint[2];
-    else if (secs>= hms('3:07')) plankpoints=plankPoint[3];
-    else if (secs>= hms('3:00')) plankpoints=plankPoint[4];
-    else if (secs>= hms('2:40')) plankpoints=plankPoint[5];
-    else if (secs>= hms('2:20')) plankpoints=plankPoint[6];
-    else if (secs>= hms('2:00')) plankpoints=plankPoint[7];
-    else if (secs>= hms('1:40')) plankpoints=plankPoint[8];
-    else if (secs>= hms('1:20')) plankpoints=plankPoint[9];
-    else if (secs>= hms('1:00')) plankpoints=plankPoint[10];
-    else if (secs>= hms(':55')) plankpoints=plankPoint[11];
-    else if (secs>= hms(':50')) plankpoints=plankPoint[12];
-    
-  } else if (age == 'Female 30-34') {
-    plankPoint=[20.0,19.7,19.3,18.8,18.4,17.1,15.8,14.5,13.2,11.9,10.6,10.3,10.0];
-    if (secs>= hms('3:20')) plankpoints=plankPoint[0];
-    else if (secs>= hms('3:15')) plankpoints=plankPoint[1]; //3:25
-    else if (secs>= hms('3:09')) plankpoints=plankPoint[2]; //3:20
-    else if (secs>= hms('3:02')) plankpoints=plankPoint[3]; //3:15
-    else if (secs>= hms('2:55')) plankpoints=plankPoint[4]; //3:09
-    else if (secs>= hms('2:35')) plankpoints=plankPoint[5]; //3:02
-    else if (secs>= hms('2:15')) plankpoints=plankPoint[6]; //2:55
-    else if (secs>= hms('1:55')) plankpoints=plankPoint[7]; //2:35
-    else if (secs>= hms('1:35')) plankpoints=plankPoint[8]; //2:15
-    else if (secs>= hms('1:15')) plankpoints=plankPoint[9]; //1:55
-    else if (secs>= hms('0:55')) plankpoints=plankPoint[10]; // 1:35
-    else if (secs>= hms(':50')) plankpoints=plankPoint[11]; //1:15
-    else if (secs>= hms(':45')) plankpoints=plankPoint[12]; //0:55
-    
-  } else if (age == 'Female 35-39') {
-    plankPoint=[20.0,19.7,19.3,18.8,18.4,17.1,15.8,14.5,13.2,11.9,10.6,10.3,10.0];
-    
-    if (secs>= hms('3:15')) plankpoints=plankPoint[0];
-    else if (secs>= hms('3:10')) plankpoints=plankPoint[1]; //3:25
-    else if (secs>= hms('3:04')) plankpoints=plankPoint[2]; //3:20
-    else if (secs>= hms('2:57')) plankpoints=plankPoint[3]; //3:15
-    else if (secs>= hms('2:50')) plankpoints=plankPoint[4]; //3:09
-    else if (secs>= hms('2:30')) plankpoints=plankPoint[5]; //3:02
-    else if (secs>= hms('2:10')) plankpoints=plankPoint[6]; //2:55
-    else if (secs>= hms('1:50')) plankpoints=plankPoint[7]; //2:35
-    else if (secs>= hms('1:30')) plankpoints=plankPoint[8]; //2:15
-    else if (secs>= hms('1:10')) plankpoints=plankPoint[9]; //1:55
-    else if (secs>= hms('0:50')) plankpoints=plankPoint[10]; // 1:35
-    else if (secs>= hms(':45')) plankpoints=plankPoint[11]; //1:15
-    else if (secs>= hms(':40')) plankpoints=plankPoint[12]; //0:55 
-    
-  } else if (age == 'Female 40-44') {
-    plankPoint=[20.0,19.7,19.3,18.8,18.4,17.1,15.8,14.5,13.2,11.9,10.6,10.3,10.0];
-    
-    if (secs>= hms('3:10')) plankpoints=plankPoint[0];
-    else if (secs>= hms('3:05')) plankpoints=plankPoint[1]; //3:25
-    else if (secs>= hms('2:59')) plankpoints=plankPoint[2]; //3:20
-    else if (secs>= hms('2:52')) plankpoints=plankPoint[3]; //3:15
-    else if (secs>= hms('2:45')) plankpoints=plankPoint[4]; //3:09
-    else if (secs>= hms('2:25')) plankpoints=plankPoint[5]; //3:02
-    else if (secs>= hms('2:05')) plankpoints=plankPoint[6]; //2:55
-    else if (secs>= hms('1:45')) plankpoints=plankPoint[7]; //2:35
-    else if (secs>= hms('1:25')) plankpoints=plankPoint[8]; //2:15
-    else if (secs>= hms('1:05')) plankpoints=plankPoint[9]; //1:55
-    else if (secs>= hms('0:45')) plankpoints=plankPoint[10]; // 1:35
-    else if (secs>= hms(':40')) plankpoints=plankPoint[11]; //1:15
-    else if (secs>= hms(':35')) plankpoints=plankPoint[12]; //0:55
-    
-  } else if (age == 'Female 45-49') {
-    plankPoint=[20.0,19.7,19.3,18.8,18.4,17.1,15.8,14.5,13.2,11.9,10.6,10.3,10.0];
-    
-    if (secs>= hms('3:05')) plankpoints=plankPoint[0];
-    else if (secs>= hms('3:00')) plankpoints=plankPoint[1]; //3:25
-    else if (secs>= hms('2:54')) plankpoints=plankPoint[2]; //3:20
-    else if (secs>= hms('2:47')) plankpoints=plankPoint[3]; //3:15
-    else if (secs>= hms('2:40')) plankpoints=plankPoint[4]; //3:09
-    else if (secs>= hms('2:20')) plankpoints=plankPoint[5]; //3:02
-    else if (secs>= hms('2:00')) plankpoints=plankPoint[6]; //2:55
-    else if (secs>= hms('1:40')) plankpoints=plankPoint[7]; //2:35
-    else if (secs>= hms('1:20')) plankpoints=plankPoint[8]; //2:15
-    else if (secs>= hms('1:00')) plankpoints=plankPoint[9]; //1:55
-    else if (secs>= hms('0:40')) plankpoints=plankPoint[10]; // 1:35
-    else if (secs>= hms(':35')) plankpoints=plankPoint[11]; //1:15
-    else if (secs>= hms(':30')) plankpoints=plankPoint[12]; //0:55
-    
-  } else if (age == 'Female 50-54') {
-    plankPoint=[20.0,19.7,19.3,18.8,18.4,17.1,15.8,14.5,13.2,11.9,10.6,10.3,10.0];
-    
-    if (secs>= hms('3:00')) plankpoints=plankPoint[0];
-    else if (secs>= hms('2:55')) plankpoints=plankPoint[1]; //3:25
-    else if (secs>= hms('2:49')) plankpoints=plankPoint[2]; //3:20
-    else if (secs>= hms('2:42')) plankpoints=plankPoint[3]; //3:15
-    else if (secs>= hms('2:35')) plankpoints=plankPoint[4]; //3:09
-    else if (secs>= hms('2:15')) plankpoints=plankPoint[5]; //3:02
-    else if (secs>= hms('1:55')) plankpoints=plankPoint[6]; //2:55
-    else if (secs>= hms('1:35')) plankpoints=plankPoint[7]; //2:35
-    else if (secs>= hms('1:15')) plankpoints=plankPoint[8]; //2:15
-    else if (secs>= hms('0:55')) plankpoints=plankPoint[9]; //1:55
-    else if (secs>= hms('0:35')) plankpoints=plankPoint[10]; // 1:35
-    else if (secs>= hms(':30')) plankpoints=plankPoint[11]; //1:15
-    else if (secs>= hms(':25')) plankpoints=plankPoint[12]; //0:55
-    
-  } else if (age == 'Female 55-59') {
-    plankPoint=[20.0,19.7,19.3,18.8,18.4,17.1,15.8,14.5,13.2,11.9,10.6,10.3,10.0];
-    
-    if (secs>= hms('2:55')) plankpoints=plankPoint[0];
-    else if (secs>= hms('2:50')) plankpoints=plankPoint[1]; //3:25
-    else if (secs>= hms('2:44')) plankpoints=plankPoint[2]; //3:20
-    else if (secs>= hms('2:37')) plankpoints=plankPoint[3]; //3:15
-    else if (secs>= hms('2:30')) plankpoints=plankPoint[4]; //3:09
-    else if (secs>= hms('2:10')) plankpoints=plankPoint[5]; //3:02
-    else if (secs>= hms('1:50')) plankpoints=plankPoint[6]; //2:55
-    else if (secs>= hms('1:30')) plankpoints=plankPoint[7]; //2:35
-    else if (secs>= hms('1:10')) plankpoints=plankPoint[8]; //2:15
-    else if (secs>= hms('0:50')) plankpoints=plankPoint[9]; //1:55
-    else if (secs>= hms('0:30')) plankpoints=plankPoint[10]; // 1:35
-    else if (secs>= hms(':25')) plankpoints=plankPoint[11]; //1:15
-    else if (secs>= hms(':20')) plankpoints=plankPoint[12]; //0:55
-    
-  } else if (age == 'Female >60') {
-    plankPoint=[20.0,19.7,19.3,18.8,18.4,17.1,15.8,14.5,13.2,11.9,10.6,10.3,10.0];
-    
-    if (secs>= hms('2:50')) plankpoints=plankPoint[0];
-    else if (secs>= hms('2:45')) plankpoints=plankPoint[1]; //3:25
-    else if (secs>= hms('2:39')) plankpoints=plankPoint[2]; //3:20
-    else if (secs>= hms('2:32')) plankpoints=plankPoint[3]; //3:15
-    else if (secs>= hms('2:25')) plankpoints=plankPoint[4]; //3:09
-    else if (secs>= hms('2:05')) plankpoints=plankPoint[5]; //3:02
-    else if (secs>= hms('1:45')) plankpoints=plankPoint[6]; //2:55
-    else if (secs>= hms('1:25')) plankpoints=plankPoint[7]; //2:35
-    else if (secs>= hms('1:05')) plankpoints=plankPoint[8]; //2:15
-    else if (secs>= hms('0:30')) plankpoints=plankPoint[9]; //1:55
-    else if (secs>= hms('0:25')) plankpoints=plankPoint[10]; // 1:35
-    else if (secs>= hms(':20')) plankpoints=plankPoint[11]; //1:15
-    else if (secs>= hms(':15')) plankpoints=plankPoint[12]; //0:55 
-    
-  }
-  
-     
-  
-return plankpoints; 
+  return calculatePlankScore(secs, scoreArrays);
 }
 
 function pushScore(pnum)
 {
-  var pushPoints = [];
-  var ppoints = 0;
-  var age = ageSel.value();
-  
-if(age == 'Male 18-24') {
-  pushPoints=[20,19.8,19.6, 19.4, 19.2, 19.0, 18.8, 18.6, 18.4, 18.2, 18, 17.8, 17.6, 17.5, 17.4, 17.2, 17, 16.8, 16.6, 16.2, 16, 15.6, 15.4, 15, 14.6, 14.4, 14, 13.6, 13, 12.6, 12, 11.6, 11, 10.6, 10, 7, 4, 1,0];
-} else if(age == 'Male 25-29') {
-  pushPoints=[20, 19.7, 19.4, 19, 18.8, 18.6, 18.4, 18.2, 18, 17.8, 17.6, 17.5, 17.4, 17.2, 17, 16.8, 16.6, 16.2, 16, 15.6, 15.4, 15, 14.6, 14.4, 14, 13.6, 13, 12.6, 12, 11.6, 11, 10.6, 10, 7, 4,1];
-} else if(age == 'Male 30-34') {
-  pushPoints=[20, 19.8, 19.6, 19.4, 19.2, 19, 18.8, 18.6, 18.5, 18.4, 18.2, 18, 17.8, 17.6, 17.4, 17.2, 17, 16.6, 16, 15.6, 15.4, 15, 14.6, 14, 13.6, 13.4, 13, 12, 11, 10.6, 10, 7, 4, 1];
-} else if(age == 'Male 35-39') {
-  pushPoints=[20, 19.5, 19, 18.8, 18.6,18.5, 18.4, 18.2, 18, 17.8, 17.6, 17.4, 17.2, 17, 16.6, 16, 15.6, 15.4, 15, 14.6, 14, 13.6, 13.4, 13, 12, 11, 10.6, 10, 7, 4, 1];
-} else if(age == 'Male 40-44') {
-  pushPoints=[20, 19.7, 19.4, 19.2, 19, 18.8, 18.4, 18.2, 18, 17.6, 17, 16.8, 16.6, 16.2, 16, 15, 14.6, 14.4, 14, 13, 12, 11.6, 11, 10, 7, 4, 1];
-} else if(age == 'Male 45-49') {
-  pushPoints=[20, 19.8, 19.6, 19.4, 19.2, 19, 18.8, 18.4, 18.2, 18, 17.6, 17, 16.8, 16.6, 16.2, 16, 15, 14.6, 14.4, 14, 13, 12.6, 12, 11.6, 11, 10.6, 10, 7, 4, 1];
-} else if(age == 'Male 50-54') {
-  pushPoints=[20, 19.8, 19.6, 19.4, 19.2, 19, 18.9, 18.8, 18.7, 18.6, 18.5, 18.4, 18.3, 18.2, 18, 17.6, 17, 16.6, 16.4, 16, 15, 14.6, 14.4, 14, 13, 12, 11.6, 11, 10.6, 10, 7, 4, 1];
-} else if(age == 'Male 55-59') {
-  pushPoints=[20, 19.5,  19,  18.6, 18, 17.8, 17.6, 17.4, 17, 16.8,  16.6, 16.2, 16, 15.6, 15, 14.6, 14,  13.6, 13, 12.6, 12, 11.6, 10, 7, 4, 1];
-} else if(age == 'Male >60') {
-  pushPoints=[20, 19.5,  19,  18.6, 18, 17.6, 17, 16, 15, 14, 13, 12.6, 12, 11.6, 11, 10.6, 10, 7, 4, 1];
-} else if(age == 'Female 18-24') {
-  pushPoints=[20, 19.8, 19.6, 19.4, 19.2, 19, 18.8, 18.6, 18.4, 18.2, 18, 17.8, 17.6, 17.2, 17, 16.8, 16.6, 16.4, 16.2, 16, 15, 14.6, 14.4, 14, 13, 12.6, 12, 11.6, 11, 10, 7, 4, 1];
-} else if(age == 'Female 25-29') {
-  pushPoints=[20, 19.8, 19.6, 19.4, 19.2, 19, 18.8, 18.6, 18.4, 18.2, 18, 17.8, 17.6, 17.2, 17, 16.8, 16.6, 16.4, 16.2, 16, 15, 14.6, 14.4, 14, 13, 12.6, 12, 11.6, 11, 10.6, 10, 7, 4, 1];
-} else if(age == 'Female 30-34') {
-  pushPoints=[20, 19.9, 19.8, 19.6, 19.4, 19.2, 19, 18.8, 18.7, 18.6, 18.4, 18.2, 18.1, 18, 17.9, 17.8, 17.6, 17.4, 17.3, 17.2, 17, 16.6, 16.4, 16, 15.8, 15.6, 15.2, 15, 14, 13.6, 13, 12, 10, 7, 4, 1];
-} else if(age == 'Female 35-39') {
-  pushPoints=[20, 19.7, 19.4, 19, 18.8, 18.7, 18.6, 18.4, 18.2, 18.1, 18, 17.9, 17.8, 17.6, 17.4, 17.3, 17.2, 17, 16.6, 16.4, 16, 15.8, 15.6, 15.2, 15, 14, 13.6, 13, 12, 10, 7, 4, 1];
-} else if(age == 'Female 40-44') {
-  pushPoints=[20,19.8,19.6,19.4,19.2,19.0,18.8,18.4,18.2,18.0,17.8,17.6,17.4,17.3,17.2,17.0,16.8,16.6,16.4,16.2,16.0,15.6,15.5,14.0,13.0,12.0,11.0,10.0,7.0,4.0,1.0];
-} else if(age == 'Female 45-49') {
-  pushPoints=[20,19.8,19.6,19.4,19.2,19.0,18.8,18.6,18.4,18.2,18.0,17.8,17.6,17.4,17.2,17.0,16.8,16.6,16.4,16.2,16.0,15.6,15.0,14.0,13.0,12.0,11.0,10.0,7.0,4.0,1.0];
-} else if(age == 'Female 50-54') {
-  pushPoints=[20.0,19.8,19.6,19.4,19.2,19.0,18.8,18.6,18.4,18.2,18.0,17.6,17.4,17.3,17.2,17.0,16.8,16.6,16.4,16.2,16.0,15.0,14.0,13.0,12.0,11.0,10.0,7.0,4.0,1.0];
-} else if(age == 'Female 55-59') {
-  pushPoints=[20.0,19.7,19.4,19.2,19.0,18.6,18.0,17.6,17.2,17.0,16.8,16.6,16.4,16.2,16.0,15.0,14.0,13.0,12.0,11.0,10.0,7.0,4.0,1.0];
-} else if(age == 'Female >60') {
-  pushPoints=[20.0,19.5,19.0,18.8,18.0,17.6,17.0,16.0,15.0,14.0,13.0,12.0,11.4,10.6,10.0,7.0,4.0,1.0];
-}
-if((pnum>=pushmin) && (pnum<=pushmax))
-{
-ppoints=pushPoints[pushmax-pnum];  
-}
-
-return ppoints; 
+  return calculateStrengthScore(pnum, scoreArrays);
 }
 
 function hrpushScore(hrpnum) {
-  var hrpushPoints = [];
-  var hrppoints = 0;
-  var age = ageSel.value();
-  
-  if (age == 'Male 18-24') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.4, 10.0];
-  } else if (age == 'Male 25-29') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.4, 10.0];
-  } else if (age == 'Male 30-34') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.4, 10.0];
-  } else if (age == 'Male 35-39') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.4, 10.0];
-  } else if (age == 'Male 40-44') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.4, 10.0];
-  } else if (age == 'Male 45-49') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.4, 10.0];
-  } else if (age == 'Male 50-54') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.3, 17.9, 17.5, 17.1, 16.7, 16.3, 15.8, 15.4, 15.0, 14.6, 14.2, 13.8, 13.3, 12.9, 12.5, 12.1, 11.7, 11.3, 10.8, 10.4, 10,];  } else if (age == 'Male 55-59') {
-    hrpushPoints = [20.0, 19.6, 19.1, 18.7, 18.3, 17.8, 17.4, 17.0, 16.5, 16.1, 15.7, 15.2, 14.8, 14.3, 13.9, 13.5, 13.0, 12.6, 12.2, 11.7, 11.3, 10.9, 10.4, 10.0];
-  } else if (age == 'Male >60') {
-    hrpushPoints = [20.0, 19.5, 19.0, 18.5, 18.0, 17.5, 17.0, 16.5, 16.0, 15.5, 15.0, 14.5, 14.0, 13.5, 13.0, 12.5, 12.0, 11.5, 11.0, 10.5, 10.0];
-  } else if (age == 'Female 18-24') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.4, 10.0];
-  } else if (age == 'Female 25-29') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.4, 10.0];
-  } else if (age == 'Female 30-24') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.4, 10.0];
-  } else if (age == 'Female 35-39') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.4, 10.0];
-  } else if (age == 'Female 40-44') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.0];
-  } else if (age == 'Female 45-49') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.0];
-  } else if (age == 'Female 50-54') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.0];  
-  } else if (age == 'Female 55-59') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.8, 10.0];
-  } else if (age == 'Female >60') {
-    hrpushPoints = [20.0, 19.6, 19.2, 18.8, 18.4, 18.0, 17.6, 17.2, 16.8, 16.4, 16.0, 15.6, 15.2, 14.8, 14.4, 14.0, 13.6, 13.2, 12.8, 12.4, 12.0, 11.6, 11.2, 10.0];
-  }
-  
-  if((hrpnum>=hrmin) && (hrpnum<=hrmax))
-  {
-  hrppoints=hrpushPoints[hrmax-hrpnum];  
-  }
-  return hrppoints;
+  return calculateStrengthScore(hrpnum, scoreArrays);
 }
 
 function sitScore(snum)
 {
-  var sitPoints = [];
-  var spoints = 0;
-  age = ageSel.value();
-if (age == 'Male 18-24') {
-    sitPoints=[20, 19.5, 19, 18.8, 18.4, 18, 17.6, 17.4, 17, 16.6, 16, 15, 14, 13, 12.8, 12, 9, 6, 3];
-} else if (age == 'Male 25-29') {
-  sitPoints=[20, 19.5, 19, 18.8, 18.4, 18, 17.6, 17.4, 17, 16.6, 16, 15, 14, 13, 12.8, 12, 9, 6, 3];
-} else if (age == 'Male 30-34') {
-  sitPoints=[20, 19.7, 19.4, 19, 18.8, 18.4, 18, 17.6, 17.4, 17, 16.6, 16, 15, 14, 13, 12, 9, 6, 3];
-} else if (age == 'Male 35-39') {
-  sitPoints=[20, 19.7, 19.4, 19, 18.8, 18.4, 18, 17.6, 17.4, 17, 16.6, 16, 15, 14, 13, 12, 9, 6, 3];
-}else if (age == 'Male 40-44') {
-  sitPoints=[20, 19.7, 19.4, 19, 18.8, 18.4, 18.2, 18, 17.6, 17.4, 17, 16, 15.6, 15, 14, 13, 12, 9, 6, 3];
-}else if (age == 'Male 45-49') {
-  sitPoints=[20, 19.7, 19.4, 19.2, 19, 18.8, 18.4, 18, 17.6, 17.4, 17, 16.6, 16, 15.6, 15, 14, 13, 12, 9, 6, 3];
-}else if (age == 'Male 50-54') {
-  sitPoints=[20, 19.7, 19.4, 19, 18.8, 18.4, 18.2, 18, 17.6, 17.4, 17, 16, 15.6, 15, 14.6, 14, 13, 12.6, 12, 9, 6, 3];
-}else if (age == 'Male 55-59') {
-  sitPoints=[20, 19.7, 19.4, 19, 18.8, 18.4, 18.2, 18, 17.6, 17.4, 17, 16, 15.6, 15, 14.6, 14, 13.6, 13, 12.6, 12, 9, 6, 3];
-}else if (age == 'Male >60') {
-  sitPoints=[20, 19.7, 19.4, 19, 18.8, 18.4, 18.2, 18, 17.8, 17.6, 17.2, 17, 16, 15.6, 15, 14.6, 14, 13.6, 13, 12.6, 12, 9, 6, 3];
-} else if (age == 'Female 18-24') {
-    sitPoints=[20, 19.7, 19.4, 19, 18.8, 18, 17.8, 17.6, 17.2, 17, 16, 15.6, 15, 14, 13.6, 13, 12, 9, 6, 3];
-} else if (age == 'Female 25-29') {
-  sitPoints=[20, 19.5, 19, 18.8, 18, 17.8, 17.2, 17, 16, 15.6, 15, 14.6, 14, 13.6, 13, 12.6, 12, 9, 6, 3];
-} else if (age == 'Female 30-34') {
-  sitPoints=[20,  19.7, 19.4, 19, 18.8, 18, 17.6, 17, 16.6, 16.4, 16, 15.6, 15, 14, 13.6, 13, 12, 9, 6, 3];
-} else if (age == 'Female 35-39') {
-  sitPoints=[20,  19.7, 19.4, 19, 18.8, 18, 17.6, 17, 16.6, 16.4, 16, 15.6, 15, 14, 13.6, 13, 12, 9, 6, 3];
-}else if (age == 'Female 40-44') {
-  sitPoints=[20, 19.7, 19.4, 19, 18.8, 18.4, 18.2, 18, 17.6, 17, 16.6, 16.4, 16, 15, 14, 13.6, 12.8, 12, 9, 6, 3];
-}else if (age == 'Female 45-49') {
-  sitPoints=[20, 19.7, 19.4, 19, 18.8, 18.4, 18.2, 18, 17.6, 17, 16.6, 16.4, 16, 12, 9, 6, 3];
-}else if (age == 'Female 50-54') {
-  sitPoints=[20, 19.5, 19, 18, 17.8, 17.6, 17.2, 17, 16, 15, 14, 13, 12, 9, 6, 3];
-}else if (age == 'Female 55-59') {
-  sitPoints=[20, 19.7, 19.4, 19.2, 19, 18, 17.8, 17.6, 17.2, 17, 16, 15, 14.6, 14, 13.6, 13, 12.6, 12, 9, 6, 3];
-}else if (age == 'Female >60') {
-  sitPoints=[20, 19.7, 19.4, 19, 18.8, 18, 17.8, 17.6, 17.4, 17.2, 17, 16.8, 16.6, 16.4, 16, 15.6, 15, 14.6, 14, 13, 12, 9, 6, 3];
-}
-
-if((snum>=sitmin) && (snum<=sitmax))
-{
-spoints=sitPoints[sitmax-snum];  
-}
-   return spoints; 
+  return calculateSitupsScore(snum, scoreArrays);
 }
 
 function rsitScore(rsitnum) {
-  var rsitPoints=[];
-  var rspoints=0;
-  var age = ageSel.value();
-  if (age == 'Male 18-24') {
-    rsitPoints=[20.0, 19.7, 19.4, 19.1, 18.8, 18.5, 18.2,17.9, 17.6, 17.3, 17.0, 16.7,16.4,16.1,15.8,15.5,15.2,14.8,14.5,14.2,13.9,13.6,13.3,13.0,12.7,12.4,12.1,11.8,11.5,11.2,10.9,10.6,10.3,10.0];
-  } else if (age == 'Male 25-29') {
-    rsitPoints=[20.0, 19.6,19.3,189,18.6,18.2,17.9,17.5,17.1,16.8,16.4,16.1,15.7,15.4,15.0,14.6,14.3,13.9,13.6,13.2,12.9,12.5,12.1,11.8,11.4,11.1,10.7,10.4,10.0];
-  } else if (age == 'Male 30-34') {
-    rsitPoints=[20.0, 19.6,19.3,18.9,18.6,18.2,17.9,17.5,17.1,16.8,16.4,16.1,15.7,15.4,15.0,14.6,14.3,13.9,13.6,13.2,12.9,12.5,12.1,11.8,11.4,11.1,10.7,10.4,10.0];
-  } else if (age == 'Male 35-39') {
-    rsitPoints=[20.0, 19.6,19.3,18.9,18.6,18.2,17.9,17.5,17.1,16.8,16.4,16.1,15.7,15.4,15.0,14.6,14.3,13.9,13.6,13.2,12.9,12.5,12.1,11.8,11.4,11.1,10.7,10.4,10.0];
-  } else if (age == 'Male 40-44') {
-    rsitPoints=[20.0, 19.6,19.3,18.9,18.6,18.2,17.9,17.5,17.1,16.8,16.4,16.1,15.7,15.4,15.0,14.6,14.3,13.9,13.6,13.2,12.9,12.5,12.1,11.8,11.4,11.1,10.7,10.4,10.0];
-  } else if (age == 'Male 45-49') {
-    rsitPoints=[20.0, 19.7,19.4,19.1,18.8,18.4,18.1,17.8,17.5,17.2,16.9,16.6,16.3,15.9,15.6,15.3,15.0,14.7,14.4,14.1,13.8,13.4,13.1,12.8,12.5,12.2,11.9,11.6,11.3,10.9,10.6,10.3,10.0];
-  } else if (age == 'Male 50-54') {
-    rsitPoints=[20.0, 19.7,19.4,19.1,18.8,18.5,18.2,17.9,17.6,17.3,17.0,16.7,16.4,16.1,15.8,15.5,15.2,14.8,14.5,14.2,13.9,13.6,13.3,13.0,12.7,12.4,12.1,11.8,11.5,11.2,10.9,10.6,10.3,10.0];
-  } else if (age == 'Male 55-59') {
-    rsitPoints=[20.0, 19.7,19.4,19.1,18.8,18.5,18.2,17.9,17.6,17.3,17.0,16.7,16.4,16.1,15.8,15.5,15.2,14.8,14.5,14,2,13.9,13.6,13.3,13.0,12.7,12.4,12.1,11.8,11.5,11.2,10.9,10.6,10.3,10.0];
-  } else if (age == 'Male >60') {
-    rsitPoints=[20.0, 19.6,19.3,18.9,18.6,18.2,17.9,17.5,17.1,16.8,16.4,16.1,15.7,15.4,15.0,14.6,14.3,13.9,13.6,13.2,12.9,12.5,12.1,11.8,11.4,11.1,10.7,10.4,10];
-  } else if (age == 'Female 18-24') {
-    rsitPoints=[20.0, 19.7, 19.4, 19.2, 18.9, 18.6, 18.3,18.1, 17.8, 17.5, 17.2, 16.9,16.7,16.4,16.1,15.8,15.6,15.3,15.0,14.7,14.4,14.2,13.9,13.6,13.3,13.1,12.8,12.5,12.2,11.9,11.7,11.4,11.1,10.8,10.6,10.3,10.0];
-  } else if (age == 'Female 25-29') {
-    rsitPoints=[20.0, 19.7, 19.4, 19.2, 18.9, 18.6, 18.3,18.1, 17.8, 17.5, 17.2, 16.9,16.7,16.4,16.1,15.8,15.6,15.3,15.0,14.7,14.4,14.2,13.9,13.6,13.3,13.1,12.8,12.5,12.2,11.9,11.7,11.4,11.1,10.8,10.6,10.3,10.0];
-  } else if (age == 'Female 30-34') {
-    rsitPoints=[20.0, 19.7, 19.4, 19.1, 18.9, 18.6, 18.3,18.0, 17.7, 17.4,17.1,16.9,16.6,16.3,16.0,15.7,15.4,15.1,14.9,14.6,14.3,14.0,13.7,13.4,13.1,12.9,12.6,12.3,12.0,11.7,11.4,11.1,10.9,10.6,10.3,10.0];
-  } else if (age == 'Female 35-39') {
-    rsitPoints=[20.0,19.7,19.4,19.2,18.9,18.6,18.3,18.1,17.8,17.5,17.2,16.9,16.7,16.4,16.1,15.8,15.6,15.3,15.0,14.7,14.4,14.2,13.9,13.6,13.3,13.1,12.8,12.5,12.2,11.9,11.7,11.4,11.1,10.8,10.6,10.3,10.0];
-  } else if (age == 'Female 40-44') {
-    rsitPoints=[20.0,19.7,19.4,19.2,18.9,18.6,18.3,18.1,17.8,17.5,17.2,16.9,16.7,16.4,16.1,15.8,15.6,15.3,15.0,14.7,14.4,14.2,13.9,13.6,13.3,13.1,12.8,12.5,12.2,11.9,11.7,11.4,11.1,10.8,10.6,10.3,10.0];
-  } else if (age == 'Female 45-49') {
-    rsitPoints=[20.0,19.7,19.4,19.1,18.8,18.5,18.2,17.9,17.6,17.4,17.1,16.8,16.5,16.2,15.9,15.6,15.3,15.0,14.7,14.4,14.1,13.8,13.5,13.2,12.9,12.6,12.4,12.1,11.8,11.5,11.2,10.9,10.6,10.3,10.0];
-  } else if (age == 'Female 50-54') {
-    rsitPoints=[20.0,19.7,19.4,19.1,18.8,18.5,18.2,17.9,17.6,17.3,17.0,16.7,16.4,16.1,15.8,15.5,15.2,14.8,14.5,14.2,13.9,13.6,13.3,13.0,12.7,12.4,12.1,11.8,11.5,11.2,10.9,10.6,10.3,10.0];
-  } else if (age == 'Female 55-59') {
-    rsitPoints=[20.0,19.7,19.4,19.1,18.8,18.4,18.1,17.8,17.5,17.2,16.9,16.6,16.3,15.9,15.6,15.3,15.0,14.7,14.4,14.1,13.8,13.4,13.1,12.8,12.5,12.2,11.9,11.6,11.3,10.9,10.6,10.3,10.0];
-  } else if (age == 'Female >60') {
-    rsitPoints=[20.0, 19.6,19.3,18.9,18.5,18.1,17.8,17.4,17.0,16.7,16.3,15.9,15.6,15.2,14.8,14.4,14.1,13.7,13.3,13.0,12.6,12.2,11.9,11.5,11.1,10.7,10.4,10.0];
-  }
-  
-  
-  
-  if((rsitnum>=rsitmin) && (rsitnum<=rsitmax))
-{
-rspoints=rsitPoints[rsitmax-rsitnum];  
-}
-   return rspoints; 
+  return calculateSitupsScore(rsitnum, scoreArrays);
 }
 
 function hamrScore() {
-  var hamrPoints = [];
-  var points = 0;
-  var age = ageSel.value();
-  
-  if(age == 'Male 18-24') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 46.5, 44, 41, 38, 35, 0];
-  
-  if (shuttleRun.value() >= 100) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 94) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 92) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 88) points=hamrPoints[3]
-  else if (shuttleRun.value() >= 86) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 83) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 80) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 77) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 74) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 71) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 68) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[20];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[21];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 36) points=hamrPoints[22];
-  
-  } else if (age == 'Male 25-29') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 46.5, 44, 41, 38, 35, 0];
-  
-  if (shuttleRun.value() >= 97) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 92) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 88) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 86) points=hamrPoints[3]
-  else if (shuttleRun.value() >= 83) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 80) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 77) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 74) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 71) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 68) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[20];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[21];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 33) points=hamrPoints[22];
-  
-  } else if (age == 'Male 30-34') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45.5, 43, 40.5, 38, 35, 0];
-  
-  if (shuttleRun.value() >= 94) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 88) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 86) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 83) points=hamrPoints[3]
-  else if (shuttleRun.value() >= 80) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 77) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 74) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 71) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 68) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[20];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[21];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 30) points=hamrPoints[22];
-  
-  } else if (age == 'Male 35-39') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45.5, 43, 40.5, 38, 35, 0];
-  
-  if (shuttleRun.value() >= 92) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 87) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 83) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 80) points=hamrPoints[3]
-  else if (shuttleRun.value() >= 77) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 74) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 71) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 68) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[20];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[21];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 27) points=hamrPoints[22];
-  
-  } else if (age == 'Male 40-44') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 46.5, 44, 41, 38, 35, 0];
-  
-  if (shuttleRun.value() >= 88) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 83) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 80) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 77) points=hamrPoints[3]
-  else if (shuttleRun.value() >= 74) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 71) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 68) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[20];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[21];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 24) points=hamrPoints[22];
- 
-  } else if (age == 'Male 45-49') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 46.5, 44, 41, 38, 35, 0];
-  
-  if (shuttleRun.value() >= 86) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 80) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 77) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 74) points=hamrPoints[3]
-  else if (shuttleRun.value() >= 71) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 68) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[20];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[21];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 22) points=hamrPoints[22];
- 
-  } else if (age == 'Male 50-54') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45.5, 43, 40.5, 38, 35, 0];
-  
-  if (shuttleRun.value() >= 80) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 74) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 71) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 68) points=hamrPoints[3]
-  else if (shuttleRun.value() >= 65) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 19) points=hamrPoints[20];
-  else if (shuttleRun.value() >= 16) points=hamrPoints[21];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 16) points=hamrPoints[22];
- 
-  } else if (age == 'Male 55-59') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45.5, 43, 40.5, 38, 35, 0];
-  
-  if (shuttleRun.value() >= 77) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 71) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 68) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[3]
-  else if (shuttleRun.value() >= 62) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 19) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 16) points=hamrPoints[20];
-  else if (shuttleRun.value() >= 13) points=hamrPoints[21];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 13) points=hamrPoints[22];
- 
-  } else if (age == 'Male >60') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 52.5, 51, 49.5, 47, 44.5, 41.5, 38.5, 35, 0];
-  
-  if (shuttleRun.value() >= 71) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[3]
-  else if (shuttleRun.value() >= 56) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 19) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 16) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 13) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 10) points=hamrPoints[20];
-  if (shuttleRun.value() < 10) points=hamrPoints[21];  
-  
- 
-  } else if(age == 'Female 18-24') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 46, 42.5, 39, 35, 0];
-  
-  if (shuttleRun.value() >= 83) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 77) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 74) points=hamrPoints[2]
-  else if (shuttleRun.value() >= 71) points=hamrPoints[3];
-  else if (shuttleRun.value() >= 68) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[20];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 22) points=hamrPoints[21];
-  
-  } else if (age == 'Female 25-29') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 49, 45.5, 42, 38.5, 35, 0];
-  
-  
-  if (shuttleRun.value() >= 80) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 74) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 71) points=hamrPoints[2]
-  else if (shuttleRun.value() >= 68) points=hamrPoints[3];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 19) points=hamrPoints[20];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 19) points=hamrPoints[21];
-  
-  } else if (age == 'Female 30-34') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 52.5, 51, 49.5, 47, 44.5, 42, 38.5, 35, 0];
-  
-  if (shuttleRun.value() >= 77) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 71) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 68) points=hamrPoints[2]
-  else if (shuttleRun.value() >= 65) points=hamrPoints[3];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 19) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 16) points=hamrPoints[20];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 16) points=hamrPoints[21];
-  
-  } else if (age == 'Female 35-39') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 52.5, 51, 49.5, 47, 44, 41, 38, 35, 0];
-  
-  
-  if (shuttleRun.value() >= 74) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 68) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[2]
-  else if (shuttleRun.value() >= 62) points=hamrPoints[3];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 19) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 16) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 13) points=hamrPoints[20];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 13) points=hamrPoints[21];
-  
-  } else if (age == 'Female 40-44') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45.5, 42, 38.5, 35, 0];
-  
-  
-  if (shuttleRun.value() >= 71) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 65) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[2]
-  else if (shuttleRun.value() >= 59) points=hamrPoints[3];
-  else if (shuttleRun.value() >= 56) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 19) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 16) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 13) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 10) points=hamrPoints[20];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 10) points=hamrPoints[21];
- 
-  } else if (age == 'Female 45-49') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 54.5, 54, 53.5, 52, 50.5, 48, 45, 42, 38.5, 35, 0];
-  
-  if (shuttleRun.value() >= 68) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 62) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 59) points=hamrPoints[2]
-  else if (shuttleRun.value() >= 56) points=hamrPoints[3];
-  else if (shuttleRun.value() >= 54) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 19) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 16) points=hamrPoints[17];
-  else if (shuttleRun.value() >= 13) points=hamrPoints[18];
-  else if (shuttleRun.value() >= 10) points=hamrPoints[19];
-  else if (shuttleRun.value() >= 7) points=hamrPoints[20];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 7) points=hamrPoints[21];
- 
-  } else if (age == 'Female 50-54') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 53.5, 52, 49.5, 46, 42.5, 39, 35, 0];
-  
-  if (shuttleRun.value() >= 56) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 51) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[3];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 19) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 16) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 13) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 10) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 7) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 5) points=hamrPoints[17];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 5) points=hamrPoints[18];
- 
-  } else if (age == 'Female 55-59') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 55, 53.5, 52, 49, 46, 43, 39, 35, 0];
-  
-  if (shuttleRun.value() >= 54) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 48) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 45) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[3];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 19) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 16) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 13) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 10) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 7) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 5) points=hamrPoints[16];
-  else if (shuttleRun.value() >= 2) points=hamrPoints[17];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 2) points=hamrPoints[18];
- 
-  } else if (age == 'Female >60') {
-    hamrPoints = [60, 59.5, 59, 58.5, 58, 57.5, 57, 56.5, 56, 55.5, 54, 52.5, 51, 47, 43, 39, 35, 0];
-  
-  if (shuttleRun.value() >= 48) points=hamrPoints[0];
-  else if (shuttleRun.value() >= 42) points=hamrPoints[1];
-  else if (shuttleRun.value() >= 39) points=hamrPoints[2];
-  else if (shuttleRun.value() >= 36) points=hamrPoints[3];
-  else if (shuttleRun.value() >= 33) points=hamrPoints[4];
-  else if (shuttleRun.value() >= 30) points=hamrPoints[5];
-  else if (shuttleRun.value() >= 27) points=hamrPoints[6];
-  else if (shuttleRun.value() >= 24) points=hamrPoints[7];
-  else if (shuttleRun.value() >= 22) points=hamrPoints[8];
-  else if (shuttleRun.value() >= 19) points=hamrPoints[9];
-  else if (shuttleRun.value() >= 16) points=hamrPoints[10];
-  else if (shuttleRun.value() >= 13) points=hamrPoints[11];
-  else if (shuttleRun.value() >= 10) points=hamrPoints[12];
-  else if (shuttleRun.value() >= 7) points=hamrPoints[13];
-  else if (shuttleRun.value() >= 5) points=hamrPoints[14];
-  else if (shuttleRun.value() >= 2) points=hamrPoints[15];
-  else if (shuttleRun.value() >= 1) points=hamrPoints[16];  //level 5, 1 shuttle
-  if (shuttleRun.value() < 1) points=hamrPoints[17];  
-  
- 
-  }
-  
-  return points
+  return calculateShuttleScore(shuttleRun.value(), scoreArrays);
 }
   
 
@@ -2157,6 +713,7 @@ function hamrScore() {
 
 
 function selectChange() {
+  setScoreArrays();
   if (pushSel.value() == 'Pushups') {
     pushupsText = 'Pushups: ';
     pushups.show();
@@ -2206,7 +763,6 @@ function selectChange() {
   if (runSel.value() == '1.5 Mile') {
     var runMinimum = runTime(runmin);
     runText = 'Run Time: ';
-    runValue = runnum.minutes + ":" + nf(runnum.sec,2);
     runtime.show();
     runmintxt.show();
     runsectxt.value(runMinimum.sec);
@@ -2269,12 +825,12 @@ function runChange()
 {
 var tm= runTime(runtime.value());
 runmintxt.value(tm.minutes);
-runsectxt.value(nf(tm.sec,2)); 
-runValue = tm.minutes + ":" + nf(tm.sec,2);  
+// console.log(nf(tm.sec,2) + " : " + tm.sec)
+runsectxt.value(tm.sec); 
 }
 
 // If submit button is clicked, use the values manually input from textboxes
-function calcButton()
+function calcBtnClick()
 {
   plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec,2);
   shuttlevalue = shuttleRun.value();
@@ -2332,7 +888,7 @@ function calcButton()
   // I think I'm pretty clever for coming up with this
   // It minimized the amount of code I have to paste into 
   // each score program. 
-  if(!isNaN(validPush) && !isNaN(validSit) && !isNaN(validRunMin) && !isNaN(validRunSec) &&       !isNaN(validPlankMin) && !isNaN(validPlankSec) && !isNaN(validShuttles))
+  if(!isNaN(validPush) && !isNaN(validSit) && !isNaN(validRunMin) && !isNaN(validRunSec) && !isNaN(validPlankMin) && !isNaN(validPlankSec) && !isNaN(validShuttles))
   {
     if (pushSel.value() == 'Pushups') {
       if(validPush>pushmax) {
@@ -2428,6 +984,7 @@ function ageChange() {
   removeSliders();
   createSliders();
   selectChange();
+  setScoreArrays();
 }
 
 function minMaxValueAge() {
@@ -2447,7 +1004,7 @@ function minMaxValueAge() {
   
   
   var age = ageSel.value();
-  if (age == 'Male 18-24') {
+  if (age == 'Male < 25') {
     pushmin = 30;
     pushmax = 67;
     sitmin = 39;
@@ -2600,7 +1157,7 @@ function minMaxValueAge() {
     shuttleMax = 71;
     strengthAbsLink = "./Score Chart jpgs/male_over60_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/male_over60_cardio.jpg";
-  } else if (age == 'Female 18-24') {
+  } else if (age == 'Female < 25') {
     pushmin = 15;
     pushmax = 47;
     sitmin = 35;
