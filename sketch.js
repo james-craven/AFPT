@@ -2420,6 +2420,7 @@ function removeSliders() {
   shuttletxt.remove();
   pushImg.remove();
   cardioImg.remove();
+  shuttleImg.remove();
 }
 
 function ageChange() {
