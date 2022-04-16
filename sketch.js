@@ -343,6 +343,35 @@ function setup() {
 
   setScoreArrays();
 
+  
+      var firebaseConfig = {
+      apiKey: "AIzaSyCBAB_KPIiDcNogD7ounFIsoM3-DPGMvZA",
+      authDomain: "afpt-2dc34.firebaseapp.com",
+      projectId: "afpt-2dc34",
+      storageBucket: "afpt-2dc34.appspot.com",
+      messagingSenderId: "1003402600665",
+      appId: "1:1003402600665:web:10e65940837ca2a7d9dec8",
+      measurementId: "G-GFRCEY89D5",
+      databaseURL: "https://afpt-2dc34-default-rtdb.firebaseio.com/",
+    };
+    firebase.initializeApp(firebaseConfig);
+    
+    var database = firebase.database();
+    var ref = database.ref('visitors');
+    var key;
+    ref.on('value', (snapshot) => {
+      var data = snapshot.val();
+      var keys = Object.keys(data);
+      key = data[keys[0]];
+      console.log(key.visitors);
+    });
+  
+    firebase.database()
+      .ref('visitors')
+      .child('-N-nBCn6sIJouOwqBVLR')
+      .child('visitors')
+      .set(firebase.database.ServerValue.increment(1))
+  
 }  
 
 function draw() {
