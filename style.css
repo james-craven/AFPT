@@ -111,9 +111,8 @@ select:hover {
   top:-6px;
   z-index: 1;
   overflow:auto;
-  background: linear-gradient(-45deg, #ee7652e5, #e73c7eda, #23a5d5d8, #23d5abd3);
+  background-color: #006797fb;
   background-size: 400% 400%;
-  animation: Gradient 15s ease infinite;
   color:white;
   text-shadow:2px 2px black;
   padding:20px;
