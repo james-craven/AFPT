@@ -1340,6 +1340,8 @@ function pushInfoClick() {
   cardioImg.hide();
   shuttleImg.hide();
   pushImg.show();
+  
+  return false;
 }
 function cardioInfoClick() {
   if (isModalActive) {
@@ -1350,6 +1352,8 @@ function cardioInfoClick() {
   pushImg.hide();
   shuttleImg.hide();
   cardioImg.show();
+  
+  return false;
 }
 
 function appInfoClick() {
