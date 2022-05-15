@@ -294,19 +294,19 @@ function setup() {
   resetBtn.position(290, 555); //240,555
   resetBtn.mousePressed(ageChange);
 
-  pushInfoBtn = createA(pushInfoClick, "See <br>Chart"); //infoIcon found in tm.js
+  pushInfoBtn = createA("javascript:void(0);", "See <br>Chart"); //infoIcon found in tm.js
   pushInfoBtn.parent('sketch-holder');
   pushInfoBtn.position(365, 153);
   pushInfoBtn.id('pushBtn');
   pushInfoBtn.mousePressed(pushInfoClick);
 
-  sitInfoBtn = createA(pushInfoClick, "See <br>Chart");
+  sitInfoBtn = createA("javascript:void(0);", "See <br>Chart");
   sitInfoBtn.parent('sketch-holder');
   sitInfoBtn.position(365, 253);
   sitInfoBtn.id('pushBtn');
   sitInfoBtn.mousePressed(pushInfoClick);
 
-  cardioInfoBtn = createA(pushInfoClick, "See <br>Chart");
+  cardioInfoBtn = createA("javascript:void(0);", "See <br>Chart");
   cardioInfoBtn.parent('sketch-holder');
   cardioInfoBtn.position(365, 353);
   cardioInfoBtn.id('pushBtn');
