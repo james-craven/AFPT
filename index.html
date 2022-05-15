@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <title> Air Force PT Calculator </title>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.3.1/p5.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+    
+  </head>
+  <div id="gradient"></div>
+  <body>
+    <div id="sketch-holder"></div>
+      <audio controls="controls" style="position:absolute; left: 0px; top:700px; display: none;" id="shuttle-audio">
+        <source src="shuttle.ogg" type="application/ogg" codecs="vorbis">
+        <source src="shuttle.m4a" type="audio/mpeg">
+        <source src="shuttle.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+      </audio>
+      <div id="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn" role="button">&times;</span>
+            
+        </div>
+      </div>
+    <div id="modal2">
+      <span class="close-btn2" role="button">&times;</span>
+      <p>Start by selecting your age/sex. Sliders adjust
+        the scores on the fly. You can also manually input values
+        into the boxes and click/tap calculate score. See Chart links pull 
+        up the score chart for the age/sex selected.
+        Bottom left you'll find the required lap times for the time you've
+        entered in the 1.5 mile run. If you want to get back to this
+        page, click/tap the large info button at the top. 
+      </p>
+    </div>
+    <script src="tm.js"></script>
+    <script src="sketch.js"></script>
+  </body>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</html>
