@@ -157,6 +157,7 @@ function createSliders() {
   pushtxt.size(20, 20);
   pushtxt.value(0);
   pushups.input(pushChange);
+  pushtxt.mouseClicked(txtInput);
   
   hrpushtxt = createInput();
   hrpushtxt.parent('sketch-holder');
@@ -166,6 +167,7 @@ function createSliders() {
   hrpushtxt.value(0);
   hrpushtxt.hide();
   hrpush.input(hrpushChange);
+  hrpushtxt.mouseClicked(txtInput);
   
   
   sittxt = createInput();
@@ -175,6 +177,7 @@ function createSliders() {
   sittxt.size(20, 20);
   sittxt.value(0);
   situps.input(sitChange);
+  sittxt.mouseClicked(txtInput);
   
   rsittxt = createInput();
   rsittxt.parent('sketch-holder');
@@ -184,6 +187,7 @@ function createSliders() {
   rsittxt.value(0);
   rsittxt.hide();
   rsitups.input(rsitChange);
+  rsittxt.mouseClicked(txtInput);
 
   var runMinimum = runTime(runmin);
   runmintxt = createInput();
@@ -193,6 +197,8 @@ function createSliders() {
   runmintxt.size(20, 20);
   runmintxt.value(runMinimum.minutes);
   runmintxt.hide();
+  runmintxt.mouseClicked(txtInput);
+
   runsectxt = createInput();
   runsectxt.parent('sketch-holder');
   runsectxt.addClass('text-box');
@@ -200,6 +206,7 @@ function createSliders() {
   runsectxt.size(20, 20);
   runsectxt.value(runMinimum.sec);
   runsectxt.hide();
+  runsectxt.mouseClicked(txtInput);
   runtime.input(runChange);
   
   plankmintxt = createInput();
@@ -209,6 +216,7 @@ function createSliders() {
   plankmintxt.size(20,20);
   plankmintxt.value(0);
   plankmintxt.hide();
+  plankmintxt.mouseClicked(txtInput);
   planksectxt = createInput();
   planksectxt.parent('sketch-holder');
   planksectxt.addClass('text-box');
@@ -216,6 +224,7 @@ function createSliders() {
   planksectxt.size(20,20);
   planksectxt.value(0);
   planksectxt.hide();
+  planksectxt.mouseClicked(txtInput);
   planks.input(plankChange);
   
   shuttletxt = createInput();
@@ -225,6 +234,7 @@ function createSliders() {
   shuttletxt.size(22,20);
   shuttletxt.value(0);
   shuttletxt.hide();
+  shuttletxt.mouseClicked(txtInput);
   shuttleRun.input(shuttleChange);
 
   pushImg = createImg(strengthAbsLink, "");
@@ -448,7 +458,7 @@ function draw() {
     text('Cardio Score: ' + rscore + '  |  Min: ' + plankString(runmin) + "  |  Max: " + plankString(runmax), 15, 375);
     runtime.removeAttribute('disabled');
     runmintxt.removeAttribute('disabled');
-    if (runmintxt.value() == 0) {runmintxt.value(runMinimum.minutes);}
+    if (runmintxt.value() === '0') {runmintxt.value(runMinimum.minutes);}
     runsectxt.removeAttribute('disabled');
     shuttleRun.removeAttribute('disabled');
     shuttletxt.removeAttribute('disabled');
@@ -722,18 +732,21 @@ function selectChange() {
     pushtxt.show();
     hrpush.hide();
     hrpushtxt.hide();
+    pushtxt.value('0');
   } else if (pushSel.value() == 'Hand-Release') {
     pushupsText = 'Hand-Release Pushups: ';
     pushups.hide();
     pushtxt.hide();
     hrpush.show();
     hrpushtxt.show();
+    hrpushtxt.value('0');
   }
   
   if (sitSel.value() == 'Situps') {
     situpsText = 'Sit Ups: ';
     situps.show();
     sittxt.show();
+    sittxt.value('0');
     rsitups.hide();
     rsittxt.hide();
     planks.hide();
@@ -744,7 +757,9 @@ function selectChange() {
     situpsText = 'Plank: ';
     planks.show();
     plankmintxt.show();
+    plankmintxt.value('0');
     planksectxt.show();
+    planksectxt.value('0');
     situps.hide();
     sittxt.hide();
     rsitups.hide();
@@ -760,6 +775,7 @@ function selectChange() {
     planksectxt.hide();
     rsitups.show();
     rsittxt.show();
+    rsittxt.value('0');
   }
   
   if (runSel.value() == '1.5 Mile') {
@@ -767,6 +783,7 @@ function selectChange() {
     runText = 'Run Time: ';
     runtime.show();
     runmintxt.show();
+    runmintxt.value(runMinimum.minutes);
     runsectxt.value(runMinimum.sec);
     runsectxt.show();
     shuttleRun.hide();
@@ -779,6 +796,7 @@ function selectChange() {
     runmintxt.hide();
     runsectxt.hide();
     shuttletxt.show();
+    shuttletxt.value('0');
     shuttleRun.show();
     shuttleChartsBtn.show();
     runText = 'Shuttles: ';
@@ -1382,4 +1400,8 @@ function showShuttleCharts() {
   pushImg.hide();
   shuttleImg.show();
   cardioImg.hide();
+}
+
+function txtInput() {
+  this.value('');
 }
