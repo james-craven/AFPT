@@ -83,10 +83,9 @@ select:hover {
 }
 
 #sketch-holder {
-  width: 500px;
-  height: 750px;
   margin: 0 auto;
   position: relative;
+  width: 500px;
 }
 
 #modal {
@@ -102,15 +101,15 @@ select:hover {
 
 #modal2 {
   width: 375px;
-  height: 620px;
+  height: 670px;
   margin-top: 20px;
   margin-bottom:0;
   margin-left:auto;
   margin-right:auto;
   position: absolute;
-  top:-6px;
+  top:-10px;
   z-index: 1;
-  overflow:auto;
+  overflow:visible;
   background-color: #006797fb;
   background-size: 400% 400%;
   color:white;
@@ -136,7 +135,8 @@ select:hover {
 
 #appInfoBtn {
   height:45px!important;
-  border-radius:50%!important;
+  width: 400px!important;
+  border-radius:5px!important;
   display:table-cell!important;
   vertical-align: center;
   cursor: pointer;
