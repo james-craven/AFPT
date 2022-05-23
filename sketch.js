@@ -13,7 +13,7 @@ var shuttleLink = "./Score Chart jpgs/shuttleScores.jpg"
 
 var canvasContainer;
 var isModalActive = false;
-var isModal2Active = true;
+var isModal2Active = false;
 
 var modal;
 var modal2;
@@ -88,7 +88,7 @@ var pscore=0;
 function createSliders() {
   pushSel = createSelect();
   pushSel.parent('sketch-holder');
-  pushSel.position(10, 195);
+  pushSel.position(10, 245);
   pushSel.option('Pushups');
   pushSel.option('Hand-Release');
   pushSel.option('Exempt');
@@ -97,7 +97,7 @@ function createSliders() {
 
   sitSel = createSelect();
   sitSel.parent('sketch-holder');
-  sitSel.position(10, 295);
+  sitSel.position(10, 295 + 50);
   sitSel.option('Situps');
   sitSel.option('Plank');
   sitSel.option('Reverse Crunch');
@@ -107,7 +107,7 @@ function createSliders() {
   
   runSel = createSelect();
   runSel.parent('sketch-holder');
-  runSel.position(10, 395);
+  runSel.position(10, 395 + 50);
   runSel.option('1.5 Mile');
   runSel.option('Shuttle');
   runSel.option('Exempt');
@@ -117,34 +117,34 @@ function createSliders() {
   runnum=new Time(0,0);
   pushups =createSlider(0, pushmax, 0, 1)
   pushups.parent('sketch-holder');
-  pushups.position(170,208); 
+  pushups.position(170,208 + 50); 
   pushups.size(175,15);
   hrpush = createSlider(0, hrmax, 0, 1)
   hrpush.parent('sketch-holder');
-  hrpush.position(170,208);
+  hrpush.position(170,208 + 50);
   hrpush.size(175,15);
   hrpush.hide();
   situps =createSlider(0, sitmax, 0, 1)
   situps.parent('sketch-holder');
-  situps.position(170,305);
+  situps.position(170,305 + 50);
   situps.size(175,15);
   rsitups = createSlider(0, rsitmax, 0, 1)
   rsitups.parent('sketch-holder');
-  rsitups.position(170,305);
+  rsitups.position(170,305 + 50);
   rsitups.size(175,15);
   rsitups.hide();
   planks = createSlider(0, plankmax, 0, 1)
   planks.parent('sketch-holder');
-  planks.position(170, 305);
+  planks.position(170, 305 + 50);
   planks.size(135,15);
   planks.hide();
   runtime =createSlider(runmin, runmax, 0, 1)
   runtime.parent('sketch-holder');
-  runtime.position(40,450);
+  runtime.position(40,450 + 50);
   runtime.size(350,15);
   shuttleRun = createSlider(0, shuttleMax, 0, 1)
   shuttleRun.parent('sketch-holder');
-  shuttleRun.position(40,450);
+  shuttleRun.position(40,450 + 50);
   shuttleRun.size(350,15);
   shuttleRun.hide();
   
@@ -153,7 +153,7 @@ function createSliders() {
   pushtxt = createInput();
   pushtxt.parent('sketch-holder');
   pushtxt.addClass('text-box');
-  pushtxt.position(365, 195);
+  pushtxt.position(365, 195 + 50);
   pushtxt.size(20, 20);
   pushtxt.value(0);
   pushups.input(pushChange);
@@ -162,7 +162,7 @@ function createSliders() {
   hrpushtxt = createInput();
   hrpushtxt.parent('sketch-holder');
   hrpushtxt.addClass('text-box');
-  hrpushtxt.position(365, 195);
+  hrpushtxt.position(365, 195 + 50);
   hrpushtxt.size(20, 20);
   hrpushtxt.value(0);
   hrpushtxt.hide();
@@ -173,7 +173,7 @@ function createSliders() {
   sittxt = createInput();
   sittxt.parent('sketch-holder');
   sittxt.addClass('text-box');
-  sittxt.position(365, 295);
+  sittxt.position(365, 295 + 50);
   sittxt.size(20, 20);
   sittxt.value(0);
   situps.input(sitChange);
@@ -182,7 +182,7 @@ function createSliders() {
   rsittxt = createInput();
   rsittxt.parent('sketch-holder');
   rsittxt.addClass('text-box');
-  rsittxt.position(365, 295);
+  rsittxt.position(365, 295 + 50);
   rsittxt.size(20, 20);
   rsittxt.value(0);
   rsittxt.hide();
@@ -193,7 +193,7 @@ function createSliders() {
   runmintxt = createInput();
   runmintxt.parent('sketch-holder');
   runmintxt.addClass('text-box');
-  runmintxt.position (310, 395);
+  runmintxt.position (310, 395 + 50);
   runmintxt.size(20, 20);
   runmintxt.value(runMinimum.minutes);
   runmintxt.hide();
@@ -202,7 +202,7 @@ function createSliders() {
   runsectxt = createInput();
   runsectxt.parent('sketch-holder');
   runsectxt.addClass('text-box');
-  runsectxt.position(365, 395); //245
+  runsectxt.position(365, 395 + 50); //245
   runsectxt.size(20, 20);
   runsectxt.value(runMinimum.sec);
   runsectxt.hide();
@@ -212,7 +212,7 @@ function createSliders() {
   plankmintxt = createInput();
   plankmintxt.parent('sketch-holder');
   plankmintxt.addClass('text-box');
-  plankmintxt.position(310, 295);
+  plankmintxt.position(310, 295 + 50);
   plankmintxt.size(20,20);
   plankmintxt.value(0);
   plankmintxt.hide();
@@ -220,7 +220,7 @@ function createSliders() {
   planksectxt = createInput();
   planksectxt.parent('sketch-holder');
   planksectxt.addClass('text-box');
-  planksectxt.position(365, 295);
+  planksectxt.position(365, 295 + 50);
   planksectxt.size(20,20);
   planksectxt.value(0);
   planksectxt.hide();
@@ -230,7 +230,7 @@ function createSliders() {
   shuttletxt = createInput();
   shuttletxt.parent('sketch-holder');
   shuttletxt.addClass('text-box');
-  shuttletxt.position(365, 395);
+  shuttletxt.position(365, 395 + 50);
   shuttletxt.size(22,20);
   shuttletxt.value(0);
   shuttletxt.hide();
@@ -258,7 +258,7 @@ function setup() {
   c.parent('sketch-holder');
   
   ageSel = createSelect();
-  ageSel.position(310, 85);
+  ageSel.position(310, 85 + 50);
   ageSel.option('< 25');
   ageSel.option('25-29');
   ageSel.option('30-34');
@@ -274,7 +274,7 @@ function setup() {
   ageSel.parent('sketch-holder');
 
   sexSel = createSelect();
-  sexSel.position(90, 85);
+  sexSel.position(90, 85 + 50);
   sexSel.option('Female');
   sexSel.option('Male');
   sexSel.changed(ageChange);
@@ -287,12 +287,12 @@ function setup() {
   calculateBtn.parent('sketch-holder');
   calculateBtn.addClass('text-box');
   calculateBtn.id('calculateScoreBtn');
-  calculateBtn.position(240, 610);
+  calculateBtn.position(240, 610 + 50);
   calculateBtn.mousePressed(calcBtnClick);
   
   shuttleAudioBtn = createButton("Shuttle Audio");
   shuttleAudioBtn.parent('sketch-holder');
-  shuttleAudioBtn.position(180, 395);
+  shuttleAudioBtn.position(180, 395 + 50);
   shuttleAudioBtn.addClass('text-box');
   shuttleAudio = select("#shuttle-audio");
   shuttleAudio.parent('sketch-holder');
@@ -301,31 +301,31 @@ function setup() {
   resetBtn = createButton("Reset Values");
   resetBtn.parent('sketch-holder');
   resetBtn.addClass('text-box');
-  resetBtn.position(290, 555); //240,555
+  resetBtn.position(290, 555 + 50); //240,555
   resetBtn.mousePressed(ageChange);
 
   pushInfoBtn = createA("javascript:void(0);", "See <br>Chart"); //infoIcon found in tm.js
   pushInfoBtn.parent('sketch-holder');
-  pushInfoBtn.position(365, 153);
+  pushInfoBtn.position(365, 153 + 50);
   pushInfoBtn.id('pushBtn');
   pushInfoBtn.mousePressed(pushInfoClick);
 
   sitInfoBtn = createA("javascript:void(0);", "See <br>Chart");
   sitInfoBtn.parent('sketch-holder');
-  sitInfoBtn.position(365, 253);
+  sitInfoBtn.position(365, 253 + 50);
   sitInfoBtn.id('pushBtn');
   sitInfoBtn.mousePressed(pushInfoClick);
 
   cardioInfoBtn = createA("javascript:void(0);", "See <br>Chart");
   cardioInfoBtn.parent('sketch-holder');
-  cardioInfoBtn.position(365, 353);
+  cardioInfoBtn.position(365, 353 + 50);
   cardioInfoBtn.id('pushBtn');
   cardioInfoBtn.mousePressed(cardioInfoClick);
 
   appInfoIcon = createButton("Info");
   appInfoIcon.parent('sketch-holder');
   appInfoIcon.addClass('text-box');
-  appInfoIcon.position(350, 15);
+  appInfoIcon.position(10, 10);
   appInfoIcon.id("appInfoBtn");
   appInfoIcon.mousePressed(appInfoClick);
 
@@ -343,7 +343,7 @@ function setup() {
   shuttleChartsBtn = createButton("Shuttle Info Charts");
   shuttleChartsBtn.parent('sketch-holder');
   shuttleChartsBtn.addClass('text-box');
-  shuttleChartsBtn.position(190, 395);
+  shuttleChartsBtn.position(190, 395 + 50);
   shuttleChartsBtn.mousePressed(showShuttleCharts);
   shuttleChartsBtn.hide();
   
@@ -377,27 +377,27 @@ function draw() {
   }
   stroke('white');
   fill('white');
-  text("SEX:", 25, 115);
-  text("AGE:", 235, 115);
+  text("SEX:", 25, 115 + 50);
+  text("AGE:", 235, 115 + 50);
 
   textSize(16);
   stroke('white');
   strokeWeight(.5);
   fill('white');
   if (pushSel.value() == 'Pushups') {
-    text('Strength Score: ' + pscore + '  |  Min: ' + pushmin + "  |  Max: " + pushmax, 15, 175);
+    text('Strength Score: ' + pscore + '  |  Min: ' + pushmin + "  |  Max: " + pushmax, 15, 175 + 50);
     pushups.removeAttribute('disabled');
     hrpush.removeAttribute('disabled');
     pushtxt.removeAttribute('disabled');
     hrpushtxt.removeAttribute('disabled');
   } else if (pushSel.value() == 'Hand-Release') {
-    text('Strength Score: ' + pscore + '  |  Min: ' + hrmin + "  |  Max: " + hrmax, 15, 175);
+    text('Strength Score: ' + pscore + '  |  Min: ' + hrmin + "  |  Max: " + hrmax, 15, 175 + 50);
     pushups.removeAttribute('disabled');
     hrpush.removeAttribute('disabled');
     pushtxt.removeAttribute('disabled');
     hrpushtxt.removeAttribute('disabled');
   } else if (pushSel.value() == 'Exempt') {
-    text('Strength Score: Exempt', 15, 175);
+    text('Strength Score: Exempt', 15, 175 + 50);
     pushups.value(0);
     pushups.attribute('disabled', '');
     hrpush.value(0);
@@ -409,7 +409,7 @@ function draw() {
   }
   
   if (sitSel.value() == 'Situps') {
-    text('Abs Score: ' + sscore + '  |  Min: ' + sitmin + "  |  Max: " + sitmax, 15, 275);
+    text('Abs Score: ' + sscore + '  |  Min: ' + sitmin + "  |  Max: " + sitmax, 15, 275 + 50);
     situps.removeAttribute('disabled');
     rsitups.removeAttribute('disabled');
     planks.removeAttribute('disabled');
@@ -418,7 +418,7 @@ function draw() {
     plankmintxt.removeAttribute('disabled');
     planksectxt.removeAttribute('disabled');
   } else if (sitSel.value() == 'Plank') {
-    text('Abs Score: ' + sscore + '  |  Min: ' + plankString(plankmin) + "  |  Max: " + plankString(plankmax), 15, 275);
+    text('Abs Score: ' + sscore + '  |  Min: ' + plankString(plankmin) + "  |  Max: " + plankString(plankmax), 15, 275 + 50);
     situps.removeAttribute('disabled');
     rsitups.removeAttribute('disabled');
     planks.removeAttribute('disabled');
@@ -427,7 +427,7 @@ function draw() {
     plankmintxt.removeAttribute('disabled');
     planksectxt.removeAttribute('disabled');
   } else if (sitSel.value() == 'Reverse Crunch') {
-    text('Abs Score: ' + sscore + '  |  Min: ' + rsitmin + "  |  Max: " + rsitmax, 15, 275);
+    text('Abs Score: ' + sscore + '  |  Min: ' + rsitmin + "  |  Max: " + rsitmax, 15, 275 + 50);
     situps.removeAttribute('disabled');
     rsitups.removeAttribute('disabled');
     planks.removeAttribute('disabled');
@@ -436,7 +436,7 @@ function draw() {
     plankmintxt.removeAttribute('disabled');
     planksectxt.removeAttribute('disabled');
   } else if (sitSel.value() == 'Exempt') {
-    text('Abs Score: Exempt', 85, 275);
+    text('Abs Score: Exempt', 15, 275 + 50);
     situps.value(0);
     situps.attribute('disabled', '');
     rsitups.value(0);
@@ -455,7 +455,7 @@ function draw() {
   
   var runMinimum = runTime(runmin);
   if (runSel.value() == '1.5 Mile') {
-    text('Cardio Score: ' + rscore + '  |  Min: ' + plankString(runmin) + "  |  Max: " + plankString(runmax), 15, 375);
+    text('Cardio Score: ' + rscore + '  |  Min: ' + plankString(runmin) + "  |  Max: " + plankString(runmax), 15, 375 + 50);
     runtime.removeAttribute('disabled');
     runmintxt.removeAttribute('disabled');
     if (runmintxt.value() === '0') {runmintxt.value(runMinimum.minutes);}
@@ -463,14 +463,14 @@ function draw() {
     shuttleRun.removeAttribute('disabled');
     shuttletxt.removeAttribute('disabled');
   } else if (runSel.value() == 'Shuttle') {
-    text('Cardio Score: ' + rscore + '  |  Min: ' + shuttleMin + "  |  Max: " + shuttleMax, 15, 375);
+    text('Cardio Score: ' + rscore + '  |  Min: ' + shuttleMin + "  |  Max: " + shuttleMax, 15, 375 + 50);
     runtime.removeAttribute('disabled');
     runmintxt.removeAttribute('disabled');
     runsectxt.removeAttribute('disabled');
     shuttleRun.removeAttribute('disabled');
     shuttletxt.removeAttribute('disabled');
   } else if (runSel.value() == 'Exempt') {
-    text('Cardio Score: Exempt', 85, 375);
+    text('Cardio Score: Exempt', 85, 375 + 50);
     runtime.value(runmin);
     runtime.attribute('disabled', '');
     runmintxt.value(0);
@@ -487,19 +487,19 @@ function draw() {
   
   stroke('white');
   strokeWeight(2);
-  line(10,150,410,150);
+  line(10,150 + 50,410,150 + 50);
   stroke(0);
   strokeWeight(1);
   
   stroke('white');
   strokeWeight(2);
-  line(10,350,410,350);
+  line(10,350 + 50,410,350 + 50);
   stroke(0);
   strokeWeight(1);
   
   stroke('white');
   strokeWeight(2);
-  line(10,250,410,250);
+  line(10,250 + 50,410,250 + 50);
   stroke(0);
   strokeWeight(.5);
   
@@ -508,24 +508,24 @@ function draw() {
   fill('white');
   stroke('white');
   if (runSel.value()=='1.5 Mile') {
-    text(":", 356, 423);
+    text(":", 356, 423 + 50);
     runmintxt.show();
     runsectxt.show();
     shuttletxt.hide();
     lapTime=runTime(floor(runtime.value()/6));
-    text("Req'd 6 Lap Time: ~" + lapTime.minutes +":" + nf(lapTime.sec,2), 10, 505);
-    text("(Rounded down to nearest sec)", 10, 525);
+    text("Req'd 6 Lap Time: ~" + lapTime.minutes +":" + nf(lapTime.sec,2), 10, 505 + 50);
+    text("(Rounded down to nearest sec)", 10, 525 + 50);
     //textSize(15);
     for(var i=0; i<6; i++)
     {
     var lp=floor(runtime.value()/6)  // num secs per lap
     var nl=runTime(lp*(i+1));      // Next lap
      // console.log(nl);
-    text("Lap " + int(i+1) + ": ≤ " + nl.minutes  +":" +nf(nl.sec,2), 10, 550+(i*20));    
+    text("Lap " + int(i+1) + ": ≤ " + nl.minutes  +":" +nf(nl.sec,2), 10, 600+(i*20));    
     }
   } else if (runSel.value() == 'Shuttle') {
-    text('Shuttle Level: ' + hamrLevel(), 10, 505);
-    text('Current Level Shuttles: ' + hamrShuttles(), 10, 535);
+    text('Shuttle Level: ' + hamrLevel(), 10, 505 + 50);
+    text('Current Level Shuttles: ' + hamrShuttles(), 10, 535 + 50);
   }
   pushnum=pushups.value();
   sitnum=situps.value();
@@ -553,7 +553,7 @@ function draw() {
     sscore=rsitScore(rsitnum);
   } else if (sitSel.value() == 'Plank') {
     sscore = plankScore(planks.value());
-    text(":", 356, 323);
+    text(":", 356, 323 + 50);
   }
   
 
@@ -600,15 +600,15 @@ function draw() {
   textSize(23);
   fill('white');
   stroke('white');
-  text('Total Score: ' + total.toFixed(1), 125,35)
+  text('Total Score: ' + total.toFixed(1), 125,35 + 50)
   if (totalScoreText == 'FAIL! Minimum Not Met!') {
-    text(totalScoreText, 85,65)
+    text(totalScoreText, 85,65 + 50)
   } else if (totalScoreText == "Unsatisfactory!") {
-    text(totalScoreText, 125,65)
+    text(totalScoreText, 125,65 + 50)
   } else if (totalScoreText == "Satisfactory!") {
-    text(totalScoreText, 135,65)
+    text(totalScoreText, 135,65 + 50)
   } else if (totalScoreText == "Excellent!") { 
-    text(totalScoreText, 155,65)
+    text(totalScoreText, 155,65 + 50)
   }
   
   
@@ -789,7 +789,7 @@ function selectChange() {
     shuttleRun.hide();
     shuttleChartsBtn.hide();
     isAudioActive = false;
-    shuttleAudioBtn.position(180, 395);
+    shuttleAudioBtn.position(180, 395 + 50);
     
   } else if (runSel.value() == 'Shuttle') {
     runtime.hide();
@@ -801,7 +801,7 @@ function selectChange() {
     shuttleChartsBtn.show();
     runText = 'Shuttles: ';
     shuttlevalue = shuttleRun.value();
-    shuttleAudioBtn.position(290, 495);
+    shuttleAudioBtn.position(290, 495 + 50);
   }
 }
 
