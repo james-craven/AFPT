@@ -936,9 +936,10 @@ function pushChangeTxt()
 }
 
 function keyPressed() {
-  if (keyCode == ENTER || keyCode == TAB) {
+  if (keyCode == ENTER) {
     calcBtnClick();
     document.activeElement.blur();
+    console.log(keyCode);
   }
 }
 
