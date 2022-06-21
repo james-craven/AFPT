@@ -145,12 +145,12 @@ function createSliders() {
   planks.size(135,15);
   planks.hide();
   planks.addClass('situps');
-  runtime =createSlider(runmin, runmax, 0, 1)
+  runtime =createSlider(runmin, runmax, runmax, 1)
   runtime.parent('sketch-holder');
   runtime.position(10,450 + 55);
   runtime.size(400,15);
   runtime.addClass('run');
-  shuttleRun = createSlider(0, shuttleMax, 0, 1)
+  shuttleRun = createSlider(0, shuttleMax, 1, 0)
   shuttleRun.parent('sketch-holder');
   shuttleRun.position(40,450 + 55);
   shuttleRun.size(350,15);
@@ -210,13 +210,13 @@ function createSliders() {
   rsittxt.attribute('type', 'tel')
   rsittxt.attribute('pattern', '[0-9]+')
 
-  var runMinimum = runTime(runmin);
+  var runMaximum = runTime(runmax);
   runmintxt = createInput();
   runmintxt.parent('sketch-holder');
   runmintxt.addClass('text-box');
   runmintxt.position (310, 395 + 50);
   runmintxt.size(20, 20);
-  runmintxt.value(runMinimum.minutes);
+  runmintxt.value(runMaximum.minutes);
   runmintxt.hide();
   runmintxt.mouseClicked(txtInput);
   runmintxt.attribute('type', 'tel')
@@ -228,7 +228,7 @@ function createSliders() {
   runsectxt.addClass('text-box');
   runsectxt.position(365, 395 + 50); //245
   runsectxt.size(20, 20);
-  runsectxt.value(runMinimum.sec);
+  runsectxt.value(runMaximum.sec);
   runsectxt.hide();
   runsectxt.mouseClicked(txtInput);
   runtime.input(runChange);
@@ -535,7 +535,7 @@ function draw() {
   
   var runMinimum = runTime(runmin);
   if (runSel.value() == '1.5 Mile') {
-    text('Cardio Score: ' + rscore + '  |  Min: ' + plankString(runmin) + "  |  Max: " + plankString(runmax), 15, 375 + 50);
+    text('Cardio Score: ' + rscore + '  |  Min: ' + plankString(runmax) + "  |  Max: " + plankString(runmin), 15, 375 + 50);
     runtime.removeAttribute('disabled');
     runmintxt.removeAttribute('disabled');
     if (runmintxt.value() === '0') {runmintxt.value(runMinimum.minutes);}
