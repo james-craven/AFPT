@@ -346,19 +346,19 @@ function setup() {
 
   pushInfoBtn = createA("javascript:void(0);", "See <br>Chart"); //infoIcon found in tm.js
   pushInfoBtn.parent('sketch-holder');
-  pushInfoBtn.position(365, 153 + 50);
+  pushInfoBtn.position(365, 153 + 53);
   pushInfoBtn.id('pushBtn');
   pushInfoBtn.mousePressed(pushInfoClick);
 
   sitInfoBtn = createA("javascript:void(0);", "See <br>Chart");
   sitInfoBtn.parent('sketch-holder');
-  sitInfoBtn.position(365, 253 + 50);
+  sitInfoBtn.position(365, 253 + 53);
   sitInfoBtn.id('pushBtn');
   sitInfoBtn.mousePressed(pushInfoClick);
 
   cardioInfoBtn = createA("javascript:void(0);", "See <br>Chart");
   cardioInfoBtn.parent('sketch-holder');
-  cardioInfoBtn.position(365, 353 + 50);
+  cardioInfoBtn.position(365, 353 + 53);
   cardioInfoBtn.id('pushBtn');
   cardioInfoBtn.mousePressed(cardioInfoClick);
 
