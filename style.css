@@ -202,7 +202,12 @@ input[type=range] {
   border-radius:20px;
 }
 
+.run {
+  transform: rotate(180deg);
+}
+
 .run::-webkit-slider-thumb {
+  transform: rotate(180deg);
     -webkit-appearance: none;
     appearance: none;
     width: 45px;
@@ -221,6 +226,7 @@ input[type=range] {
 }
 
 .run::-moz-range-thumb {
+  transform: rotate(180deg);
   width: 40px;
   height: 40px;
   border: 0;
