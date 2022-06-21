@@ -939,8 +939,8 @@ function keyPressed() {
   if (keyCode == ENTER) {
     calcBtnClick();
     document.activeElement.blur();
-    console.log(keyCode);
   }
+  console.log(keyCode);
 }
 
 // If Slider is used, sets the situp txt boxes to slider value
