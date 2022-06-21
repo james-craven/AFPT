@@ -202,12 +202,12 @@ input[type=range] {
   border-radius:20px;
 }
 
-.run {
+.run{
   transform: rotate(180deg);
 }
 
 .run::-webkit-slider-thumb {
-  transform: rotate(180deg);
+    transform: rotate(180deg);
     -webkit-appearance: none;
     appearance: none;
     width: 45px;
@@ -227,6 +227,40 @@ input[type=range] {
 
 .run::-moz-range-thumb {
   transform: rotate(180deg);
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: url('running.png');
+  background-color:white;
+  z-index: 5;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 4px solid black;
+  border-radius: 50%;
+  background-size: 30px 30px;
+  overflow:visible;
+  cursor: pointer;
+}
+
+.shuttle::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 45px;
+    height: 45px;
+    border: 0;
+    background: url('running.png');
+    background-color:white;
+    z-index: 5;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 4px solid black;
+    border-radius: 50%;
+    background-size: 30px 30px;
+    overflow:visible;
+    cursor: pointer;
+}
+
+.shuttle::-moz-range-thumb {
   width: 40px;
   height: 40px;
   border: 0;
@@ -313,11 +347,11 @@ input[type=range] {
 }
 
 .greenbackground::-webkit-slider-thumb{
-  background-color: rgb(40, 198, 0)!important;
+  background-color: #28c600!important;
 }
 
 .greenbackground::-moz-range-thumb {
-  background-color: rgb(40, 198, 0)!important;
+  background-color: #28c600!important;
 }
 
 a {
