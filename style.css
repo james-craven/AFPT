@@ -130,7 +130,7 @@ select:hover {
   text-align: center;
   cursor: pointer;
   color: white;
-  font-weight: bold;
+  font-family: sans-serif;
 }
 
 #appInfoBtn {
