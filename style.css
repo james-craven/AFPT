@@ -65,7 +65,7 @@ select:hover {
     width: 100%;
     height: 100%;
     color: #fff;
-    background-color: #006797cb;
+    background-color: #025981dc;
     background-size: 100% 100%;
     overflow:hidden;
 }
@@ -194,4 +194,126 @@ audio { width: 400px; margin:10px; }
     transform: scale(.75);
     transform-origin: top left;
   }
+}
+
+input[type=range] {
+  background-color: white;
+  -webkit-appearance:none;
+  border-radius:20px;
+}
+
+.run::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 45px;
+    height: 45px;
+    border: 0;
+    background: url('running.png');
+    background-color:white;
+    z-index: 5;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 4px solid black;
+    border-radius: 50%;
+    background-size: 30px 30px;
+    overflow:visible;
+    cursor: pointer;
+}
+
+.run::-moz-range-thumb {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: url('running.png');
+  background-color:white;
+  z-index: 5;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 4px solid black;
+  border-radius: 50%;
+  background-size: 30px 30px;
+  overflow:visible;
+  cursor: pointer;
+}
+
+.pushups::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 45px;
+  height: 45px;
+  border: 0;
+  background: url('pushups.png');
+  background-color:white;
+  z-index: 5;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 4px solid black;
+  border-radius: 50%;
+  background-size: 30px 30px;
+  overflow:visible;
+  cursor: pointer;
+}
+
+.pushups::-moz-range-thumb {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: url('pushups.png');
+  background-color:white;
+  z-index: 5;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 4px solid black;
+  border-radius: 50%;
+  background-size: 30px 30px;
+  overflow:visible;
+  cursor: pointer;
+}
+
+.situps::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 45px;
+  height: 45px;
+  border: 0;
+  background: url('situps.png');
+  background-color:white;
+  z-index: 5;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 4px solid black;
+  border-radius: 50%;
+  background-size: 30px 30px;
+  overflow:visible;
+  cursor: pointer;
+}
+
+.situps::-moz-range-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: url('situps.png');
+  background-color:white;
+  z-index: 5;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 4px solid black;
+  border-radius: 50%;
+  background-size: 30px 30px;
+  overflow:visible;
+  cursor: pointer;
+}
+
+.greenbackground::-webkit-slider-thumb{
+  background-color: rgb(40, 198, 0)!important;
+}
+
+.greenbackground::-moz-range-thumb {
+  background-color: rgb(40, 198, 0)!important;
+}
+
+a {
+  color: rgb(242, 255, 0)!important;
 }
