@@ -1,3 +1,5 @@
+var redgreencolor;
+
 var infoIcon = "See Charts";
 var appInfoIcon;
 
@@ -115,37 +117,44 @@ function createSliders() {
   runSel.changed(selectChange);
   
   runnum=new Time(0,0);
-  pushups =createSlider(0, pushmax, 0, 1)
+  pushups = createSlider(0, pushmax, 0, 1);
   pushups.parent('sketch-holder');
   pushups.position(170,208 + 50); 
   pushups.size(175,15);
-  hrpush = createSlider(0, hrmax, 0, 1)
+  pushups.addClass("pushups");
+  hrpush = createSlider(0, hrmax, 0, 1);
   hrpush.parent('sketch-holder');
   hrpush.position(170,208 + 50);
   hrpush.size(175,15);
   hrpush.hide();
+  hrpush.addClass('pushups');
   situps =createSlider(0, sitmax, 0, 1)
   situps.parent('sketch-holder');
   situps.position(170,305 + 50);
   situps.size(175,15);
+  situps.addClass('situps');
   rsitups = createSlider(0, rsitmax, 0, 1)
   rsitups.parent('sketch-holder');
   rsitups.position(170,305 + 50);
   rsitups.size(175,15);
   rsitups.hide();
+  rsitups.addClass('situps');
   planks = createSlider(0, plankmax, 0, 1)
   planks.parent('sketch-holder');
   planks.position(170, 305 + 50);
   planks.size(135,15);
   planks.hide();
+  planks.addClass('situps');
   runtime =createSlider(runmin, runmax, 0, 1)
   runtime.parent('sketch-holder');
-  runtime.position(40,450 + 50);
-  runtime.size(350,15);
+  runtime.position(10,450 + 55);
+  runtime.size(400,15);
+  runtime.addClass('run');
   shuttleRun = createSlider(0, shuttleMax, 0, 1)
   shuttleRun.parent('sketch-holder');
-  shuttleRun.position(40,450 + 50);
+  shuttleRun.position(40,450 + 55);
   shuttleRun.size(350,15);
+  shuttleRun.addClass('run');
   shuttleRun.hide();
   
   plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec,2);
@@ -248,6 +257,8 @@ function createSliders() {
   shuttleImg = createImg(shuttleLink, "");
   shuttleImg.parent(modal);
   shuttleImg.position(-40, 0);
+
+
 }
 
 
@@ -256,6 +267,7 @@ function createSliders() {
 function setup() {
   let c = createCanvas(500, 750);  
   c.parent('sketch-holder');
+  c.drawingContext.miterLimit = 2;
   
   ageSel = createSelect();
   ageSel.position(310, 85 + 50);
@@ -355,7 +367,47 @@ function setup() {
 
 function draw() {
   clear();
-  
+
+  if (runtime.value() >= runmin) {
+    runtime.addClass('greenbackground')
+  }
+
+  if (shuttleRun.value() >= shuttleMin) {
+    shuttleRun.addClass('greenbackground')
+  } else {
+    shuttleRun.removeClass('greenbackground')
+  }
+
+  if (pushups.value() >= pushmin) {
+    pushups.addClass('greenbackground')
+  } else {
+    pushups.removeClass('greenbackground')
+  }
+
+  if (hrpush.value() >= hrmin) {
+    hrpush.addClass('greenbackground')
+  } else {
+    hrpush.removeClass('greenbackground')
+  }
+
+  if (situps.value() >= sitmin) {
+    situps.addClass('greenbackground')
+  } else {
+    situps.removeClass('greenbackground')
+  }
+
+  if (rsitups.value() >= rsitmin) {
+    rsitups.addClass('greenbackground')
+  } else {
+    rsitups.removeClass('greenbackground')
+  }
+
+  if (planks.value() >= plankmin) {
+    planks.addClass('greenbackground')
+  } else {
+    planks.removeClass('greenbackground')
+  }
+
   if (isAudioActive) {
     shuttleAudio.show();
   } else {
@@ -600,17 +652,45 @@ function draw() {
   textSize(23);
   fill('white');
   stroke('white');
-  text('Total Score: ' + total.toFixed(1), 125,35 + 50)
   if (totalScoreText == 'FAIL! Minimum Not Met!') {
-    text(totalScoreText, 85,65 + 50)
+    redgreencolor = 'red';
+    fill(redgreencolor)
+    stroke('black')
+    strokeWeight(5)
+    text('FAIL! Minimum Not Met!', 85,65 + 50)
   } else if (totalScoreText == "Unsatisfactory!") {
+    redgreencolor = 'red';
+    fill(redgreencolor)
+    stroke('black')
+    strokeWeight(5)
     text(totalScoreText, 125,65 + 50)
   } else if (totalScoreText == "Satisfactory!") {
-    text(totalScoreText, 135,65 + 50)
-  } else if (totalScoreText == "Excellent!") { 
+    redgreencolor = 'lightgreen';
+    fill(redgreencolor)
+    stroke('black')
+    strokeWeight(5)
     text(totalScoreText, 155,65 + 50)
+  } else if (totalScoreText == "Excellent!") { 
+    redgreencolor = 'lightgreen';
+    fill(redgreencolor)
+    stroke('black')
+    strokeWeight(5)
+    text(totalScoreText, 165,65 + 50)
   }
-  
+
+  fill('white');
+  stroke('white');
+  strokeWeight(1)
+
+  text('Total Score:', 125, 85);
+
+  fill(redgreencolor)
+  stroke('black')
+  strokeWeight(4)
+  text(total.toFixed(1), 255,85)
+  fill('white')
+  stroke('white')
+  strokeWeight(1)
   
   
 function hamrLevel() {
