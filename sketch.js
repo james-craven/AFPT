@@ -150,11 +150,11 @@ function createSliders() {
   runtime.position(10,450 + 55);
   runtime.size(400,15);
   runtime.addClass('run');
-  shuttleRun = createSlider(0, shuttleMax, 1, 0)
+  shuttleRun = createSlider(0, shuttleMax, 0, 1)
   shuttleRun.parent('sketch-holder');
   shuttleRun.position(40,450 + 55);
   shuttleRun.size(350,15);
-  shuttleRun.addClass('run');
+  shuttleRun.addClass('shuttle');
   shuttleRun.hide();
   
   plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec,2);
