@@ -299,7 +299,7 @@ function setup() {
   calculateBtn.parent('sketch-holder');
   calculateBtn.addClass('text-box');
   calculateBtn.id('calculateScoreBtn');
-  calculateBtn.position(240, 610 + 50);
+  calculateBtn.position(245, 610 + 50);
   calculateBtn.mousePressed(calcBtnClick);
   
   shuttleAudioBtn = createButton("Shuttle Audio");
