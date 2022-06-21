@@ -167,6 +167,7 @@ function createSliders() {
   pushtxt.value(0);
   pushups.input(pushChange);
   pushtxt.mouseClicked(txtInput);
+  pushtxt.input(pushChangeTxt);
   
   hrpushtxt = createInput();
   hrpushtxt.parent('sketch-holder');
@@ -895,6 +896,17 @@ function shuttleChange() {
 function pushChange()
 {
 pushtxt.value(pushups.value()); 
+}
+
+function pushChangeTxt()
+{
+  pushups.value(pushtxt.value());
+}
+
+function keyPressed() {
+  if (keyCode == ENTER) {
+    calcBtnClick();
+  }
 }
 
 // If Slider is used, sets the situp txt boxes to slider value
