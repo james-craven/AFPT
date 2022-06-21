@@ -180,6 +180,8 @@ function createSliders() {
   hrpushtxt.hide();
   hrpush.input(hrpushChange);
   hrpushtxt.mouseClicked(txtInput);
+  hrpushtxt.attribute('type', 'tel')
+  hrpushtxt.attribute('pattern', '[0-9]+')
   
   
   sittxt = createInput();
@@ -190,6 +192,8 @@ function createSliders() {
   sittxt.value(0);
   situps.input(sitChange);
   sittxt.mouseClicked(txtInput);
+  sittxt.attribute('type', 'tel')
+  sittxt.attribute('pattern', '[0-9]+')
   
   rsittxt = createInput();
   rsittxt.parent('sketch-holder');
@@ -200,6 +204,8 @@ function createSliders() {
   rsittxt.hide();
   rsitups.input(rsitChange);
   rsittxt.mouseClicked(txtInput);
+  rsittxt.attribute('type', 'tel')
+  rsittxt.attribute('pattern', '[0-9]+')
 
   var runMinimum = runTime(runmin);
   runmintxt = createInput();
@@ -210,6 +216,8 @@ function createSliders() {
   runmintxt.value(runMinimum.minutes);
   runmintxt.hide();
   runmintxt.mouseClicked(txtInput);
+  runmintxt.attribute('type', 'tel')
+  runmintxt.attribute('pattern', '[0-9]+')
 
   runsectxt = createInput();
   runsectxt.parent('sketch-holder');
@@ -220,6 +228,8 @@ function createSliders() {
   runsectxt.hide();
   runsectxt.mouseClicked(txtInput);
   runtime.input(runChange);
+  runsectxt.attribute('type', 'tel')
+  runsectxt.attribute('pattern', '[0-9]+')
   
   plankmintxt = createInput();
   plankmintxt.parent('sketch-holder');
@@ -229,6 +239,9 @@ function createSliders() {
   plankmintxt.value(0);
   plankmintxt.hide();
   plankmintxt.mouseClicked(txtInput);
+  plankmintxt.attribute('type', 'tel')
+  plankmintxt.attribute('pattern', '[0-9]+')
+
   planksectxt = createInput();
   planksectxt.parent('sketch-holder');
   planksectxt.addClass('text-box');
@@ -238,6 +251,8 @@ function createSliders() {
   planksectxt.hide();
   planksectxt.mouseClicked(txtInput);
   planks.input(plankChange);
+  planksectxt.attribute('type', 'tel')
+  planksectxt.attribute('pattern', '[0-9]+')
   
   shuttletxt = createInput();
   shuttletxt.parent('sketch-holder');
@@ -248,6 +263,8 @@ function createSliders() {
   shuttletxt.hide();
   shuttletxt.mouseClicked(txtInput);
   shuttleRun.input(shuttleChange);
+  shuttletxt.attribute('type', 'tel')
+  shuttletxt.attribute('pattern', '[0-9]+')
 
   pushImg = createImg(strengthAbsLink, "");
   pushImg.parent(modal);
