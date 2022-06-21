@@ -168,8 +168,8 @@ function createSliders() {
   pushups.input(pushChange);
   pushtxt.mouseClicked(txtInput);
   pushtxt.input(pushChangeTxt);
-  pushtxt.attribute('type', 'numeric')
-  pushtxt.attribute('pattern', '[0-9]')
+  pushtxt.attribute('type', 'tel')
+  pushtxt.attribute('pattern', '[0-9]+')
   
   hrpushtxt = createInput();
   hrpushtxt.parent('sketch-holder');
