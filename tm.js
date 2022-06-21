@@ -3038,7 +3038,7 @@ var male30To34ShuttleScores = [
 var male35To39ShuttleScores = [
 {"range": ">92",   "points":      60.0},			
 {"range": "87 - 91", "points":		59.5},			
-{"range": "83 - 85", "points":		59.0},			
+{"range": "83 - 86", "points":		59.0},			
 {"range": "80 - 82", "points":		58.5},			
 {"range": "77 - 79", "points":		58.0},			
 {"range": "74 - 76", "points":		57.5},			
