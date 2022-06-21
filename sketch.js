@@ -653,16 +653,16 @@ function draw() {
   fill('white');
   stroke('white');
   if (totalScoreText == 'FAIL! Minimum Not Met!') {
-    redgreencolor = 'red';
+    redgreencolor = color(220, 35, 0);
     fill(redgreencolor);
     stroke('black');
-    strokeWeight(3)
+    strokeWeight(6)
     text('FAIL! Minimum Not Met!', 85,65 + 50)
   } else if (totalScoreText == "Unsatisfactory!") {
-    redgreencolor = 'red';
+    redgreencolor = color(220, 35, 0);
     fill(redgreencolor)
     stroke('black')
-    strokeWeight(4)
+    strokeWeight(6)
     text(totalScoreText, 135,65 + 50)
   } else if (totalScoreText == "Satisfactory!") {
     redgreencolor = 'lightgreen';
@@ -680,13 +680,13 @@ function draw() {
 
   fill('white');
   stroke('white');
-  strokeWeight(1)
+  strokeWeight(0)
 
   text('Total Score:', 125, 85);
 
   fill(redgreencolor)
   stroke('black')
-  strokeWeight(4)
+  strokeWeight(6)
   text(total.toFixed(1), 255,85)
   fill('white')
   stroke('white')
