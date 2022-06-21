@@ -179,6 +179,7 @@ function createSliders() {
   hrpushtxt.value(0);
   hrpushtxt.hide();
   hrpush.input(hrpushChange);
+  hrpushtxt.input(hrpushChangeTxt)
   hrpushtxt.mouseClicked(txtInput);
   hrpushtxt.attribute('type', 'tel')
   hrpushtxt.attribute('pattern', '[0-9]+')
@@ -191,6 +192,7 @@ function createSliders() {
   sittxt.size(20, 20);
   sittxt.value(0);
   situps.input(sitChange);
+  sittxt.input(sitChangeTxt)
   sittxt.mouseClicked(txtInput);
   sittxt.attribute('type', 'tel')
   sittxt.attribute('pattern', '[0-9]+')
@@ -203,6 +205,7 @@ function createSliders() {
   rsittxt.value(0);
   rsittxt.hide();
   rsitups.input(rsitChange);
+  rsittxt.input(rsitChangeTxt)
   rsittxt.mouseClicked(txtInput);
   rsittxt.attribute('type', 'tel')
   rsittxt.attribute('pattern', '[0-9]+')
@@ -218,6 +221,7 @@ function createSliders() {
   runmintxt.mouseClicked(txtInput);
   runmintxt.attribute('type', 'tel')
   runmintxt.attribute('pattern', '[0-9]+')
+  runmintxt.input(runChangeTxt);
 
   runsectxt = createInput();
   runsectxt.parent('sketch-holder');
@@ -228,6 +232,7 @@ function createSliders() {
   runsectxt.hide();
   runsectxt.mouseClicked(txtInput);
   runtime.input(runChange);
+  runsectxt.input(runChangeTxt);
   runsectxt.attribute('type', 'tel')
   runsectxt.attribute('pattern', '[0-9]+')
   
@@ -239,6 +244,7 @@ function createSliders() {
   plankmintxt.value(0);
   plankmintxt.hide();
   plankmintxt.mouseClicked(txtInput);
+  plankmintxt.input(plankChangeTxt);
   plankmintxt.attribute('type', 'tel')
   plankmintxt.attribute('pattern', '[0-9]+')
 
@@ -251,6 +257,7 @@ function createSliders() {
   planksectxt.hide();
   planksectxt.mouseClicked(txtInput);
   planks.input(plankChange);
+  planksectxt.input(plankChangeTxt);
   planksectxt.attribute('type', 'tel')
   planksectxt.attribute('pattern', '[0-9]+')
   
@@ -263,6 +270,7 @@ function createSliders() {
   shuttletxt.hide();
   shuttletxt.mouseClicked(txtInput);
   shuttleRun.input(shuttleChange);
+  shuttletxt.input(shuttleChangeTxt);
   shuttletxt.attribute('type', 'tel')
   shuttletxt.attribute('pattern', '[0-9]+')
 
@@ -911,6 +919,11 @@ function shuttleChange() {
   shuttlevalue = shuttleRun.value();
 }
 
+function shuttleChangeTxt() {
+  shuttleRun.value(shuttletxt.value());
+  shuttlevalue = shuttleRun.value();
+}
+
 // If Slider is used, sets the pushup txt boxes to slider value
 function pushChange()
 {
@@ -934,8 +947,17 @@ function sitChange()
 sittxt.value(situps.value()); 
 }
 
+function sitChangeTxt() 
+{
+  situps.value(sittxt.value());
+}
+
 function rsitChange() {
   rsittxt.value(rsitups.value());
+}
+
+function rsitChangeTxt() {
+  rsitups.value(rsittxt.value());
 }
 
 function plankString(secs) {
@@ -950,8 +972,18 @@ function plankChange() {
   plankValue = tm.minutes + ":" + nf(tm.sec,2);
 }
 
+function plankChangeTxt() {
+  var plankTimeValue = plankmintxt.value() + ":" + planksectxt.value();
+  var seconds = hmsToSecs(plankTimeValue);
+  planks.value(seconds);
+}
+
 function hrpushChange() {
   hrpushtxt.value(hrpush.value());
+}
+
+function hrpushChangeTxt() {
+  hrpush.value(hrpushtxt.value());
 }
 // If Slider is used, sets the runtime txt boxes to slider value
 function runChange() 
@@ -960,6 +992,12 @@ var tm= runTime(runtime.value());
 runmintxt.value(tm.minutes);
 // console.log(nf(tm.sec,2) + " : " + tm.sec)
 runsectxt.value(tm.sec); 
+}
+
+function runChangeTxt() {
+  var tm = runmintxt.value() + ':' + runsectxt.value();
+  var seconds = hmsToSecs(tm);
+  runtime.value(seconds);
 }
 
 // If submit button is clicked, use the values manually input from textboxes
