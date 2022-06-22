@@ -82,7 +82,7 @@
       cacheFirst({
         request: event.request,
         preloadResponsePromise: event.preloadResponse,
-        fallbackUrl: 'home-screen-icon.jpg',
+        fallbackUrl: 'home-screen-icon.png',
       })
     );
   });
