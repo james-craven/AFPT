@@ -61,18 +61,18 @@
     event.waitUntil(
       addResourcesToCache([
         "./",
-        "index.html",
-        "style.css",
-        "tm.js",
-        "home-screen-icon.png",
+        "./index.html",
+        "./style.css",
+        "./tm.js",
+        "./home-screen-icon.png",
         "./Score Chart jpgs/",
-        "pushups.png",
-        "situps.png",
-        "running.png",
-        "shuttle.m4a",
-        "shuttle.mp3",
-        "shuttle.ogg",
-        "manifest.webmanifest"
+        "./pushups.png",
+        "./situps.png",
+        "./running.png",
+        "./shuttle.m4a",
+        "./shuttle.mp3",
+        "./shuttle.ogg",
+        "./manifest.webmanifest"
       ])
     );
   });
