@@ -65,7 +65,7 @@
         "./style.css",
         "./tm.js",
         "./home-screen-icon.png",
-        "./Score Chart jpgs",
+        "./Score Chart jpgs/male_25-29_cardio.jpg",
         "./pushups.png",
         "./situps.png",
         "./running.png",
