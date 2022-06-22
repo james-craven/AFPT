@@ -60,12 +60,12 @@
   self.addEventListener("install", (event) => {
     event.waitUntil(
       addResourcesToCache([
-        "/",
+        "./",
         "index.html",
         "style.css",
         "tm.js",
         "home-screen-icon.png",
-        "/Score Chart jpgs/",
+        "./Score Chart jpgs/",
         "pushups.png",
         "situps.png",
         "running.png",
