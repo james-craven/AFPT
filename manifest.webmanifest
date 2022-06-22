@@ -18,5 +18,6 @@
     ],
     "name": "Air Force PT Calculator",
     "short_name": "AFPTCalc",
-    "start_url": "index.html"
+    "start_url": "index.html",
+    "id": "index.html"
   }
