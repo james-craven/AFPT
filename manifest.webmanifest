@@ -1,0 +1,15 @@
+{
+    "background_color": "blue",
+    "description": "Calculates PT Scores for Air Force",
+    "display": "fullscreen",
+    "icons": [
+      {
+        "src": "home-screen-icon.png",
+        "sizes": "144x144",
+        "type": "image/png"
+      }
+    ],
+    "name": "Air Force PT Calculator",
+    "short_name": "AFPTCalc",
+    "start_url": "index.html"
+  }
