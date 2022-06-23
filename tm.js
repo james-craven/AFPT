@@ -2508,7 +2508,7 @@ function hms(str) {
 
 function calculatePlankScore(secs, scoreArray) {
   for (key in scoreArray.abs) {
-    console.log(key + ", " + scoreArray.abs[key]);
+    // console.log(key + ", " + scoreArray.abs[key]);
 
     if (secs >= hms(key)) {
       return scoreArray.abs[key];
@@ -3517,7 +3517,7 @@ function setScoreArrays() {
     if (sit=="Plank") {scoreArrays.abs = male55To59PlankScores}
     if (sit=="Reverse Crunch") {scoreArrays.abs = male55To59RSitupScores}
     if (run=="Shuttle") {scoreArrays.cardio = male55To59ShuttleScores}
-  } else if(age == 'Male > 60') {
+  } else if(age == 'Male >60') {
     if (push=="Pushups") {scoreArrays.strength = maleGreaterThan60PushupScores;}
     if (sit=="Situps") {scoreArrays.abs = maleGreaterThan60SitupScores;}
     if (run=="1.5 Mile") {scoreArrays.cardio = maleGreaterThan60RunScores;}
@@ -3589,7 +3589,7 @@ function setScoreArrays() {
     if (sit=="Plank") {scoreArrays.abs = female55To59PlankScores}
     if (sit=="Reverse Crunch") {scoreArrays.abs = female55To59RSitupScores}
     if (run=="Shuttle") {scoreArrays.cardio = female55To59ShuttleScores}
-  } else if(age == 'Female > 60') {
+  } else if(age == 'Female >60') {
     if (push=="Pushups") {scoreArrays.strength = femaleGreaterThan60PushupScores;}
     if (sit=="Situps") {scoreArrays.abs = femaleGreaterThan60SitupScores;}
     if (run=="1.5 Mile") {scoreArrays.cardio = femaleGreaterThan60RunScores;}
