@@ -7,7 +7,7 @@
     const cache = await caches.open('v1');
     await cache.put(request, response);
   };
-  
+  /*
   const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
     // First try to get the resource from the cache
     const responseFromCache = await caches.match(request);
@@ -45,7 +45,7 @@
       });
     }
   };
-  
+  */
   const enableNavigationPreload = async () => {
     if (self.registration.navigationPreload) {
       // Enable navigation preloads!
@@ -78,6 +78,7 @@
     );
   });
   
+/*
   self.addEventListener('fetch', (event) => {
     event.respondWith(
       cacheFirst({
@@ -87,10 +88,7 @@
       })
     );
   });
-
-
-/*
-https://developer.chrome.com/docs/workbox/caching-strategies-overview/
+*/
 
 self.addEventListener('fetch', (event) => {
   // Check if this is a navigation request
@@ -111,4 +109,4 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 });
-*/
+
