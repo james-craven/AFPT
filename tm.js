@@ -2795,7 +2795,7 @@ var female25To29RunScores = [
 
 var female30To34RunScores = [
   {"range": "0 - 10:51", "points": 60.0}, 
-  {"range": "10:52- 11:22", "points": 59.5},
+  {"range": "10:52 - 11:22", "points": 59.5},
   {"range": "11:23 - 11:38", "points": 59.0}, 
   {"range": "11:39 - 11:56", "points": 58.5},
   {"range": "11:57 - 12:14", "points": 58.0}, 
