@@ -346,7 +346,7 @@ function setup() {
       reg.waiting.postMessage('skipWaiting');
     }
   }
-  listenForWaitingServiceWorker(reg, promptUserToRefresh);
+  listenForWaitingServiceWorker(registerServiceWorker(), promptUserToRefresh);
 
 
 
