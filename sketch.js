@@ -72,7 +72,7 @@ var sitmin;
 var sitmax;
 var rsitmin;
 var rsitmax;
-var runmax;    
+var runmax;
 var runmin;
 var plankmin;
 var plankmax;
@@ -83,9 +83,9 @@ var shuttleMax;
 var shuttlevalue;
 
 //Score for component based on calculations.
-var rscore=0;
-var sscore=0;
-var pscore=0;
+var rscore = 0;
+var sscore = 0;
+var pscore = 0;
 
 function createSliders() {
   pushSel = createSelect();
@@ -106,7 +106,7 @@ function createSliders() {
   sitSel.option('Exempt');
   sitSel.selected('Situps');
   sitSel.changed(selectChange);
-  
+
   runSel = createSelect();
   runSel.parent('sketch-holder');
   runSel.position(10, 395 + 50);
@@ -115,50 +115,50 @@ function createSliders() {
   runSel.option('Exempt');
   runSel.selected('1.5 Mile');
   runSel.changed(selectChange);
-  
-  runnum=new Time(0,0);
+
+  runnum = new Time(0, 0);
   pushups = createSlider(0, pushmax, 0, 1);
   pushups.parent('sketch-holder');
-  pushups.position(170,208 + 50); 
-  pushups.size(175,15);
+  pushups.position(170, 208 + 50);
+  pushups.size(175, 15);
   pushups.addClass("pushups");
   hrpush = createSlider(0, hrmax, 0, 1);
   hrpush.parent('sketch-holder');
-  hrpush.position(170,208 + 50);
-  hrpush.size(175,15);
+  hrpush.position(170, 208 + 50);
+  hrpush.size(175, 15);
   hrpush.hide();
   hrpush.addClass('pushups');
-  situps =createSlider(0, sitmax, 0, 1)
+  situps = createSlider(0, sitmax, 0, 1)
   situps.parent('sketch-holder');
-  situps.position(170,305 + 50);
-  situps.size(175,15);
+  situps.position(170, 305 + 50);
+  situps.size(175, 15);
   situps.addClass('situps');
   rsitups = createSlider(0, rsitmax, 0, 1)
   rsitups.parent('sketch-holder');
-  rsitups.position(170,305 + 50);
-  rsitups.size(175,15);
+  rsitups.position(170, 305 + 50);
+  rsitups.size(175, 15);
   rsitups.hide();
   rsitups.addClass('situps');
   planks = createSlider(0, plankmax, 0, 1)
   planks.parent('sketch-holder');
   planks.position(170, 305 + 50);
-  planks.size(135,15);
+  planks.size(135, 15);
   planks.hide();
   planks.addClass('situps');
-  runtime =createSlider(runmin, runmax, runmax, 1)
+  runtime = createSlider(runmin, runmax, runmax, 1)
   runtime.parent('sketch-holder');
-  runtime.position(10,450 + 55);
-  runtime.size(400,15);
+  runtime.position(10, 450 + 55);
+  runtime.size(400, 15);
   runtime.addClass('run');
   shuttleRun = createSlider(0, shuttleMax, 0, 1)
   shuttleRun.parent('sketch-holder');
-  shuttleRun.position(40,450 + 55);
-  shuttleRun.size(350,15);
+  shuttleRun.position(40, 450 + 55);
+  shuttleRun.size(350, 15);
   shuttleRun.addClass('shuttle');
   shuttleRun.hide();
-  
-  plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec,2);
-  
+
+  plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec, 2);
+
   pushtxt = createInput();
   pushtxt.parent('sketch-holder');
   pushtxt.addClass('text-box');
@@ -170,7 +170,7 @@ function createSliders() {
   pushtxt.input(pushChangeTxt);
   pushtxt.attribute('type', 'tel')
   pushtxt.attribute('pattern', '[0-9]+')
-  
+
   hrpushtxt = createInput();
   hrpushtxt.parent('sketch-holder');
   hrpushtxt.addClass('text-box');
@@ -183,8 +183,8 @@ function createSliders() {
   hrpushtxt.mouseClicked(txtInput);
   hrpushtxt.attribute('type', 'tel')
   hrpushtxt.attribute('pattern', '[0-9]+')
-  
-  
+
+
   sittxt = createInput();
   sittxt.parent('sketch-holder');
   sittxt.addClass('text-box');
@@ -196,7 +196,7 @@ function createSliders() {
   sittxt.mouseClicked(txtInput);
   sittxt.attribute('type', 'tel')
   sittxt.attribute('pattern', '[0-9]+')
-  
+
   rsittxt = createInput();
   rsittxt.parent('sketch-holder');
   rsittxt.addClass('text-box');
@@ -214,7 +214,7 @@ function createSliders() {
   runmintxt = createInput();
   runmintxt.parent('sketch-holder');
   runmintxt.addClass('text-box');
-  runmintxt.position (310, 395 + 50);
+  runmintxt.position(310, 395 + 50);
   runmintxt.size(20, 20);
   runmintxt.value(runMaximum.minutes);
   runmintxt.hide();
@@ -235,12 +235,12 @@ function createSliders() {
   runsectxt.input(runChangeTxt);
   runsectxt.attribute('type', 'tel')
   runsectxt.attribute('pattern', '[0-9]+')
-  
+
   plankmintxt = createInput();
   plankmintxt.parent('sketch-holder');
   plankmintxt.addClass('text-box');
   plankmintxt.position(310, 295 + 50);
-  plankmintxt.size(20,20);
+  plankmintxt.size(20, 20);
   plankmintxt.value(0);
   plankmintxt.hide();
   plankmintxt.mouseClicked(txtInput);
@@ -252,7 +252,7 @@ function createSliders() {
   planksectxt.parent('sketch-holder');
   planksectxt.addClass('text-box');
   planksectxt.position(365, 295 + 50);
-  planksectxt.size(20,20);
+  planksectxt.size(20, 20);
   planksectxt.value(0);
   planksectxt.hide();
   planksectxt.mouseClicked(txtInput);
@@ -260,12 +260,12 @@ function createSliders() {
   planksectxt.input(plankChangeTxt);
   planksectxt.attribute('type', 'tel')
   planksectxt.attribute('pattern', '[0-9]+')
-  
+
   shuttletxt = createInput();
   shuttletxt.parent('sketch-holder');
   shuttletxt.addClass('text-box');
   shuttletxt.position(365, 395 + 50);
-  shuttletxt.size(22,20);
+  shuttletxt.size(22, 20);
   shuttletxt.value(0);
   shuttletxt.hide();
   shuttletxt.mouseClicked(txtInput);
@@ -281,7 +281,7 @@ function createSliders() {
   cardioImg = createImg(cardioLink, "");
   cardioImg.parent(modal);
   cardioImg.position(-40, 0);
-  
+
   shuttleImg = createImg(shuttleLink, "");
   shuttleImg.parent(modal);
   shuttleImg.position(-40, 0);
@@ -313,26 +313,54 @@ function setup() {
       }
     }
   };
-  
+
   // ...
-  
+
   registerServiceWorker();
-  
+
+  function listenForWaitingServiceWorker(reg, callback) {
+    function awaitStateChange() {
+      reg.installing.addEventListener('statechange', function () {
+        if (this.state === 'installed') callback(reg);
+      });
+    }
+    if (!reg) return;
+    if (reg.waiting) return callback(reg);
+    if (reg.installing) awaitStateChange();
+    reg.addEventListener('updatefound', awaitStateChange);
+  }
+
+  // reload once when the new Service Worker starts activating
+  var refreshing;
+  navigator.serviceWorker.addEventListener('controllerchange',
+    function () {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    }
+  );
+  function promptUserToRefresh(reg) {
+    // this is just an example
+    // don't use window.confirm in real life; it's terrible
+    if (window.confirm("New version available! OK to refresh?")) {
+      reg.waiting.postMessage('skipWaiting');
+    }
+  }
+  listenForWaitingServiceWorker(reg, promptUserToRefresh);
 
 
 
 
-  
-
-  
-  
 
 
 
-  let c = createCanvas(500, 750);  
+
+
+
+  let c = createCanvas(500, 750);
   c.parent('sketch-holder');
   c.drawingContext.miterLimit = 2;
-  
+
   ageSel = createSelect();
   ageSel.position(310, 85 + 50);
   ageSel.option('< 25');
@@ -356,16 +384,16 @@ function setup() {
   sexSel.changed(ageChange);
   sexSel.id('sexSel');
   sexSel.parent('sketch-holder');
-  
+
   minMaxValueAge()
-  
+
   calculateBtn = createButton("CALCULATE SCORE");
   calculateBtn.parent('sketch-holder');
   calculateBtn.addClass('text-box');
   calculateBtn.id('calculateScoreBtn');
   calculateBtn.position(245, 610 + 50);
   calculateBtn.mousePressed(calcBtnClick);
-  
+
   shuttleAudioBtn = createButton("Shuttle Audio");
   shuttleAudioBtn.parent('sketch-holder');
   shuttleAudioBtn.position(180, 395 + 50);
@@ -373,7 +401,7 @@ function setup() {
   shuttleAudio = select("#shuttle-audio");
   shuttleAudio.parent('sketch-holder');
   shuttleAudioBtn.mousePressed(toggleMusicPlayer);
-  
+
   resetBtn = createButton("Reset Values");
   resetBtn.parent('sketch-holder');
   resetBtn.addClass('text-box');
@@ -422,12 +450,12 @@ function setup() {
   shuttleChartsBtn.position(190, 395 + 50);
   shuttleChartsBtn.mousePressed(showShuttleCharts);
   shuttleChartsBtn.hide();
-  
+
   createSliders();
 
   setScoreArrays();
-  
-}  
+
+}
 
 function draw() {
   clear();
@@ -523,7 +551,7 @@ function draw() {
     hrpushtxt.value(0);
     hrpushtxt.attribute('disabled', '');
   }
-  
+
   if (sitSel.value() == 'Situps') {
     text('Abs Score: ' + sscore + '  |  Min: ' + sitmin + "  |  Max: " + sitmax, 15, 275 + 50);
     situps.removeAttribute('disabled');
@@ -568,13 +596,13 @@ function draw() {
     planksectxt.value(0);
     planksectxt.attribute('disabled', '');
   }
-  
+
   var runMinimum = runTime(runmax);
   if (runSel.value() == '1.5 Mile') {
     text('Cardio Score: ' + rscore + '  |  Min: ' + plankString(runmax) + "  |  Max: " + plankString(runmin), 15, 375 + 50);
     runtime.removeAttribute('disabled');
     runmintxt.removeAttribute('disabled');
-    if (runmintxt.value() === '0') {runmintxt.value(runMinimum.minutes);}
+    if (runmintxt.value() === '0') { runmintxt.value(runMinimum.minutes); }
     runsectxt.removeAttribute('disabled');
     shuttleRun.removeAttribute('disabled');
     shuttletxt.removeAttribute('disabled');
@@ -598,86 +626,85 @@ function draw() {
     shuttletxt.value(0);
     shuttletxt.attribute('disabled', '');
   }
-  
+
   fill(0);
-  
+
   stroke('white');
   strokeWeight(2);
-  line(10,150 + 50,410,150 + 50);
+  line(10, 150 + 50, 410, 150 + 50);
   stroke(0);
   strokeWeight(1);
-  
+
   stroke('white');
   strokeWeight(2);
-  line(10,350 + 50,410,350 + 50);
+  line(10, 350 + 50, 410, 350 + 50);
   stroke(0);
   strokeWeight(1);
-  
+
   stroke('white');
   strokeWeight(2);
-  line(10,250 + 50,410,250 + 50);
+  line(10, 250 + 50, 410, 250 + 50);
   stroke(0);
   strokeWeight(.5);
-  
+
 
   textSize(20);
   fill('white');
   stroke('white');
-  if (runSel.value()=='1.5 Mile') {
+  if (runSel.value() == '1.5 Mile') {
     text(":", 356, 423 + 50);
     runmintxt.show();
     runsectxt.show();
     shuttletxt.hide();
-    lapTime=runTime(floor(runtime.value()/6));
-    text("Req'd 6 Lap Time: ~" + lapTime.minutes +":" + nf(lapTime.sec,2), 10, 505 + 50);
+    lapTime = runTime(floor(runtime.value() / 6));
+    text("Req'd 6 Lap Time: ~" + lapTime.minutes + ":" + nf(lapTime.sec, 2), 10, 505 + 50);
     text("(Rounded down to nearest sec)", 10, 525 + 50);
     //textSize(15);
-    for(var i=0; i<6; i++)
-    {
-    var lp=floor(runtime.value()/6)  // num secs per lap
-    var nl=runTime(lp*(i+1));      // Next lap
-     // console.log(nl);
-    text("Lap " + int(i+1) + ": ≤ " + nl.minutes  +":" +nf(nl.sec,2), 10, 600+(i*20));    
+    for (var i = 0; i < 6; i++) {
+      var lp = floor(runtime.value() / 6)  // num secs per lap
+      var nl = runTime(lp * (i + 1));      // Next lap
+      // console.log(nl);
+      text("Lap " + int(i + 1) + ": ≤ " + nl.minutes + ":" + nf(nl.sec, 2), 10, 600 + (i * 20));
     }
   } else if (runSel.value() == 'Shuttle') {
     text('Shuttle Level: ' + hamrLevel(), 10, 505 + 50);
     text('Current Level Shuttles: ' + hamrShuttles(), 10, 535 + 50);
   }
-  pushnum=pushups.value();
-  sitnum=situps.value();
-  hrpushnum=hrpush.value();
-  rsitnum=rsitups.value();
-  runnum=runTime(runtime.value());
-  plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec,2);
+  pushnum = pushups.value();
+  sitnum = situps.value();
+  hrpushnum = hrpush.value();
+  rsitnum = rsitups.value();
+  runnum = runTime(runtime.value());
+  plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec, 2);
   shuttlevalue = shuttleRun.value();
-  
+
   if (runSel.value() == '1.5 Mile') {
-    rscore=runScore(runtime.value());
+    rscore = runScore(runtime.value());
   } else if (runSel.value() == 'Shuttle') {
     rscore = hamrScore(shuttleRun.value());
   }
-  
+
   if (pushSel.value() == 'Pushups') {
-    pscore=pushScore(pushnum);
+    pscore = pushScore(pushnum);
   } else if (pushSel.value() == 'Hand-Release') {
-    pscore=hrpushScore(hrpushnum);
+    pscore = hrpushScore(hrpushnum);
   }
-  
+
   if (sitSel.value() == 'Situps') {
-    sscore=sitScore(sitnum);
+    sscore = sitScore(sitnum);
   } else if (sitSel.value() == 'Reverse Crunch') {
-    sscore=rsitScore(rsitnum);
+    sscore = rsitScore(rsitnum);
   } else if (sitSel.value() == 'Plank') {
     sscore = plankScore(planks.value());
     text(":", 356, 323 + 50);
   }
-  
 
-    
-  var total=sscore+pscore+rscore;
-  
+
+
+  var total = sscore + pscore + rscore;
+
   //Exemptions
-  
+
   var p = pushSel.value(), s = sitSel.value(), r = runSel.value(), e = 'Exempt';
   if (p == e && s != e && r != e) {        //only pushups exempt
     total = (sscore + rscore) / 80 * 100;
@@ -692,27 +719,23 @@ function draw() {
   } else if (s == e && r == e && p != e) { //situps & run exempt
     total = pscore / 20 * 100;
   }
-  
-  
-  var totalScoreText = 'FAIL! Minimum Not Met!';
-  if ((sscore==0 && s != e) || (rscore==0 && r != e) || (pscore==0 && p != e))
-  {
-  totalScoreText = "FAIL! Minimum Not Met!";
-  }
-  else if((total<75))
-  {
 
-  totalScoreText = "Unsatisfactory!";
+
+  var totalScoreText = 'FAIL! Minimum Not Met!';
+  if ((sscore == 0 && s != e) || (rscore == 0 && r != e) || (pscore == 0 && p != e)) {
+    totalScoreText = "FAIL! Minimum Not Met!";
   }
-  else if((total<90))
-  {
-  totalScoreText = "Satisfactory!";
+  else if ((total < 75)) {
+
+    totalScoreText = "Unsatisfactory!";
   }
-  else if((total>=90))
-  {
-  totalScoreText = "Excellent!";
+  else if ((total < 90)) {
+    totalScoreText = "Satisfactory!";
   }
-  
+  else if ((total >= 90)) {
+    totalScoreText = "Excellent!";
+  }
+
   textSize(23);
   fill('white');
   stroke('white');
@@ -721,25 +744,25 @@ function draw() {
     fill(redgreencolor);
     stroke('black');
     strokeWeight(6)
-    text('FAIL! Minimum Not Met!', 85,65 + 50)
+    text('FAIL! Minimum Not Met!', 85, 65 + 50)
   } else if (totalScoreText == "Unsatisfactory!") {
     redgreencolor = color(220, 35, 0);
     fill(redgreencolor)
     stroke('black')
     strokeWeight(6)
-    text(totalScoreText, 135,65 + 50)
+    text(totalScoreText, 135, 65 + 50)
   } else if (totalScoreText == "Satisfactory!") {
     redgreencolor = 'lightgreen';
     fill(redgreencolor)
     stroke('black')
     strokeWeight(5)
-    text(totalScoreText, 155,65 + 50)
-  } else if (totalScoreText == "Excellent!") { 
+    text(totalScoreText, 155, 65 + 50)
+  } else if (totalScoreText == "Excellent!") {
     redgreencolor = 'lightgreen';
     fill(redgreencolor)
     stroke('black')
     strokeWeight(5)
-    text(totalScoreText, 165,65 + 50)
+    text(totalScoreText, 165, 65 + 50)
   }
 
   fill('white');
@@ -751,55 +774,55 @@ function draw() {
   fill(redgreencolor)
   stroke('black')
   strokeWeight(6)
-  text(total.toFixed(1), 255,85)
+  text(total.toFixed(1), 255, 85)
   fill('white')
   stroke('white')
   strokeWeight(1)
-  
-  
-function hamrLevel() {
-  
-  var hamrLevels = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-  
-  var level = 5;
-  
-  if (shuttleRun.value() >= 93) level=hamrLevels[0]; //level 11
-  else if (shuttleRun.value() >= 82 && shuttleRun.value() <93) level=hamrLevels[1]; //level 10
-  else if (shuttleRun.value() >= 71 && shuttleRun.value() <82) level=hamrLevels[2]; //level 9
-  else if (shuttleRun.value() >= 61 && shuttleRun.value() <71) level=hamrLevels[3]; //level 8
-  else if (shuttleRun.value() >= 51 && shuttleRun.value() <61) level=hamrLevels[4]; //level 7
-  else if (shuttleRun.value() >= 42 && shuttleRun.value() <51) level=hamrLevels[5]; //level 6
-  else if (shuttleRun.value() >= 33 && shuttleRun.value() <42) level=hamrLevels[6]; //level 5
-  else if (shuttleRun.value() >= 24 && shuttleRun.value() <33) level=hamrLevels[7]; //level 4
-  else if (shuttleRun.value() >= 16 && shuttleRun.value() <24) level=hamrLevels[8]; //level 3
-  else if (shuttleRun.value() >= 8 && shuttleRun.value() <16) level=hamrLevels[9]; //level 2
-  if (shuttleRun.value() >= 0 && shuttleRun.value() <8) level=hamrLevels[10]; //level 1
-  
-  
-  return level
-}
-  
-function hamrShuttles() {
-  
-  var shuttles = 1;
-  
-  var levelMax = [7, 15, 23, 32, 41, 50, 60, 70, 81, 92, 104];
-  
-  if (hamrLevel() == 1) shuttles = shuttleRun.value() - levelMax[0] +7;
-  if (hamrLevel() == 2) shuttles = shuttleRun.value() - levelMax[1] +8;
-  if (hamrLevel() == 3) shuttles = shuttleRun.value() - levelMax[2] +8;
-  if (hamrLevel() == 4) shuttles = shuttleRun.value() - levelMax[3] +9;
-  if (hamrLevel() == 5) shuttles = shuttleRun.value() - levelMax[4] +9;
-  if (hamrLevel() == 6) shuttles = shuttleRun.value() - levelMax[5] +9;
-  if (hamrLevel() == 7) shuttles = shuttleRun.value() - levelMax[6] +10;
-  if (hamrLevel() == 8) shuttles = shuttleRun.value() - levelMax[7] +10;
-  if (hamrLevel() == 9) shuttles = shuttleRun.value() - levelMax[8] +11;
-  if (hamrLevel() == 10) shuttles = shuttleRun.value() - levelMax[9] +11;
-  if (hamrLevel() == 11) shuttles = shuttleRun.value() - levelMax[10] +12;
-  
-  return shuttles
-}
-  
+
+
+  function hamrLevel() {
+
+    var hamrLevels = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+
+    var level = 5;
+
+    if (shuttleRun.value() >= 93) level = hamrLevels[0]; //level 11
+    else if (shuttleRun.value() >= 82 && shuttleRun.value() < 93) level = hamrLevels[1]; //level 10
+    else if (shuttleRun.value() >= 71 && shuttleRun.value() < 82) level = hamrLevels[2]; //level 9
+    else if (shuttleRun.value() >= 61 && shuttleRun.value() < 71) level = hamrLevels[3]; //level 8
+    else if (shuttleRun.value() >= 51 && shuttleRun.value() < 61) level = hamrLevels[4]; //level 7
+    else if (shuttleRun.value() >= 42 && shuttleRun.value() < 51) level = hamrLevels[5]; //level 6
+    else if (shuttleRun.value() >= 33 && shuttleRun.value() < 42) level = hamrLevels[6]; //level 5
+    else if (shuttleRun.value() >= 24 && shuttleRun.value() < 33) level = hamrLevels[7]; //level 4
+    else if (shuttleRun.value() >= 16 && shuttleRun.value() < 24) level = hamrLevels[8]; //level 3
+    else if (shuttleRun.value() >= 8 && shuttleRun.value() < 16) level = hamrLevels[9]; //level 2
+    if (shuttleRun.value() >= 0 && shuttleRun.value() < 8) level = hamrLevels[10]; //level 1
+
+
+    return level
+  }
+
+  function hamrShuttles() {
+
+    var shuttles = 1;
+
+    var levelMax = [7, 15, 23, 32, 41, 50, 60, 70, 81, 92, 104];
+
+    if (hamrLevel() == 1) shuttles = shuttleRun.value() - levelMax[0] + 7;
+    if (hamrLevel() == 2) shuttles = shuttleRun.value() - levelMax[1] + 8;
+    if (hamrLevel() == 3) shuttles = shuttleRun.value() - levelMax[2] + 8;
+    if (hamrLevel() == 4) shuttles = shuttleRun.value() - levelMax[3] + 9;
+    if (hamrLevel() == 5) shuttles = shuttleRun.value() - levelMax[4] + 9;
+    if (hamrLevel() == 6) shuttles = shuttleRun.value() - levelMax[5] + 9;
+    if (hamrLevel() == 7) shuttles = shuttleRun.value() - levelMax[6] + 10;
+    if (hamrLevel() == 8) shuttles = shuttleRun.value() - levelMax[7] + 10;
+    if (hamrLevel() == 9) shuttles = shuttleRun.value() - levelMax[8] + 11;
+    if (hamrLevel() == 10) shuttles = shuttleRun.value() - levelMax[9] + 11;
+    if (hamrLevel() == 11) shuttles = shuttleRun.value() - levelMax[10] + 12;
+
+    return shuttles
+  }
+
   stroke(0);
   fill(0);
 }
@@ -807,43 +830,40 @@ function hamrShuttles() {
 
 
 function plankTime(secs) {
-  var minutes=0;
-  var seconds=0;
-  minutes=floor(secs/60);
-  seconds=secs- (minutes*60);
+  var minutes = 0;
+  var seconds = 0;
+  minutes = floor(secs / 60);
+  seconds = secs - (minutes * 60);
   //console.log(seconds);
   var tot = new Time(minutes, seconds);
-  
-return tot;
+
+  return tot;
 }
 
 
-function runTime(secs)
-{
-var minutes=0;
-var seconds=0;
+function runTime(secs) {
+  var minutes = 0;
+  var seconds = 0;
 
-  
-minutes=floor(secs/60);
-seconds=secs-(minutes*60);
+
+  minutes = floor(secs / 60);
+  seconds = secs - (minutes * 60);
   // console.log(minutes + " : " + seconds);
-  
-var tot = new Time(minutes, seconds);
-  
-return tot; 
+
+  var tot = new Time(minutes, seconds);
+
+  return tot;
 }
 
-function runScore(secs)
-{
-  return calculateRunScore(secs,scoreArrays.cardio);
+function runScore(secs) {
+  return calculateRunScore(secs, scoreArrays.cardio);
 }
 
 function plankScore(secs) {
   return calculatePlankScore(secs, scoreArrays);
 }
 
-function pushScore(pnum)
-{
+function pushScore(pnum) {
   return calculateStrengthScore(pnum, scoreArrays);
 }
 
@@ -851,8 +871,7 @@ function hrpushScore(hrpnum) {
   return calculateStrengthScore(hrpnum, scoreArrays);
 }
 
-function sitScore(snum)
-{
+function sitScore(snum) {
   return calculateSitupsScore(snum, scoreArrays);
 }
 
@@ -863,9 +882,9 @@ function rsitScore(rsitnum) {
 function hamrScore() {
   return calculateShuttleScore(shuttleRun.value(), scoreArrays);
 }
-  
 
-  
+
+
 
 
 function selectChange() {
@@ -885,7 +904,7 @@ function selectChange() {
     hrpushtxt.show();
     hrpushtxt.value('0');
   }
-  
+
   if (sitSel.value() == 'Situps') {
     situpsText = 'Sit Ups: ';
     situps.show();
@@ -896,7 +915,7 @@ function selectChange() {
     planks.hide();
     plankmintxt.hide();
     planksectxt.hide();
-    
+
   } else if (sitSel.value() == 'Plank') {
     situpsText = 'Plank: ';
     planks.show();
@@ -909,7 +928,7 @@ function selectChange() {
     rsitups.hide();
     rsittxt.hide();
 
-    
+
   } else if (sitSel.value() == 'Reverse Crunch') {
     situpsText = 'Reverse Crunch: ';
     situps.hide();
@@ -921,7 +940,7 @@ function selectChange() {
     rsittxt.show();
     rsittxt.value('0');
   }
-  
+
   if (runSel.value() == '1.5 Mile') {
     var runMinimum = runTime(runmax);
     runText = 'Run Time: ';
@@ -934,7 +953,7 @@ function selectChange() {
     shuttleChartsBtn.hide();
     isAudioActive = false;
     shuttleAudioBtn.position(180, 395 + 50);
-    
+
   } else if (runSel.value() == 'Shuttle') {
     runtime.hide();
     runmintxt.hide();
@@ -961,13 +980,11 @@ function shuttleChangeTxt() {
 }
 
 // If Slider is used, sets the pushup txt boxes to slider value
-function pushChange()
-{
-pushtxt.value(pushups.value()); 
+function pushChange() {
+  pushtxt.value(pushups.value());
 }
 
-function pushChangeTxt()
-{
+function pushChangeTxt() {
   pushups.value(pushtxt.value());
 }
 
@@ -980,13 +997,11 @@ function keyPressed() {
 }
 
 // If Slider is used, sets the situp txt boxes to slider value
-function sitChange()
-{
-sittxt.value(situps.value()); 
+function sitChange() {
+  sittxt.value(situps.value());
 }
 
-function sitChangeTxt() 
-{
+function sitChangeTxt() {
   situps.value(sittxt.value());
 }
 
@@ -1000,14 +1015,14 @@ function rsitChangeTxt() {
 
 function plankString(secs) {
   var tm = plankTime(secs);
-  return tm.minutes + ":" + nf(tm.sec,2);
+  return tm.minutes + ":" + nf(tm.sec, 2);
 }
 
 function plankChange() {
   var tm = plankTime(planks.value());
   plankmintxt.value(tm.minutes);
-  planksectxt.value(nf(tm.sec,2));
-  plankValue = tm.minutes + ":" + nf(tm.sec,2);
+  planksectxt.value(nf(tm.sec, 2));
+  plankValue = tm.minutes + ":" + nf(tm.sec, 2);
 }
 
 function plankChangeTxt() {
@@ -1024,12 +1039,11 @@ function hrpushChangeTxt() {
   hrpush.value(hrpushtxt.value());
 }
 // If Slider is used, sets the runtime txt boxes to slider value
-function runChange() 
-{
-var tm= runTime(runtime.value());
-runmintxt.value(tm.minutes);
-// console.log(nf(tm.sec,2) + " : " + tm.sec)
-runsectxt.value(tm.sec); 
+function runChange() {
+  var tm = runTime(runtime.value());
+  runmintxt.value(tm.minutes);
+  // console.log(nf(tm.sec,2) + " : " + tm.sec)
+  runsectxt.value(tm.sec);
 }
 
 function runChangeTxt() {
@@ -1039,9 +1053,8 @@ function runChangeTxt() {
 }
 
 // If submit button is clicked, use the values manually input from textboxes
-function calcBtnClick()
-{
-  plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec,2);
+function calcBtnClick() {
+  plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec, 2);
   shuttlevalue = shuttleRun.value();
   var validSit;
   var validRunMin;
@@ -1049,16 +1062,16 @@ function calcBtnClick()
   var validPlankMin;
   var validPlankSec;
   var validShuttles;
-  var validPush; 
-  
+  var validPush;
+
   if (pushSel.value() == 'Pushups') {
     validPush = int(pushtxt.value());
   } else if (pushSel.value() == 'Hand-Release') {
-      validPush = int(hrpushtxt.value());
-    } else if (pushSel.value() == 'Exempt') {
-      validPush = 0;
-    }
-  
+    validPush = int(hrpushtxt.value());
+  } else if (pushSel.value() == 'Exempt') {
+    validPush = 0;
+  }
+
   if (sitSel.value() == 'Situps') {
     validSit = int(sittxt.value());
     validPlankMin = 0;
@@ -1076,7 +1089,7 @@ function calcBtnClick()
     validPlankSec = 0;
     validSit = 0;
   }
-  
+
   if (runSel.value() == '1.5 Mile') {
     validRunMin = int(runmintxt.value());
     validRunSec = int(runsectxt.value());
@@ -1097,53 +1110,50 @@ function calcBtnClick()
   // I think I'm pretty clever for coming up with this
   // It minimized the amount of code I have to paste into 
   // each score program. 
-  if(!isNaN(validPush) && !isNaN(validSit) && !isNaN(validRunMin) && !isNaN(validRunSec) && !isNaN(validPlankMin) && !isNaN(validPlankSec) && !isNaN(validShuttles))
-  {
+  if (!isNaN(validPush) && !isNaN(validSit) && !isNaN(validRunMin) && !isNaN(validRunSec) && !isNaN(validPlankMin) && !isNaN(validPlankSec) && !isNaN(validShuttles)) {
     if (pushSel.value() == 'Pushups') {
-      if(validPush>pushmax) {
-      validPush=pushmax;  
+      if (validPush > pushmax) {
+        validPush = pushmax;
       }
     } else if (pushSel.value() == 'Hand-Release') {
-      if (validPush>hrmax) {
+      if (validPush > hrmax) {
         validPush = hrmax;
       }
     }
     if (sitSel.value() == 'Situps') {
-      if(validSit>sitmax) {
-      validSit=sitmax;  
+      if (validSit > sitmax) {
+        validSit = sitmax;
       }
     } else if (sitSel.value() == 'Reverse Crunch') {
-      if (validSit>rsitmax) {
+      if (validSit > rsitmax) {
         validSit = rsitmax;
       }
     }
 
-    var mins=validRunMin;
-    var secs=validRunSec;
-    var runsecs=(mins*60) + secs;
-  
-    if(runsecs > runmax)
-    {
-    runsecs=runmax; 
+    var mins = validRunMin;
+    var secs = validRunSec;
+    var runsecs = (mins * 60) + secs;
+
+    if (runsecs > runmax) {
+      runsecs = runmax;
     }
-    else if(runsecs < runmin)
-    {
-    runsecs = runmin;  
+    else if (runsecs < runmin) {
+      runsecs = runmin;
     }
-    
-    var plankMins=validPlankMin;
-    var plankSecs=validPlankSec;
-    var plankSeconds=(plankMins*60) + plankSecs;
-    
-    if(plankSeconds > plankmax) {
+
+    var plankMins = validPlankMin;
+    var plankSecs = validPlankSec;
+    var plankSeconds = (plankMins * 60) + plankSecs;
+
+    if (plankSeconds > plankmax) {
       plankSeconds = plankmax;
     }
-  
+
     if (validShuttles > shuttleMax) {
       validShuttles = shuttleMax;
     }
-    
-    if (pushSel.value() == 'Pushups'){
+
+    if (pushSel.value() == 'Pushups') {
       pushups.value(validPush);
     } else if (pushSel.value() == 'Hand-Release') {
       hrpush.value(validPush);
@@ -1157,10 +1167,9 @@ function calcBtnClick()
     planks.value(plankSeconds);
     shuttleRun.value(validShuttles);
   }
-  else
-  {
-  alert("Please verify that only numbers are input for times!");
-  } 
+  else {
+    alert("Please verify that only numbers are input for times!");
+  }
 }
 
 function removeSliders() {
@@ -1197,21 +1206,21 @@ function ageChange() {
 }
 
 function minMaxValueAge() {
-  
-  
+
+
   function hms(str) {
     var p = str.split(':'),
-        s = 0, m = 1;
+      s = 0, m = 1;
 
     while (p.length > 0) {
-        if (p[0] == '') p[0] = 0;
-        s += m * parseInt(p.pop(), 10);
-        m *= 60;
+      if (p[0] == '') p[0] = 0;
+      s += m * parseInt(p.pop(), 10);
+      m *= 60;
     }
     return s;
   }
-  
-  
+
+
   var age = ageSel.value();
   var sex = sexSel.value();
   age = sex + " " + age;
@@ -1541,7 +1550,7 @@ function pushInfoClick() {
   cardioImg.hide();
   shuttleImg.hide();
   pushImg.show();
-  
+
   return false;
 }
 function cardioInfoClick() {
@@ -1553,7 +1562,7 @@ function cardioInfoClick() {
   pushImg.hide();
   shuttleImg.hide();
   cardioImg.show();
-  
+
   return false;
 }
 
