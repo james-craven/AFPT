@@ -294,63 +294,51 @@ function createSliders() {
 
 function setup() {
 
+  // check if the browser supports serviceWorker at all
   const registerServiceWorker = async () => {
-    if ('serviceWorker' in navigator) {
-      try {
-        const registration = await navigator.serviceWorker.register(
-          'sw.js',
+  if ('serviceWorker' in navigator) {
+      // register the service worker from the file specified
+      const registration = await navigator.serviceWorker.register('sw.js')
 
-        );
+      // detect Service Worker update available and wait for it to become installed
+      registration.addEventListener('updatefound', () => {
         if (registration.installing) {
-          console.log('Service worker installing');
-        } else if (registration.waiting) {
-          console.log('Service worker installed');
-        } else if (registration.active) {
-          console.log('Service worker active');
+          // wait until the new Service worker is actually installed (ready to take over)
+          registration.installing.addEventListener('statechange', () => {
+            if (registration.waiting) {
+              // if there's an existing controller (previous Service Worker), show the prompt
+              if (navigator.serviceWorker.controller) {
+                window.location.reload();
+              } else {
+                // otherwise it's the first install, nothing to do
+                console.log('Service Worker initialized for the first time')
+              }
+            }
+          })
         }
-      } catch (error) {
-        console.error(`Registration failed with ${error}`);
-      }
-    }
-  };
+      })
 
-  // ...
+      let refreshing = false;
+
+      // detect controller change and refresh the page
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) {
+          window.location.reload()
+          refreshing = true
+        }
+      })
+    
+  }
+}
 
   registerServiceWorker();
 
-  function listenForWaitingServiceWorker(reg, callback) {
-    function awaitStateChange() {
-      reg.installing.addEventListener('statechange', function () {
-        if (this.state === 'installed') callback(reg);
-      });
-    }
-    if (!reg) return;
-    if (reg.waiting) return callback(reg);
-    if (reg.installing) awaitStateChange();
-    reg.addEventListener('updatefound', awaitStateChange);
-  }
-
-  // reload once when the new Service Worker starts activating
-  var refreshing;
-  navigator.serviceWorker.addEventListener('controllerchange',
-    function () {
-      if (refreshing) return;
-      refreshing = true;
-      window.location.reload();
-    }
-  );
-  function promptUserToRefresh(reg) {
-    // this is just an example
-    // don't use window.confirm in real life; it's terrible
-    if (window.confirm("New version available! OK to refresh?")) {
-      reg.waiting.postMessage('skipWaiting');
-    }
-  }
-  listenForWaitingServiceWorker(registerServiceWorker(), promptUserToRefresh);
+  
 
 
 
 
+/* Test */
 
 
 
