@@ -67,7 +67,7 @@ self.addEventListener("install", (event) => {
       "style.css",
       "tm.js",
       "home-screen-icon.png",
-      "/Score Chart jpgs/",
+      "./Score Chart jpgs/female_25-29_Strength_Abs.jpg",
       "pushups.png",
       "situps.png",
       "running.png",
