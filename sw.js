@@ -55,9 +55,11 @@ const enableNavigationPreload = async () => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(enableNavigationPreload());
+  event.waitUntil(clients.claim());
 });
 
 self.addEventListener("install", (event) => {
+  self.skipWaiting();
   event.waitUntil(
     addResourcesToCache([
       "/",
@@ -77,21 +79,13 @@ self.addEventListener("install", (event) => {
   );
 });
 
-// self.addEventListener('fetch', (event) => {
-//   event.respondWith(
-//     cacheFirst({
-//       request: event.request,
-//       preloadResponsePromise: event.preloadResponse,
-//       fallbackUrl: 'home-screen-icon.jpg',
-//     })
-//   );
-// });
+
 
 self.addEventListener('fetch', (event) => {
   // Check if this is a navigation request
   if (event.request.mode === 'navigate') {
     // Open the cache
-    event.respondWith(caches.open(cacheName).then((cache) => {
+    event.respondWith(caches.open('v1').then((cache) => {
       // Go to the network first
       return fetch(event.request.url).then((fetchedResponse) => {
         cache.put(event.request, fetchedResponse.clone());
@@ -104,23 +98,4 @@ self.addEventListener('fetch', (event) => {
   } else {
     return;
   }
-});
-
-addEventListener('message', messageEvent => {
-  if (messageEvent.data === 'skipWaiting') return skipWaiting();
-});
-
-addEventListener('fetch', event => {
-  event.respondWith((async () => {
-    if (event.request.mode === "navigate" &&
-      event.request.method === "GET" &&
-      registration.waiting &&
-      (await clients.matchAll()).length < 2
-    ) {
-      registration.waiting.postMessage('skipWaiting');
-      return new Response("", { headers: { "Refresh": "0" } });
-    }
-    return await caches.match(event.request) ||
-      fetch(event.request);
-  })());
 });
