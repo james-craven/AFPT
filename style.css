@@ -111,7 +111,7 @@ select:hover {
   z-index: 1;
   overflow:visible;
   background-color: #006797fb;
-  background-size: 400% 400%;
+  background-size: 100% 100%;
   color:white;
   text-shadow:2px 2px black;
   padding:20px;
