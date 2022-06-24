@@ -394,7 +394,13 @@ function setup() {
   resetBtn.parent('sketch-holder');
   resetBtn.addClass('text-box');
   resetBtn.position(290, 555 + 50); //240,555
-  resetBtn.mousePressed(ageChange);
+  resetBtn.mousePressed(resetBtnPressed);
+
+
+  function resetBtnPressed() {
+    ageChange();
+    selectChange();
+  }
 
   pushInfoBtn = createA("javascript:void(0);", "See <br>Chart"); //infoIcon found in tm.js
   pushInfoBtn.parent('sketch-holder');
