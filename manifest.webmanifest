@@ -1,7 +1,7 @@
 {
     "background_color": "blue",
     "description": "Calculates PT Scores for Air Force",
-    "display": "standalone",
+    "display": "minimal-ui",
     "icons": [
       {
         "src": "home-screen-icon.png",
