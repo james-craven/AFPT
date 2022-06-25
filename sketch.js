@@ -173,8 +173,8 @@ function createSliders() {
   
   shuttleRun = createSlider(0, shuttleMax, 0, 1)
   shuttleRun.parent('sketch-holder');
-  shuttleRun.position(40, 450 + 55);
-  shuttleRun.size(350, 15);
+  shuttleRun.position(10, 450 + 55);
+  shuttleRun.size(400, 15);
   shuttleRun.addClass('shuttle');
   shuttleRun.hide();
 
@@ -1053,7 +1053,7 @@ function draw() {
 
   } else if (runSel.value() == 'Exempt') {
     text('Cardio Score: Exempt', 85, 375 + 50);
-    runtime.value(runmax);
+    runtime.value(runmax + 62);
     runtime.attribute('disabled', '');
     runmintxt.value(0);
     runmintxt.attribute('disabled', '');
@@ -1063,7 +1063,7 @@ function draw() {
     shuttleRun.attribute('disabled', '');
     shuttletxt.value(0);
     shuttletxt.attribute('disabled', '');
-    walktime.value(runmax);
+    walktime.value(runmax + 62);
     walktime.attribute('disabled', '');
     walkmintxt.value(0);
     walkmintxt.attribute('disabled', '');
@@ -1426,7 +1426,7 @@ function selectChange() {
   }
 
   if (runSel.value() == '1.5 Mile') {
-    var runMinimum = runTime(runmax);
+    var runMinimum = runTime(runmax + 62);
     runText = 'Run Time: ';
     runtime.show();
     runmintxt.show();
