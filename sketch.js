@@ -12,6 +12,7 @@ var isAudioActive = false;
 var strengthAbsLink = "./Score Chart jpgs/female_lessthan25_Strength_Abs.jpg";
 var cardioLink = "./Score Chart jpgs/female_lessthan25_cardio.jpg"
 var shuttleLink = "./Score Chart jpgs/shuttleScores.jpg"
+var walkLink = "./Score Chart jpgs/walkChart.jpg"
 
 var canvasContainer;
 var isModalActive = false;
@@ -22,11 +23,17 @@ var modal2;
 var closeBtnModal;
 var closeBtnModal2;
 
+var passFailWalk
+
 
 var runtime;                     // Run Slider
 var runnum;                      // Run time in seconds
 var runmintxt;                   // Textbox for run
 var runsectxt;                  // Textbox for run (sec);
+
+var walktime;
+var walkmintxt;
+var walksectxt;
 
 var ageSel;
 var pushSel;
@@ -74,6 +81,8 @@ var rsitmin;
 var rsitmax;
 var runmax;
 var runmin;
+var walkmin;
+var walkmax;
 var plankmin;
 var plankmax;
 var shuttleMin;
@@ -86,6 +95,7 @@ var shuttlevalue;
 var rscore = 0;
 var sscore = 0;
 var pscore = 0;
+var walkScore = true;
 
 function createSliders() {
   pushSel = createSelect();
@@ -112,6 +122,7 @@ function createSliders() {
   runSel.position(10, 395 + 50);
   runSel.option('1.5 Mile');
   runSel.option('Shuttle');
+  runSel.option('Walk');
   runSel.option('Exempt');
   runSel.selected('1.5 Mile');
   runSel.changed(selectChange);
@@ -145,11 +156,18 @@ function createSliders() {
   planks.size(135, 15);
   planks.hide();
   planks.addClass('situps');
-  runtime = createSlider(runmin, runmax, runmax, 1)
+  runtime = createSlider(runmin, runmax + 62, runmax + 62, 1)
   runtime.parent('sketch-holder');
   runtime.position(10, 450 + 55);
   runtime.size(400, 15);
   runtime.addClass('run');
+  walktime = createSlider(0, walkmax+62, 0, 1);
+  walktime.parent('sketch-holder');
+  walktime.position(10, 450 + 55);
+  walktime.size(400, 15);
+  walktime.addClass('walk');
+  walktime.hide();
+  
   shuttleRun = createSlider(0, shuttleMax, 0, 1)
   shuttleRun.parent('sketch-holder');
   shuttleRun.position(40, 450 + 55);
@@ -210,7 +228,7 @@ function createSliders() {
   rsittxt.attribute('type', 'tel')
   rsittxt.attribute('pattern', '[0-9]+')
 
-  var runMaximum = runTime(runmax);
+  var runMaximum = runTime(runmax + 62);
   runmintxt = createInput();
   runmintxt.parent('sketch-holder');
   runmintxt.addClass('text-box');
@@ -235,6 +253,34 @@ function createSliders() {
   runsectxt.input(runChangeTxt);
   runsectxt.attribute('type', 'tel')
   runsectxt.attribute('pattern', '[0-9]+')
+
+
+  var walkMaximum = runTime(walkmax);
+  walkmintxt = createInput();
+  walkmintxt.parent('sketch-holder');
+  walkmintxt.addClass('text-box');
+  walkmintxt.position(310, 395 + 50);
+  walkmintxt.size(20, 20);
+  walkmintxt.value(runMaximum.minutes);
+  walkmintxt.hide();
+  walkmintxt.mouseClicked(txtInput);
+  walkmintxt.attribute('type', 'tel')
+  walkmintxt.attribute('pattern', '[0-9]+')
+  walkmintxt.input(walkChangeTxt);
+
+  walksectxt = createInput();
+  walksectxt.parent('sketch-holder');
+  walksectxt.addClass('text-box');
+  walksectxt.position(365, 395 + 50); //245
+  walksectxt.size(20, 20);
+  walksectxt.value(runMaximum.sec);
+  walksectxt.hide();
+  walksectxt.mouseClicked(txtInput);
+  walktime.input(walkChange);
+  walksectxt.input(walkChangeTxt);
+  walksectxt.attribute('type', 'tel')
+  walksectxt.attribute('pattern', '[0-9]+')
+
 
   plankmintxt = createInput();
   plankmintxt.parent('sketch-holder');
@@ -286,6 +332,10 @@ function createSliders() {
   shuttleImg.parent(modal);
   shuttleImg.position(-40, 0);
 
+  walkImg = createImg(walkLink, "");
+  walkImg.parent(modal);
+  walkImg.position(-40, 0);
+
 
 }
 
@@ -332,16 +382,6 @@ function setup() {
 }
 
   registerServiceWorker();
-
-  
-
-
-
-
-/* Test */
-
-
-
 
 
 
@@ -390,17 +430,19 @@ function setup() {
   shuttleAudio.parent('sketch-holder');
   shuttleAudioBtn.mousePressed(toggleMusicPlayer);
 
-  resetBtn = createButton("Reset Values");
-  resetBtn.parent('sketch-holder');
-  resetBtn.addClass('text-box');
-  resetBtn.position(290, 555 + 50); //240,555
-  resetBtn.mousePressed(resetBtnPressed);
+  altitudeSel = createSelect();
+  altitudeSel.parent('sketch-holder');
+  altitudeSel.addClass('text-box');
+  altitudeSel.addClass('altitude-select');
+  altitudeSel.position(200, 555 + 50); //240,555
+  altitudeSel.option("Altitude Adjust");
+  altitudeSel.option("Group 1 (5250-5499ft)");
+  altitudeSel.option("Group 2 (5500-5999ft)");
+  altitudeSel.option("Group 3 (6000-6599ft)");
+  altitudeSel.option("Group 4 (>6600ft)");
 
 
-  function resetBtnPressed() {
-    ageChange();
-    selectChange();
-  }
+
 
   pushInfoBtn = createA("javascript:void(0);", "See <br>Chart"); //infoIcon found in tm.js
   pushInfoBtn.parent('sketch-holder');
@@ -427,6 +469,12 @@ function setup() {
   appInfoIcon.id("appInfoBtn");
   appInfoIcon.mousePressed(appInfoClick);
 
+  resourceIcon = createButton("Resources");
+  resourceIcon.parent('sketch-holder');
+  resourceIcon.addClass('text-box');
+  resourceIcon.position(210, 10);
+  resourceIcon.id("resourceBtn");
+  resourceIcon.mousePressed(appInfoClick);
 
   modal = select("#modal");
   closeBtnModal = select(".close-btn");
@@ -454,8 +502,365 @@ function setup() {
 function draw() {
   clear();
 
-  if (runtime.value() >= runmin) {
+
+  var walkAltitudeAdjustment = 0;
+    let age = ageSel.value();
+    let sex = sexSel.value();
+    age = sex + " " + age;
+    if (age == 'Male < 25' || age == 'Male 25-29') {
+      switch (altitudeSel.value()) {
+        case 'Group 1 (5250-5499ft)':
+          walkAltitudeAdjustment = 2;
+          break;
+        case 'Group 2 (5500-5999ft)':
+          walkAltitudeAdjustment = 6;
+          break;
+        case 'Group 3 (6000-6599ft)':
+          walkAltitudeAdjustment = 9;
+          break;
+        case 'Group 4 (>6600ft)':
+          walkAltitudeAdjustment = 15;
+          break;
+        default:
+          walkAltitudeAdjustment = 0;
+      }
+    } else if(age == 'Male 30-34' || age == 'Male 35-39') {
+      switch (altitudeSel.value()) {
+        case 'Group 1 (5250-5499ft)':
+          walkAltitudeAdjustment = 2;
+          break;
+        case 'Group 2 (5500-5999ft)':
+          walkAltitudeAdjustment = 6;
+          break;
+        case 'Group 3 (6000-6599ft)':
+          walkAltitudeAdjustment = 9;
+          break;
+        case 'Group 4 (>6600ft)':
+          walkAltitudeAdjustment = 15;
+          break;
+        default:
+          walkAltitudeAdjustment = 0;
+      }
+    } else if(age == 'Male 40-44' || age == 'Male 45-49') {
+      switch (altitudeSel.value()) {
+        case 'Group 1 (5250-5499ft)':
+          walkAltitudeAdjustment = 2;
+          break;
+        case 'Group 2 (5500-5999ft)':
+          walkAltitudeAdjustment = 5;
+          break;
+        case 'Group 3 (6000-6599ft)':
+          walkAltitudeAdjustment = 8;
+          break;
+        case 'Group 4 (>6600ft)':
+          walkAltitudeAdjustment = 14;
+          break;
+        default:
+          walkAltitudeAdjustment = 0;
+      }
+    } else if(age == 'Male 50-54' || age == 'Male 55-59') {
+      switch (altitudeSel.value()) {
+        case 'Group 1 (5250-5499ft)':
+          walkAltitudeAdjustment = 2;
+          break;
+        case 'Group 2 (5500-5999ft)':
+          walkAltitudeAdjustment = 5;
+          break;
+        case 'Group 3 (6000-6599ft)':
+          walkAltitudeAdjustment = 8;
+          break;
+        case 'Group 4 (>6600ft)':
+          walkAltitudeAdjustment = 13;
+          break;
+        default:
+          walkAltitudeAdjustment = 0;
+      }
+    } else if (age == 'Male >60') {
+      switch (altitudeSel.value()) {
+        case 'Group 1 (5250-5499ft)':
+          walkAltitudeAdjustment = 1;
+          break;
+        case 'Group 2 (5500-5999ft)':
+          walkAltitudeAdjustment = 4;
+          break;
+        case 'Group 3 (6000-6599ft)':
+          walkAltitudeAdjustment = 7;
+          break;
+        case 'Group 4 (>6600ft)':
+          walkAltitudeAdjustment = 12;
+          break;
+        default:
+          walkAltitudeAdjustment = 0;
+      }
+    } else if (age == 'Female < 25' || age == 'Female 25-29') {
+      switch (altitudeSel.value()) {
+        case 'Group 1 (5250-5499ft)':
+          walkAltitudeAdjustment = 3;
+          break;
+        case 'Group 2 (5500-5999ft)':
+          walkAltitudeAdjustment = 8;
+          break;
+        case 'Group 3 (6000-6599ft)':
+          walkAltitudeAdjustment = 12;
+          break;
+        case 'Group 4 (>6600ft)':
+          walkAltitudeAdjustment = 20;
+          break;
+        default:
+          walkAltitudeAdjustment = 0;
+      }
+    } else if(age == 'Female 30-34' || age == 'Female 35-39') {
+      switch (altitudeSel.value()) {
+        case 'Group 1 (5250-5499ft)':
+          walkAltitudeAdjustment = 2;
+          break;
+        case 'Group 2 (5500-5999ft)':
+          walkAltitudeAdjustment = 7;
+          break;
+        case 'Group 3 (6000-6599ft)':
+          walkAltitudeAdjustment = 12;
+          break;
+        case 'Group 4 (>6600ft)':
+          walkAltitudeAdjustment = 19;
+          break;
+        default:
+          walkAltitudeAdjustment = 0;
+      }
+    } else if(age == 'Female 40-44' || age == 'Female 45-49') {
+      switch (altitudeSel.value()) {
+        case 'Group 1 (5250-5499ft)':
+          walkAltitudeAdjustment = 3;
+          break;
+        case 'Group 2 (5500-5999ft)':
+          walkAltitudeAdjustment = 7;
+          break;
+        case 'Group 3 (6000-6599ft)':
+          walkAltitudeAdjustment = 11;
+          break;
+        case 'Group 4 (>6600ft)':
+          walkAltitudeAdjustment = 18;
+          break;
+        default:
+          walkAltitudeAdjustment = 0;
+      }
+    } else if(age == 'Female 50-54' || age == 'Female 55-59') {
+      switch (altitudeSel.value()) {
+        case 'Group 1 (5250-5499ft)':
+          walkAltitudeAdjustment = 2;
+          break;
+        case 'Group 2 (5500-5999ft)':
+          walkAltitudeAdjustment = 6;
+          break;
+        case 'Group 3 (6000-6599ft)':
+          walkAltitudeAdjustment = 10;
+          break;
+        case 'Group 4 (>6600ft)':
+          walkAltitudeAdjustment = 17;
+          break;
+        default:
+          walkAltitudeAdjustment = 0;
+      }
+    } else if (age == 'Female >60') {
+      switch (altitudeSel.value()) {
+        case 'Group 1 (5250-5499ft)':
+          walkAltitudeAdjustment = 1;
+          break;
+        case 'Group 2 (5500-5999ft)':
+          walkAltitudeAdjustment = 5;
+          break;
+        case 'Group 3 (6000-6599ft)':
+          walkAltitudeAdjustment = 9;
+          break;
+        case 'Group 4 (>6600ft)':
+          walkAltitudeAdjustment = 15;
+          break;
+        default:
+          walkAltitudeAdjustment = 0;
+      }
+    } else {
+      walkAltitudeAdjustment = 0;
+    }
+    function runAltitudeAdjust() {
+      var run = runtime.value();
+      if (altitudeSel.value() == 'Group 1 (5250-5499ft)') {
+        if (run <= hms('11:22')) {
+          return 2;
+        } else if (run <= hms('15:20')) {
+          return 3;
+        } else if (run <= hms('16:22')) {
+          return 4;
+        } else if (run <= hms('20:33')) {
+          return 5;
+        } else if (run <= hms('24:46')) {
+          return 6;
+        } else if (run <= hms('26:06')) {
+          return 7;
+        } else if (run >= hms('26:07')) {
+          return 8;
+        } else {
+          return 0;
+        }
+    
+      } else if (altitudeSel.value() == 'Group 2 (5500-5999ft)') {
+        if (run <= hms('9:34')) {
+          return 6;
+        } else if (run <= hms('10:37')) {
+          return 7;
+        } else if (run <= hms('11:38')) {
+          return 8;
+        } else if (run <= hms('13:14')) {
+          return 9;
+        } else if (run <= hms('14:25')) {
+          return 10;
+        } else if (run <= hms('15:50')) {
+          return 11;
+        } else if (run >= hms('16:22')) {
+          return 12;
+        } else if (run <= hms('17:34')) {
+          return 13;
+        } else if (run <= hms('18:56')) {
+          return 14;
+        } else if (run <= hms('20:33')) {
+          return 15;
+        } else if (run <= hms('21:28')) {
+          return 17;
+        } else if (run <= hms('23:34')) {
+          return 18;
+        } else if (run >= hms('24:46')) {
+          return 19;
+        } else if (run <= hms('26:06')) {
+          return 20;
+        } else if (run >= hms('16:22')) {
+          return 22;
+        } else {
+          return 0;
+        }
+  
+      } else if (altitudeSel.value() == 'Group 3 (6000-6599ft)') {
+        if (run <= hms('9:34')) {
+          return 11;
+        } else if (run <= hms('10:37')) {
+          return 12;
+        } else if (run <= hms('11:22')) {
+          return 13;
+        } else if (run <= hms('11:38')) {
+          return 14;
+        } else if (run <= hms('12:33')) {
+          return 15;
+        } else if (run <= hms('13:36')) {
+          return 16;
+        } else if (run >= hms('14:25')) {
+          return 17;
+        } else if (run <= hms('15:20')) {
+          return 18;
+        } else if (run <= hms('15:50')) {
+          return 19;
+        } else if (run <= hms('16:22')) {
+          return 20;
+        } else if (run <= hms('16:57')) {
+          return 21;
+        } else if (run <= hms('17:34')) {
+          return 22;
+        } else if (run >= hms('18:14')) {
+          return 23;
+        } else if (run <= hms('18:56')) {
+          return 24;
+        } else if (run >= hms('19:43')) {
+          return 25;
+        } else if (run <= hms('20:33')) {
+          return 26;
+        } else if (run <= hms('21:28')) {
+          return 28;
+        } else if (run <= hms('22:28')) {
+          return 29;
+        } else if (run >= hms('23:24')) {
+          return 31;
+        } else if (run <= hms('24:46')) {
+          return 32;
+        } else if (run >= hms('26:06')) {
+          return 34;
+        } else  if (run >= hms('26:07')){
+          return 37;
+        } else {
+          return 0;
+        }
+  
+      } else if (altitudeSel.value() == 'Group 4 (>6600ft)') {
+        if (run <= hms('9:22')) {
+          return 18;
+        } else if (run <= hms('9:34')) {
+          return 19;
+        } else if (run <= hms('9:45')) {
+          return 20;
+        } else if (run <= hms('10:37')) {
+          return 21;
+        } else if (run <= hms('11:22')) {
+          return 22;
+        } else if (run <= hms('11:38')) {
+          return 23;
+        } else if (run >= hms('11:56')) {
+          return 24;
+        } else if (run <= hms('12:14')) {
+          return 25;
+        } else if (run <= hms('12:53')) {
+          return 26;
+        } else if (run <= hms('13:14')) {
+          return 27;
+        } else if (run <= hms('14:00')) {
+          return 28;
+        } else if (run <= hms('14:25')) {
+          return 29;
+        } else if (run >= hms('15:20')) {
+          return 31;
+        } else if (run <= hms('15:50')) {
+          return 32;
+        } else if (run >= hms('16:22')) {
+          return 34;
+        } else if (run <= hms('16:57')) {
+          return 36;
+        } else if (run <= hms('17:34')) {
+          return 37;
+        } else if (run <= hms('18:14')) {
+          return 38;
+        } else if (run >= hms('18:56')) {
+          return 40;
+        } else if (run <= hms('19:43')) {
+          return 42;
+        } else if (run >= hms('20:33')) {
+          return 43;
+        } else  if (run >= hms('21:28')){
+          return 46;
+        } else if (run <= hms('22:28')) {
+          return 49;
+        } else if (run >= hms('23:34')) {
+          return 51;
+        } else if (run <= hms('24:46')) {
+          return 54;
+        } else if (run >= hms('26:06')) {
+          return 57;
+        } else  if (run >= hms('26:07')){
+          return 62;
+        } else {
+          return 0;
+        }
+  
+      } else {
+        return 0;
+      }
+    }
+    var runAltitudeAdjustment = runAltitudeAdjust();
+ 
+
+  if (runtime.value() >= runmin && runtime.value() <= runmax + runAltitudeAdjustment) {
     runtime.addClass('greenbackground')
+  } else {
+    runtime.removeClass('greenbackground');
+  }
+
+  if (walktime.value() <= walkmax + walkAltitudeAdjustment) {
+    walktime.addClass('greenbackground')
+  } else {
+    walktime.removeClass('greenbackground')
   }
 
   if (shuttleRun.value() >= shuttleMin) {
@@ -591,15 +996,23 @@ function draw() {
     planksectxt.attribute('disabled', '');
   }
 
+
+  
+
+
   var runMinimum = runTime(runmax);
   if (runSel.value() == '1.5 Mile') {
-    text('Cardio Score: ' + rscore + '  |  Min: ' + plankString(runmax) + "  |  Max: " + plankString(runmin), 15, 375 + 50);
+    text('Cardio Score: ' + rscore + '  |  Min: ' + plankString(runmax + runAltitudeAdjustment) + "  |  Max: " + plankString(runmin), 15, 375 + 50);
     runtime.removeAttribute('disabled');
     runmintxt.removeAttribute('disabled');
     if (runmintxt.value() === '0') { runmintxt.value(runMinimum.minutes); }
     runsectxt.removeAttribute('disabled');
     shuttleRun.removeAttribute('disabled');
     shuttletxt.removeAttribute('disabled');
+    walktime.removeAttribute('disabled');
+    walkmintxt.removeAttribute('disabled');
+    walksectxt.removeAttribute('disabled');
+
   } else if (runSel.value() == 'Shuttle') {
     text('Cardio Score: ' + rscore + '  |  Min: ' + shuttleMin + "  |  Max: " + shuttleMax, 15, 375 + 50);
     runtime.removeAttribute('disabled');
@@ -607,6 +1020,10 @@ function draw() {
     runsectxt.removeAttribute('disabled');
     shuttleRun.removeAttribute('disabled');
     shuttletxt.removeAttribute('disabled');
+    walktime.removeAttribute('disabled');
+    walkmintxt.removeAttribute('disabled');
+    walksectxt.removeAttribute('disabled');
+
   } else if (runSel.value() == 'Exempt') {
     text('Cardio Score: Exempt', 85, 375 + 50);
     runtime.value(runmax);
@@ -619,7 +1036,23 @@ function draw() {
     shuttleRun.attribute('disabled', '');
     shuttletxt.value(0);
     shuttletxt.attribute('disabled', '');
+    walktime.value(runmax);
+    walktime.attribute('disabled', '');
+    walkmintxt.value(0);
+    walkmintxt.attribute('disabled', '');
+    walksectxt.value(0);
+    walksectxt.attribute('disabled', '');
+    
+  } else if (runSel.value() == 'Walk') {
+    text('Walk Is Pass/Fail. Max Time To Pass: ' + plankString(walkmax + walkAltitudeAdjustment), 15, 375 + 50);
+    walktime.removeAttribute('disabled');
+    walkmintxt.removeAttribute('disabled');
+    walksectxt.removeAttribute('disabled');
   }
+
+
+
+
 
   fill(0);
 
@@ -650,6 +1083,8 @@ function draw() {
     runmintxt.show();
     runsectxt.show();
     shuttletxt.hide();
+    walkmintxt.hide();
+    walksectxt.hide();
     lapTime = runTime(floor(runtime.value() / 6));
     text("Req'd 6 Lap Time: ~" + lapTime.minutes + ":" + nf(lapTime.sec, 2), 10, 505 + 50);
     text("(Rounded down to nearest sec)", 10, 525 + 50);
@@ -672,11 +1107,40 @@ function draw() {
   plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec, 2);
   shuttlevalue = shuttleRun.value();
 
+
+
+
+  
+
+  var shuttleAltitudeAdjustment = 0;
+
+    var a = altitudeSel.value();
+    if (a == 'Group 1 (5250-5499ft)') {
+      shuttleAltitudeAdjustment = 1;
+    } else if (a == 'Group 2 (5500-5999ft)') {
+      shuttleAltitudeAdjustment = 2;
+    } else if (a == 'Group 3 (6000-6599ft)') {
+      shuttleAltitudeAdjustment = 3;
+    } else if (a == 'Group 4 (>6600ft)') {
+      shuttleAltitudeAdjustment = 4;
+    } else {
+      shuttleAltitudeAdjustment = 0;
+    }
+    var numOfShuttles = shuttleRun.value() + shuttleAltitudeAdjustment;
+
+
+    
+
   if (runSel.value() == '1.5 Mile') {
-    rscore = runScore(runtime.value());
+    rscore = runScore(runtime.value() - runAltitudeAdjustment);
   } else if (runSel.value() == 'Shuttle') {
-    rscore = hamrScore(shuttleRun.value());
+    console.log(shuttleRun.value() + shuttleAltitudeAdjustment);
+    console.log(hamrScore(numOfShuttles))
+    rscore = hamrScore(shuttleRun.value() + shuttleAltitudeAdjustment);
+  } else if (runSel.value() == 'Walk') {
+    rscore = 0; walkScore = didWalkPass(walktime.value() - walkAltitudeAdjustment, scoreArrays)
   }
+
 
   if (pushSel.value() == 'Pushups') {
     pscore = pushScore(pushnum);
@@ -704,19 +1168,20 @@ function draw() {
     total = (sscore + rscore) / 80 * 100;
   } else if (s == e && r != e && p != e) { //only situps exempt
     total = (pscore + rscore) / 80 * 100;
-  } else if (r == e && s != e && p != e) { //only run exempt
+  } else if ((r == e || r == 'Walk') && s != e && p != e) { //only run exempt
     total = (pscore + sscore) / 40 * 100;
   } else if (p == e && s == e && r != e) { //pushups & situps exempt
     total = rscore / 60 * 100;
-  } else if (p == e && r == e && s != e) { //pushups & run exempt
+  } else if (p == e && (r == e || r == 'Walk') && s != e) { //pushups & run exempt
     total = sscore / 20 * 100;
-  } else if (s == e && r == e && p != e) { //situps & run exempt
+  } else if (s == e && (r == e || r == 'Walk') && p != e) { //situps & run exempt
     total = pscore / 20 * 100;
   }
 
+ 
 
   var totalScoreText = 'FAIL! Minimum Not Met!';
-  if ((sscore == 0 && s != e) || (rscore == 0 && r != e) || (pscore == 0 && p != e)) {
+  if ((sscore == 0 && s != e) || (rscore == 0 && r != e && r != 'Walk') || (pscore == 0 && p != e) || (r == 'Walk' && !walkScore)) {
     totalScoreText = "FAIL! Minimum Not Met!";
   }
   else if ((total < 75)) {
@@ -873,11 +1338,9 @@ function rsitScore(rsitnum) {
   return calculateSitupsScore(rsitnum, scoreArrays);
 }
 
-function hamrScore() {
-  return calculateShuttleScore(shuttleRun.value(), scoreArrays);
+function hamrScore(shuttles) {
+  return calculateShuttleScore(shuttles, scoreArrays);
 }
-
-
 
 
 
@@ -945,6 +1408,9 @@ function selectChange() {
     runsectxt.show();
     shuttleRun.hide();
     shuttleChartsBtn.hide();
+    walkmintxt.hide();
+    walksectxt.hide();
+    walktime.hide();
     isAudioActive = false;
     shuttleAudioBtn.position(180, 395 + 50);
 
@@ -956,9 +1422,28 @@ function selectChange() {
     shuttletxt.value('0');
     shuttleRun.show();
     shuttleChartsBtn.show();
+    walkmintxt.hide();
+    walksectxt.hide();
+    walktime.hide();
     runText = 'Shuttles: ';
     shuttlevalue = shuttleRun.value();
     shuttleAudioBtn.position(290, 495 + 50);
+
+  } else if (runSel.value() == 'Walk') {
+    runText = 'Walk : ';
+    runtime.hide();
+    runmintxt.hide();
+    runsectxt.hide();
+    shuttletxt.hide();
+    shuttleRun.hide();
+    shuttleChartsBtn.hide();
+    shuttleAudioBtn.position(180, 395 + 50);
+    walktime.show();
+    walkmintxt.show();
+    walksectxt.show();
+    walkmintxt.value(0);
+    walksectxt.value(0);
+    walktime.value(0);
   }
 }
 
@@ -1046,6 +1531,21 @@ function runChangeTxt() {
   runtime.value(seconds);
 }
 
+
+function walkChange() {
+  var tm = runTime(walktime.value());
+  walkmintxt.value(tm.minutes);
+  // console.log(nf(tm.sec,2) + " : " + tm.sec)
+  walksectxt.value(tm.sec);
+}
+
+function walkChangeTxt() {
+  var tm = walkmintxt.value() + ':' + walksectxt.value();
+  var seconds = hmsToSecs(tm);
+  walktime.value(seconds);
+}
+
+
 // If submit button is clicked, use the values manually input from textboxes
 function calcBtnClick() {
   plankValue = plankTime(planks.value()).minutes + ":" + nf(plankTime(planks.value()).sec, 2);
@@ -1096,6 +1596,12 @@ function calcBtnClick() {
     validRunMin = 0;
     validRunSec = 0;
     validShuttles = 0;
+  } else if (runSel.value() == 'Walk') {
+    validWalkMin = int(walkmintxt.value());
+    validWalkSecs = int(walksectxt.value());
+    validRunMin = 0;
+    validRunSec = 0;
+    validShuttles = 0;
   }
 
   // Validate textbox inputs
@@ -1104,7 +1610,7 @@ function calcBtnClick() {
   // I think I'm pretty clever for coming up with this
   // It minimized the amount of code I have to paste into 
   // each score program. 
-  if (!isNaN(validPush) && !isNaN(validSit) && !isNaN(validRunMin) && !isNaN(validRunSec) && !isNaN(validPlankMin) && !isNaN(validPlankSec) && !isNaN(validShuttles)) {
+  if (!isNaN(validPush) && !isNaN(validSit) && !isNaN(validRunMin) && !isNaN(validRunSec) && !isNaN(validPlankMin) && !isNaN(validPlankSec) && !isNaN(validShuttles) && !isNaN(validWalkMin) && !isNaN(validWalkSecs)) {
     if (pushSel.value() == 'Pushups') {
       if (validPush > pushmax) {
         validPush = pushmax;
@@ -1135,6 +1641,15 @@ function calcBtnClick() {
       runsecs = runmin;
     }
 
+    var walkmins = validWalkMin;
+    var walksecs = validwalkSecs;
+
+    var walkseconds = (walkmins * 60) + walkseconds;
+
+    if (walkseconds > walkmax) {
+      walkseconds = walkmax;
+    }
+
     var plankMins = validPlankMin;
     var plankSecs = validPlankSec;
     var plankSeconds = (plankMins * 60) + plankSecs;
@@ -1160,10 +1675,15 @@ function calcBtnClick() {
     runtime.value(runsecs);
     planks.value(plankSeconds);
     shuttleRun.value(validShuttles);
+    walktime.value(validwalksecs);
   }
   else {
     alert("Please verify that only numbers are input for times!");
   }
+
+
+
+  
 }
 
 function removeSliders() {
@@ -1189,6 +1709,9 @@ function removeSliders() {
   pushImg.remove();
   cardioImg.remove();
   shuttleImg.remove();
+  walktime.remove();
+  walkmintxt.remove();
+  walksectxt.remove();
 }
 
 function ageChange() {
@@ -1233,6 +1756,7 @@ function minMaxValueAge() {
     runmax = 950;
     shuttleMin = 36;
     shuttleMax = 100;
+    walkmax = hms("16:16");
     strengthAbsLink = "./Score Chart jpgs/male_lessthan25_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/male_lessthan25_Run_Shuttle.jpg";
   } else if (age == 'Male 25-29') {
@@ -1250,6 +1774,7 @@ function minMaxValueAge() {
     runmax = 982;
     shuttleMin = 33;
     shuttleMax = 97;
+    walkmax = hms("16:16");
     strengthAbsLink = "./Score Chart jpgs/male_25-29_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/male_25-29_cardio.jpg";
   } else if (age == 'Male 30-34') {
@@ -1267,6 +1792,7 @@ function minMaxValueAge() {
     runmax = 1017;
     shuttleMin = 30;
     shuttleMax = 94;
+    walkmax = hms("16:18");
     strengthAbsLink = "./Score Chart jpgs/male_30-34_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/male_30-34_cardio.jpg";
   } else if (age == 'Male 35-39') {
@@ -1284,6 +1810,7 @@ function minMaxValueAge() {
     runmax = 1054;
     shuttleMin = 36;
     shuttleMax = 100;
+    walkmax = hms("16:18");
     strengthAbsLink = "./Score Chart jpgs/male_35-39_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/male_35-39_cardio.jpg";
   } else if (age == 'Male 40-44') {
@@ -1301,6 +1828,7 @@ function minMaxValueAge() {
     runmax = 1094;
     shuttleMin = 24;
     shuttleMax = 88;
+    walkmax = hms("16:23");
     strengthAbsLink = "./Score Chart jpgs/male_40-44_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/male_40-44_Run_Shuttle.jpg";
   } else if (age == 'Male 45-49') {
@@ -1318,6 +1846,7 @@ function minMaxValueAge() {
     runmax = 1136;
     shuttleMin = 22;
     shuttleMax = 86;
+    walkmax = hms("16:23");
     strengthAbsLink = "./Score Chart jpgs/male_45-49_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/male_45-49_cardio.jpg";
   } else if (age == 'Male 50-54') {
@@ -1335,6 +1864,7 @@ function minMaxValueAge() {
     runmax = 1233;
     shuttleMin = 16;
     shuttleMax = 80;
+    walkmax = hms("16:40");
     strengthAbsLink = "./Score Chart jpgs/male_50-54_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/male_50-54_cardio.jpg";
   } else if (age == 'Male 55-59') {
@@ -1352,6 +1882,7 @@ function minMaxValueAge() {
     runmax = 1288;
     shuttleMin = 13;
     shuttleMax = 77;
+    walkmax = hms("16:40");
     strengthAbsLink = "./Score Chart jpgs/male_55-59_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/male_55-59_cardio.jpg";
   } else if (age == 'Male >60') {
@@ -1369,6 +1900,7 @@ function minMaxValueAge() {
     runmax = 1348;
     shuttleMin = 10;
     shuttleMax = 71;
+    walkmax = hms("16:58");
     strengthAbsLink = "./Score Chart jpgs/male_over60_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/male_over60_cardio.jpg";
   } else if (age == 'Female < 25') {
@@ -1386,6 +1918,7 @@ function minMaxValueAge() {
     runmax = hms('18:56');
     shuttleMin = 22;
     shuttleMax = 83;
+    walkmax = hms("17:22");
     strengthAbsLink = "./Score Chart jpgs/female_lessthan25_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/female_lessthan25_cardio.jpg";
   } else if (age == 'Female 25-29') {
@@ -1403,6 +1936,7 @@ function minMaxValueAge() {
     runmax = hms("19:43");
     shuttleMin = 19;
     shuttleMax = 80;
+    walkmax = hms("17:22");
     strengthAbsLink = "./Score Chart jpgs/female_25-29_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/female_25-29_cardio.jpg";
   } else if (age == 'Female 30-34') {
@@ -1420,6 +1954,7 @@ function minMaxValueAge() {
     runmax = hms("20:33");
     shuttleMin = 16;
     shuttleMax = 77;
+    walkmax = hms("17:28");
     strengthAbsLink = "./Score Chart jpgs/female_30-34_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/female_30-34_cardio.jpg";
   } else if (age == 'Female 35-39') {
@@ -1437,6 +1972,7 @@ function minMaxValueAge() {
     runmax = hms("21:28");
     shuttleMin = 13;
     shuttleMax = 74;
+    walkmax = hms("17:28");
     strengthAbsLink = "./Score Chart jpgs/female_35-39_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/female_35-39_cardio.jpg";
   } else if (age == 'Female 40-44') {
@@ -1454,6 +1990,7 @@ function minMaxValueAge() {
     runmax = hms("22:28");
     shuttleMin = 10;
     shuttleMax = 71;
+    walkmax = hms("17:49");
     strengthAbsLink = "./Score Chart jpgs/female_40-44_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/female_40-44_cardio.jpg";
   } else if (age == 'Female 45-49') {
@@ -1471,6 +2008,7 @@ function minMaxValueAge() {
     runmax = hms("23:34");
     shuttleMin = 7;
     shuttleMax = 68;
+    walkmax = hms("17:49");
     strengthAbsLink = "./Score Chart jpgs/female_45-49_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/female_45-49_cardio.jpg";
   } else if (age == 'Female 50-54') {
@@ -1488,6 +2026,7 @@ function minMaxValueAge() {
     runmax = hms("24:46");
     shuttleMin = 5;
     shuttleMax = 56;
+    walkmax = hms("18:11");
     strengthAbsLink = "./Score Chart jpgs/female_50-54_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/female_50-54_cardio.jpg";
   } else if (age == 'Female 55-59') {
@@ -1505,6 +2044,7 @@ function minMaxValueAge() {
     runmax = hms("26:06");
     shuttleMin = 2;
     shuttleMax = 54;
+    walkmax = hms("18:11");
     strengthAbsLink = "./Score Chart jpgs/female_55-59_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/female_55-59_cardio.jpg";
   } else if (age == 'Female >60') {
@@ -1522,6 +2062,7 @@ function minMaxValueAge() {
     runmax = hms("27:27");
     shuttleMin = 1;
     shuttleMax = 48;
+    walkmax = hms("18:53");
     strengthAbsLink = "./Score Chart jpgs/female_over60_Strength_Abs.jpg";
     cardioLink = "./Score Chart jpgs/female_over60_cardio.jpg";
   }
@@ -1555,7 +2096,14 @@ function cardioInfoClick() {
   }
   pushImg.hide();
   shuttleImg.hide();
-  cardioImg.show();
+  if (runSel.value() == 'Walk') {
+    walkImg.show();
+    cardioImg.hide();
+  } else {
+    cardioImg.show();
+    walkImg.hide();
+  }
+
 
   return false;
 }
@@ -1591,3 +2139,6 @@ function showShuttleCharts() {
 function txtInput() {
   this.value('');
 }
+
+//add altitude differential to runtime.value() in score calculation if altitude select is used...
+
