@@ -2,17 +2,12 @@
 <html lang="en">
   <title> Air Force PT Calculator </title>
   <head>
+    <link rel="apple-touch-icon" href="home-screen-icon.png">
+    <link rel="icon" href="home-screen-icon.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.3.1/p5.js"></script>
     <link rel="manifest" href="manifest.webmanifest">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-    
-    <meta name="description" 
-          content="This Air Force Physical Training (PT) Calculator contains all the alt alternate components with exemptions!
-                   This AF PT Calc even includes the score charts and sliders for easy real-time test score calculations! Shuttle run audio
-                   is also available. Based on dafman 36-2905 this AF Fitness Calculator is the one stop shop to calculate PT scores."/>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
     
   </head>
   <div id="gradient"></div>
@@ -28,6 +23,13 @@
           entered in the 1.5 mile run. If you want to get back to this
           page, click/tap the large info button at the top. 
         </p>
+      </div>
+      <div id="modal3" style="display:none;">
+        <span class="close-btn3" role="button">&times;</span>
+        <ul class="nav_list">
+          <li class="nav_link" id="runAltitudeChart">Run Altitude Adjustment Chart</li>
+          <li class="nav_link" id="walkAltitudeChart">Walk Altitude Adjustment Chart</li>
+        </ul>
       </div>
       <audio controls="controls" style="position:absolute; left: 0px; top:700px; display: none;" id="shuttle-audio">
         <source src="shuttle.ogg" type="application/ogg" codecs="vorbis">
