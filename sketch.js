@@ -13,10 +13,13 @@ var strengthAbsLink = "./Score Chart jpgs/female_lessthan25_Strength_Abs.jpg";
 var cardioLink = "./Score Chart jpgs/female_lessthan25_cardio.jpg"
 var shuttleLink = "./Score Chart jpgs/shuttleScores.jpg"
 var walkLink = "./Score Chart jpgs/walkChart.jpg"
+var walkAltitudeAdjustPath = "./Score Chart jpgs/walkAltitudeAdjust.jpg";
+var runAltitudeAdjustPath = "./Score Chart jpgs/runAltitudeAdjust.jpg";
 
 var canvasContainer;
 var isModalActive = false;
 var isModal2Active = false;
+var isModal3Active = false;
 
 var modal;
 var modal2;
@@ -336,6 +339,13 @@ function createSliders() {
   walkImg.parent(modal);
   walkImg.position(-40, 0);
 
+  runAltitudeImg = createImg(runAltitudeAdjustPath, "");
+  runAltitudeImg.parent(modal);
+  runAltitudeImg.position(-40, 0);
+
+  walkAltitudeImg = createImg(walkAltitudeAdjustPath, "");
+  walkAltitudeImg.parent(modal);
+  walkAltitudeImg.position(-40, 0);
 
 }
 
@@ -419,7 +429,7 @@ function setup() {
   calculateBtn.parent('sketch-holder');
   calculateBtn.addClass('text-box');
   calculateBtn.id('calculateScoreBtn');
-  calculateBtn.position(245, 610 + 50);
+  calculateBtn.position(245, 555 + 50);
   calculateBtn.mousePressed(calcBtnClick);
 
   shuttleAudioBtn = createButton("Shuttle Audio");
@@ -434,7 +444,7 @@ function setup() {
   altitudeSel.parent('sketch-holder');
   altitudeSel.addClass('text-box');
   altitudeSel.addClass('altitude-select');
-  altitudeSel.position(200, 555 + 50); //240,555
+  altitudeSel.position(200, 610 + 50); //240,555
   altitudeSel.option("Altitude Adjust");
   altitudeSel.option("Group 1 (5250-5499ft)");
   altitudeSel.option("Group 2 (5500-5999ft)");
@@ -474,12 +484,22 @@ function setup() {
   resourceIcon.addClass('text-box');
   resourceIcon.position(210, 10);
   resourceIcon.id("resourceBtn");
-  resourceIcon.mousePressed(appInfoClick);
+  resourceIcon.mousePressed(toggleModal3);
 
   modal = select("#modal");
   closeBtnModal = select(".close-btn");
   canvasContainer = select("#sketch-holder");
   closeBtnModal.mousePressed(toggleModal);
+
+  modal3 = select("#modal3");
+  modal3.parent("sketch-holder");
+  closeBtnModal3 = select(".close-btn3");
+  closeBtnModal3.mousePressed(toggleModal3);
+
+  runAltitudeLink = select("#runAltitudeChart");
+  walkAltitudeLink = select("#walkAltitudeChart");
+  runAltitudeLink.mousePressed(runAltitudeLinkClicked);
+  walkAltitudeLink.mousePressed(walkAltitudeLinkClicked);
 
   modal2 = select('#modal2');
   modal2.parent('sketch-holder');
@@ -918,6 +938,13 @@ function draw() {
   } else {
     modal2.hide();
   }
+
+  if (isModal3Active) {
+    modal3.show();
+  } else {
+    modal3.hide();
+  }
+
   stroke('white');
   fill('white');
   text("SEX:", 25, 115 + 50);
@@ -2084,6 +2111,9 @@ function pushInfoClick() {
   }
   cardioImg.hide();
   shuttleImg.hide();
+  runAltitudeImg.hide();
+  walkAltitudeImg.hide();
+  walkImg.hide();
   pushImg.show();
 
   return false;
@@ -2096,6 +2126,8 @@ function cardioInfoClick() {
   }
   pushImg.hide();
   shuttleImg.hide();
+  runAltitudeImg.hide();
+  walkAltitudeImg.hide();
   if (runSel.value() == 'Walk') {
     walkImg.show();
     cardioImg.hide();
@@ -2125,6 +2157,14 @@ function toggleModal() {
   }
 }
 
+function toggleModal3() {
+  if (isModal3Active) {
+    isModal3Active = false;
+  } else {
+    isModal3Active = true;
+  }
+}
+
 function showShuttleCharts() {
   if (isModalActive) {
     isModalActive = false;
@@ -2134,11 +2174,41 @@ function showShuttleCharts() {
   pushImg.hide();
   shuttleImg.show();
   cardioImg.hide();
+  runAltitudeImg.hide();
+  walkAltitudeImg.hide();
+}
+
+function runAltitudeLinkClicked() {
+  if (isModalActive) {
+    isModalActive = false;
+  } else {
+    isModalActive = true;
+  }
+  pushImg.hide();
+  shuttleImg.hide();
+  cardioImg.hide();
+  walkAltitudeImg.hide();
+  runAltitudeImg.show();
+}
+
+function walkAltitudeLinkClicked() {
+  if (isModalActive) {
+    isModalActive = false;
+  } else {
+    isModalActive = true;
+  }
+  pushImg.hide();
+  shuttleImg.hide();
+  cardioImg.hide();
+  runAltitudeImg.hide();
+  walkAltitudeImg.show();
 }
 
 function txtInput() {
   this.value('');
 }
+
+
 
 //add altitude differential to runtime.value() in score calculation if altitude select is used...
 
