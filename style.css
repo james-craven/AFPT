@@ -135,7 +135,16 @@ select:hover {
 
 #appInfoBtn {
   height:45px!important;
-  width: 400px!important;
+  width: 200px!important;
+  border-radius:5px!important;
+  display:table-cell!important;
+  vertical-align: center;
+  cursor: pointer;
+}
+
+#resourceBtn {
+  height:45px!important;
+  width: 200px!important;
   border-radius:5px!important;
   display:table-cell!important;
   vertical-align: center;
@@ -241,6 +250,44 @@ input[type=range] {
   overflow:visible;
   cursor: pointer;
 }
+
+
+
+.walk::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 45px;
+  height: 45px;
+  border: 0;
+  background: url('running.png');
+  background-color:white;
+  z-index: 5;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 4px solid black;
+  border-radius: 50%;
+  background-size: 30px 30px;
+  overflow:visible;
+  cursor: pointer;
+}
+
+.walk::-moz-range-thumb {
+width: 40px;
+height: 40px;
+border: 0;
+background: url('running.png');
+background-color:white;
+z-index: 5;
+background-position: center;
+background-repeat: no-repeat;
+border: 4px solid black;
+border-radius: 50%;
+background-size: 30px 30px;
+overflow:visible;
+cursor: pointer;
+}
+
+
 
 .shuttle::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -356,4 +403,13 @@ input[type=range] {
 
 a {
   color: rgb(242, 255, 0)!important;
+}
+
+.altitude-select {
+  width: 210px;
+  text-align:left;
+  background-position: 185px center;
+}
+.altitude-select:hover {
+  background-position: 185px center;
 }
