@@ -354,6 +354,8 @@ function createSliders() {
 
 function setup() {
 
+  pixelDensity(1);
+  
   // check if the browser supports serviceWorker at all
   const registerServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
