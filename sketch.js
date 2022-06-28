@@ -359,6 +359,7 @@ function setup() {
    // check if the browser supports serviceWorker at all
   const registerServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
+    let refreshing = false;
       // register the service worker from the file specified
       const registration = await navigator.serviceWorker.register('sw.js')
 
@@ -370,23 +371,16 @@ function setup() {
             if (registration.waiting) {
               // if there's an existing controller (previous Service Worker), show the prompt
               if (navigator.serviceWorker.controller) {
-                console.log("there's an existing controller");
+                if (!refreshing) {
+                  refreshing = true;
+                  window.location.reload();
+                }
               } else {
                 // otherwise it's the first install, nothing to do
                 console.log('Service Worker initialized for the first time')
               }
             }
           })
-        }
-      })
-
-      let refreshing = false;
-
-      // detect controller change and refresh the page
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (!refreshing) {
-          refreshing = true;
-          window.location.reload();
         }
       })
     
