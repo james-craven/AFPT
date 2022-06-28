@@ -1948,8 +1948,8 @@ function minMaxValueAge() {
     shuttleMin = 22;
     shuttleMax = 83;
     walkmax = hms("17:22");
-    strengthAbsLink = "./Score Chart jpgs/female_lessthan25_Strength_Abs.jpg";
-    cardioLink = "./Score Chart jpgs/female_lessthan25_cardio.jpg";
+    strengthAbsLink = "./web formatted jpgs/female_lessthan25_Strength_Abs.webp";
+    cardioLink = "./web formatted jpgs/female_lessthan25_cardio.webp";
   } else if (age == 'Female 25-29') {
     pushmin = 14;
     pushmax = 47;
@@ -1966,8 +1966,8 @@ function minMaxValueAge() {
     shuttleMin = 19;
     shuttleMax = 80;
     walkmax = hms("17:22");
-    strengthAbsLink = "./Score Chart jpgs/female_25-29_Strength_Abs.jpg";
-    cardioLink = "./Score Chart jpgs/female_25-29_cardio.jpg";
+    strengthAbsLink = "./web formatted jpgs/female_25-29_Strength_Abs.webp";
+    cardioLink = "./web formatted jpgs/female_25-29_cardio.webp";
   } else if (age == 'Female 30-34') {
     pushmin = 11;
     pushmax = 46;
@@ -1984,8 +1984,8 @@ function minMaxValueAge() {
     shuttleMin = 16;
     shuttleMax = 77;
     walkmax = hms("17:28");
-    strengthAbsLink = "./Score Chart jpgs/female_30-34_Strength_Abs.jpg";
-    cardioLink = "./Score Chart jpgs/female_30-34_cardio.jpg";
+    strengthAbsLink = "./web formatted jpgs/female_30-34_Strength_Abs.webp";
+    cardioLink = "./web formatted jpgs/female_30-34_cardio.webp";
   } else if (age == 'Female 35-39') {
     pushmin = 10;
     pushmax = 42;
@@ -2002,8 +2002,8 @@ function minMaxValueAge() {
     shuttleMin = 13;
     shuttleMax = 74;
     walkmax = hms("17:28");
-    strengthAbsLink = "./Score Chart jpgs/female_35-39_Strength_Abs.jpg";
-    cardioLink = "./Score Chart jpgs/female_35-39_cardio.jpg";
+    strengthAbsLink = "./web formatted jpgs/female_35-39_Strength_Abs.webp";
+    cardioLink = "./web formatted jpgs/female_35-39_cardio.webp";
   } else if (age == 'Female 40-44') {
     pushmin = 8;
     pushmax = 38;
@@ -2020,8 +2020,8 @@ function minMaxValueAge() {
     shuttleMin = 10;
     shuttleMax = 71;
     walkmax = hms("17:49");
-    strengthAbsLink = "./Score Chart jpgs/female_40-44_Strength_Abs.jpg";
-    cardioLink = "./Score Chart jpgs/female_40-44_cardio.jpg";
+    strengthAbsLink = "./web formatted jpgs/female_40-44_Strength_Abs.webp";
+    cardioLink = "./web formatted jpgs/female_40-44_cardio.webp";
   } else if (age == 'Female 45-49') {
     pushmin = 7;
     pushmax = 37;
@@ -2038,8 +2038,8 @@ function minMaxValueAge() {
     shuttleMin = 7;
     shuttleMax = 68;
     walkmax = hms("17:49");
-    strengthAbsLink = "./Score Chart jpgs/female_45-49_Strength_Abs.jpg";
-    cardioLink = "./Score Chart jpgs/female_45-49_cardio.jpg";
+    strengthAbsLink = "./web formatted jpgs/female_45-49_Strength_Abs.webp";
+    cardioLink = "./web formatted jpgs/female_45-49_cardio.webp";
   } else if (age == 'Female 50-54') {
     pushmin = 6;
     pushmax = 35;
@@ -2056,8 +2056,8 @@ function minMaxValueAge() {
     shuttleMin = 5;
     shuttleMax = 56;
     walkmax = hms("18:11");
-    strengthAbsLink = "./Score Chart jpgs/female_50-54_Strength_Abs.jpg";
-    cardioLink = "./Score Chart jpgs/female_50-54_cardio.jpg";
+    strengthAbsLink = "./web formatted jpgs/female_50-54_Strength_Abs.webp";
+    cardioLink = "./web formatted jpgs/female_50-54_cardio.webp";
   } else if (age == 'Female 55-59') {
     pushmin = 5;
     pushmax = 28;
@@ -2074,8 +2074,8 @@ function minMaxValueAge() {
     shuttleMin = 2;
     shuttleMax = 54;
     walkmax = hms("18:11");
-    strengthAbsLink = "./Score Chart jpgs/female_55-59_Strength_Abs.jpg";
-    cardioLink = "./Score Chart jpgs/female_55-59_cardio.jpg";
+    strengthAbsLink = "./web formatted jpgs/female_55-59_Strength_Abs.webp";
+    cardioLink = "./web formatted jpgs/female_55-59_cardio.webp";
   } else if (age == 'Female >60') {
     pushmin = 4;
     pushmax = 21;
@@ -2092,8 +2092,8 @@ function minMaxValueAge() {
     shuttleMin = 1;
     shuttleMax = 48;
     walkmax = hms("18:53");
-    strengthAbsLink = "./Score Chart jpgs/female_over60_Strength_Abs.jpg";
-    cardioLink = "./Score Chart jpgs/female_over60_cardio.jpg";
+    strengthAbsLink = "./web formatted jpgs/female_over60_Strength_Abs.webp";
+    cardioLink = "./web formatted jpgs/female_over60_cardio.webp";
   }
 }
 
