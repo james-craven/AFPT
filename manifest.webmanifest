@@ -14,6 +14,12 @@
         "sizes": "261x261",
         "type": "image/png",
         "purpose": "maskable"
+      },
+      {
+        "src": "512_maskable_icon.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "maskable"
       }
     ],
     "name": "Air Force PT Calculator",
