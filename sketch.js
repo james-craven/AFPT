@@ -438,12 +438,21 @@ window.addEventListener("beforeinstallprompt", e => {
     overlay.style("diaplay", "block");
     overlay.attribute("style", "display:block");
   }
-  overlay.mousePressed(installApp, "return false");
-  overlay.mouseReleased(installApp, "return false");
+  overlay.mousePressed(installApp);
+  overlay.mouseReleased(installApp);
   installButton.mouseReleased(installApp);
 });
-    
+
 }
+
+function mousePressed() {
+    return false;
+}
+
+function mouseReleased() {
+    return false;
+}
+
 function draw() {
     clear();
     var t = 0;
