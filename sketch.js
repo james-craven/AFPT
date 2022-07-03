@@ -436,6 +436,9 @@ window.addEventListener("beforeinstallprompt", e => {
   installButton.mousePressed(installApp);
 });
 
+if (deferredPrompt) {
+  document.addEventListener("mousedown", () => {deferredPrompt.prompt()}, {once: true})
+}
     
 }
 function draw() {
