@@ -74,7 +74,8 @@ var redgreencolor,
     pscore = 0,
     walkScore = !0,
     deferredPrompt = "not set",
-    installButton;
+    installButton,
+    firstload = true;
 
 function createSliders() {
     (pushSel = createSelect()).parent("sketch-holder"),
@@ -408,16 +409,23 @@ if (isIos() && !isPwa()) {
   select(".blocker").style("display", "none");
 }
 
-var closebtn = select(".close-btn4");
+var closebtn4 = select(".close-btn4");
+var closebtn5 = select(".close-btn5");
 var backdrop = select(".blocker");
 
-closebtn.mousePressed(() => {
+closebtn4.mousePressed(() => {
   select(".banner").style("display", "none");
+  select(".blocker").style("display", "none");
+});
+
+closebtn5.mousePressed(() => {
+  select(".banner2").style("display", "none");
   select(".blocker").style("display", "none");
 });
 
 backdrop.mousePressed(() => {
   select(".banner").style("display", "none");
+  select(".banner2").style("display", "none")
   select(".blocker").style("display", "none");
 });
 
@@ -432,6 +440,11 @@ window.addEventListener("beforeinstallprompt", e => {
   // Show the install button
   installButton.removeAttribute('hidden');
   installButton.mouseReleased(installApp);
+  if(firstload) {
+    select(".banner2").style("display", "block");
+    select(".blocker").style("display", "block");
+  }
+
 });
 }
 function draw() {
@@ -1633,6 +1646,7 @@ function txtInput() {
 }
 
 function installApp() {
+  firstload = false;
   // Show the prompt
   deferredPrompt.prompt();
   installButton.attribute("disabled", "");
