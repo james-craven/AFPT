@@ -441,8 +441,10 @@ window.addEventListener("beforeinstallprompt", e => {
   installButton.removeAttribute('hidden');
   installButton.mouseReleased(installApp);
   if(firstload) {
-    select(".banner2").style("display", "block");
-    select(".blocker").style("display", "block");
+    setTimeout(() => {
+      select(".banner2").style("display", "block");
+      select(".blocker").style("display", "block");
+    }, 2000);
   }
 
 });
