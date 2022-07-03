@@ -459,6 +459,7 @@ a {
   font-size: 2.25rem;
   text-decoration: underline;
   cursor: pointer;
+  text-align: center;
 }
 
 .banner {
