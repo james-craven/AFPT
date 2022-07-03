@@ -485,13 +485,13 @@ a {
   color: #000000;
   border-radius:10px;
   position:fixed;
-  bottom:30px;
-  left: calc(50% - 200px);
+  top:30px;
+  left: calc(50% - 250px);
   padding: 1rem;
   box-shadow: 0 5px #dadada;
   z-index:100;
   animation: fade-in 2s forwards,
-             slide-up 2s forwards;
+             slide-down 2s forwards;
 }
 
 .blocker {
@@ -582,6 +582,15 @@ z-index:1;
 @keyframes slide-up {
   0% {
     transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    transform: translateY(-100%);
   }
   100% {
     transform: translateY(0%);
