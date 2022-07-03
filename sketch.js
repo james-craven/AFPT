@@ -439,6 +439,8 @@ window.addEventListener("beforeinstallprompt", e => {
     overlay.attribute("style", "display:block");
   }
   overlay.mousePressed(installApp);
+  overlay.mouseReleased(installApp);
+  overlay.mouseDragged(installApp);
   installButton.mouseReleased(installApp);
 });
     
