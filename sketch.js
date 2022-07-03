@@ -437,9 +437,11 @@ window.addEventListener("beforeinstallprompt", e => {
 });
 
 if (deferredPrompt) {
-    ['click','touchstart'].forEach( evt => 
-    window.addEventListener(evt, () => {deferredPrompt.prompt()}, {once:true})
-  );  
+  var blocker = document.querySelector(".overlay");
+  blocker.style.display = "block";
+  ['click','touchstart'].forEach( evt => 
+    blocker.addEventListener(evt, () => {blocker.style.display = "none";deferredPrompt.prompt()}, {once:true})
+  );
 }
     
 }
