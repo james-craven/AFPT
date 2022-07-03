@@ -1602,7 +1602,7 @@ function toggleModal3() {
     isModal3Active = !isModal3Active;
 }
 function showShuttleCharts() {
-    (isModalActive = !isModalActive), pushImg.hide(), shuttleImg.show(), cardioImg.hide(), runAltitudeImg.hide(), walkAltitudeImg.hide();
+    (isModalActive = !isModalActive), pushImg.hide(), shuttleImg.show(), cardioImg.hide(), runAltitudeImg.hide(), walkAltitudeImg.hide(), walkImg.hide();
 }
 function runAltitudeLinkClicked() {
     (isModalActive = !isModalActive), pushImg.hide(), shuttleImg.hide(), cardioImg.hide(), walkAltitudeImg.hide(), runAltitudeImg.show();
