@@ -74,7 +74,9 @@ var redgreencolor,
     pscore = 0,
     walkScore = !0,
     deferredPrompt = "not set",
-    installButton;
+    installButton,
+    overlay,
+    firstload = true;
 
 function createSliders() {
     (pushSel = createSelect()).parent("sketch-holder"),
@@ -421,10 +423,9 @@ backdrop.mousePressed(() => {
   select(".blocker").style("display", "none");
 });
 
-
 // Allows to show the install prompt
-
 installButton = select("#addToHomSscreen");
+overlay = select(".overlay");
 window.addEventListener("beforeinstallprompt", e => {
   console.log("beforeinstallprompt fired");
   // Prevent Chrome 76 and earlier from automatically showing a prompt
@@ -433,16 +434,13 @@ window.addEventListener("beforeinstallprompt", e => {
   deferredPrompt = e;
   // Show the install button
   installButton.removeAttribute('hidden');
-  installButton.mousePressed(installApp);
+  if (firstload) {
+    overlay.style("diaplay", "block");
+    overlay.attribute("style", "display:block");
+  }
+  overlay.mousePressed(installApp);
+  installButton.mouseReleased(installApp);
 });
-
-if (deferredPrompt) {
-  var blocker = document.querySelector(".overlay");
-  blocker.style.display = "block";
-  ['click','touchstart'].forEach( evt => 
-    blocker.addEventListener(evt, () => {blocker.style.display = "none";deferredPrompt.prompt()}, {once:true})
-  );
-}
     
 }
 function draw() {
@@ -1645,17 +1643,26 @@ function txtInput() {
 
 function installApp() {
   // Show the prompt
+  firstload = false;
   deferredPrompt.prompt();
   installButton.attribute("disabled", "");
 
+  overlay.style("display", "none");
+  overlay.attribute("style", "display:none");
   // Wait for the user to respond to the prompt
   deferredPrompt.userChoice.then(choiceResult => {
     if (choiceResult.outcome === "accepted") {
       console.log("PWA setup accepted");
       installButton.attribute("hidden", "");
+      overlay.style("display", "none");
+      overlay.attribute("style", "display:none");
     } else {
       console.log("PWA setup rejected");
+      overlay.style("display", "none");
+      overlay.attribute("style", "display:none");
     }
+    overlay.style("display", "none");
+    overlay.attribute("style", "display:none");
     installButton.attribute("disabled", "");
     deferredPrompt = null;
   });
