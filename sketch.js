@@ -304,13 +304,21 @@ function isPwa() {
 // Checks if should display install popup notification:
 if (isIos() && !isPwa()) {
   select(".banner").style("display", "visible");
+  select(".blocker").style("display", "visible");
 } else {
   select(".banner").style("display", "none");
+  select(".blocker").style("display", "none");
 }
 
 var closebtn = select(".close-btn4");
+var backdrop = select(".blocker");
 
 closebtn.mousePressed(() => {
+  select(".banner").style("display", "none");
+  select(".blocker").style("display", "none");
+});
+
+backdrop.mousePressed(() => {
   select(".banner").style("display", "none");
   select(".blocker").style("display", "none");
 });
