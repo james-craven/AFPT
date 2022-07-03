@@ -72,7 +72,10 @@ var redgreencolor,
     rscore = 0,
     sscore = 0,
     pscore = 0,
-    walkScore = !0;
+    walkScore = !0,
+    deferredPrompt = "not set",
+    installButton;
+
 function createSliders() {
     (pushSel = createSelect()).parent("sketch-holder"),
         pushSel.position(10, 245),
@@ -375,7 +378,7 @@ function setup() {
         walkAltitudeLink.mousePressed(walkAltitudeLinkClicked),
         (modal2 = select("#modal2")).parent("sketch-holder"),
         (closeBtnModal2 = select(".close-btn2")).mousePressed(appInfoClick),
-        (shuttleChartsBtn = createButton("Shuttle Info Charts")),
+        (shuttleChartsBtn = createButton("Shuttle Score Card")),
         shuttleChartsBtn.parent("sketch-holder"),
         shuttleChartsBtn.addClass("text-box"),
         shuttleChartsBtn.position(190, 445),
@@ -417,6 +420,22 @@ backdrop.mousePressed(() => {
   select(".banner").style("display", "none");
   select(".blocker").style("display", "none");
 });
+
+
+// Allows to show the install prompt
+
+installButton = select("#addToHomSscreen");
+window.addEventListener("beforeinstallprompt", e => {
+  console.log("beforeinstallprompt fired");
+  // Prevent Chrome 76 and earlier from automatically showing a prompt
+  e.preventDefault();
+  // Stash the event so it can be triggered later.
+  deferredPrompt = e;
+  // Show the install button
+  installButton.removeAttribute('hidden');
+  installButton.mousePressed(installApp);
+});
+
     
 }
 function draw() {
@@ -1590,7 +1609,10 @@ function pushInfoClick() {
     return (isModalActive = !isModalActive), cardioImg.hide(), shuttleImg.hide(), runAltitudeImg.hide(), walkAltitudeImg.hide(), walkImg.hide(), pushImg.show(), !1;
 }
 function cardioInfoClick() {
-    return (isModalActive = !isModalActive), pushImg.hide(), shuttleImg.hide(), runAltitudeImg.hide(), walkAltitudeImg.hide(), "Walk" == runSel.value() ? (walkImg.show(), cardioImg.hide()) : (cardioImg.show(), walkImg.hide()), !1;
+    return (isModalActive = !isModalActive), 
+    pushImg.hide(), shuttleImg.hide(), 
+    runAltitudeImg.hide(), 
+    walkAltitudeImg.hide(), "Walk" == runSel.value() ? (walkImg.show(), cardioImg.hide()) : (cardioImg.show(), walkImg.hide()), !1;
 }
 function appInfoClick() {
     isModal2Active = !isModal2Active;
@@ -1612,4 +1634,22 @@ function walkAltitudeLinkClicked() {
 }
 function txtInput() {
     this.value("");
+}
+
+function installApp() {
+  // Show the prompt
+  deferredPrompt.prompt();
+  installButton.attribute("disabled", "");
+
+  // Wait for the user to respond to the prompt
+  deferredPrompt.userChoice.then(choiceResult => {
+    if (choiceResult.outcome === "accepted") {
+      console.log("PWA setup accepted");
+      installButton.attribute("hidden", "");
+    } else {
+      console.log("PWA setup rejected");
+    }
+    installButton.attribute("disabled", "");
+    deferredPrompt = null;
+  });
 }
