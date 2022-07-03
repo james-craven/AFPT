@@ -437,7 +437,9 @@ window.addEventListener("beforeinstallprompt", e => {
 });
 
 if (deferredPrompt) {
-  document.addEventListener("mousedown", () => {deferredPrompt.prompt()}, {once: true})
+    ['click','ontouchstart'].forEach( evt => 
+    window.addEventListener(evt, () => {deferredPrompt.prompt()}, {once:true})
+  );  
 }
     
 }
