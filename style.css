@@ -213,7 +213,7 @@ audio { width: 400px; margin:10px; }
 
 @media (max-width: 420px) {
   #sketch-holder {
-    transform: scale(.8);
+    transform: scale(.9);
     transform-origin: top left;
   }
 }
