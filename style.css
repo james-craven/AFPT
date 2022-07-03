@@ -8,6 +8,15 @@ canvas {
   margin:auto;
 }
 
+@media all and (display-mode: fullscreen) {
+  canvas {
+    margin-top: 2em;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 
 select, .text-box {
     transition-property: background-color opacity;
