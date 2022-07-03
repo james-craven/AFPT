@@ -1,4 +1,4 @@
-const staticCacheName = 'v3';
+const staticCacheName = 'v2';
 
 const addResourcesToCache = async (resources) => {
   const cache = await caches.open(staticCacheName);
@@ -10,12 +10,12 @@ const putInCache = async (request, response) => {
   await cache.put(request, response);
 };
 
-const enableNavigationPreload = async () => {
-  if (self.registration.navigationPreload) {
-    // Enable navigation preloads!
-    await self.registration.navigationPreload.enable();
-  }
-};
+// const enableNavigationPreload = async () => {
+//   if (self.registration.navigationPreload) {
+//     // Enable navigation preloads!
+//     await self.registration.navigationPreload.enable();
+//   }
+// };
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -25,7 +25,7 @@ self.addEventListener('activate', (event) => {
         .map(key => caches.delete(key)))
     })
   )
-  event.waitUntil(enableNavigationPreload());
+  // event.waitUntil(enableNavigationPreload());
   event.waitUntil(clients.claim());
 });
 
