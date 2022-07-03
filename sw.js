@@ -68,6 +68,7 @@ self.addEventListener("install", (event) => {
       "tm.js",
       "home-screen-icon.png",
       "plus.png",
+      "arrow.png",
       "pushups.png",
       "situps.png",
       "running.png",
