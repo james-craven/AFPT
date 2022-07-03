@@ -74,9 +74,7 @@ var redgreencolor,
     pscore = 0,
     walkScore = !0,
     deferredPrompt = "not set",
-    installButton,
-    overlay,
-    firstload = true;
+    installButton;
 
 function createSliders() {
     (pushSel = createSelect()).parent("sketch-holder"),
@@ -425,7 +423,6 @@ backdrop.mousePressed(() => {
 
 // Allows to show the install prompt
 installButton = select("#addToHomSscreen");
-overlay = select(".overlay");
 window.addEventListener("beforeinstallprompt", e => {
   console.log("beforeinstallprompt fired");
   // Prevent Chrome 76 and earlier from automatically showing a prompt
@@ -434,23 +431,10 @@ window.addEventListener("beforeinstallprompt", e => {
   deferredPrompt = e;
   // Show the install button
   installButton.removeAttribute('hidden');
-  if (firstload) {
-    overlay.style("diaplay", "block");
-    overlay.attribute("style", "display:block");
   }
-  overlay.mousePressed(installApp);
-  overlay.mouseReleased(installApp);
   installButton.mouseReleased(installApp);
 });
 
-}
-
-function mousePressed() {
-    return false;
-}
-
-function mouseReleased() {
-    return false;
 }
 
 function draw() {
@@ -1653,26 +1637,17 @@ function txtInput() {
 
 function installApp() {
   // Show the prompt
-  firstload = false;
   deferredPrompt.prompt();
   installButton.attribute("disabled", "");
 
-  overlay.style("display", "none");
-  overlay.attribute("style", "display:none");
   // Wait for the user to respond to the prompt
   deferredPrompt.userChoice.then(choiceResult => {
     if (choiceResult.outcome === "accepted") {
       console.log("PWA setup accepted");
       installButton.attribute("hidden", "");
-      overlay.style("display", "none");
-      overlay.attribute("style", "display:none");
     } else {
       console.log("PWA setup rejected");
-      overlay.style("display", "none");
-      overlay.attribute("style", "display:none");
     }
-    overlay.style("display", "none");
-    overlay.attribute("style", "display:none");
     installButton.attribute("disabled", "");
     deferredPrompt = null;
   });
