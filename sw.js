@@ -69,6 +69,7 @@ self.addEventListener("install", (event) => {
       "home-screen-icon.png",
       "plus.png",
       "arrow.png",
+      "sketch.js",
       "pushups.png",
       "situps.png",
       "running.png",
