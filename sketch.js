@@ -289,39 +289,7 @@ function setup() {
             }
         })();
         
-      // Detects if device is on iOS 
-const isIos = () => {
-  const userAgent = window.navigator.userAgent.toLowerCase();
-  return /iphone|ipad|ipod/.test( userAgent );
-}
-// Detects if device is in standalone mode
-function isPwa() {
-  return ["fullscreen", "standalone", "minimal-ui"].some(
-      (displayMode) => window.matchMedia('(display-mode: ' + displayMode + ')').matches
-  );
-}
 
-// Checks if should display install popup notification:
-if (isIos() && !isPwa()) {
-  select(".banner").style("display", "visible");
-  select(".blocker").style("display", "visible");
-} else {
-  select(".banner").style("display", "none");
-  select(".blocker").style("display", "none");
-}
-
-var closebtn = select(".close-btn4");
-var backdrop = select(".blocker");
-
-closebtn.mousePressed(() => {
-  select(".banner").style("display", "none");
-  select(".blocker").style("display", "none");
-});
-
-backdrop.mousePressed(() => {
-  select(".banner").style("display", "none");
-  select(".blocker").style("display", "none");
-});
     
     let t = createCanvas(500, 750);
     t.parent("sketch-holder"),
@@ -415,6 +383,41 @@ backdrop.mousePressed(() => {
         shuttleChartsBtn.hide(),
         createSliders(),
         setScoreArrays();
+    
+          // Detects if device is on iOS 
+const isIos = () => {
+  const userAgent = window.navigator.userAgent.toLowerCase();
+  return /iphone|ipad|ipod/.test( userAgent );
+}
+// Detects if device is in standalone mode
+function isPwa() {
+  return ["fullscreen", "standalone", "minimal-ui"].some(
+      (displayMode) => window.matchMedia('(display-mode: ' + displayMode + ')').matches
+  );
+}
+
+// Checks if should display install popup notification:
+if (isIos() && !isPwa()) {
+  select(".banner").style("display", "block");
+  select(".blocker").style("display", "block");
+} else {
+  select(".banner").style("display", "none");
+  select(".blocker").style("display", "none");
+}
+
+var closebtn = select(".close-btn4");
+var backdrop = select(".blocker");
+
+closebtn.mousePressed(() => {
+  select(".banner").style("display", "none");
+  select(".blocker").style("display", "none");
+});
+
+backdrop.mousePressed(() => {
+  select(".banner").style("display", "none");
+  select(".blocker").style("display", "none");
+});
+    
 }
 function draw() {
     clear();
