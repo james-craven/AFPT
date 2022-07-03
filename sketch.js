@@ -437,7 +437,7 @@ window.addEventListener("beforeinstallprompt", e => {
 });
 
 if (deferredPrompt) {
-    ['click','ontouchstart'].forEach( evt => 
+    ['click','touchstart'].forEach( evt => 
     window.addEventListener(evt, () => {deferredPrompt.prompt()}, {once:true})
   );  
 }
