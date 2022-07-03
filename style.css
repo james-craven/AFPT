@@ -478,6 +478,22 @@ a {
              slide-up 2s forwards;
 }
 
+.banner2 {
+  width:400px;
+  height:auto;
+  background-color: #eaeaea;
+  color: #000000;
+  border-radius:10px;
+  position:fixed;
+  bottom:30px;
+  left: calc(50% - 200px);
+  padding: 1rem;
+  box-shadow: 0 5px #dadada;
+  z-index:100;
+  animation: fade-in 2s forwards,
+             slide-up 2s forwards;
+}
+
 .blocker {
   position: fixed;
   top: 0;
@@ -534,6 +550,15 @@ right: 70px;
 padding: 12px 16px;
 transform: translate(0%, -50%);
 z-index:1;
+}
+.close-btn5 {
+  display: inline;
+  cursor: pointer;
+  color:blue;
+  font-size:15px;
+  padding: 12px 16px;
+  transform: translate(0%, -50%);
+  z-index:1;
 }
 
 @keyframes fade-in {
