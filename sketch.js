@@ -431,12 +431,9 @@ window.addEventListener("beforeinstallprompt", e => {
   deferredPrompt = e;
   // Show the install button
   installButton.removeAttribute('hidden');
-  }
   installButton.mouseReleased(installApp);
 });
-
 }
-
 function draw() {
     clear();
     var t = 0;
