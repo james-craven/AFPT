@@ -1,7 +1,7 @@
-importScripts('/application/third_party/workbox/workbox-v6.5.3/workbox-sw.js');
+importScripts('/docs/third_party/workbox/workbox-v6.5.3/workbox-sw.js');
 
 workbox.setConfig({
-  modulePathPrefix: '/application/third_party/workbox/workbox-v6.5.3/',
+  modulePathPrefix: '/docs/third_party/workbox/workbox-v6.5.3/',
 });
 
 const {registerRoute} = workbox.routing;
