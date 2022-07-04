@@ -9,25 +9,10 @@ const {CacheFirst} = workbox.strategies;
 const {CacheableResponse} = workbox.cacheableResponse;
 const {RangeRequests} = workbox.rangeRequests;
 
-const staticCacheName = 'v2';
+const staticCacheName = 'v1';
 
 
-registerRoute(
-  ({request}) => {
-    const {destination} = request;
 
-    return destination === 'video' || destination === 'audio'
-  },
-  new CacheFirst({
-    cacheName: 'your-cache-name-here',
-    plugins: [
-      new CacheableResponsePlugin({
-        statuses: [200]
-      }),
-      new RangeRequestsPlugin(),
-    ],
-  }),
-);
 
 
 const addResourcesToCache = async (resources) => {
@@ -118,11 +103,25 @@ self.addEventListener("install", (event) => {
       "./web formatted jpgs/female_over60_cardio.webp"
     ])
   );
-  event.waitUntil(fetch("./shuttle.ogg").then((res) => {
-    cache.add(res)
-  }))
 });
 
+
+registerRoute(
+  ({request}) => {
+    const {destination} = request;
+
+    return destination === 'video' || destination === 'audio'
+  },
+  new CacheFirst({
+    cacheName: staticCacheName,
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [200]
+      }),
+      new RangeRequestsPlugin(),
+    ],
+  }),
+);
 
 
 self.addEventListener('fetch', (event) => {
