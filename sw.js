@@ -115,7 +115,7 @@ registerRoute(
   new CacheFirst({
     cacheName: staticCacheName,
     plugins: [
-      new CacheableResponsePlugin({
+      new workbox.cacheableResponse.CacheableResponsePlugin({
         statuses: [200]
       }),
       new RangeRequestsPlugin(),
