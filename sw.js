@@ -104,22 +104,22 @@ self.addEventListener("install", (event) => {
 });
 
 
-registerRoute(
-  ({request}) => {
-    const {destination} = request;
+// registerRoute(
+//   ({request}) => {
+//     const {destination} = request;
 
-    return destination === 'video' || destination === 'audio'
-  },
-  new CacheFirst({
-    cacheName: staticCacheName,
-    plugins: [
-      new workbox.cacheableResponse.CacheableResponsePlugin({
-        statuses: [200]
-      }),
-      new workbox.rangeRequests.RangeRequestsPlugin(),
-    ],
-  }),
-);
+//     return destination === 'video' || destination === 'audio'
+//   },
+//   new CacheFirst({
+//     cacheName: staticCacheName,
+//     plugins: [
+//       new workbox.cacheableResponse.CacheableResponsePlugin({
+//         statuses: [200]
+//       }),
+//       new workbox.rangeRequests.RangeRequestsPlugin(),
+//     ],
+//   }),
+// );
 
 
 self.addEventListener('fetch', (event) => {
