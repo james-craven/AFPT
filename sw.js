@@ -9,7 +9,7 @@ const {CacheFirst} = workbox.strategies;
 const {CacheableResponse} = workbox.cacheableResponse;
 const {RangeRequests} = workbox.rangeRequests;
 
-const staticCacheName = 'v2';
+const staticCacheName = 'v5';
 
 
 
@@ -58,6 +58,7 @@ self.addEventListener("install", (event) => {
       "situps.png",
       "running.png",
       "manifest.webmanifest",
+      "shuttle.ogg",
       "./web formatted jpgs/shuttleScores.webp",
       "./web formatted jpgs/walkChart.webp",
       "./web formatted jpgs/walkAltitudeAdjust.webp",
