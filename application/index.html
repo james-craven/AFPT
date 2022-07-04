@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="apple-touch-icon" href="home-screen-icon.png">
+    <link rel="icon" href="home-screen-icon.png">
+    <script src="p5.min.js"></script>
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="theme-color" content="#025981">
+    <title> Air Force PT Calculator </title>
+    <meta name="description" 
+          content="This Air Force Physical Training (PT) Calculator contains all the alt alternate components with exemptions!
+                   This AF PT Calc even includes the score charts and sliders for easy real-time test score calculations! Shuttle run audio
+                   is also available. Based on dafman 36-2905 this AF Fitness Calculator is the one stop shop to calculate PT scores."/>
+  </head>
+  <div id="gradient"></div>
+  <body>
+    <div id="sketch-holder"></div>
+      <div id="modal2" style="display:none;">
+        <span class="close-btn2" role="button">&times;</span>
+        <p>Start by selecting your age/sex. Sliders adjust
+          the scores on the fly. You can also manually input values
+          into the boxes and click/tap calculate score. See Chart links pull 
+          up the score chart for the age/sex selected.
+          Bottom left you'll find the required lap times for the time you've
+          entered in the 1.5 mile run. If you want to get back to this
+          page, click/tap the large info button at the top. 
+        </p>
+      </div>
+      <div id="modal3" style="display:none;">
+        <span class="close-btn3" role="button">&times;</span>
+        <ul class="nav_list">
+          <li class="nav_link" id="runAltitudeChart">Run Altitude Adjustment Chart</li>
+          <li class="nav_link" id="walkAltitudeChart">Walk Altitude Adjustment Chart</li>
+          <li class="nav_link" id="shuttleScoreCard">Shuttle Score Card</li>
+          <li class="nav_link" id="addToHomSscreen" hidden>Download App For Offline Use</li>
+        </ul>
+      </div>
+      <audio preload="auto" src="shuttle.mp3" controls="controls" style="position:absolute; left: 0px; top:700px; display: none;" id="shuttle-audio">
+
+      Your browser does not support the audio element.
+      </audio>
+      <div id="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn" role="button">&times;</span>
+            
+        </div>
+      </div>
+      <div class="blocker" style="display:none;"></div>
+      <div class="overlay"style="display:none"></div>
+      <div class="banner" style="display:none;">
+        <img src="plus.png" class="banner-icon" style="height:38px;display:inline-block;vertical-align:middle;" />
+        <div class="content">
+          Install this webapp on your iPhone for offline use: tap <img src="arrow.png" class="text-icon" /> and then Add to homescreen 
+        </div><span class="close-btn4" role="button">OK</span>
+        <div class="arrow"></div>
+      </div>
+      <div class="banner2" style="display:none">
+        <img src="lightbulb.png" class="banner-icon" style="height:38px;display:inline-block;vertical-align:middle;" />
+        <div class="content">
+          Install this webapp on your Phone for offline use: tap the Resources button at the top and then Download... 
+        </div><span class="close-btn5" role="button">OK</span>
+        <div class="arrow2"></div>
+      </div>
+    <script src="tm.js"></script>
+    <script src="sketch.js"></script>
+  </body>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</html>
