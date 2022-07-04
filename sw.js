@@ -166,6 +166,6 @@ self.addEventListener('fetch', (event) => {
       });
     }));
   } else {
-    return;
+    return "An error was thrown";
   }
 });
