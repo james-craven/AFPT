@@ -37,27 +37,8 @@
           <li class="nav_link" id="addToHomSscreen" hidden>Download App For Offline Use</li>
         </ul>
       </div>
-      <audio preload="auto" controls="controls" style="position:absolute; left: 0px; top:700px; display: none;" id="shuttle-audio">
-        <script>
-          const mediaSource = new MediaSource();
-          let audio = document.getElementsByTagName('audio');
-          audio.src = URL.createObjectURL(mediaSource);
-          mediaSource.addEventListener('sourceopen', sourceOpen, { once: true });
+      <audio preload="auto" src="shuttle.mp3" controls="controls" style="position:absolute; left: 0px; top:700px; display: none;" id="shuttle-audio">
 
-          function sourceOpen() {
-            URL.revokeObjectURL(audio.src);
-            const sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');
-
-            fetch("/shuttle.mp3")
-            .then(response => response.arrayBuffer())
-            .then(data => {
-              sourceBuffer.appendBuffer(data);
-            })
-            .catch(error => {
-              console.log(error);
-            });
-          }
-        </script>
       Your browser does not support the audio element.
       </audio>
       <div id="modal" style="display:none;">

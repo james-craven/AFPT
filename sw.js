@@ -9,7 +9,7 @@ const {CacheFirst} = workbox.strategies;
 const {CacheableResponse} = workbox.cacheableResponse;
 const {RangeRequests} = workbox.rangeRequests;
 
-const staticCacheName = 'v1';
+const staticCacheName = 'v4';
 
 
 
@@ -134,7 +134,26 @@ self.addEventListener('fetch', (event) => {
       }).catch(async() => {
         //Network unavailable, try cache.
         const cachedResponse = await cache.match(event.request.url);
-        if (cachedResponse) return cachedResponse;
+        if (cachedResponse) {
+          if (event.request.headers.has('range')) {
+            cachedResponse = await cachedResponse.blob().then(data => {
+              // Get start position from Range request header.
+              const pos = Number(/^bytes\=(\d+)\-/g.exec(request.headers.get('range'))[1]);
+              const options = {
+                status: 206,
+                statusText: 'Partial Content',
+                headers: response.headers
+              }
+              const slicedResponse = new Response(data.slice(pos), options);
+              slicedResponse.setHeaders('Content-Range', 'bytes ' + pos + '-' +
+                  (data.size - 1) + '/' + data.size);
+              slicedResponse.setHeaders('X-From-Cache', 'true');
+
+              return slicedResponse;
+            })
+          }
+          return cachedResponse;
+        }
         else {
           const response = await event.preloadResponse;
           if (response) return response;
