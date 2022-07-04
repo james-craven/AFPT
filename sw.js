@@ -9,7 +9,7 @@ const {CacheFirst} = workbox.strategies;
 const {CacheableResponse} = workbox.cacheableResponse;
 const {RangeRequests} = workbox.rangeRequests;
 
-const staticCacheName = 'v4';
+const staticCacheName = 'v1';
 
 
 
