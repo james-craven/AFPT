@@ -9,7 +9,7 @@ const {CacheFirst} = workbox.strategies;
 const {CacheableResponse} = workbox.cacheableResponse;
 const {RangeRequests} = workbox.rangeRequests;
 
-const staticCacheName = 'v2';
+const staticCacheName = 'v1';
 
 
 
@@ -23,12 +23,12 @@ const putInCache = async (request, response) => {
   await cache.put(request, response);
 };
 
-// const enableNavigationPreload = async () => {
-//   if (self.registration.navigationPreload) {
-//     // Enable navigation preloads!
-//     await self.registration.navigationPreload.enable();
-//   }
-// };
+const enableNavigationPreload = async () => {
+  if (self.registration.navigationPreload) {
+    // Enable navigation preloads!
+    await self.registration.navigationPreload.enable();
+  }
+};
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -38,7 +38,7 @@ self.addEventListener('activate', (event) => {
         .map(key => caches.delete(key)))
     })
   )
-  // event.waitUntil(enableNavigationPreload());
+  event.waitUntil(enableNavigationPreload());
   event.waitUntil(clients.claim());
 });
 
