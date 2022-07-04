@@ -38,9 +38,6 @@
         </ul>
       </div>
       <audio preload="auto" controls="controls" style="position:absolute; left: 0px; top:700px; display: none;" id="shuttle-audio">
-        <source src="shuttle.ogg" type="application/ogg" codecs="vorbis" crossorigin="anonymous">
-        <source src="shuttle.m4a" type="audio/mpeg" crossorigin="anonymous">
-        <source src="shuttle.mp3" type="audio/mpeg" crossorigin="anonymous">
         <script>
           const mediaSource = new MediaSource();
           let audio = document.getElementsByTagName('audio');
@@ -49,9 +46,9 @@
 
           function sourceOpen() {
             URL.revokeObjectURL(audio.src);
-            const sourceBuffer = mediaSource.addSourceBuffer('application/ogg');
+            const sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');
 
-            fetch("/shuttle.ogg")
+            fetch("/shuttle.mp3")
             .then(response => response.arrayBuffer())
             .then(data => {
               sourceBuffer.appendBuffer(data);

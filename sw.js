@@ -58,7 +58,7 @@ self.addEventListener("install", (event) => {
       "situps.png",
       "running.png",
       "manifest.webmanifest",
-      "shuttle.ogg",
+      "shuttle.mp3",
       "./web formatted jpgs/shuttleScores.webp",
       "./web formatted jpgs/walkChart.webp",
       "./web formatted jpgs/walkAltitudeAdjust.webp",
