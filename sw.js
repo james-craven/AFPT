@@ -118,7 +118,7 @@ registerRoute(
       new workbox.cacheableResponse.CacheableResponsePlugin({
         statuses: [200]
       }),
-      new RangeRequestsPlugin(),
+      new workbox.rangeRequests.RangeRequestsPlugin(),
     ],
   }),
 );
