@@ -1,15 +1,15 @@
-// importScripts('/third_party/workbox/workbox-v6.5.3/workbox-sw.js');
+importScripts('/third_party/workbox/workbox-v6.5.3/workbox-sw.js');
 
-// workbox.setConfig({
-//   modulePathPrefix: '/third_party/workbox/workbox-v6.5.3/',
-// });
+workbox.setConfig({
+  modulePathPrefix: '/third_party/workbox/workbox-v6.5.3/',
+});
 
-// const {registerRoute} = workbox.routing;
-// const {CacheFirst} = workbox.strategies;
-// const {CacheableResponse} = workbox.cacheableResponse;
-// const {RangeRequests} = workbox.rangeRequests;
+const {registerRoute} = workbox.routing;
+const {CacheFirst} = workbox.strategies;
+const {CacheableResponse} = workbox.cacheableResponse;
+const {RangeRequests} = workbox.rangeRequests;
 
-const staticCacheName = 'v1';
+const staticCacheName = 'v2';
 
 
 
@@ -103,22 +103,22 @@ self.addEventListener("install", (event) => {
 });
 
 
-// registerRoute(
-//   ({request}) => {
-//     const {destination} = request;
+registerRoute(
+  ({request}) => {
+    const {destination} = request;
 
-//     return destination === 'video' || destination === 'audio'
-//   },
-//   new CacheFirst({
-//     cacheName: staticCacheName,
-//     plugins: [
-//       new workbox.cacheableResponse.CacheableResponsePlugin({
-//         statuses: [200]
-//       }),
-//       new workbox.rangeRequests.RangeRequestsPlugin(),
-//     ],
-//   }),
-// );
+    return destination === 'video' || destination === 'audio'
+  },
+  new CacheFirst({
+    cacheName: staticCacheName,
+    plugins: [
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [200]
+      }),
+      new workbox.rangeRequests.RangeRequestsPlugin(),
+    ],
+  }),
+);
 
 
 self.addEventListener('fetch', (event) => {
