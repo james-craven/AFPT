@@ -9,7 +9,7 @@ const {CacheFirst} = workbox.strategies;
 const {CacheableResponse} = workbox.cacheableResponse;
 const {RangeRequests} = workbox.rangeRequests;
 
-const staticCacheName = 'v1';
+const staticCacheName = 'v2';
 
 
 
@@ -130,6 +130,7 @@ self.addEventListener('fetch', (event) => {
       // Go to the network first
       return fetch(event.request.url).then((fetchedResponse) => {
         cache.put(event.request, fetchedResponse.clone());
+        console.log("returning network response for: " + event.request.url);
         return fetchedResponse;
       }).catch(async() => {
         console.log("trying Cache");
