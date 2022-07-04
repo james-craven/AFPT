@@ -1,4 +1,34 @@
-const staticCacheName = 'v1';
+importScripts('/third_party/workbox-vX.Y.Z/workbox-sw.js');
+
+workbox.setConfig({
+  modulePathPrefix: '/third_party/workbox-vX.Y.Z/',
+});
+
+const {registerRoute} = workbox.routing;
+const {CacheFirst} = workbox.strategies;
+const {CacheableResponse} = workbox.cacheableResponse;
+const {RangeRequests} = workbox.rangeRequests;
+
+const staticCacheName = 'v2';
+
+
+registerRoute(
+  ({request}) => {
+    const {destination} = request;
+
+    return destination === 'video' || destination === 'audio'
+  },
+  new CacheFirst({
+    cacheName: 'your-cache-name-here',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [200]
+      }),
+      new RangeRequestsPlugin(),
+    ],
+  }),
+);
+
 
 const addResourcesToCache = async (resources) => {
   const cache = await caches.open(staticCacheName);
@@ -88,6 +118,9 @@ self.addEventListener("install", (event) => {
       "./web formatted jpgs/female_over60_cardio.webp"
     ])
   );
+  event.waitUntil(fetch("./shuttle.ogg").then((res) => {
+    cache.add(res)
+  }))
 });
 
 
@@ -95,51 +128,17 @@ self.addEventListener("install", (event) => {
 self.addEventListener('fetch', (event) => {
   // Check if this is a navigation request
   if (event.request.mode === 'navigate') {
-    //Check if it's a range request (video and audio).
-    if (event.request.headers.get('range')) {
-      var pos =
-      Number(/^bytes\=(\d+)\-$/g.exec(event.request.headers.get('range'))[1]);
-      console.log('Range request for', event.request.url,
-        ', starting position:', pos);
-      event.respondWith(
-        caches.open(CURRENT_CACHES.prefetch)
-        .then(function(cache) {
-          return cache.match(event.request.url);
-        }).then(function(res) {
-          if (!res) {
-            return fetch(event.request)
-            .then(res => {
-              return res.arrayBuffer();
-            });
-          }
-          return res.arrayBuffer();
-        }).then(function(ab) {
-          return new Response(
-            ab.slice(pos),
-            {
-              status: 206,
-              statusText: 'Partial Content',
-              headers: [
-                // ['Content-Type', 'video/webm'],
-                ['Content-Range', 'bytes ' + pos + '-' +
-                  (ab.byteLength - 1) + '/' + ab.byteLength]]
-            });
-        }));
-        //Not a range request
-    } else {
-
     // Open the cache
-      event.respondWith(caches.open(staticCacheName).then((cache) => {
-        // Go to the network first
-        return fetch(event.request.url).then((fetchedResponse) => {
-          cache.put(event.request, fetchedResponse.clone());
-          return fetchedResponse;
-        }).catch(() => {
-          // If the network is unavailable, get
-          return cache.match(event.request.url);
-        });
-      }));
-    }
+    event.respondWith(caches.open(staticCacheName).then((cache) => {
+      // Go to the network first
+      return fetch(event.request.url).then((fetchedResponse) => {
+        cache.put(event.request, fetchedResponse.clone());
+        return fetchedResponse;
+      }).catch(() => {
+        // If the network is unavailable, get
+        return cache.match(event.request.url);
+      });
+    }));
   } else {
     return;
   }
