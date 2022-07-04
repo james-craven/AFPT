@@ -283,7 +283,7 @@ function setup() {
         (async () => {
             if ("serviceWorker" in navigator) {
                 let t = !1;
-                const e = await navigator.serviceWorker.register("/docs/sw.js");
+                const e = await navigator.serviceWorker.register("/sw.js");
                 e.addEventListener("updatefound", () => {
                     e.installing &&
                         e.installing.addEventListener("statechange", () => {
