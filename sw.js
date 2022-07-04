@@ -9,7 +9,7 @@ const {CacheFirst} = workbox.strategies;
 const {CacheableResponse} = workbox.cacheableResponse;
 const {RangeRequests} = workbox.rangeRequests;
 
-const staticCacheName = 'v1';
+const staticCacheName = 'v2';
 
 
 
@@ -132,8 +132,13 @@ self.addEventListener('fetch', (event) => {
         cache.put(event.request, fetchedResponse.clone());
         return fetchedResponse;
       }).catch(() => {
-        // If the network is unavailable, get
-        return cache.match(event.request.url);
+        //Network unavailable, try cache.
+        const cachedResponse = await cache.match(event.request.url);
+        if (cachedResponse) return cachedResponse;
+        else {
+          const response = await event.preloadResponse;
+          if (response) return response;
+        }
       });
     }));
   } else {
