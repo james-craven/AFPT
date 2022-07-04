@@ -132,10 +132,13 @@ self.addEventListener('fetch', (event) => {
         cache.put(event.request, fetchedResponse.clone());
         return fetchedResponse;
       }).catch(async() => {
+        console.log("trying Cache");
         //Network unavailable, try cache.
         const cachedResponse = await cache.match(event.request.url);
         if (cachedResponse) {
+          console.log("Cache returned response");
           if (event.request.headers.has('range')) {
+            console.log("Cached response had a header with range");
             cachedResponse = await cachedResponse.blob().then(data => {
               // Get start position from Range request header.
               const pos = Number(/^bytes\=(\d+)\-/g.exec(request.headers.get('range'))[1]);
@@ -148,10 +151,11 @@ self.addEventListener('fetch', (event) => {
               slicedResponse.setHeaders('Content-Range', 'bytes ' + pos + '-' +
                   (data.size - 1) + '/' + data.size);
               slicedResponse.setHeaders('X-From-Cache', 'true');
-
+              console.log("returning sliced response")
               return slicedResponse;
             })
           }
+          console.log("request didnt have header range. returning regular response");
           return cachedResponse;
         }
         else {
