@@ -279,22 +279,11 @@ function createSliders() {
         walkAltitudeImg.position(-40, 0);
 }
 function setup() {
-    pixelDensity(1),
-        (async () => {
-            if ("serviceWorker" in navigator) {
-                let t = !1;
-                const e = await navigator.serviceWorker.register("sw.js");
-                e.addEventListener("updatefound", () => {
-                    e.installing &&
-                        e.installing.addEventListener("statechange", () => {
-                            e.waiting && (navigator.serviceWorker.controller ? t || ((t = !0), window.location.reload()) : console.log("Service Worker initialized for the first time"));
-                        });
-                });
-            }
-        })();
-        
+    pixelDensity(1);
 
-    
+    //Service Worker Was Here
+
+
     let t = createCanvas(500, 750);
     t.parent("sketch-holder"),
         (t.drawingContext.miterLimit = 2),
