@@ -9,7 +9,7 @@ const {CacheFirst} = workbox.strategies;
 const {CacheableResponse} = workbox.cacheableResponse;
 const {RangeRequests} = workbox.rangeRequests;
 
-const staticCacheName = 'v6';
+const staticCacheName = 'v1';
 
 
 
@@ -47,18 +47,18 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     addResourcesToCache([
       "/",
-      "index.html",
-      "style.css",
-      "tm.js",
-      "home-screen-icon.png",
-      "plus.png",
-      "arrow.png",
-      "sketch.js",
-      "pushups.png",
-      "situps.png",
-      "running.png",
-      "manifest.webmanifest",
-      "shuttle.mp3",
+      "./index.html",
+      "./style.css",
+      "./tm.js",
+      "./home-screen-icon.png",
+      "./plus.png",
+      "./arrow.png",
+      "./sketch.js",
+      "./pushups.png",
+      "./situps.png",
+      "./running.png",
+      "./manifest.webmanifest",
+      "./shuttle.mp3",
       "./web formatted jpgs/shuttleScores.webp",
       "./web formatted jpgs/walkChart.webp",
       "./web formatted jpgs/walkAltitudeAdjust.webp",
