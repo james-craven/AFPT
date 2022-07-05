@@ -113,10 +113,7 @@ registerRoute(
   new CacheFirst({
     cacheName: staticCacheName,
     plugins: [
-      new workbox.cacheableResponse.CacheableResponsePlugin({
-        statuses: [200]
-      }),
-      new workbox.rangeRequests.RangeRequestsPlugin(),
+      new workbox.rangeRequests.RangeRequestsPlugin()
     ],
   }),
 );
@@ -161,7 +158,7 @@ self.addEventListener('fetch', (event) => {
         }
         else {
           const response = await event.preloadResponse;
-          if (response) return response;
+          if (response) {console.log("returning preloaded response");return response;}
         }
       });
     }));
