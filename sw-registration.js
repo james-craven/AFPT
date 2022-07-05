@@ -1,7 +1,7 @@
 (async () => {
     if ("serviceWorker" in navigator) {
         let t = !1;
-        const e = await navigator.serviceWorker.register("sw.js", {scope: 'https://afptcalc.com'});
+        const e = await navigator.serviceWorker.register("sw.js", {scope: 'https://afptcalc.com/'});
         e.addEventListener("updatefound", () => {
             e.installing &&
                 e.installing.addEventListener("statechange", () => {
