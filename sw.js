@@ -1,7 +1,7 @@
-importScripts('/site-assets/third_party/workbox/workbox-v6.5.3/workbox-sw.js');
+importScripts('./site-assets/third_party/workbox/workbox-v6.5.3/workbox-sw.js');
 
 workbox.setConfig({
-  modulePathPrefix: '/site-assets/third_party/workbox/workbox-v6.5.3/',
+  modulePathPrefix: './site-assets/third_party/workbox/workbox-v6.5.3/',
 });
 
 const {registerRoute} = workbox.routing;
@@ -47,7 +47,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     addResourcesToCache([
       "./",
-      "/index.html",
+      "./index.html",
       "./site-assets/style.css",
       "./site-assets/tm.js",
       "./site-assets/home-screen-icon.png",
