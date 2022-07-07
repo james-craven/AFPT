@@ -57,12 +57,12 @@ var redgreencolor,
     shuttlevalue,
     infoIcon = "See Charts",
     isAudioActive = !1,
-    strengthAbsLink = "../site-assets/web formatted jpgs/female_lessthan25_Strength_Abs.webp",
-    cardioLink = "../site-assets/web formatted jpgs/female_lessthan25_cardio.webp",
-    shuttleLink = "../site-assets/web formatted jpgs/shuttleScores.webp",
-    walkLink = "../site-assets/web formatted jpgs/walkChart.webp",
-    walkAltitudeAdjustPath = "../site-assets/web formatted jpgs/walkAltitudeAdjust.webp",
-    runAltitudeAdjustPath = "../site-assets/web formatted jpgs/runAltitudeAdjust.webp",
+    strengthAbsLink = "./web formatted jpgs/female_lessthan25_Strength_Abs.webp",
+    cardioLink = "./web formatted jpgs/female_lessthan25_cardio.webp",
+    shuttleLink = "./web formatted jpgs/shuttleScores.webp",
+    walkLink = "./web formatted jpgs/walkChart.webp",
+    walkAltitudeAdjustPath = "./web formatted jpgs/walkAltitudeAdjust.webp",
+    runAltitudeAdjustPath = "./web formatted jpgs/runAltitudeAdjust.webp",
     isModalActive = !1,
     isModal2Active = !1,
     isModal3Active = !1,
@@ -1293,8 +1293,8 @@ function minMaxValueAge() {
           (shuttleMin = 36),
           (shuttleMax = 100),
           (walkmax = t("16:16")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/male_lessthan25_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/male_lessthan25_Run_Shuttle.webp"))
+          (strengthAbsLink = "./web formatted jpgs/male_lessthan25_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/male_lessthan25_Run_Shuttle.webp"))
         : "Male 25-29" == e
         ? ((pushmin = 27),
           (pushmax = 62),
@@ -1311,8 +1311,8 @@ function minMaxValueAge() {
           (shuttleMin = 33),
           (shuttleMax = 97),
           (walkmax = t("16:16")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/male_25-29_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/male_25-29_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/male_25-29_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/male_25-29_cardio.webp"))
         : "Male 30-34" == e
         ? ((pushmin = 24),
           (pushmax = 57),
@@ -1329,8 +1329,8 @@ function minMaxValueAge() {
           (shuttleMin = 30),
           (shuttleMax = 94),
           (walkmax = t("16:18")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/male_30-34_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/male_30-34_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/male_30-34_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/male_30-34_cardio.webp"))
         : "Male 35-39" == e
         ? ((pushmin = 21),
           (pushmax = 51),
@@ -1347,8 +1347,8 @@ function minMaxValueAge() {
           (shuttleMin = 36),
           (shuttleMax = 100),
           (walkmax = t("16:18")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/male_35-39_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/male_35-39_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/male_35-39_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/male_35-39_cardio.webp"))
         : "Male 40-44" == e
         ? ((pushmin = 18),
           (pushmax = 44),
@@ -1365,8 +1365,8 @@ function minMaxValueAge() {
           (shuttleMin = 24),
           (shuttleMax = 88),
           (walkmax = t("16:23")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/male_40-44_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/male_40-44_Run_Shuttle.webp"))
+          (strengthAbsLink = "./web formatted jpgs/male_40-44_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/male_40-44_Run_Shuttle.webp"))
         : "Male 45-49" == e
         ? ((pushmin = 15),
           (pushmax = 44),
@@ -1383,8 +1383,8 @@ function minMaxValueAge() {
           (shuttleMin = 22),
           (shuttleMax = 86),
           (walkmax = t("16:23")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/male_45-49_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/male_45-49_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/male_45-49_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/male_45-49_cardio.webp"))
         : "Male 50-54" == e
         ? ((pushmin = 12),
           (pushmax = 36),
@@ -1401,8 +1401,8 @@ function minMaxValueAge() {
           (shuttleMin = 16),
           (shuttleMax = 80),
           (walkmax = t("16:40")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/male_50-54_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/male_50-54_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/male_50-54_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/male_50-54_cardio.webp"))
         : "Male 55-59" == e
         ? ((pushmin = 12),
           (pushmax = 33),
@@ -1419,8 +1419,8 @@ function minMaxValueAge() {
           (shuttleMin = 13),
           (shuttleMax = 77),
           (walkmax = t("16:40")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/male_55-59_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/male_55-59_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/male_55-59_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/male_55-59_cardio.webp"))
         : "Male >60" == e
         ? ((pushmin = 11),
           (pushmax = 30),
@@ -1437,8 +1437,8 @@ function minMaxValueAge() {
           (shuttleMin = 10),
           (shuttleMax = 71),
           (walkmax = t("16:58")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/male_over60_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/male_over60_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/male_over60_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/male_over60_cardio.webp"))
         : "Female < 25" == e
         ? ((pushmin = 15),
           (pushmax = 47),
@@ -1455,8 +1455,8 @@ function minMaxValueAge() {
           (shuttleMin = 22),
           (shuttleMax = 83),
           (walkmax = t("17:22")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/female_lessthan25_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/female_lessthan25_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/female_lessthan25_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/female_lessthan25_cardio.webp"))
         : "Female 25-29" == e
         ? ((pushmin = 14),
           (pushmax = 47),
@@ -1473,8 +1473,8 @@ function minMaxValueAge() {
           (shuttleMin = 19),
           (shuttleMax = 80),
           (walkmax = t("17:22")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/female_25-29_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/female_25-29_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/female_25-29_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/female_25-29_cardio.webp"))
         : "Female 30-34" == e
         ? ((pushmin = 11),
           (pushmax = 46),
@@ -1491,8 +1491,8 @@ function minMaxValueAge() {
           (shuttleMin = 16),
           (shuttleMax = 77),
           (walkmax = t("17:28")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/female_30-34_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/female_30-34_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/female_30-34_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/female_30-34_cardio.webp"))
         : "Female 35-39" == e
         ? ((pushmin = 10),
           (pushmax = 42),
@@ -1509,8 +1509,8 @@ function minMaxValueAge() {
           (shuttleMin = 13),
           (shuttleMax = 74),
           (walkmax = t("17:28")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/female_35-39_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/female_35-39_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/female_35-39_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/female_35-39_cardio.webp"))
         : "Female 40-44" == e
         ? ((pushmin = 8),
           (pushmax = 38),
@@ -1527,8 +1527,8 @@ function minMaxValueAge() {
           (shuttleMin = 10),
           (shuttleMax = 71),
           (walkmax = t("17:49")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/female_40-44_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/female_40-44_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/female_40-44_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/female_40-44_cardio.webp"))
         : "Female 45-49" == e
         ? ((pushmin = 7),
           (pushmax = 37),
@@ -1545,8 +1545,8 @@ function minMaxValueAge() {
           (shuttleMin = 7),
           (shuttleMax = 68),
           (walkmax = t("17:49")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/female_45-49_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/female_45-49_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/female_45-49_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/female_45-49_cardio.webp"))
         : "Female 50-54" == e
         ? ((pushmin = 6),
           (pushmax = 35),
@@ -1563,8 +1563,8 @@ function minMaxValueAge() {
           (shuttleMin = 5),
           (shuttleMax = 56),
           (walkmax = t("18:11")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/female_50-54_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/female_50-54_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/female_50-54_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/female_50-54_cardio.webp"))
         : "Female 55-59" == e
         ? ((pushmin = 5),
           (pushmax = 28),
@@ -1581,8 +1581,8 @@ function minMaxValueAge() {
           (shuttleMin = 2),
           (shuttleMax = 54),
           (walkmax = t("18:11")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/female_55-59_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/female_55-59_cardio.webp"))
+          (strengthAbsLink = "./web formatted jpgs/female_55-59_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/female_55-59_cardio.webp"))
         : "Female >60" == e &&
           ((pushmin = 4),
           (pushmax = 21),
@@ -1599,8 +1599,8 @@ function minMaxValueAge() {
           (shuttleMin = 1),
           (shuttleMax = 48),
           (walkmax = t("18:53")),
-          (strengthAbsLink = "../site-assets/web formatted jpgs/female_over60_Strength_Abs.webp"),
-          (cardioLink = "../site-assets/web formatted jpgs/female_over60_cardio.webp"));
+          (strengthAbsLink = "./web formatted jpgs/female_over60_Strength_Abs.webp"),
+          (cardioLink = "./web formatted jpgs/female_over60_cardio.webp"));
 }
 function toggleMusicPlayer() {
     isAudioActive = !isAudioActive;
