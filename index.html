@@ -14,7 +14,7 @@
       (async () => {
           if ("serviceWorker" in navigator) {
               let t = !1;
-              const e = await navigator.serviceWorker.register("./sw.js");
+              const e = await navigator.serviceWorker.register("./sw2.js");
               e.addEventListener("updatefound", () => {
                   e.installing &&
                       e.installing.addEventListener("statechange", () => {
