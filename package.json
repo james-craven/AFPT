@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "workbox generateSW workbox-config.js",
+    "upload": "git add . && git commit -m \"changed background color to darker\" && git push",
+    "hardupload": "git push --force"
   },
   "repository": {
     "type": "git",

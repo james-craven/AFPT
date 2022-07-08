@@ -1028,9 +1028,9 @@ function draw() {
         fill("white"),
         stroke("white"),
         "FAIL! Minimum Not Met!" == x
-            ? ((redgreencolor = color(220, 35, 0)), fill(redgreencolor), stroke("black"), strokeWeight(6), text("FAIL! Minimum Not Met!", 85, 115))
+            ? ((redgreencolor = color(255, 0, 0)), fill(redgreencolor), stroke("black"), strokeWeight(6), text("FAIL! Minimum Not Met!", 85, 115))
             : "Unsatisfactory!" == x
-            ? ((redgreencolor = color(220, 35, 0)), fill(redgreencolor), stroke("black"), strokeWeight(6), text(x, 135, 115))
+            ? ((redgreencolor = color(255, 0, 0)), fill(redgreencolor), stroke("black"), strokeWeight(6), text(x, 135, 115))
             : "Satisfactory!" == x
             ? ((redgreencolor = "lightgreen"), fill(redgreencolor), stroke("black"), strokeWeight(5), text(x, 155, 115))
             : "Excellent!" == x && ((redgreencolor = "lightgreen"), fill(redgreencolor), stroke("black"), strokeWeight(5), text(x, 165, 115)),
