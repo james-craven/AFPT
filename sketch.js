@@ -284,7 +284,7 @@ function setup() {
     //Service Worker Was Here
 
 
-    let t = createCanvas(500, 750);
+    let t = createCanvas(4500, 750);
     t.parent("sketch-holder"),
         (t.drawingContext.miterLimit = 2),
         (ageSel = createSelect()).position(310, 135),
