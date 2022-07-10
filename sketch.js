@@ -320,7 +320,7 @@ function setup() {
         calculateBtn.position(245, 687),
         calculateBtn.mousePressed(calcBtnClick),
         (shuttleAudioBtn = createButton("Shuttle Audio")).parent("sketch-holder"),
-        shuttleAudioBtn.position(300, 640),
+        shuttleAudioBtn.position(285, 640),
         shuttleAudioBtn.addClass("text-box"),
         (shuttleAudio = select("#shuttle-audio")).parent("sketch-holder"),
         shuttleAudioBtn.mousePressed(toggleMusicPlayer),
