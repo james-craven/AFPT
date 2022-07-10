@@ -86,7 +86,7 @@ function createSliders() {
         pushSel.selected("Pushups"),
         pushSel.changed(selectChange),
         (sitSel = createSelect()).parent("sketch-holder"),
-        sitSel.position(10, 345),
+        sitSel.position(10, 395),
         sitSel.option("Situps"),
         sitSel.option("Plank"),
         sitSel.option("Reverse Crunch"),
@@ -94,7 +94,7 @@ function createSliders() {
         sitSel.selected("Situps"),
         sitSel.changed(selectChange),
         (runSel = createSelect()).parent("sketch-holder"),
-        runSel.position(10, 445),
+        runSel.position(10, 545),
         runSel.option("1.5 Mile"),
         runSel.option("Shuttle"),
         runSel.option("Walk"),
@@ -103,40 +103,40 @@ function createSliders() {
         runSel.changed(selectChange),
         (runnum = new Time(0, 0)),
         (pushups = createSlider(0, pushmax, 0, 1)).parent("sketch-holder"),
-        pushups.position(170, 258),
-        pushups.size(175, 15),
+        pushups.position(10, 308),
+        pushups.size(400, 15),
         pushups.addClass("pushups"),
         (hrpush = createSlider(0, hrmax, 0, 1)).parent("sketch-holder"),
-        hrpush.position(170, 258),
-        hrpush.size(175, 15),
+        hrpush.position(10, 308),
+        hrpush.size(400, 15),
         hrpush.hide(),
         hrpush.addClass("pushups"),
         (situps = createSlider(0, sitmax, 0, 1)).parent("sketch-holder"),
-        situps.position(170, 355),
-        situps.size(175, 15),
+        situps.position(10, 460),
+        situps.size(400, 15),
         situps.addClass("situps"),
         (rsitups = createSlider(0, rsitmax, 0, 1)).parent("sketch-holder"),
-        rsitups.position(170, 355),
-        rsitups.size(175, 15),
+        rsitups.position(10, 460),
+        rsitups.size(400, 15),
         rsitups.hide(),
         rsitups.addClass("situps"),
         (planks = createSlider(0, plankmax, 0, 1)).parent("sketch-holder"),
-        planks.position(170, 355),
-        planks.size(135, 15),
+        planks.position(10, 460),
+        planks.size(400, 15),
         planks.hide(),
         planks.addClass("situps"),
         (runtime = createSlider(runmin, runmax + 62, runmax + 62, 1)).parent("sketch-holder"),
-        runtime.position(10, 505),
+        runtime.position(10, 605),
         runtime.size(400, 15),
         runtime.addClass("run"),
         (walktime = createSlider(0, walkmax + 62, 0, 1)).parent("sketch-holder"),
-        walktime.position(10, 505),
+        walktime.position(10, 605),
         walktime.size(400, 15),
         walktime.addClass("walk"),
         walktime.hide(),
         (shuttleRun = createSlider(0, shuttleMax, 0, 1)),
         shuttleRun.parent("sketch-holder"),
-        shuttleRun.position(10, 505),
+        shuttleRun.position(10, 605),
         shuttleRun.size(400, 15),
         shuttleRun.addClass("shuttle"),
         shuttleRun.hide(),
@@ -144,7 +144,7 @@ function createSliders() {
         (pushtxt = createInput()).parent("sketch-holder"),
         pushtxt.addClass("text-box"),
         pushtxt.position(365, 245),
-        pushtxt.size(20, 20),
+        pushtxt.size(22, 22),
         pushtxt.value(0),
         pushups.input(pushChange),
         pushtxt.mouseClicked(txtInput),
@@ -154,7 +154,7 @@ function createSliders() {
         (hrpushtxt = createInput()).parent("sketch-holder"),
         hrpushtxt.addClass("text-box"),
         hrpushtxt.position(365, 245),
-        hrpushtxt.size(20, 20),
+        hrpushtxt.size(22, 22),
         hrpushtxt.value(0),
         hrpushtxt.hide(),
         hrpush.input(hrpushChange),
@@ -164,8 +164,8 @@ function createSliders() {
         hrpushtxt.attribute("pattern", "[0-9]+"),
         (sittxt = createInput()).parent("sketch-holder"),
         sittxt.addClass("text-box"),
-        sittxt.position(365, 345),
-        sittxt.size(20, 20),
+        sittxt.position(365, 395),
+        sittxt.size(22, 22),
         sittxt.value(0),
         situps.input(sitChange),
         sittxt.input(sitChangeTxt),
@@ -174,8 +174,8 @@ function createSliders() {
         sittxt.attribute("pattern", "[0-9]+"),
         (rsittxt = createInput()).parent("sketch-holder"),
         rsittxt.addClass("text-box"),
-        rsittxt.position(365, 345),
-        rsittxt.size(20, 20),
+        rsittxt.position(365, 395),
+        rsittxt.size(22, 22),
         rsittxt.value(0),
         rsittxt.hide(),
         rsitups.input(rsitChange),
@@ -186,8 +186,8 @@ function createSliders() {
     var t = runTime(runmax + 62);
     (runmintxt = createInput()).parent("sketch-holder"),
         runmintxt.addClass("text-box"),
-        runmintxt.position(310, 445),
-        runmintxt.size(20, 20),
+        runmintxt.position(310, 545),
+        runmintxt.size(22, 22),
         runmintxt.value(t.minutes),
         runmintxt.hide(),
         runmintxt.mouseClicked(txtInput),
@@ -196,8 +196,8 @@ function createSliders() {
         runmintxt.input(runChangeTxt),
         (runsectxt = createInput()).parent("sketch-holder"),
         runsectxt.addClass("text-box"),
-        runsectxt.position(365, 445),
-        runsectxt.size(20, 20),
+        runsectxt.position(365, 545),
+        runsectxt.size(22, 22),
         runsectxt.value(t.sec),
         runsectxt.hide(),
         runsectxt.mouseClicked(txtInput),
@@ -208,8 +208,8 @@ function createSliders() {
         runTime(walkmax),
         (walkmintxt = createInput()).parent("sketch-holder"),
         walkmintxt.addClass("text-box"),
-        walkmintxt.position(310, 445),
-        walkmintxt.size(20, 20),
+        walkmintxt.position(310, 545),
+        walkmintxt.size(22, 22),
         walkmintxt.value(t.minutes),
         walkmintxt.hide(),
         walkmintxt.mouseClicked(txtInput),
@@ -218,8 +218,8 @@ function createSliders() {
         walkmintxt.input(walkChangeTxt),
         (walksectxt = createInput()).parent("sketch-holder"),
         walksectxt.addClass("text-box"),
-        walksectxt.position(365, 445),
-        walksectxt.size(20, 20),
+        walksectxt.position(365, 545),
+        walksectxt.size(22, 22),
         walksectxt.value(t.sec),
         walksectxt.hide(),
         walksectxt.mouseClicked(txtInput),
@@ -229,8 +229,8 @@ function createSliders() {
         walksectxt.attribute("pattern", "[0-9]+"),
         (plankmintxt = createInput()).parent("sketch-holder"),
         plankmintxt.addClass("text-box"),
-        plankmintxt.position(310, 345),
-        plankmintxt.size(20, 20),
+        plankmintxt.position(310, 395),
+        plankmintxt.size(22, 22),
         plankmintxt.value(0),
         plankmintxt.hide(),
         plankmintxt.mouseClicked(txtInput),
@@ -239,8 +239,8 @@ function createSliders() {
         plankmintxt.attribute("pattern", "[0-9]+"),
         (planksectxt = createInput()).parent("sketch-holder"),
         planksectxt.addClass("text-box"),
-        planksectxt.position(365, 345),
-        planksectxt.size(20, 20),
+        planksectxt.position(365, 395),
+        planksectxt.size(22, 22),
         planksectxt.value(0),
         planksectxt.hide(),
         planksectxt.mouseClicked(txtInput),
@@ -251,7 +251,7 @@ function createSliders() {
         (shuttletxt = createInput()),
         shuttletxt.parent("sketch-holder"),
         shuttletxt.addClass("text-box"),
-        shuttletxt.position(365, 445),
+        shuttletxt.position(365, 545),
         shuttletxt.size(22, 20),
         shuttletxt.value(0),
         shuttletxt.hide(),
@@ -290,7 +290,7 @@ function setup() {
     //Service Worker Was Here
 
 
-    let t = createCanvas(4500, 750);
+    let t = createCanvas(4500, 850);
     t.parent("sketch-holder"),
         (t.drawingContext.miterLimit = 2),
         (ageSel = createSelect()).position(310, 135),
@@ -317,10 +317,10 @@ function setup() {
         (calculateBtn = createButton("CALCULATE SCORE")).parent("sketch-holder"),
         calculateBtn.addClass("text-box"),
         calculateBtn.id("calculateScoreBtn"),
-        calculateBtn.position(245, 605),
+        calculateBtn.position(245, 687),
         calculateBtn.mousePressed(calcBtnClick),
         (shuttleAudioBtn = createButton("Shuttle Audio")).parent("sketch-holder"),
-        shuttleAudioBtn.position(180, 445),
+        shuttleAudioBtn.position(300, 640),
         shuttleAudioBtn.addClass("text-box"),
         (shuttleAudio = select("#shuttle-audio")).parent("sketch-holder"),
         shuttleAudioBtn.mousePressed(toggleMusicPlayer),
@@ -328,26 +328,29 @@ function setup() {
         altitudeSel.parent("sketch-holder"),
         altitudeSel.addClass("text-box"),
         altitudeSel.addClass("altitude-select"),
-        altitudeSel.position(200, 660),
+        altitudeSel.position(200, 740),
         altitudeSel.option("Altitude Adjust"),
         altitudeSel.option("Group 1 (5250-5499ft)"),
         altitudeSel.option("Group 2 (5500-5999ft)"),
         altitudeSel.option("Group 3 (6000-6599ft)"),
         altitudeSel.option("Group 4 (>6600ft)"),
-        (pushInfoBtn = createA("javascript:void(0);", "See <br>Chart")),
+        (pushInfoBtn = createButton("See Chart")),
         pushInfoBtn.parent("sketch-holder"),
-        pushInfoBtn.position(365, 206),
-        pushInfoBtn.id("pushBtn"),
+        pushInfoBtn.addClass("text-box"),
+        pushInfoBtn.position(180, 245),
+        pushInfoBtn.addClass("pushBtn"),
         pushInfoBtn.mousePressed(pushInfoClick),
-        (sitInfoBtn = createA("javascript:void(0);", "See <br>Chart")),
+        (sitInfoBtn = createButton("See Chart")),
         sitInfoBtn.parent("sketch-holder"),
-        sitInfoBtn.position(365, 306),
-        sitInfoBtn.id("pushBtn"),
+        sitInfoBtn.position(180, 395),
+        sitInfoBtn.addClass("text-box"),
+        sitInfoBtn.addClass("sitBtn"),
         sitInfoBtn.mousePressed(pushInfoClick),
-        (cardioInfoBtn = createA("javascript:void(0);", "See <br>Chart")),
+        (cardioInfoBtn = createButton("See Chart")),
         cardioInfoBtn.parent("sketch-holder"),
-        cardioInfoBtn.position(365, 406),
-        cardioInfoBtn.id("pushBtn"),
+        cardioInfoBtn.addClass("text-box"),
+        cardioInfoBtn.position(180, 545),
+        cardioInfoBtn.addClass("runBtn"),
         cardioInfoBtn.mousePressed(cardioInfoClick),
         (appInfoIcon = createButton("Info")).parent("sketch-holder"),
         appInfoIcon.addClass("text-box"),
@@ -377,7 +380,7 @@ function setup() {
         (shuttleChartsBtn = createButton("Shuttle Score Card")),
         shuttleChartsBtn.parent("sketch-holder"),
         shuttleChartsBtn.addClass("text-box"),
-        shuttleChartsBtn.position(190, 445),
+        shuttleChartsBtn.position(10, 695),
         shuttleChartsBtn.mousePressed(showShuttleCharts),
         shuttleChartsBtn.hide(),
         createSliders(),
@@ -794,19 +797,19 @@ function draw() {
         strokeWeight(0.5),
         fill("white"),
         "Pushups" == pushSel.value()
-            ? (text("Strength Score: " + pscore + "  |  Min: " + pushmin + "  |  Max: " + pushmax, 15, 225),
+            ? (text("Strength Score: " + pscore + "  |  Min: " + pushmin + "  |  Max: " + pushmax, 76, 225),
               pushups.removeAttribute("disabled"),
               hrpush.removeAttribute("disabled"),
               pushtxt.removeAttribute("disabled"),
               hrpushtxt.removeAttribute("disabled"))
             : "Hand-Release" == pushSel.value()
-            ? (text("Strength Score: " + pscore + "  |  Min: " + hrmin + "  |  Max: " + hrmax, 15, 225),
+            ? (text("Strength Score: " + pscore + "  |  Min: " + hrmin + "  |  Max: " + hrmax, 76, 225),
               pushups.removeAttribute("disabled"),
               hrpush.removeAttribute("disabled"),
               pushtxt.removeAttribute("disabled"),
               hrpushtxt.removeAttribute("disabled"))
             : "Exempt" == pushSel.value() &&
-              (text("Strength Score: Exempt", 15, 225),
+              (text("Strength Score: Exempt", 120, 225),
               pushups.value(0),
               pushups.attribute("disabled", ""),
               hrpush.value(0),
@@ -816,7 +819,7 @@ function draw() {
               hrpushtxt.value(0),
               hrpushtxt.attribute("disabled", "")),
         "Situps" == sitSel.value()
-            ? (text("Abs Score: " + sscore + "  |  Min: " + sitmin + "  |  Max: " + sitmax, 15, 325),
+            ? (text("Abs Score: " + sscore + "  |  Min: " + sitmin + "  |  Max: " + sitmax, 95, 375),
               situps.removeAttribute("disabled"),
               rsitups.removeAttribute("disabled"),
               planks.removeAttribute("disabled"),
@@ -825,7 +828,7 @@ function draw() {
               plankmintxt.removeAttribute("disabled"),
               planksectxt.removeAttribute("disabled"))
             : "Plank" == sitSel.value()
-            ? (text("Abs Score: " + sscore + "  |  Min: " + plankString(plankmin) + "  |  Max: " + plankString(plankmax), 15, 325),
+            ? (text("Abs Score: " + sscore + "  |  Min: " + plankString(plankmin) + "  |  Max: " + plankString(plankmax), 80, 375),
               situps.removeAttribute("disabled"),
               rsitups.removeAttribute("disabled"),
               planks.removeAttribute("disabled"),
@@ -834,7 +837,7 @@ function draw() {
               plankmintxt.removeAttribute("disabled"),
               planksectxt.removeAttribute("disabled"))
             : "Reverse Crunch" == sitSel.value()
-            ? (text("Abs Score: " + sscore + "  |  Min: " + rsitmin + "  |  Max: " + rsitmax, 15, 325),
+            ? (text("Abs Score: " + sscore + "  |  Min: " + rsitmin + "  |  Max: " + rsitmax, 95, 375),
               situps.removeAttribute("disabled"),
               rsitups.removeAttribute("disabled"),
               planks.removeAttribute("disabled"),
@@ -843,7 +846,7 @@ function draw() {
               plankmintxt.removeAttribute("disabled"),
               planksectxt.removeAttribute("disabled"))
             : "Exempt" == sitSel.value() &&
-              (text("Abs Score: Exempt", 15, 325),
+              (text("Abs Score: Exempt", 135, 375),
               situps.value(0),
               situps.attribute("disabled", ""),
               rsitups.value(0),
@@ -861,7 +864,7 @@ function draw() {
     var l = runTime(runmax);
     if (
         ("1.5 Mile" == runSel.value()
-            ? (text("Cardio Score: " + rscore + "  |  Min: " + plankString(runmax + a) + "  |  Max: " + plankString(runmin), 15, 425),
+            ? (text("Cardio Score: " + rscore + "  |  Min: " + plankString(runmax + a) + "  |  Max: " + plankString(runmin), 55, 525),
               runtime.removeAttribute("disabled"),
               runmintxt.removeAttribute("disabled"),
               "0" === runmintxt.value() && runmintxt.value(l.minutes),
@@ -872,7 +875,7 @@ function draw() {
               walkmintxt.removeAttribute("disabled"),
               walksectxt.removeAttribute("disabled"))
             : "Shuttle" == runSel.value()
-            ? (text("Cardio Score: " + rscore + "  |  Min: " + shuttleMin + "  |  Max: " + shuttleMax, 15, 425),
+            ? (text("Cardio Score: " + rscore + "  |  Min: " + shuttleMin + "  |  Max: " + shuttleMax, 85, 525),
               runtime.removeAttribute("disabled"),
               runmintxt.removeAttribute("disabled"),
               runsectxt.removeAttribute("disabled"),
@@ -882,7 +885,7 @@ function draw() {
               walkmintxt.removeAttribute("disabled"),
               walksectxt.removeAttribute("disabled"))
             : "Exempt" == runSel.value()
-            ? (text("Cardio Score: Exempt", 85, 425),
+            ? (text("Cardio Score: Exempt", 125, 525),
               runtime.value(runmax + 62),
               runtime.attribute("disabled", ""),
               runmintxt.value(0),
@@ -900,7 +903,7 @@ function draw() {
               walksectxt.value(0),
               walksectxt.attribute("disabled", ""))
             : "Walk" == runSel.value() &&
-              (text("Walk Is Pass/Fail. Max Time To Pass: " + plankString(walkmax + t), 15, 425), walktime.removeAttribute("disabled"), walkmintxt.removeAttribute("disabled"), walksectxt.removeAttribute("disabled")),
+              (text("Walk Is Pass/Fail. Max Time To Pass: " + plankString(walkmax + t), 55, 525), walktime.removeAttribute("disabled"), walkmintxt.removeAttribute("disabled"), walksectxt.removeAttribute("disabled")),
         fill(0),
         stroke("white"),
         strokeWeight(2),
@@ -909,12 +912,12 @@ function draw() {
         strokeWeight(1),
         stroke("white"),
         strokeWeight(2),
-        line(10, 400, 410, 400),
+        line(10, 500, 410, 500),
         stroke(0),
         strokeWeight(1),
         stroke("white"),
         strokeWeight(2),
-        line(10, 300, 410, 300),
+        line(10, 350, 410, 350),
         stroke(0),
         strokeWeight(0.5),
         textSize(20),
@@ -922,22 +925,21 @@ function draw() {
         stroke("white"),
         "1.5 Mile" == runSel.value())
     ) {
-        text(":", 356, 473),
+        text(":", 356, 573),
             runmintxt.show(),
             runsectxt.show(),
             shuttletxt.hide(),
             walkmintxt.hide(),
             walksectxt.hide(),
             (lapTime = runTime(floor(runtime.value() / 6))),
-            text("Req'd 6 Lap Time: ~" + lapTime.minutes + ":" + nf(lapTime.sec, 2), 10, 555),
-            text("(Rounded down to nearest sec)", 10, 575);
+            text("Req'd 6 Lap Time: ~" + lapTime.minutes + ":" + nf(lapTime.sec, 2), 10, 655);
         for (var i = 0; i < 6; i++) {
             var u = runTime(floor(runtime.value() / 6) * (i + 1));
-            text("Lap " + int(i + 1) + ": ≤ " + u.minutes + ":" + nf(u.sec, 2), 10, 600 + 20 * i);
+            text("Lap " + int(i + 1) + ": ≤ " + u.minutes + ":" + nf(u.sec, 2), 10, 680 + 20 * i);
         }
     } else
         "Shuttle" == runSel.value() &&
-            (text("Shuttle Level: " + k(), 10, 555),
+            (text("Shuttle Level: " + k(), 10, 655),
             text(
                 "Current Level Shuttles: " +
                     (function () {
@@ -959,7 +961,7 @@ function draw() {
                         );
                     })(),
                 10,
-                585
+                680
             ));
     (pushnum = pushups.value()),
         (sitnum = situps.value()),
@@ -978,7 +980,7 @@ function draw() {
         ? (console.log(shuttleRun.value() + n), console.log(hamrScore(h)), (rscore = hamrScore(shuttleRun.value() + n)))
         : "Walk" == runSel.value() && ((rscore = 0), (walkScore = didWalkPass(walktime.value() - t, scoreArrays))),
         "Pushups" == pushSel.value() ? (pscore = pushScore(pushnum)) : "Hand-Release" == pushSel.value() && (pscore = hrpushScore(hrpushnum)),
-        "Situps" == sitSel.value() ? (sscore = sitScore(sitnum)) : "Reverse Crunch" == sitSel.value() ? (sscore = rsitScore(rsitnum)) : "Plank" == sitSel.value() && ((sscore = plankScore(planks.value())), text(":", 356, 373));
+        "Situps" == sitSel.value() ? (sscore = sitScore(sitnum)) : "Reverse Crunch" == sitSel.value() ? (sscore = rsitScore(rsitnum)) : "Plank" == sitSel.value() && ((sscore = plankScore(planks.value())), text(":", 356, 423));
     var o = sscore + pscore + rscore,
         m = pushSel.value(),
         p = sitSel.value(),
@@ -1090,10 +1092,10 @@ function selectChange() {
             ? ((pushupsText = "Pushups: "), pushups.show(), pushtxt.show(), hrpush.hide(), hrpushtxt.hide(), pushtxt.value("0"))
             : "Hand-Release" == pushSel.value() && ((pushupsText = "Hand-Release Pushups: "), pushups.hide(), pushtxt.hide(), hrpush.show(), hrpushtxt.show(), hrpushtxt.value("0")),
         "Situps" == sitSel.value()
-            ? ((situpsText = "Sit Ups: "), situps.show(), sittxt.show(), sittxt.value("0"), rsitups.hide(), rsittxt.hide(), planks.hide(), plankmintxt.hide(), planksectxt.hide())
+            ? ((situpsText = "Sit Ups: "),sitInfoBtn.removeClass("sitBtn2"), situps.show(), sittxt.show(), sittxt.value("0"), rsitups.hide(), rsittxt.hide(), planks.hide(), plankmintxt.hide(), planksectxt.hide())
             : "Plank" == sitSel.value()
-            ? ((situpsText = "Plank: "), planks.show(), plankmintxt.show(), plankmintxt.value("0"), planksectxt.show(), planksectxt.value("0"), situps.hide(), sittxt.hide(), rsitups.hide(), rsittxt.hide())
-            : "Reverse Crunch" == sitSel.value() && ((situpsText = "Reverse Crunch: "), situps.hide(), sittxt.hide(), planks.hide(), plankmintxt.hide(), planksectxt.hide(), rsitups.show(), rsittxt.show(), rsittxt.value("0")),
+            ? ((situpsText = "Plank: "), sitInfoBtn.addClass("sitBtn2"), planks.show(), plankmintxt.show(), plankmintxt.value("0"), planksectxt.show(), planksectxt.value("0"), situps.hide(), sittxt.hide(), rsitups.hide(), rsittxt.hide())
+            : "Reverse Crunch" == sitSel.value() && ((situpsText = "Reverse Crunch: "),sitInfoBtn.removeClass("sitBtn2"), situps.hide(), sittxt.hide(), planks.hide(), plankmintxt.hide(), planksectxt.hide(), rsitups.show(), rsittxt.show(), rsittxt.value("0")),
         "1.5 Mile" == runSel.value())
     ) {
         var t = runTime(runmax + 62);
@@ -1109,7 +1111,7 @@ function selectChange() {
             walksectxt.hide(),
             walktime.hide(),
             (isAudioActive = !1),
-            shuttleAudioBtn.position(180, 445);
+            shuttleAudioBtn.position(300, 640);
     } else
         "Shuttle" == runSel.value()
             ? (runtime.hide(),
@@ -1124,7 +1126,7 @@ function selectChange() {
               walktime.hide(),
               (runText = "Shuttles: "),
               (shuttlevalue = shuttleRun.value()),
-              shuttleAudioBtn.position(290, 545))
+              shuttleAudioBtn.position(300, 640))
             : "Walk" == runSel.value() &&
               ((runText = "Walk : "),
               runtime.hide(),
@@ -1133,7 +1135,7 @@ function selectChange() {
               shuttletxt.hide(),
               shuttleRun.hide(),
               shuttleChartsBtn.hide(),
-              shuttleAudioBtn.position(180, 445),
+              shuttleAudioBtn.position(300, 640),
               walktime.show(),
               walkmintxt.show(),
               walksectxt.show(),

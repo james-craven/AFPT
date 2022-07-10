@@ -43,6 +43,25 @@ select {
   width: 150px;
 }
 
+.pushBtn {
+  height: 45px;
+  width: 165px;
+}
+
+.sitBtn {
+  height: 45px;
+  width: 165px;
+}
+
+.sitBtn2 {
+  width: 110px!important;
+}
+
+.runBtn {
+  height: 45px;
+  width: 110px;
+}
+
 select {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAJJJREFUOE/dkz0KwlAQhL8hjWcIOVEgrY29eAEbLyDkAik8gNYW4oVyiIAwIZCAhvcw5HXZcn8+mNldkRhKnGdrANstkP/xpZVUTD0/HtgugSeQRSAfoJL0DgKGpO0T0EQAR0m371pwC7Zr4DyDXCVd5uAYYMg/gP04cAcOkrwIMErZAS9g0t2FZG3tkNY8VrIHPSopIRH6MrMFAAAAAElFTkSuQmCC');
     background-repeat: no-repeat;
