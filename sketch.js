@@ -977,7 +977,7 @@ function draw() {
     "1.5 Mile" == runSel.value()
         ? (rscore = runScore(runtime.value() - a))
         : "Shuttle" == runSel.value()
-        ? (console.log(shuttleRun.value() + n), console.log(hamrScore(h)), (rscore = hamrScore(shuttleRun.value() + n)))
+        ? ((rscore = hamrScore(shuttleRun.value() + n)))
         : "Walk" == runSel.value() && ((rscore = 0), (walkScore = didWalkPass(walktime.value() - t, scoreArrays))),
         "Pushups" == pushSel.value() ? (pscore = pushScore(pushnum)) : "Hand-Release" == pushSel.value() && (pscore = hrpushScore(hrpushnum)),
         "Situps" == sitSel.value() ? (sscore = sitScore(sitnum)) : "Reverse Crunch" == sitSel.value() ? (sscore = rsitScore(rsitnum)) : "Plank" == sitSel.value() && ((sscore = plankScore(planks.value())), text(":", 356, 423));
@@ -1111,7 +1111,7 @@ function selectChange() {
             walksectxt.hide(),
             walktime.hide(),
             (isAudioActive = !1),
-            shuttleAudioBtn.position(300, 640);
+            shuttleAudioBtn.position(285, 640);
     } else
         "Shuttle" == runSel.value()
             ? (runtime.hide(),
@@ -1126,7 +1126,7 @@ function selectChange() {
               walktime.hide(),
               (runText = "Shuttles: "),
               (shuttlevalue = shuttleRun.value()),
-              shuttleAudioBtn.position(300, 640))
+              shuttleAudioBtn.position(285, 640))
             : "Walk" == runSel.value() &&
               ((runText = "Walk : "),
               runtime.hide(),
@@ -1135,7 +1135,7 @@ function selectChange() {
               shuttletxt.hide(),
               shuttleRun.hide(),
               shuttleChartsBtn.hide(),
-              shuttleAudioBtn.position(300, 640),
+              shuttleAudioBtn.position(285, 640),
               walktime.show(),
               walkmintxt.show(),
               walksectxt.show(),
