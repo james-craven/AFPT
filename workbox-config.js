@@ -16,7 +16,7 @@ module.exports = {
 			  urlPattern: ({request}) => {
 				const {destination} = request;
 			
-				return destination === 'video' || destination === 'audio'
+				return destination === 'video' || destination === 'audio' || destination === 'image'
 			  },
 			  handler: 'CacheFirst',
 			  options: {
@@ -24,8 +24,8 @@ module.exports = {
 			  }
 			},
 			{
-				urlPattern: '**/*.{html,png,webmanifest,js,css,mjs,webp}',
-				handler: 'StaleWhileRevalidate',
+				urlPattern: '**/*.{html,webmanifest,js,css,mjs}',
+				handler: 'NetworkFirst',
 			},
 			  
 	],
