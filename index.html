@@ -38,7 +38,7 @@
           <h4 class="modal-title">Did You Know?</h4>
           <p class="modal-msg">You can download this app for offline use of all charts and 
               shuttle audio! Just click the hamburger menu and click Download App For Offline Use.
-              Note: iPhone users have to click the <img id="apple-arrow" src="arrow.png"> icon below and click Add To Homescreen.
+              Note: iPhone users have to click the <img id="apple-arrow" alt="apple arrow pic" src="arrow.png"> icon below and click Add To Homescreen.
           </p>
         </article>
         
@@ -113,12 +113,14 @@
         <div class="pushsit-see-chart-btn">
             <button id="push-btn">See Chart</button>
         </div>
+        <label for="push-txt" class="hidden-labels">pushups textbox</label>
         <input type="tel" pattern="[0-9]+" class="push-txt" id="push-txt">
         <input type="tel" class="hrpush-txt">
     </section>
 
     <!-- Section 6 - Pushups Slider -->
     <section class="push-slide">
+        <label for="push-slider" class="hidden-labels">pushups slider</label>
         <input type="range" id="push-slider" class="push-slider" min="0" max="100" value="0">
     </section>
 
@@ -142,7 +144,8 @@
         <div id="abs-see-chart-btn" class="pushsit-see-chart-btn">
             <button id="sit-btn">See Chart</button>
         </div>
-        <input type="tel" class="sit-txt">
+        <label for="sit-txt" class="hidden-labels">situps textbox</label>
+        <input type="tel" class="sit-txt" id="sit-txt">
         <p class="plank-colon" hidden>:</p>
         <input type="tel" id="plankmintxt" class="plankmin-txt">
 
@@ -151,6 +154,7 @@
 
     <!-- Section 9 - Situps Slider -->
     <section class="sit-slide">
+        <label for="sit-slider" class="hidden-labels">situps slider</label>
         <input type="range" id="sit-slider" class="sit-slider" min="0" max="100" value="0">
     </section>
 
@@ -173,17 +177,22 @@
         <div id="cardio-see-chart-btn" class="cardio-see-chart-btn">
             <button id="run-btn">See Chart</button>
         </div>
-            <input type="tel" class="run-mintxt">
+        <label for="run-mintxt" class="hidden-labels">run minutes textbox</label>
+            <input type="tel" class="run-mintxt" id="run-mintxt">
             <p id="colon" class="colon">:</p>
-            <input type="tel" class="run-sectxt">
-            <input type="tel" class="shuttle-txt">
-            <input type="tel" class="walk-txt">
+            <label for="run-sectxt" class="hidden-labels">run seconds textbox</label>
+            <input type="tel" class="run-sectxt" id="run-sectxt">
+            <label for="shuttle-txt" class="hidden-labels">shuttles textbox</label>
+            <input type="tel" class="shuttle-txt" id="shuttle-txt">
+            <label for="walk-txt" class="hidden-labels">walk textbox</label>
+            <input type="tel" class="walk-txt" id="walk-txt">
     </section>
         
 
 
     <!-- Run Slider -->
     <section class="run-slider-section">
+        <label for="run-slider" class="hidden-labels">run slider</label>
         <input type="range" id="run-slider" class="run-slider" min="0" max="1136" value="1136">
     </section>
 

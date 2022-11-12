@@ -197,8 +197,14 @@ align-items: center;
     margin-bottom:.3em;
 }
 
+.hidden-labels {
+    position:absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
 .score-txt-red {
-    color: rgb(255, 44, 44);
+    color: rgb(250, 54, 54);
     text-shadow: -1px -1px 0 rgb(0, 0, 0), 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000;
 }
 
@@ -745,7 +751,7 @@ input[type=range] {
 
 #apple-arrow {
     width: 15px;
-    height: 25px;
+    height: 22px;
 }
 
   .modal__article {
