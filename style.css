@@ -41,7 +41,6 @@ section {
 .info-section-wrapper{
     height:50px;
     display:grid;
-    justify-content: center;
     margin: 0 auto;
     max-width:400px;
     width: 100%;
