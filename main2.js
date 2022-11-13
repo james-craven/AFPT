@@ -4822,3 +4822,8 @@ console.log(isIos());
 if (isIos() && !isPwa()) {
   document.getElementById('install-modal').classList.add('in');
 }
+
+let menuBtn = document.getElementsByClassName('menu-button')[0];
+
+menuBtn.parentElement = document.getElementsByClassName('menu-button-container')[0];
+console.dir(menuBtn.parentElement);
