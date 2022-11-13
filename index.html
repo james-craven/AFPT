@@ -49,29 +49,32 @@
         </footer>
     </div>
     <!-- Section 1 - Info Button -->
-    <section class="info-section">
-        <div class="logo">AFPTCalc</div>
-        <input id="menu-toggle" type="checkbox" />
-        <div class="menu-btn-container">
-            <label class='menu-button-container' for="menu-toggle">
-            <div class='menu-button'></div>
-            </label>
-        </div>
-        <ul class="menu" id="menu">
-            <li id="run-adjust-chart">See Run Altitude Adjustment Chart</li>
-            <li id="walk-adjust-chart">See Walk/Shuttle Altitude Adjustment Chart</li>
-            <li id="shuttle-score-card">See Shuttle Score Card</li>
-            <li id="shuttle-audio">Show Shuttle Audio</li>
-            <li id="shuttle-audio-player" style="visibility:hidden"> <audio crossorigin="anonymous" preload="auto" src="./shuttle.mp3" controls="controls" id="shuttle-audio">
-                Your browser does not support the audio element.
-                </audio>
-            </li>
-        </ul>
-    </section>
+    
 
 
     <!-- Section 2 - Score Text -->
     <section class="score-txt">
+        <div class="info-section-wrapper">
+            <section class="info-section">
+                <div class="logo">AFPTCalc</div>
+                <input id="menu-toggle" type="checkbox" />
+                <div class="menu-btn-container">
+                    <label class='menu-button-container' for="menu-toggle">
+                    <div class='menu-button'></div>
+                    </label>
+                </div>
+                <ul class="menu" id="menu">
+                    <li id="run-adjust-chart">See Run Altitude Adjustment Chart</li>
+                    <li id="walk-adjust-chart">See Walk/Shuttle Altitude Adjustment Chart</li>
+                    <li id="shuttle-score-card">See Shuttle Score Card</li>
+                    <li id="shuttle-audio">Show Shuttle Audio</li>
+                    <li id="shuttle-audio-player" style="visibility:hidden"> <audio crossorigin="anonymous" preload="auto" src="./shuttle.mp3" controls="controls" id="shuttle-audio">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </li>
+                </ul>
+            </section>
+        </div>
         <p id="score-txt">Total Score: 60.0<br>
         Fail! Minimum Not Met!</p>
     </section>

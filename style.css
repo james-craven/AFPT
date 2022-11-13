@@ -5,6 +5,7 @@
 body {
     background: #003a6df0;
     font-weight: bold;
+    margin:0;
 }
 
 select {
@@ -37,7 +38,14 @@ section {
     margin: 0 auto;
     /* border-bottom: white solid 1px; */
 }
-
+.info-section-wrapper{
+    height:50px;
+    display:grid;
+    justify-content: center;
+    margin: 0 auto;
+    max-width:400px;
+    width: 100%;
+}
 .info-section {
   display: grid;
   grid-template-areas: "a b"
@@ -51,6 +59,7 @@ section {
   height: 50px;
   padding: 1em;
   align-items: center!important;
+  position: fixed;
 }
 .logo {
     display: grid;
@@ -74,7 +83,7 @@ section {
     max-width: 400px;
     margin:0 auto;
     padding:0;
-    z-index: 1;
+    z-index: 2!important;
 }
 
 .menu > li {
@@ -186,6 +195,7 @@ align-items: center;
     display: grid;
     align-items: center;
     justify-content: center;
+    grid-template-columns: 1fr;
 }
 
 .score-txt p {
@@ -555,6 +565,7 @@ input[type=range] {
 
 .run-slider {
     transform: rotate(180deg);
+    z-index:-99!important;
 }
 
 .run-slider::-webkit-slider-thumb {
