@@ -37,7 +37,7 @@ section {
     max-width: 400px;
     margin: 0 auto;
     /* border-bottom: white solid 1px; */
-    padding: 0 .2em;
+    padding: 0 1em;
 }
 .info-section-wrapper{
     height:50px;
@@ -203,6 +203,8 @@ align-items: center;
     align-items: center;
     justify-content: center;
     grid-template-columns: 1fr;
+    padding-left:0;
+    padding-right:0;
 }
 
 .score-txt p {
@@ -233,12 +235,12 @@ align-items: center;
 /* Sextion 3 - Sex/Age Select */
 
 .sex-age-sel-section {
-    grid-template-columns: .55fr 1fr .1fr 1fr;
+    grid-template-columns: .5fr 1fr .5fr 1fr;
     justify-content: center;
     align-items: center;
     padding-bottom: 1em;
     grid-column-gap: .5em;
-    padding-left: .5em;
+
 }
 
 .sex-sel-label, .age-sel-label {
