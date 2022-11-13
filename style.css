@@ -444,9 +444,9 @@ align-items: center;
 
 .sit-sel-chart-plank {
     grid-template-columns: 1fr 1fr 40px 5px 40px!important;
-    justify-content: left!important;
+    justify-content: center!important;
     align-items: center!important;
-
+    grid-column-gap: 5px;
 }
 
 .cardio-sel-div {
