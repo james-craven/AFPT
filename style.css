@@ -49,7 +49,7 @@ section {
   display: grid;
   grid-template-areas: "a b"
                        "nav nav";
-  justify-content: space-between;
+  justify-content: space-between!important;
   grid-row-gap: 1em;
   background-color: #00BAF0;
   background: linear-gradient(to right,#003a6df0, #00ddff, #003a6df0);
