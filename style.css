@@ -82,7 +82,6 @@ section {
     max-width: 400px;
     margin:0 auto;
     padding:0;
-    z-index: 2!important;
 }
 
 .menu > li {
