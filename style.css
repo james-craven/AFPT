@@ -37,6 +37,7 @@ section {
     max-width: 400px;
     margin: 0 auto;
     /* border-bottom: white solid 1px; */
+    padding: 0 .2em;
 }
 .info-section-wrapper{
     height:50px;
