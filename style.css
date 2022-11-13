@@ -71,6 +71,7 @@ section {
     display: grid;
     grid-area: b;
     justify-content: end!important;
+    position: relative;
 }
 
 .menu {
