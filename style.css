@@ -115,16 +115,17 @@ align-items: center;
   transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
   border-radius: 2px;
   right:0;
+  top:-2px;
 }
 
 .menu-button::before {
   content: '';
-  margin-top: -8px;
+  margin-top: -6px;
 }
 
 .menu-button::after {
   content: '';
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 #menu-toggle:checked ~ .menu-btn-container .menu-button::before {
