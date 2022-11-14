@@ -773,15 +773,20 @@ input[type=range] {
     height: 22px;
 }
 
-  .modal__article {
-    text-align: center;
-    padding: 2.5rem;
-  }
-    .modal-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-    }
+.modal__article {
+text-align: center;
+padding: 2.5rem;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.modal {
+    background-color: #003a6df0;
+}
 
   
   footer {
@@ -852,4 +857,28 @@ tr, th, td {
 .reddit {
     color: white;
     font-size:1.3rem;
+}
+
+.article-content {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+@media only screen and (min-width: 1000px) {
+    .article-content {
+      grid-template-columns: 1fr 1fr 1fr;
+      max-width: 1250px;
+      justify-content: center;
+      grid-column-gap: 10em;
+      border-top: solid 2px white
+    }
+    .article-content div {
+        margin-top: 1em;
+    }
+    .article-content table {
+        margin-top: 1em;
+    }
+    .article-content p {
+        line-height: 1.5rem;
+    }
 }
