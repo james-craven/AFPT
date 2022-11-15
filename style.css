@@ -107,6 +107,17 @@ align-items: center;
     display: none;
 }
 
+.push-slide span::before {
+    display:block;
+    background-color:red;
+    position:absolute;
+    height:4px;
+    width:15px;
+    transform:rotate(90deg);
+    content: '';
+    margin-top: -11.5px;
+}
+
 .menu-button,
 .menu-button::before,
 .menu-button::after {
@@ -716,9 +727,11 @@ input[type=range] {
 
 .slider-green::-webkit-slider-thumb {
     background-color:#90ee90;
+    z-index:2;
 }
 .slider-red::-webkit-slider-thumb {
     background-color: rgb(255, 0, 0);
+    z-index:2;
 }
 
 .runlaps-row {

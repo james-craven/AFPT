@@ -4305,6 +4305,10 @@ function updateScoreMinMaxText() {
       pushSlider.classList.remove('slider-red')) :
     pushSlider.classList.add('slider-red');
 
+  let left = (pushSlider.clientWidth / max) * min;
+  document.getElementById('push-tick').style.left = left + "px";
+
+
   let sit_sel = sitSel.value;
   let sit_min = sit_sel == 'Situps' ? sitmin : sit_sel == 'Reverse Crunch' ? rsitmin : sit_sel == 'Plank' ? runTimeString(plankmin) : '';
   let sit_max = sit_sel == 'Situps' ? sitmax : sit_sel == 'Reverse Crunch' ? rsitmax : sit_sel == 'Plank' ? runTimeString(plankmax) : '';
@@ -4827,3 +4831,5 @@ let menuBtn = document.getElementsByClassName('menu-button')[0];
 
 menuBtn.parentElement = document.getElementsByClassName('menu-button-container')[0];
 console.log(menu.parentElement);
+
+window.addEventListener('resize', updateScoreMinMaxText);
