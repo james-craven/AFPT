@@ -4850,8 +4850,6 @@ function isPwa() {
   );
 }
 
-
-console.log(isIos());
 if (isIos() && !isPwa()) {
   document.getElementById('install-modal').classList.add('in');
 }
