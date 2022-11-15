@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <meta name="theme-color" content="#025981">
+        <link rel="canonical" href="https://afptcalc.com/" />
+        <title> Air Force AF PT Calculator - Exemptions Walk Altitude Adjustments & Alternate Components</title>
+        <meta name="description" 
+              content="This Air Force PT Calculator contains all the alt alternate components with exemptions!
+                       This AF PT Calc even includes the score charts and sliders for easy real-time test score calculations! Shuttle run audio
+                       is also available. Based on dafman 36-2905 this AF Fitness Calculator is the one stop shop to calculate AF PT Test scores."/>
+
+        <link rel="apple-touch-icon" href="./icon-144x144.png">
+        <link rel="icon" href="./icon-144x144.png">
+        <link rel="stylesheet" type="text/css" href="./style.css">
+        <link rel="manifest" href="./manifest.webmanifest">
+      </head>
+<body>
+    <div id="modal" hidden>
+        <span class="close-btn" id="close-btn" role="button">&times;</span>
+        <img id="modal-img"></img>
+    </div>
+    <div class="install-modal" id="install-modal">
+        <article class="modal__article">
+          <h4 class="modal-title">Did You Know?</h4>
+          <p class="modal-msg">You can download this app for offline use of all charts and 
+              shuttle audio! Just click the hamburger menu and click Download App For Offline Use.
+              Note: iPhone users have to click the <img id="apple-arrow" alt="apple arrow pic" src="arrow.png"> icon below and click Add To Homescreen.
+          </p>
+        </article>
+        
+        <footer>
+          <button id="install-close" class="button button-full button-close">close</button>
+        </footer>
+    </div>
+    <!-- Section 1 - Info Button -->
+    
+
+
+    <!-- Section 2 - Score Text -->
+    <section class="score-txt">
+        <div class="info-section-wrapper">
+            <section class="info-section">
+                <div class="logo">AFPTCalc</div>
+                <input id="menu-toggle" type="checkbox" />
+                <div class="menu-btn-container">
+                    <label class='menu-button-container' for="menu-toggle">
+                    <div class='menu-button'></div>
+                    </label>
+                </div>
+                <ul class="menu" id="menu">
+                    <li id="run-adjust-chart">See Run Altitude Adjustment Chart</li>
+                    <li id="walk-adjust-chart">See Walk/Shuttle Altitude Adjustment Chart</li>
+                    <li id="shuttle-score-card">See Shuttle Score Card</li>
+                    <li id="shuttle-audio">Show Shuttle Audio</li>
+                    <li id="shuttle-audio-player" style="visibility:hidden"> <audio crossorigin="anonymous" preload="auto" src="./shuttle.mp3" controls="controls" id="shuttle-audio">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </li>
+                </ul>
+            </section>
+        </div>
+        <p id="score-txt">Total Score: 60.0<br>
+        Fail! Minimum Not Met!</p>
+    </section>
+
+    <!-- Section 3 - Sex Label & Select -->
+    <section class="sex-age-sel-section">
+            <label for="" class="sex-sel-label">SEX:</label>
+                <select name="sex" id="sex-sel" class="sex-sel">
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                </select>
+            <label for="" class="age-sel-label">AGE:</label>
+                <select name="age" id="age-sel" class="age-sel">
+                    <option value="&lt; 25">&lt; 25</option>
+                    <option value="25-29">25-29</option>
+                    <option value="30-34">30-34</option>
+                    <option value="35-39">35-39</option>
+                    <option value="40-44">40-44</option>
+                    <option value="45-49">45-49</option>
+                    <option value="50-54">50-54</option>
+                    <option value="55-59">55-59</option>
+                    <option value="60+">60+</option>
+                </select>
+    </section>
+
+    <!-- Section 4 - Strength Text -->
+    <section class="strength-txt">
+        <p class="strength-txt-p" id="push-txt-p">
+        </p>
+    </section>
+
+    <!-- Section 5 - Pushups Select & See Chart Btn -->
+    <section class="push-sel-chart">
+        <div class="strength-sel-div">
+            <select name="" id="push-sel" class="strength-sel">
+                <option value="Pushups">Pushups</option>
+                <option value="Hand-Release">Hand-Release</option>
+                <option value="Exempt">Exempt</option>
+            </select>
+        </div>
+        <div class="pushsit-see-chart-btn">
+            <button id="push-btn">See Chart</button>
+        </div>
+        <label for="push-txt" class="hidden-labels">pushups textbox</label>
+        <input type="tel" pattern="[0-9]+" class="push-txt" id="push-txt">
+        <input type="tel" class="hrpush-txt">
+    </section>
+
+    <!-- Section 6 - Pushups Slider -->
+    <section class="push-slide">
+        <label for="push-slider" class="hidden-labels">pushups slider</label>
+        <input type="range" id="push-slider" class="push-slider" min="0" max="100" value="0" list="steplist" step="1">
+        <div style="margin:2px;display:grid; position:relative"><span id="push-tick" style="color:white;position:absolute;">15</span></div>
+    </section>
+
+    <!-- Section 7 - Situps Text -->
+    <section class="situp-txt">
+        <p class="sit-txt-p" id="sit-txt-p">
+            Abs Score: 0 | Min: 15 | Max: 47
+        </p>
+    </section>
+
+    <!-- Section 8 - Situps Select & Textbox -->
+    <section id="sit-sel-chart-section" class="sit-sel-chart">
+
+            <select name="" id="sit-sel" class="sit-sel">
+                <option value="Situps">Situps</option>
+                <option value="Reverse Crunch">Reverse Crunch</option>
+                <option value="Plank">Plank</option>
+                <option value="Exempt">Exempt</option>
+            </select>
+
+        <div id="abs-see-chart-btn" class="pushsit-see-chart-btn">
+            <button id="sit-btn">See Chart</button>
+        </div>
+        <label for="sit-txt" class="hidden-labels">situps textbox</label>
+        <input type="tel" class="sit-txt" id="sit-txt">
+        <p class="plank-colon" hidden>:</p>
+        <input type="tel" id="plankmintxt" class="plankmin-txt">
+
+
+    </section>
+
+    <!-- Section 9 - Situps Slider -->
+    <section class="sit-slide">
+        <label for="sit-slider" class="hidden-labels">situps slider</label>
+        <input type="range" id="sit-slider" class="sit-slider" min="0" max="100" value="0">
+        <div style="margin:2px;display:grid; position:relative;"><span id="sit-tick" style="color:white;position:absolute;">15</span></div>
+    </section>
+
+    <!-- Section 10 - Run Text -->
+    <section class="run-txt">
+        <p class="run-txt-p" id="run-txt-p">
+        </p>
+    </section>
+
+    <!-- Section 11 - Run Select -->
+    <section class="cardio-sel-chart" id="cardio-sel-chart">
+        <div class="cardio-sel-div">
+            <select name="" id="cardio-sel" class="cardio-sel">
+                <option value="1.5 Mile">1.5 Mile</option>
+                <option value="Shuttle Run">Shuttle Run</option>
+                <option value="Walk">Walk</option>
+                <option value="Exempt">Exempt</option>
+            </select>
+        </div>
+        <div id="cardio-see-chart-btn" class="cardio-see-chart-btn">
+            <button id="run-btn">See Chart</button>
+        </div>
+        <label for="run-mintxt" class="hidden-labels">run minutes textbox</label>
+            <input type="tel" class="run-mintxt" id="run-mintxt">
+            <p id="colon" class="colon">:</p>
+            <label for="run-sectxt" class="hidden-labels">run seconds textbox</label>
+            <input type="tel" class="run-sectxt" id="run-sectxt">
+            <label for="shuttle-txt" class="hidden-labels">shuttles textbox</label>
+            <input type="tel" class="shuttle-txt" id="shuttle-txt">
+            <label for="walk-txt" class="hidden-labels">walk textbox</label>
+            <input type="tel" class="walk-txt" id="walk-txt">
+    </section>
+        
+
+
+    <!-- Run Slider -->
+    <section class="run-slider-section">
+        <label for="run-slider" class="hidden-labels">run slider</label>
+        <input type="range" id="run-slider" class="run-slider" min="0" max="1136" value="1136">
+        <div style="margin:2px;display:grid; position:relative;"><span id="run-tick" style="color:white;position:absolute;">15</span></div>
+    </section>
+
+    <!-- Run Lap Times -->
+    <section class="runlaps-row">
+        <p class="run-lap-times" id="run-lap-times"></p>
+        <div>
+            <select id="alt-select">
+                <option value="Altitude Adjust">Altitude Adjust</option>
+                <option value="Group 1 (5250-5499ft)">Group 1 (5250-5499ft)</option>
+                <option value="Group 2 (5500-5999ft)">Group 2 (5500-5999ft)</option>
+                <option value="Group 3 (6000-6599ft)">Group 3 (6000-6599ft)</option>
+                <option value="Group 4 (>6600ft)">Group 4 (>6600ft)</option>
+            </select>
+        </div>
+
+    </section>
+
+    <!-- Reset & Calc Score Btns -->
+    <section>
+        <audio crossorigin="anonymous" preload="auto" src="./shuttle.mp3" controls="controls" hidden id="shuttle-audio">
+            Your browser does not support the audio element.
+        </audio>
+    </section>
+
+    <!-- Article Content -->
+    <section class="article-content">
+        <p>In 2021, the Air Force released guidance on 
+            alternate components to the physical fitness test.
+            At the time that I made this website, few if any other
+            calculators had updated their sites to include these new
+            standards. So see a need fill a need. If you notice any errors,
+            hit up <a class="reddit" href="https://www.reddit.com/user/imasnarky">imasnarky</a> on reddit. Here's a summary of all the components
+            and how their scores are calculated:
+        </p>
+
+        <div>
+            <h3>Cardio</h3>
+            <ul>
+                <li>1.5 Mile Run</li>
+                <li>High Aerobic Multi-shuttle Run (shuttles)</li>
+            </ul>
+            <h3>Upper Body Strength</h3>
+            <ul>
+                <li>Push Ups</li>
+                <li>Hand Release Push Ups</li>
+            </ul>
+            <h3>Core Strength</h3>
+            <ul>
+                <li>Sit Ups</li>
+                <li>Cross Leg Reverse Crunch</li>
+                <li>Forearm Plank</li>
+            </ul>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <caption class="caption">Minimum number of points needed for each Air Force PT test fitness category:</caption>
+            <thead>
+            <tr>
+            <th>Points</th>
+            <th>Category</th>
+            </tr>
+            </thead>
+            <tbody><tr>
+            <td>≥ 90.0</td>
+            <td>Excellent</td>
+            </tr>
+            <tr>
+            <td>75.0 – 89.9</td>
+            <td>Satisfactory</td>
+            </tr>
+            <tr>
+            <td>&lt; 75.0</td>
+            <td>Unsatisfactory</td>
+            </tr>
+            </tbody></table>
+
+    </section>
+
+    <button onclick="alert(`Is Bright!`)">The Future</button>
+
+    <script src="./main2.js"></script>
+</body>
+</html>
