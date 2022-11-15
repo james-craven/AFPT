@@ -4306,8 +4306,13 @@ function updateScoreMinMaxText() {
     pushSlider.classList.add('slider-red');
 
   let left = (pushSlider.clientWidth / max) * min;
-  document.getElementById('push-tick').style.left = left + "px";
-
+  let pushTick = document.getElementById('push-tick');
+  pushTick.style.left = left - 1 + "px";
+  pushTick.innerText = min;
+pushTick.addEventListener('click', () => {
+  pushSlider.value = min;
+  pushSlideInput();
+})
 
   let sit_sel = sitSel.value;
   let sit_min = sit_sel == 'Situps' ? sitmin : sit_sel == 'Reverse Crunch' ? rsitmin : sit_sel == 'Plank' ? runTimeString(plankmin) : '';
