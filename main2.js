@@ -4305,14 +4305,22 @@ function updateScoreMinMaxText() {
       pushSlider.classList.remove('slider-red')) :
     pushSlider.classList.add('slider-red');
 
-  let left = (pushSlider.clientWidth / max) * min;
+
+  let percent = min/max;
   let pushTick = document.getElementById('push-tick');
-  pushTick.style.left = left - 1 + "px";
+  let sliderWidth = pushSlider.getBoundingClientRect().width;
+  let spanWidth = pushTick.getBoundingClientRect().width;
+  let handleSize = 45;
+  let left = percent * (sliderWidth - handleSize) + handleSize / 2 - spanWidth / 2;
+  left = left - ((15 - spanWidth) / 2);
+  pushTick.style.left = left + "px";
   pushTick.innerText = min;
-pushTick.addEventListener('click', () => {
-  pushSlider.value = min;
-  pushSlideInput();
-})
+  pushTick.style.cursor = 'pointer';
+
+  pushTick.addEventListener('click', () => {
+    pushSlider.value = min;
+    pushSlideInput();
+  })
 
   let sit_sel = sitSel.value;
   let sit_min = sit_sel == 'Situps' ? sitmin : sit_sel == 'Reverse Crunch' ? rsitmin : sit_sel == 'Plank' ? runTimeString(plankmin) : '';
@@ -4323,6 +4331,23 @@ pushTick.addEventListener('click', () => {
     (sitSlider.classList.add('slider-green'),
       sitSlider.classList.remove('slider-red')) :
     sitSlider.classList.add('slider-red');
+
+    sit_sel == 'Plank' ? (sit_min = plankmin, sit_max = plankmax) : '';
+    let sitpercent = sit_min/sit_max;
+    let sitTick = document.getElementById('sit-tick');
+    let sitsliderWidth = sitSlider.getBoundingClientRect().width;
+    let sitspanWidth = sitTick.getBoundingClientRect().width;
+    let sithandleSize = 45;
+    let sitleft = sitpercent * (sitsliderWidth - sithandleSize) + sithandleSize / 2 - sitspanWidth / 2;
+    sitleft = sitleft - ((15 - sitspanWidth) / 2);
+    sitTick.style.left = sitleft + "px";
+    sitTick.innerText = sit_sel == 'Plank' ? runTimeString(plankmin) : sit_min;
+    sitTick.style.cursor = 'pointer';
+  
+    sitTick.addEventListener('click', () => {
+      sitSlider.value = sit_min;
+      sitSlideInput();
+    })
 
   let altDiff = calculateAltitudeDiff();
   let run_sel = runSel.value;
@@ -4567,7 +4592,6 @@ function oneTxtboxKeydown(e) {
     alert('Please Input Numbers Only');
     e.preventDefault();
   }
-  console.log(e);
   if (Number(this.value) + Number(e.key) > Number(this.slider.max) ||
     this.value < 0) return (e.preventDefault(), this.value = 0);
   if (e.keyCode == '38') {
@@ -4835,6 +4859,9 @@ if (isIos() && !isPwa()) {
 let menuBtn = document.getElementsByClassName('menu-button')[0];
 
 menuBtn.parentElement = document.getElementsByClassName('menu-button-container')[0];
-console.log(menu.parentElement);
 
 window.addEventListener('resize', updateScoreMinMaxText);
+
+// Notes: I can use padding-left on span to move the number centered under the tick mark
+//I need to fix the function change all text boxes
+//

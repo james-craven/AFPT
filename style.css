@@ -107,7 +107,9 @@ align-items: center;
     display: none;
 }
 
-.push-slide span::before {
+.push-slide span::before,
+.sit-slide span::before,
+.run-slider-section span::before {
     display:block;
     background-color:red;
     position:absolute;
@@ -115,7 +117,7 @@ align-items: center;
     width:15px;
     transform:rotate(90deg);
     content: '';
-    margin-top: -11.5px;
+    margin-top: -13.5px;
     cursor: pointer;
 }
 
