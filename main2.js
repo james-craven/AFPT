@@ -4351,8 +4351,8 @@ function updateScoreMinMaxText() {
 
   let altDiff = calculateAltitudeDiff();
   let run_sel = runSel.value;
-  let run_min = run_sel == '1.5 Mile' ? runTimeString(runmax + altDiff.run) : run_sel == 'Shuttle Run' ? shuttlemin + altDiff.shuttle : run_sel == 'Walk' ? '' : '';
-  let run_max = run_sel == '1.5 Mile' ? runTimeString(runmin + altDiff.run) : run_sel == 'Shuttle Run' ? shuttlemax + altDiff.shuttle : run_sel == 'Walk' ? runTimeString(walkmax+altDiff.walk) : '';
+  let run_min = run_sel == '1.5 Mile' ? runTimeString(runmax + altDiff.run) : run_sel == 'Shuttle Run' ? shuttlemin - altDiff.shuttle : run_sel == 'Walk' ? '' : '';
+  let run_max = run_sel == '1.5 Mile' ? runTimeString(runmin + altDiff.run) : run_sel == 'Shuttle Run' ? shuttlemax - altDiff.shuttle : run_sel == 'Walk' ? runTimeString(walkmax+altDiff.walk) : '';
   runscore = run_sel == '1.5 Mile' ? calculateRunScore(runSlider.value - altDiff.run, scoreArrays.cardio) : run_sel == 'Shuttle Run' ? calculateShuttleScore(Number(runSlider.value) + altDiff.shuttle, scoreArrays) : run_sel == 'Walk' ? didWalkPass(Number(runSlider.value) - altDiff.walk, scoreArrays) : '';
   runtxt_p.innerHTML = run_sel == 'Exempt' ? "Run Score: EXEMPT" : "Run Score: " + runscore + " | Min: " + run_min + " | Max: " + run_max;
   if (run_sel == '1.5 Mile') {
@@ -4362,7 +4362,7 @@ function updateScoreMinMaxText() {
       (runSlider.classList.add('slider-red'),
         runSlider.classList.remove('slider-green'));
   } else {
-    runSlider.value >= run_min ?
+    runSlider.value >= run_min - altDiff.shuttle ?
       (runSlider.classList.add('slider-green'),
         runSlider.classList.remove('slider-red')) :
       (runSlider.classList.add('slider-red'),
@@ -4374,23 +4374,23 @@ function updateScoreMinMaxText() {
     runTick.style.display = 'none';
   } else if (run_sel == 'Shuttle Run') {
     runTick.style.display = 'block';
-    let runpercent = shuttlemin/shuttlemax;
+    let runpercent = (shuttlemin - altDiff.shuttle)/shuttlemax;
     let runsliderWidth = runSlider.getBoundingClientRect().width;
     let runspanWidth = runTick.getBoundingClientRect().width;
     let runhandleSize = 40;
     let runleft = runpercent * (runsliderWidth - runhandleSize) + runhandleSize / 2 - runspanWidth / 2;
     runleft = runleft - ((15 - runspanWidth) / 2);
     runTick.style.left = runleft + "px";
-    runTick.innerText = shuttlemin;
+    runTick.innerText = shuttlemin - altDiff.shuttle;
     runTick.style.cursor = 'pointer';
 
     runTick.addEventListener('click', () => {
-      runSlider.value = shuttlemin;
+      runSlider.value = shuttlemin - altDiff.shuttle;
       runSlideInput();
     })
   } else if (run_sel == 'Walk') {
-    runTick.style.display = 'block';
-    let runpercent = walkmax / (runmin - runmax);
+    runTick.style.display = 'none';
+    let runpercent = (walkmax - runmax) / (runmin - runmax);
     let runsliderWidth = runSlider.getBoundingClientRect().width;
     let runspanWidth = runTick.getBoundingClientRect().width;
     let runhandleSize = 40;
@@ -4401,7 +4401,7 @@ function updateScoreMinMaxText() {
     runTick.style.cursor = 'pointer';
 
     runTick.addEventListener('click', () => {
-      runSlider.value = shuttlemin;
+      runSlider.value = walkmax + altDiff.walk;
       runSlideInput();
     })
   }
@@ -4585,8 +4585,9 @@ function runSelChange() {
     addTxtboxEventListeners(sectxt, runSlider);
     runSlider.removeAttribute('disabled');
   } else if (runSel.value == 'Walk') {
-    runSlider.max = runmax;
-    runSlider.value = runmax;
+    runSlider.max = walkmax;
+    runSlider.value = walkmax;
+    runSlider.min = runmin;
     toggleShuttle();
     changeLapTime();
     runSlider.removeAttribute('disabled');
