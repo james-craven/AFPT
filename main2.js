@@ -4369,6 +4369,43 @@ function updateScoreMinMaxText() {
         runSlider.classList.remove('slider-green'));
   }
 
+  let runTick = document.getElementById('run-tick');
+  if (run_sel == '1.5 Mile') {
+    runTick.style.display = 'none';
+  } else if (run_sel == 'Shuttle Run') {
+    runTick.style.display = 'block';
+    let runpercent = shuttlemin/shuttlemax;
+    let runsliderWidth = runSlider.getBoundingClientRect().width;
+    let runspanWidth = runTick.getBoundingClientRect().width;
+    let runhandleSize = 40;
+    let runleft = runpercent * (runsliderWidth - runhandleSize) + runhandleSize / 2 - runspanWidth / 2;
+    runleft = runleft - ((15 - runspanWidth) / 2);
+    runTick.style.left = runleft + "px";
+    runTick.innerText = shuttlemin;
+    runTick.style.cursor = 'pointer';
+
+    runTick.addEventListener('click', () => {
+      runSlider.value = shuttlemin;
+      runSlideInput();
+    })
+  } else if (run_sel == 'Walk') {
+    runTick.style.display = 'block';
+    let runpercent = walkmax / (runmin - runmax);
+    let runsliderWidth = runSlider.getBoundingClientRect().width;
+    let runspanWidth = runTick.getBoundingClientRect().width;
+    let runhandleSize = 40;
+    let runright = runpercent * (runsliderWidth - runhandleSize) + runhandleSize / 2 - runspanWidth / 2;
+    runright = runright - ((15 - runspanWidth) / 2);
+    runTick.style.left = runright + "px";
+    runTick.innerText = runTimeString(walkmax + altDiff.walk);
+    runTick.style.cursor = 'pointer';
+
+    runTick.addEventListener('click', () => {
+      runSlider.value = shuttlemin;
+      runSlideInput();
+    })
+  }
+
   runscore = typeof (runscore) == 'number' ? runscore : runscore == 'Pass' ? 60 : 0;
   let t = pushscore + sitscore + runscore;
   let e = 'Exempt';
