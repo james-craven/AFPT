@@ -817,12 +817,14 @@ padding: 2.5rem;
 
 
 .button {
+    display:flex;
   font-weight: bold;
   color: #fff;
   padding: 15px 35px;
   border: 2px solid #fff;
   transition: all 250ms ease-in-out;
   cursor: pointer;
+  align-items: center;
 }
   .button:hover {
     color: #fff;
