@@ -3379,8 +3379,8 @@ function minMaxValueAge() {
             (plankmax = 200),
             (runmin = 585),
             (runmax = 1054),
-            (shuttlemin = 36),
-            (shuttlemax = 100),
+            (shuttlemin = 27),
+            (shuttlemax = 92),
             (walkmax = t("16:18")),
             (strengthAbsLink = "./web formatted jpgs/male_35-39_Strength_Abs.webp"),
             (cardioLink = "./web formatted jpgs/male_35-39_cardio.webp"))
