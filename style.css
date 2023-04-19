@@ -825,6 +825,7 @@ padding: 2.5rem;
   transition: all 250ms ease-in-out;
   cursor: pointer;
   align-items: center;
+  justify-content: center;
 }
   .button:hover {
     color: #fff;
