@@ -17,7 +17,7 @@ Moderate Risk
 Final USAF Physical Fitness Readiness Assessment Scoring (Effective 1 Mar 26)  
 WAIST TO HEIGHT RATIO (WHtR) SCORING STANDARDS (ratio)
 Points Under 25 25-29 30-34 35-39 40-44 45-49 50-54
-High Risk
+High Risk
 M F M F M F M F M F M F M F M F M F
 15.0 ≥ 67 ≥ 50 ≥ 63 ≥ 47 ≥ 60 ≥ 44 ≥ 56 ≥ 42 ≥ 52 ≥ 39 ≥ 49 ≥ 36 ≥ 45 ≥ 34 ≥ 42 ≥ 31 ≥ 38 ≥ 28 15.0
 14.5 66 49 62 46 59 42 55 41 51 38 47 35 44 33 41 30 37 27 14.5
@@ -48,7 +48,7 @@ M F M F M F M F M F M F M F M F M F
 40-44 45-49 50-54 55-59 60 and Over Points
 USAF Physical Fitness Readiness Assessment Scoring 
 PUSH-UP SCORING STANDARDS (reps)
-Points Under 25 25-29 30-34 35-39
+Points Under 25 25-29 30-34 35-39
 M F M F M F M F M F M F M F M F M F
 15.0 ≥ 52 ≥ 42 ≥ 50 ≥ 40 ≥ 48 ≥ 38 ≥ 46 ≥ 36 ≥ 44 ≥ 34 ≥ 42 ≥ 32 ≥ 40 ≥ 30 ≥ 38 ≥ 28 ≥ 36 ≥ 26 15.0
 14.5 51 41 49 39 47 37 45 35 43 33 41 31 39 29 37 27 35 25 14.5
@@ -79,7 +79,7 @@ M F M F M F M F M F M F M F M F M F
 50-54 55-59 60 and Over Points
 USAF Physical Fitness Readiness Assessment Scoring 
  HAND RELEASE PUSH-UP SCORING STANDARDS (reps)
-Points Under 25 25-29 30-34 35-39 40-44 45-49
+Points Under 25 25-29 30-34 35-39 40-44 45-49
 M F M F M F M F M F M F M F M F M F
 15.0 ≥ 58 ≥ 54 ≥ 56 ≥ 50 ≥ 54 ≥ 45 ≥ 52 ≥ 43 ≥ 50 ≥ 41 ≥ 48 ≥ 35 ≥ 46 ≥ 34 ≥ 44 ≥ 32 ≥ 42 ≥ 31 15.0
 14.5 57 53 55 49 53 44 51 42 49 40 47 34 45 33 43 31 41 30 14.5
@@ -109,7 +109,7 @@ M F M F M F M F M F M F M F M F M F
 2.5 33* 29* 31* 25* 29* 20* 27* 18* 25* 16* 23* 10* 21* 9* 19* 7* 17* 6* 2.5
 USAF Physical Fitness Readiness Assessment Scoring 
  SIT-UP SCORING STANDARDS (reps)
-Points Under 25 25-29 30-34 35-39 40-44 45-49 50-54 55-59 60 and Over Points
+Points Under 25 25-29 30-34 35-39 40-44 45-49 50-54 55-59 60 and Over Points
 M F M F M F M F M F M F M F M F M F
 15.0 ≥ 60 ≥ 58 ≥ 58 ≥ 56 ≥ 56 ≥ 54 ≥ 54 ≥ 52 ≥ 52 ≥ 50 ≥ 50 ≥ 48 ≥ 48 ≥ 46 ≥ 46 ≥ 44 ≥ 44 ≥ 42 15.0
 14.5 59 57 57 55 55 53 53 51 51 49 49 47 47 45 45 43 43 41 14.5
@@ -139,7 +139,7 @@ M F M F M F M F M F M F M F M F M F
 2.5 35* 33* 33* 31* 31* 29* 29* 27* 27* 25* 25* 23* 23* 21* 21* 19* 19* 17* 2.5
 USAF Physical Fitness Readiness Assessment Scoring 
  CROSS-LEG REVERSE CRUNCH SCORING STANDARDS (reps)
-Points Under 25 25-29 30-34 35-39 40-44 45-49 50-54 55-59 60 and Over Points
+Points Under 25 25-29 30-34 35-39 40-44 45-49 50-54 55-59 60 and Over Points
 M F M F M F M F M F M F M F M F M F
 15.0 ≥ 3:40 ≥ 3:35 ≥ 3:35 ≥ 3:30 ≥ 3:30 ≥ 3:25 ≥ 3:25 ≥ 3:20 ≥ 3:20 ≥ 3:15 ≥ 3:15 ≥ 3:10 ≥ 3:10 ≥ 3:05 ≥ 3:05 ≥ 3:00 ≥ 3:00 ≥ 2:55 15.0
 14.5 3:35 3:30 3:30 3:25 3:25 3:20 3:20 3:15 3:15 3:10 3:10 3:05 3:05 3:00 3:00 2:55 2:55 2:50 14.5
@@ -170,7 +170,7 @@ M F M F M F M F M F M F M F M F M F
 40-44 45-49 50-54 55-59 60 and Over Points
 USAF Physical Fitness Readiness Assessment Scoring 
 FOREARM PLANK SCORING STANDARDS (min:sec)
-Points Under 25 25-29 30-34 35-39
+Points Under 25 25-29 30-34 35-39
 M F M F M F M F M F M F M F M F M F
 50.0 ≤ 13:25 ≤ 15:30 ≤ 13:35 ≤ 15:55 ≤ 13:42 ≤ 16:10 ≤ 13:56 ≤ 16:12 ≤ 14:05 ≤ 16:45 ≤ 14:30 ≤ 16:55 ≤ 15:09 ≤ 17:10 ≤ 15:28 ≤ 17:43 ≤ 16:58 ≤ 18:20 50.0
 49.5 13:44 16:00 13:54 16:24 14:03 16:40 14:18 16:43 14:29 17:15 14:54 17:26 15:32 17:43 15:52 18:16 17:19 18:54 49.5
@@ -196,7 +196,7 @@ M F M F M F M F M F M F M F M F M F
 50-54 55-59 60 and Over Points
 USAF Physical Fitness Readiness Assessment Scoring 
 2 MILE RUN SCORING STANDARDS (min:sec)
-Points Under 25 25-29 30-34 35-39 40-44 45-49
+Points Under 25 25-29 30-34 35-39 40-44 45-49
 M F M F M F M F M F M F M F M F M F
 50.0 ≥  87 ≥ 68 ≥ 85 ≥ 65 ≥ 84 ≥ 63 ≥ 82 ≥ 63 ≥ 81 ≥ 59 ≥ 77 ≥ 58 ≥ 71 ≥ 57 ≥ 69 ≥ 53 ≥ 65 ≥ 50 50.0
 49.5 84 65 82 62 81 60 79 60 77 56 73 55 68 53 66 50 62 47 49.5
@@ -223,8 +223,8 @@ USAF Physical Fitness Readiness Assessment Scoring
 Points
 20-METER HAMR SCORING STANDARDS (SHUTTLES)
 Points Under 25 25-29 30-34 35-39 40-44 45-49 50-54 55-59 60 and Over
-
-
+
+
 Points Points
 15.0 50.0
 14.5 49.5
@@ -375,7 +375,7 @@ Push-upPush-up
 44
 41
 43
-42
+42
 USAF Physical Fitness Readiness Assessment Scoring 
 USAF Fitness Assessment Scoring 2.0 Kilometer Walk Male & Female
 Male Standards Female Standards

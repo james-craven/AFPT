@@ -24,7 +24,7 @@ const tables = [
     id: 'push-up',
     eventKey: 'pushUp',
     title: 'PUSH-UP SCORING STANDARDS (reps)',
-    nextTitle: 'HAND RELEASE PUSH-UP SCORING STANDARDS (reps)',
+    pageNumber: 2,
     unit: 'reps',
     higherIsBetter: true,
   },
@@ -32,7 +32,7 @@ const tables = [
     id: 'hand-release-push-up',
     eventKey: 'handReleasePushUp',
     title: 'HAND RELEASE PUSH-UP SCORING STANDARDS (reps)',
-    nextTitle: 'SIT-UP SCORING STANDARDS (reps)',
+    pageNumber: 3,
     unit: 'reps',
     higherIsBetter: true,
   },
@@ -40,7 +40,7 @@ const tables = [
     id: 'sit-up',
     eventKey: 'sitUp',
     title: 'SIT-UP SCORING STANDARDS (reps)',
-    nextTitle: 'CROSS-LEG REVERSE CRUNCH SCORING STANDARDS (reps)',
+    pageNumber: 4,
     unit: 'reps',
     higherIsBetter: true,
   },
@@ -48,21 +48,33 @@ const tables = [
     id: 'cross-leg-reverse-crunch',
     eventKey: 'crossLegReverseCrunch',
     title: 'CROSS-LEG REVERSE CRUNCH SCORING STANDARDS (reps)',
-    nextTitle: 'FOREARM PLANK SCORING STANDARDS (min:sec)',
+    pageNumber: 5,
+    unit: 'reps',
+    higherIsBetter: true,
+  },
+  {
+    id: 'forearm-plank',
+    eventKey: 'forearmPlank',
+    title: 'FOREARM PLANK SCORING STANDARDS (min:sec)',
+    pageNumber: 6,
     unit: 'min:sec',
     higherIsBetter: true,
-    needsReview:
-      'PDF text title says reps/cross-leg reverse crunch, but extracted values are min:sec. Verify visually before calculator use.',
   },
   {
     id: 'two-mile-run',
     eventKey: 'twoMileRun',
-    title: 'FOREARM PLANK SCORING STANDARDS (min:sec)',
-    nextTitle: '2 MILE RUN SCORING STANDARDS (min:sec)',
+    title: '2 MILE RUN SCORING STANDARDS (min:sec)',
+    pageNumber: 7,
     unit: 'min:sec',
     higherIsBetter: false,
-    needsReview:
-      'PDF text title appears offset; values match 2-mile run scoring shape. Verify visually before calculator use.',
+  },
+  {
+    id: 'hamr-20-meter',
+    eventKey: 'hamr20Meter',
+    title: '20-METER HAMR SCORING STANDARDS (SHUTTLES)',
+    pageNumber: 8,
+    unit: 'shuttles',
+    higherIsBetter: true,
   },
 ];
 
@@ -127,20 +139,8 @@ function parseScoreRow(line) {
   return { points, values };
 }
 
-function extractTable(lines, table) {
-  const start = lines.findIndex(line => line.includes(table.title));
-  const end = lines.findIndex((line, index) => index > start && line.includes(table.nextTitle));
-
-  if (start === -1) {
-    throw new Error(`Could not find table title: ${table.title}`);
-  }
-
-  if (end === -1) {
-    throw new Error(`Could not find next table title: ${table.nextTitle}`);
-  }
-
-  const rows = lines
-    .slice(start + 1, end)
+function extractTable(pageLines, table) {
+  const rows = pageLines
     .map(parseScoreRow)
     .filter(Boolean);
 
@@ -156,8 +156,7 @@ function extractTable(lines, table) {
     higherIsBetter: table.higherIsBetter,
     source: {
       file: 'standards/extracted/PFRA-Scoring-Charts.txt',
-      startLine: start + 1,
-      endLine: end + 1,
+      pdfPage: table.pageNumber,
     },
     needsReview: table.needsReview || false,
     ageGroups,
@@ -167,12 +166,17 @@ function extractTable(lines, table) {
 }
 
 const text = fs.readFileSync(sourcePath, 'utf8');
-const lines = text.split(/\r?\n/);
+const pageTexts = text.split('\f');
 
 fs.mkdirSync(outputDir, { recursive: true });
 
 for (const table of tables) {
-  const extracted = extractTable(lines, table);
+  const pageText = pageTexts[table.pageNumber - 1];
+  if (!pageText) {
+    throw new Error(`Could not find extracted text for PDF page ${table.pageNumber}`);
+  }
+
+  const extracted = extractTable(pageText.split(/\r?\n/), table);
   const outputPath = path.join(outputDir, `${table.id}.json`);
   fs.writeFileSync(outputPath, `${JSON.stringify(extracted, null, 2)}\n`);
   console.log(`Wrote ${path.relative(rootDir, outputPath)} (${extracted.rows.length} rows)`);

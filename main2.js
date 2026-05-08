@@ -4894,6 +4894,35 @@ if (isIos() && !isPwa()) {
 
 window.addEventListener('resize', updateScoreMinMaxText);
 
+async function showDevVersionModal() {
+  const modal = document.getElementById('dev-version-modal');
+  const text = document.getElementById('dev-version-text');
+  const close = document.getElementById('dev-version-close');
+
+  if (!modal || !text || !close) return;
+
+  try {
+    const response = await fetch(`./dev-build-info.json?ts=${Date.now()}`);
+    const buildInfo = await response.json();
+    const generatedAt = new Date(buildInfo.generatedAt);
+    const formattedDate = Number.isNaN(generatedAt.getTime())
+      ? buildInfo.generatedAt
+      : generatedAt.toLocaleString();
+
+    text.innerHTML = `Updated: ${formattedDate}<br>Branch: ${buildInfo.gitBranch || 'unknown'}<br>Commit: ${buildInfo.gitCommit || 'unknown'}`;
+  } catch (error) {
+    text.innerText = 'Build info unavailable.';
+  }
+
+  close.addEventListener('click', () => {
+    modal.hidden = true;
+  });
+
+  modal.hidden = false;
+}
+
+showDevVersionModal();
+
 // Notes: I can use padding-left on span to move the number centered under the tick mark
 //I need to fix the function change all text boxes
 //

@@ -63,15 +63,29 @@ The WHtR table is uniform across age and sex:
 
 ## Next extraction targets
 
-1. Visually verify the offset cross-leg reverse crunch / forearm plank / 2-mile run headings before calculator use.
-2. Extract forearm plank if it is not represented by the cross-leg reverse crunch text block.
-3. Extract 20-meter HAMR scoring. Browser text extraction is messy for this table, so this may need screenshot/table OCR or manual review.
-4. Add validation tests that compare known source examples against calculator output.
+1. Add validation tests that compare known source examples against calculator output.
+2. Wire one extracted table into the app as the first data-driven component.
 
 ## Generated tables
 
 - `tables/push-up.json`: extracted with `npm run extract:standards`.
 - `tables/hand-release-push-up.json`: extracted with `npm run extract:standards`.
 - `tables/sit-up.json`: extracted with `npm run extract:standards`.
-- `tables/cross-leg-reverse-crunch.json`: extracted with `npm run extract:standards`, needs visual review because PDF text values are `min:sec` despite the extracted title saying `reps`.
-- `tables/two-mile-run.json`: extracted with `npm run extract:standards`, needs visual review because the PDF text heading appears offset.
+- `tables/cross-leg-reverse-crunch.json`: extracted with `npm run extract:standards`.
+- `tables/forearm-plank.json`: extracted with `npm run extract:standards`.
+- `tables/two-mile-run.json`: extracted with `npm run extract:standards`.
+- `tables/hamr-20-meter.json`: extracted with `npm run extract:standards`.
+
+## Visual verification
+
+The PDF text extractor places table headings after the page's table data. To avoid one-page-shifted table labels, `tools/extract-pfra-tables.mjs` maps tables by rendered PDF page number.
+
+Rendered page checks:
+
+- Page 2: Push-up
+- Page 3: Hand-release push-up
+- Page 4: Sit-up
+- Page 5: Cross-leg reverse crunch
+- Page 6: Forearm plank
+- Page 7: 2-mile run
+- Page 8: 20-meter HAMR
