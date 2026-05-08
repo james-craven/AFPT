@@ -9,6 +9,15 @@
     "https://www.afpc.af.mil/Career-Management/Fitness-Program/",
     "https://www.afpc.af.mil/Career-Management/Fitness-Program/UnitFA/"
   ],
+  "sourceFiles": [
+    {
+      "path": "standards/sources/PFRA-Scoring-Charts.pdf",
+      "sha256": "9ee7689f8f52e48e060cb88846d2dfc2bccab76ae41d2a433d08f2ac7e89aea3",
+      "pages": 11,
+      "creationDate": "2026-02-06",
+      "modifiedDate": "2026-02-18"
+    }
+  ],
   "ageGroups": [
     "under-25",
     "25-29",

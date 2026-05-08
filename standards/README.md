@@ -14,11 +14,13 @@ Policy/context sources:
 - AFPC Unit Fitness Program: https://www.afpc.af.mil/Career-Management/Fitness-Program/UnitFA/
 - AFMAN/DAFMAN 36-2905: https://www.afpc.af.mil/Portals/70/documents/FITNESS/afman36-2905.pdf
 
-Note: AFPC blocks direct command-line PDF downloads from this environment with an access-denied page. The official PDF is still readable through browser/search extraction, so this folder tracks source URLs and extracted facts until we add a more robust import pipeline.
+Note: AFPC blocked direct command-line PDF downloads from this environment with an access-denied page. A manually downloaded copy of the same PDF has been added at `sources/PFRA-Scoring-Charts.pdf`.
 
 ## Extraction status
 
 - `af-pfra-2026.json` is a source-mapped scaffold, not yet a complete score table.
+- `sources/PFRA-Scoring-Charts.pdf` is the manually downloaded source PDF.
+- `extracted/PFRA-Scoring-Charts.txt` is text extracted from that PDF for table parsing.
 - Waist-to-height ratio scoring and 2.0 kilometer walk maximums are captured because they are compact and uniform.
 - Event table extraction is still needed for push-up, hand-release push-up, sit-up, reverse crunch, plank, 2-mile run, and HAMR.
 

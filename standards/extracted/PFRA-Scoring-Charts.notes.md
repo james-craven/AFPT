@@ -2,11 +2,16 @@
 
 Source: https://www.afpc.af.mil/Portals/70/documents/FITNESS/PFRA%20Scoring%20Charts.pdf
 
+Local source PDF: `../sources/PFRA-Scoring-Charts.pdf`
+
+Extracted text: `PFRA-Scoring-Charts.txt`
+
 Observed metadata:
 
 - Title text: `USAF Physical Fitness Readiness Assessment Scoring`
 - Effective date shown in chart: `Effective 1 Mar 26`
 - PDF length observed through browser extraction: 11 pages
+- Local PDF SHA-256: `9ee7689f8f52e48e060cb88846d2dfc2bccab76ae41d2a433d08f2ac7e89aea3`
 
 Observed components:
 
