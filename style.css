@@ -51,8 +51,9 @@ section {
   grid-template-areas: "a b"
                        "nav nav";
   grid-template-columns: 1fr auto;
+  grid-template-rows: 50px auto;
   justify-content: space-between!important;
-  grid-row-gap: 1em;
+  grid-row-gap: 0;
   background-color: #00BAF0;
   background: linear-gradient(to right,#003a6df0, #00ddff, #003a6df0);
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
@@ -60,7 +61,7 @@ section {
   height: 50px;
   width: 100%;
   max-width: 400px;
-  padding: 1em;
+  padding: 0 1em;
   align-items: center!important;
   position: fixed;
   z-index: 3!important;
@@ -68,6 +69,7 @@ section {
 .logo {
     display: grid;
     grid-area: a;
+    align-items: center;
     font-weight: bolder;
     font-size:1.2rem;
 }
