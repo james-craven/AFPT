@@ -79,7 +79,8 @@
         },
         "handReleasePushUp": {
           "unit": "reps",
-          "status": "needs-extraction"
+          "status": "extracted",
+          "tableFile": "standards/extracted/tables/hand-release-push-up.json"
         }
       }
     },
@@ -88,11 +89,14 @@
       "events": {
         "sitUp": {
           "unit": "reps",
-          "status": "needs-extraction"
+          "status": "extracted",
+          "tableFile": "standards/extracted/tables/sit-up.json"
         },
         "crossLegReverseCrunch": {
-          "unit": "reps",
-          "status": "needs-extraction"
+          "unit": "min:sec",
+          "status": "extracted-needs-review",
+          "tableFile": "standards/extracted/tables/cross-leg-reverse-crunch.json",
+          "reviewNote": "PDF text title says reps/cross-leg reverse crunch, but extracted values are min:sec. Verify against visual PDF before calculator use."
         },
         "forearmPlank": {
           "unit": "min:sec",
@@ -105,7 +109,9 @@
       "events": {
         "twoMileRun": {
           "unit": "min:sec",
-          "status": "needs-extraction"
+          "status": "extracted-needs-review",
+          "tableFile": "standards/extracted/tables/two-mile-run.json",
+          "reviewNote": "PDF text appears offset; rows after the forearm plank heading match the 2-mile run scoring shape."
         },
         "hamr20Meter": {
           "unit": "shuttles",

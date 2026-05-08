@@ -28,6 +28,42 @@ const tables = [
     unit: 'reps',
     higherIsBetter: true,
   },
+  {
+    id: 'hand-release-push-up',
+    eventKey: 'handReleasePushUp',
+    title: 'HAND RELEASE PUSH-UP SCORING STANDARDS (reps)',
+    nextTitle: 'SIT-UP SCORING STANDARDS (reps)',
+    unit: 'reps',
+    higherIsBetter: true,
+  },
+  {
+    id: 'sit-up',
+    eventKey: 'sitUp',
+    title: 'SIT-UP SCORING STANDARDS (reps)',
+    nextTitle: 'CROSS-LEG REVERSE CRUNCH SCORING STANDARDS (reps)',
+    unit: 'reps',
+    higherIsBetter: true,
+  },
+  {
+    id: 'cross-leg-reverse-crunch',
+    eventKey: 'crossLegReverseCrunch',
+    title: 'CROSS-LEG REVERSE CRUNCH SCORING STANDARDS (reps)',
+    nextTitle: 'FOREARM PLANK SCORING STANDARDS (min:sec)',
+    unit: 'min:sec',
+    higherIsBetter: true,
+    needsReview:
+      'PDF text title says reps/cross-leg reverse crunch, but extracted values are min:sec. Verify visually before calculator use.',
+  },
+  {
+    id: 'two-mile-run',
+    eventKey: 'twoMileRun',
+    title: 'FOREARM PLANK SCORING STANDARDS (min:sec)',
+    nextTitle: '2 MILE RUN SCORING STANDARDS (min:sec)',
+    unit: 'min:sec',
+    higherIsBetter: false,
+    needsReview:
+      'PDF text title appears offset; values match 2-mile run scoring shape. Verify visually before calculator use.',
+  },
 ];
 
 function parseCell(raw) {
@@ -123,6 +159,7 @@ function extractTable(lines, table) {
       startLine: start + 1,
       endLine: end + 1,
     },
+    needsReview: table.needsReview || false,
     ageGroups,
     sexes,
     rows,

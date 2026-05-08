@@ -63,12 +63,15 @@ The WHtR table is uniform across age and sex:
 
 ## Next extraction targets
 
-1. Extract hand-release push-up scoring into structured rows.
-2. Extract sit-up, cross-leg reverse crunch, and forearm plank scoring.
-3. Extract 2-mile run scoring.
-4. Extract 20-meter HAMR scoring. Browser text extraction is messy for this table, so this may need screenshot/table OCR or manual review.
-5. Add validation tests that compare known source examples against calculator output.
+1. Visually verify the offset cross-leg reverse crunch / forearm plank / 2-mile run headings before calculator use.
+2. Extract forearm plank if it is not represented by the cross-leg reverse crunch text block.
+3. Extract 20-meter HAMR scoring. Browser text extraction is messy for this table, so this may need screenshot/table OCR or manual review.
+4. Add validation tests that compare known source examples against calculator output.
 
 ## Generated tables
 
 - `tables/push-up.json`: extracted with `npm run extract:standards`.
+- `tables/hand-release-push-up.json`: extracted with `npm run extract:standards`.
+- `tables/sit-up.json`: extracted with `npm run extract:standards`.
+- `tables/cross-leg-reverse-crunch.json`: extracted with `npm run extract:standards`, needs visual review because PDF text values are `min:sec` despite the extracted title saying `reps`.
+- `tables/two-mile-run.json`: extracted with `npm run extract:standards`, needs visual review because the PDF text heading appears offset.
