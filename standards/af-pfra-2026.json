@@ -1,0 +1,133 @@
+{
+  "id": "usaf-pfra-2026-03-01",
+  "name": "USAF Physical Fitness Readiness Assessment",
+  "status": "source-mapped-incomplete",
+  "effectiveDate": "2026-03-01",
+  "lastReviewed": "2026-05-08",
+  "sourceUrls": [
+    "https://www.afpc.af.mil/Portals/70/documents/FITNESS/PFRA%20Scoring%20Charts.pdf",
+    "https://www.afpc.af.mil/Career-Management/Fitness-Program/",
+    "https://www.afpc.af.mil/Career-Management/Fitness-Program/UnitFA/"
+  ],
+  "ageGroups": [
+    "under-25",
+    "25-29",
+    "30-34",
+    "35-39",
+    "40-44",
+    "45-49",
+    "50-54",
+    "55-59",
+    "60-and-over"
+  ],
+  "sexes": [
+    "male",
+    "female"
+  ],
+  "scoreCategories": {
+    "excellent": {
+      "min": 90
+    },
+    "satisfactory": {
+      "min": 75,
+      "max": 89.9
+    },
+    "unsatisfactory": {
+      "maxExclusive": 75
+    }
+  },
+  "components": {
+    "bodyComposition": {
+      "maxPoints": 20,
+      "events": {
+        "waistToHeightRatio": {
+          "unit": "ratio",
+          "sourceLineNotes": "AFPC PFRA Scoring Charts, page 0, WHtR table",
+          "scoring": [
+            { "points": 20.0, "maxInclusive": 0.49 },
+            { "points": 19.0, "exact": 0.50 },
+            { "points": 18.0, "exact": 0.51 },
+            { "points": 17.0, "exact": 0.52 },
+            { "points": 16.0, "exact": 0.53 },
+            { "points": 15.0, "exact": 0.54 },
+            { "points": 12.5, "exact": 0.55 },
+            { "points": 10.0, "exact": 0.56 },
+            { "points": 7.5, "exact": 0.57 },
+            { "points": 5.0, "exact": 0.58 },
+            { "points": 2.5, "exact": 0.59 },
+            { "points": 0, "minInclusive": 0.60 }
+          ]
+        }
+      }
+    },
+    "muscularStrength": {
+      "maxPoints": 15,
+      "events": {
+        "pushUp": {
+          "unit": "reps",
+          "status": "needs-extraction"
+        },
+        "handReleasePushUp": {
+          "unit": "reps",
+          "status": "needs-extraction"
+        }
+      }
+    },
+    "coreEndurance": {
+      "maxPoints": 15,
+      "events": {
+        "sitUp": {
+          "unit": "reps",
+          "status": "needs-extraction"
+        },
+        "crossLegReverseCrunch": {
+          "unit": "reps",
+          "status": "needs-extraction"
+        },
+        "forearmPlank": {
+          "unit": "min:sec",
+          "status": "needs-extraction"
+        }
+      }
+    },
+    "cardiorespiratoryFitness": {
+      "maxPoints": 50,
+      "events": {
+        "twoMileRun": {
+          "unit": "min:sec",
+          "status": "needs-extraction"
+        },
+        "hamr20Meter": {
+          "unit": "shuttles",
+          "status": "needs-extraction"
+        },
+        "twoKilometerWalk": {
+          "unit": "min:sec",
+          "scoredAs": "pass-fail",
+          "sourceLineNotes": "AFPC PFRA Scoring Charts, page 10, 2.0 Kilometer Walk Male & Female",
+          "maximumTimes": {
+            "male": {
+              "under-30": "16:16",
+              "30-39": "16:18",
+              "40-49": "16:23",
+              "50-59": "16:40",
+              "60-and-over": "16:58"
+            },
+            "female": {
+              "under-30": "17:22",
+              "30-39": "17:28",
+              "40-49": "17:49",
+              "50-59": "18:11",
+              "60-and-over": "18:53"
+            }
+          }
+        }
+      }
+    }
+  },
+  "notes": [
+    "Official PFRA charts show 100 total possible points split across body composition, muscular strength, core endurance, and cardiorespiratory fitness.",
+    "WHtR scoring appears identical across sex and age groups in the AFPC PFRA chart.",
+    "The current app's legacy 1.5-mile-run scoring must be replaced or versioned alongside the new 2-mile PFRA scoring."
+  ]
+}
