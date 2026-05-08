@@ -21,6 +21,7 @@ Note: AFPC blocked direct command-line PDF downloads from this environment with 
 - `af-pfra-2026.json` is a source-mapped scaffold, not yet a complete score table.
 - `sources/PFRA-Scoring-Charts.pdf` is the manually downloaded source PDF.
 - `extracted/PFRA-Scoring-Charts.txt` is text extracted from that PDF for table parsing.
+- `extracted/tables/` contains generated structured tables from `npm run extract:standards`.
 - Waist-to-height ratio scoring and 2.0 kilometer walk maximums are captured because they are compact and uniform.
 - Event table extraction is still needed for push-up, hand-release push-up, sit-up, reverse crunch, plank, 2-mile run, and HAMR.
 

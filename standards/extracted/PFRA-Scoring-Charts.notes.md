@@ -63,8 +63,12 @@ The WHtR table is uniform across age and sex:
 
 ## Next extraction targets
 
-1. Extract push-up and hand-release push-up scoring into structured rows.
+1. Extract hand-release push-up scoring into structured rows.
 2. Extract sit-up, cross-leg reverse crunch, and forearm plank scoring.
 3. Extract 2-mile run scoring.
 4. Extract 20-meter HAMR scoring. Browser text extraction is messy for this table, so this may need screenshot/table OCR or manual review.
 5. Add validation tests that compare known source examples against calculator output.
+
+## Generated tables
+
+- `tables/push-up.json`: extracted with `npm run extract:standards`.

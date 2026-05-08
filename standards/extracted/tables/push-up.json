@@ -1,0 +1,3435 @@
+{
+  "id": "push-up",
+  "eventKey": "pushUp",
+  "title": "PUSH-UP SCORING STANDARDS (reps)",
+  "unit": "reps",
+  "higherIsBetter": true,
+  "source": {
+    "file": "standards/extracted/PFRA-Scoring-Charts.txt",
+    "startLine": 50,
+    "endLine": 81
+  },
+  "ageGroups": [
+    "under-25",
+    "25-29",
+    "30-34",
+    "35-39",
+    "40-44",
+    "45-49",
+    "50-54",
+    "55-59",
+    "60-and-over"
+  ],
+  "sexes": [
+    "male",
+    "female"
+  ],
+  "rows": [
+    {
+      "points": 15,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 52,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 42,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 50,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 40,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 48,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 38,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 46,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 36,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 44,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 34,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 42,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 32,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 40,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 30,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 38,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 28,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 36,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 26,
+            "atLeast": true,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 14.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 51,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 41,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 49,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 39,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 47,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 37,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 45,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 43,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 41,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 39,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 37,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 14,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 50,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 40,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 48,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 38,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 46,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 36,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 44,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 42,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 40,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 38,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 36,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 13.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 49,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 39,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 47,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 37,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 45,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 43,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 41,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 39,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 37,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 13,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 48,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 38,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 46,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 36,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 44,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 42,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 40,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 38,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 36,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 12.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 47,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 37,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 45,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 43,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 41,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 39,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 37,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 12,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 46,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 36,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 44,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 42,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 40,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 38,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 36,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 11.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 45,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 43,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 41,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 39,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 37,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 11,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 44,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 42,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 40,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 38,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 36,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 10.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 43,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 41,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 39,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 37,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 10,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 42,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 40,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 38,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 36,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 16,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 9.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 41,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 39,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 37,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 15,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 9,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 40,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 38,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 36,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 16,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 14,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 8.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 39,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 37,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 15,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 13,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 8,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 38,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 36,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 16,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 14,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 12,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 7.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 37,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 15,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 13,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 11,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 7,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 36,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 16,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 14,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 12,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 10,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 6.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 35,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 15,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 13,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 11,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 9,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 6,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 34,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 16,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 14,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 12,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 10,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 8,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 5.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 33,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 15,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 13,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 11,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 9,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 7,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 32,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 16,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 14,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 12,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 10,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 8,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 16,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 6,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 4.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 31,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 15,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 13,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 11,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 9,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 7,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 15,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 5,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 4,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 30,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 16,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 14,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 12,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 10,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 8,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 16,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 6,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 14,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 4,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 3.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 29,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 15,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 13,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 11,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 9,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 7,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 15,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 5,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 13,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 3,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 3,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 28,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 26,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 16,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 24,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 14,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 22,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 12,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 20,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 10,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 18,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 8,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 16,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 6,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 14,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 4,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 12,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          },
+          "female": {
+            "value": 2,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": false
+          }
+        }
+      }
+    },
+    {
+      "points": 2.5,
+      "values": {
+        "under-25": {
+          "male": {
+            "value": 27,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          },
+          "female": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          }
+        },
+        "25-29": {
+          "male": {
+            "value": 25,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          },
+          "female": {
+            "value": 15,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          }
+        },
+        "30-34": {
+          "male": {
+            "value": 23,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          },
+          "female": {
+            "value": 13,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          }
+        },
+        "35-39": {
+          "male": {
+            "value": 21,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          },
+          "female": {
+            "value": 11,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          }
+        },
+        "40-44": {
+          "male": {
+            "value": 19,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          },
+          "female": {
+            "value": 9,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          }
+        },
+        "45-49": {
+          "male": {
+            "value": 17,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          },
+          "female": {
+            "value": 7,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          }
+        },
+        "50-54": {
+          "male": {
+            "value": 15,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          },
+          "female": {
+            "value": 5,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          }
+        },
+        "55-59": {
+          "male": {
+            "value": 13,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          },
+          "female": {
+            "value": 3,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          }
+        },
+        "60-and-over": {
+          "male": {
+            "value": 11,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          },
+          "female": {
+            "value": 1,
+            "atLeast": false,
+            "atMost": false,
+            "minimum": true
+          }
+        }
+      }
+    }
+  ]
+}

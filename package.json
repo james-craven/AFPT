@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "python3 -m http.server 4173",
     "build:sw": "workbox generateSW workbox-config.js",
+    "extract:standards": "node tools/extract-pfra-tables.mjs",
     "test": "echo \"No automated tests yet\" && exit 0"
   },
   "keywords": [],
