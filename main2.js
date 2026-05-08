@@ -4909,7 +4909,7 @@ async function showDevVersionModal() {
       ? buildInfo.generatedAt
       : generatedAt.toLocaleString();
 
-    text.innerHTML = `Updated: ${formattedDate}<br>Branch: ${buildInfo.gitBranch || 'unknown'}<br>Commit: ${buildInfo.gitCommit || 'unknown'}`;
+    text.innerHTML = `Updated: ${formattedDate}`;
   } catch (error) {
     text.innerText = 'Build info unavailable.';
   }
