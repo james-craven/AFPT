@@ -4892,10 +4892,6 @@ if (isIos() && !isPwa()) {
   addInstallMenuItem();
 }
 
-let menuBtn = document.getElementsByClassName('menu-button')[0];
-
-menuBtn.parentElement = document.getElementsByClassName('menu-button-container')[0];
-
 window.addEventListener('resize', updateScoreMinMaxText);
 
 // Notes: I can use padding-left on span to move the number centered under the tick mark
