@@ -4,7 +4,9 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "python3 -m http.server 4173",
+    "build:sw": "workbox generateSW workbox-config.js",
+    "test": "echo \"No automated tests yet\" && exit 0"
   },
   "keywords": [],
   "author": "",

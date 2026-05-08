@@ -4777,7 +4777,7 @@ function removeTxtboxEventListeners(textbox1, slider, textbox2) {
 const runAltAdjustChart = document.getElementById('run-adjust-chart');
 const walkAltAdjustChart = document.getElementById('walk-adjust-chart');
 const shuttleScoreChart = document.getElementById('shuttle-score-card');
-const shuttleAudio = document.getElementById('shuttle-audio');
+const shuttleAudio = document.getElementById('shuttle-audio-menu');
 const modal = document.getElementById('modal');
 const modalImg = document.getElementById('modal-img');
 const closeBtn = document.getElementById('close-btn');
@@ -4824,12 +4824,6 @@ shuttleAudio.addEventListener('click', () => {
 
 });
 
-function isPwa() {
-  return ["fullscreen", "standalone", "minimal-ui"].some(
-      (displayMode) => window.matchMedia('(display-mode: ' + displayMode + ')').matches
-  );
-}
-
 const isIos = () => {
   const userAgent = window.navigator.userAgent.toLowerCase();
   return /iphone|ipad|ipod/.test( userAgent );
@@ -4837,8 +4831,15 @@ const isIos = () => {
 
 const menu = document.getElementById('menu');
 const li = document.createElement('li');
+li.innerText = "Install App For Offline Use";
+li.addEventListener('click', installApp);
 
 function installApp() {
+  if (!deferredPrompt) {
+    openModal();
+    return;
+  }
+
   // Show the prompt
   deferredPrompt.prompt();
 
@@ -4850,7 +4851,7 @@ function installApp() {
       console.log("PWA setup rejected");
     }
     deferredPrompt = null;
-    menu.removeChild(li);
+    li.remove();
   });
 }
 const installModal = document.getElementById('install-modal');
@@ -4865,6 +4866,12 @@ function closeInstallModal() {
 
 closeInstallModalBtn.addEventListener('click', closeInstallModal);
 
+function addInstallMenuItem() {
+  if (!isPwa() && !menu.contains(li)) {
+    menu.insertBefore(li, menu.firstElementChild);
+  }
+}
+
 window.addEventListener("beforeinstallprompt", e => {
   console.log("beforeinstallprompt fired");
   // Prevent Chrome 76 and earlier from automatically showing a prompt
@@ -4872,14 +4879,7 @@ window.addEventListener("beforeinstallprompt", e => {
   // Stash the event so it can be triggered later.
   deferredPrompt = e;
   // Show the install button
-  menu.insertBefore(li, menu.firstElementChild);
-  li.innerText = "Download App For Offline Use";
-  li.addEventListener('click', installApp);
-  if (!isPwa()) {
-    openModal();
-  } else {
-
-  }
+  addInstallMenuItem();
 });
 
 function isPwa() {
@@ -4889,7 +4889,7 @@ function isPwa() {
 }
 
 if (isIos() && !isPwa()) {
-  document.getElementById('install-modal').classList.add('in');
+  addInstallMenuItem();
 }
 
 let menuBtn = document.getElementsByClassName('menu-button')[0];

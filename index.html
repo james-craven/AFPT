@@ -37,9 +37,9 @@
     <div class="install-modal" id="install-modal">
         <article class="modal__article">
           <h4 class="modal-title">Did You Know?</h4>
-          <p class="modal-msg">You can download this app for offline use of all charts and 
-              shuttle audio! Just click the hamburger menu and click Download App For Offline Use.
-              Note: iPhone users have to click the <img id="apple-arrow" alt="apple arrow pic" src="arrow.png"> icon below and click Add To Homescreen.
+          <p class="modal-msg">You can install this app for offline use of score charts and
+              shuttle audio. iPhone users can tap the
+              <img id="apple-arrow" alt="apple share icon" src="arrow.png"> icon and choose Add to Home Screen.
           </p>
         </article>
         
@@ -66,8 +66,8 @@
                     <li id="run-adjust-chart">See Run Altitude Adjustment Chart</li>
                     <li id="walk-adjust-chart">See Walk/Shuttle Altitude Adjustment Chart</li>
                     <li id="shuttle-score-card">See Shuttle Score Card</li>
-                    <li id="shuttle-audio">Show Shuttle Audio</li>
-                    <li id="shuttle-audio-player" style="visibility:hidden"> <audio crossorigin="anonymous" preload="auto" src="./shuttle.mp3" controls="controls" id="shuttle-audio">
+                    <li id="shuttle-audio-menu">Show Shuttle Audio</li>
+                    <li id="shuttle-audio-player" style="visibility:hidden"> <audio crossorigin="anonymous" preload="auto" src="./shuttle.mp3" controls="controls" id="shuttle-audio-control">
                         Your browser does not support the audio element.
                         </audio>
                     </li>
@@ -220,7 +220,7 @@
 
     <!-- Reset & Calc Score Btns -->
     <section>
-        <audio crossorigin="anonymous" preload="auto" src="./shuttle.mp3" controls="controls" hidden id="shuttle-audio">
+        <audio crossorigin="anonymous" preload="auto" src="./shuttle.mp3" controls="controls" hidden id="shuttle-audio-hidden">
             Your browser does not support the audio element.
         </audio>
     </section>

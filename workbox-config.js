@@ -3,6 +3,12 @@ module.exports = {
 	globPatterns: [
 		'**/*.{html,css,js,png,webmanifest,m4a,mp3,ogg,mjs,webp}'
 	],
+	globIgnores: [
+		'sw.js',
+		'sw.js.map',
+		'workbox-*.js',
+		'workbox-*.js.map'
+	],
 	swDest: 'sw.js',
 	ignoreURLParametersMatching: [
 		/^utm_/,
