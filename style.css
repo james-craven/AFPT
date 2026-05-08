@@ -75,12 +75,9 @@ section {
 .menu-btn-container {
     display: grid;
     grid-area: b;
-    justify-content: end!important;
+    place-items: center;
     justify-self: end;
-    position: absolute;
-    right: 8px;
-    top: 3px;
-    align-items: center;
+    position: relative;
     height: 44px;
     width: 44px;
     cursor: pointer;
@@ -133,24 +130,28 @@ section {
   width: 30px;
   transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
   border-radius: 2px;
-  left: 7px;
-  top: 20px;
+  pointer-events: none;
+}
+
+.menu-button {
+  position: relative;
 }
 
 .menu-button::before {
   content: '';
-  top: -10px;
   left: 0;
+  top: 0;
+  transform: translateY(-10px);
 }
 
 .menu-button::after {
   content: '';
-  top: 10px;
   left: 0;
+  top: 0;
+  transform: translateY(10px);
 }
 
 #menu-toggle:checked ~ .menu-btn-container .menu-button::before {
-  top: 0;
   transform: rotate(405deg);
 }
 
@@ -159,7 +160,6 @@ section {
 }
 
 #menu-toggle:checked ~ .menu-btn-container .menu-button::after {
-  top: 0;
   transform: rotate(-405deg);
 }
 

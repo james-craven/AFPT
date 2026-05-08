@@ -16,7 +16,9 @@ http://127.0.0.1:4173
 
 ## Service worker
 
-The generated service worker is checked in as `sw.js`. After changing cached assets, regenerate it with:
+Service worker registration is temporarily disabled in `index.html` during active development so stale PWA caches do not hide changes while iterating.
+
+The generated service worker is still checked in as `sw.js`. When PWA/offline behavior is re-enabled, regenerate it with:
 
 ```sh
 npm run build:sw
