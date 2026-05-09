@@ -242,6 +242,29 @@
 
     </section>
 
+    <section class="pfra-panel" id="pfra-panel">
+        <div class="pfra-panel-header">
+            <h2>PFRA 2026 Preview</h2>
+            <p id="pfra-status">Loading standards...</p>
+        </div>
+
+        <label for="pfra-event">EVENT:</label>
+        <select id="pfra-event">
+            <option value="push-up">Push-up</option>
+            <option value="hand-release-push-up">Hand-release push-up</option>
+            <option value="sit-up">Sit-up</option>
+            <option value="cross-leg-reverse-crunch">Cross-leg reverse crunch</option>
+            <option value="forearm-plank">Forearm plank</option>
+            <option value="two-mile-run">2-mile run</option>
+            <option value="hamr-20-meter">20-meter HAMR</option>
+        </select>
+
+        <label for="pfra-performance" id="pfra-performance-label">PERFORMANCE:</label>
+        <input type="text" id="pfra-performance" inputmode="numeric" value="67">
+
+        <p id="pfra-result">Score: --</p>
+    </section>
+
     <!-- Reset & Calc Score Btns -->
     <section>
         <audio crossorigin="anonymous" preload="auto" src="./shuttle.mp3" controls="controls" hidden id="shuttle-audio-hidden">
