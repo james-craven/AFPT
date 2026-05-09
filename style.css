@@ -390,6 +390,14 @@ body.pfra-mode .cardio-see-chart-btn {
     visibility: hidden;
 }
 
+body:not(.pfra-mode) .pfra-panel {
+    display: none;
+}
+
+body.pfra-mode #alt-select {
+    visibility: hidden;
+}
+
 .push-txt {
     height: 40px;
     border-radius: 5px;

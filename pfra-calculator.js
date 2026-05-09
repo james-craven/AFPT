@@ -324,6 +324,32 @@
     }
   }
 
+  function syncLegacyInputsFromSliders() {
+    if (!isPfraMode()) return;
+
+    if (legacyPushInput && legacyPushSlider && legacyPushSelect?.value !== 'Exempt') {
+      legacyPushInput.value = legacyPushSlider.value;
+    }
+
+    if (legacySitInput && legacySitSlider && legacySitSelect?.value !== 'Exempt') {
+      if (legacySitSelect.value === 'Plank') {
+        legacySitInput.value = Math.floor(Number(legacySitSlider.value) / 60);
+        legacyPlankMinuteInput.value = String(Number(legacySitSlider.value) % 60).padStart(2, '0');
+      } else {
+        legacySitInput.value = legacySitSlider.value;
+      }
+    }
+
+    if (legacyRunSlider && legacyCardioSelect?.value !== 'Exempt') {
+      if (legacyCardioSelect.value === 'Shuttle Run') {
+        legacyRunSecondInput.value = legacyRunSlider.value;
+      } else {
+        legacyRunMinuteInput.value = Math.floor(Number(legacyRunSlider.value) / 60);
+        legacyRunSecondInput.value = String(Number(legacyRunSlider.value) % 60).padStart(2, '0');
+      }
+    }
+  }
+
   function updateCardioModeText() {
     document.body.classList.toggle('pfra-mode', isPfraMode());
 
@@ -445,24 +471,25 @@
     }
 
     updateLegacySliderRanges();
+    syncLegacyInputsFromSliders();
 
     if (legacyPushSelect?.value === 'Pushups') {
       strengthEvent.value = 'push-up';
-      strengthPerformance.value = legacyPushInput.value || eventDefaults[strengthEvent.value];
+      strengthPerformance.value = legacyPushSlider.value || eventDefaults[strengthEvent.value];
     } else if (legacyPushSelect?.value === 'Hand-Release') {
       strengthEvent.value = 'hand-release-push-up';
-      strengthPerformance.value = legacyPushInput.value || eventDefaults[strengthEvent.value];
+      strengthPerformance.value = legacyPushSlider.value || eventDefaults[strengthEvent.value];
     }
 
     if (legacySitSelect?.value === 'Situps') {
       coreEvent.value = 'sit-up';
-      corePerformance.value = legacySitInput.value || eventDefaults[coreEvent.value];
+      corePerformance.value = legacySitSlider.value || eventDefaults[coreEvent.value];
     } else if (legacySitSelect?.value === 'Reverse Crunch') {
       coreEvent.value = 'cross-leg-reverse-crunch';
-      corePerformance.value = legacySitInput.value || eventDefaults[coreEvent.value];
+      corePerformance.value = legacySitSlider.value || eventDefaults[coreEvent.value];
     } else if (legacySitSelect?.value === 'Plank') {
       coreEvent.value = 'forearm-plank';
-      corePerformance.value = `${Number(legacySitInput.value || 0)}:${String(Number(legacyPlankMinuteInput.value || 0)).padStart(2, '0')}`;
+      corePerformance.value = secondsToTimeString(Number(legacySitSlider.value || 0));
     }
 
     if (preserveCardio) {
@@ -477,17 +504,15 @@
       applyPfraCardioToLegacyControls();
     } else if (legacyCardioSelect?.value === 'Shuttle Run') {
       cardioEvent.value = 'hamr-20-meter';
-      cardioPerformance.value = legacyRunSecondInput.value || eventDefaults[cardioEvent.value];
+      cardioPerformance.value = legacyRunSlider.value || eventDefaults[cardioEvent.value];
     } else if (legacyCardioSelect?.value === 'Walk') {
       cardioEvent.value = 'two-kilometer-walk';
-      cardioPerformance.value = `${Number(legacyRunMinuteInput.value || 0)}:${String(Number(legacyRunSecondInput.value || 0)).padStart(2, '0')}`;
+      cardioPerformance.value = secondsToTimeString(Number(legacyRunSlider.value || 0));
     } else if (legacyCardioSelect?.value === '1.5 Mile' && cardioEvent.value === 'hamr-20-meter') {
       cardioEvent.value = 'two-mile-run';
       cardioPerformance.value = eventDefaults[cardioEvent.value];
     } else if (legacyCardioSelect?.value === '1.5 Mile' && cardioEvent.value === 'two-mile-run') {
-      const minutes = Number(legacyRunMinuteInput.value || 0);
-      const seconds = Number(legacyRunSecondInput.value || 0);
-      const totalSeconds = (minutes * 60) + seconds;
+      const totalSeconds = Number(legacyRunSlider.value || 0);
       if (Number.isFinite(totalSeconds) && totalSeconds > 0) {
         cardioPerformance.value = secondsToTimeString(totalSeconds);
       }
