@@ -5,6 +5,7 @@ module.exports = {
 		'style.css',
 		'main2.js',
 		'pfra-calculator.js',
+		'src/pfra/*.mjs',
 		'pwa.js',
 		'dev-build-info.json',
 		'manifest.webmanifest',

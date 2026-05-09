@@ -8,6 +8,8 @@ const requiredAssets = [
   'style.css',
   'main2.js',
   'pfra-calculator.js',
+  'src/pfra/scoring.mjs',
+  'src/pfra/standards.mjs',
   'pwa.js',
   'manifest.webmanifest',
   'dev-build-info.json',

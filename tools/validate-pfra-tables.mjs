@@ -1,5 +1,13 @@
 import assert from 'node:assert/strict';
-import { loadTable, scoreFromTable, tablePathFromId } from './pfra-score.mjs';
+import fs from 'node:fs';
+import {
+  loadTable,
+  scoreFromTable,
+  scorePfraAssessment,
+  scoreWalk,
+  scoreWhtr,
+  tablePathFromId,
+} from './pfra-score.mjs';
 
 const cases = [
   {
@@ -85,4 +93,66 @@ for (const testCase of cases) {
   );
 }
 
-console.log(`Validated ${cases.length} PFRA scoring examples`);
+const standards = JSON.parse(fs.readFileSync('standards/af-pfra-2026.json', 'utf8'));
+const tables = Object.fromEntries(
+  [
+    'push-up',
+    'hand-release-push-up',
+    'sit-up',
+    'cross-leg-reverse-crunch',
+    'forearm-plank',
+    'two-mile-run',
+    'hamr-20-meter',
+  ].map((tableId) => [tableId, loadTable(tablePathFromId(tableId))]),
+);
+
+assert.equal(scoreWhtr('0.49', standards), 20, 'WHtR max score');
+assert.equal(scoreWhtr('0.55', standards), 12.5, 'WHtR midpoint score');
+assert.equal(scoreWhtr('0.60', standards), 0, 'WHtR zero score');
+
+assert.equal(
+  scoreWalk(standards, {
+    ageGroup: 'under-25',
+    sex: 'female',
+    performance: '17:22',
+  }),
+  50,
+  '2 km walk pass threshold',
+);
+assert.equal(
+  scoreWalk(standards, {
+    ageGroup: 'under-25',
+    sex: 'female',
+    performance: '17:23',
+  }),
+  0,
+  '2 km walk fail threshold',
+);
+
+const fullAssessment = scorePfraAssessment({
+  ageGroup: 'under-25',
+  sex: 'male',
+  standards,
+  tables,
+  whtr: '0.49',
+  strengthEvent: 'push-up',
+  strengthPerformance: '67',
+  coreEvent: 'sit-up',
+  corePerformance: '58',
+  cardioEvent: 'two-mile-run',
+  cardioPerformance: '13:25',
+});
+
+assert.equal(fullAssessment.total, 100, 'full PFRA max assessment');
+assert.deepEqual(
+  fullAssessment.scores,
+  {
+    body: 20,
+    strength: 15,
+    core: 15,
+    cardio: 50,
+  },
+  'full PFRA component scores',
+);
+
+console.log(`Validated ${cases.length + 6} PFRA scoring examples`);

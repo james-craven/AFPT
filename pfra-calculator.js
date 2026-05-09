@@ -1,4 +1,9 @@
-(function () {
+(async function () {
+  const [pfraScoring, standardsData] = await Promise.all([
+    import('./src/pfra/scoring.mjs'),
+    import('./src/pfra/standards.mjs'),
+  ]);
+  const { loadPfraStandards, walkMaximumTime: standardsWalkMaximumTime } = standardsData;
   const pfraStatus = document.getElementById('pfra-status');
   const ageSelect = document.getElementById('age-sel');
   const sexSelect = document.getElementById('sex-sel');
@@ -37,19 +42,10 @@
   const legacyRunSecondInput = document.getElementById('run-sectxt');
   const legacyRunSlider = document.getElementById('run-slider');
   const legacyLapText = document.getElementById('run-lap-times');
-  const pfraTables = {};
+  let pfraStandards = null;
+  let pfraTables = {};
   let lastStandardsMode = standardsMode?.value || 'legacy';
   let pfraCardioTracksStartingValue = false;
-
-  const tableIds = [
-    'push-up',
-    'hand-release-push-up',
-    'sit-up',
-    'cross-leg-reverse-crunch',
-    'forearm-plank',
-    'two-mile-run',
-    'hamr-20-meter',
-  ];
 
   const eventDefaults = {
     'push-up': '67',
@@ -73,23 +69,6 @@
     'two-kilometer-walk': 'CARDIO WALK TIME:',
   };
 
-  const walkMaximumTimes = {
-    male: {
-      'under-30': '16:16',
-      '30-39': '16:18',
-      '40-49': '16:23',
-      '50-59': '16:40',
-      '60-and-over': '16:58',
-    },
-    female: {
-      'under-30': '17:22',
-      '30-39': '17:28',
-      '40-49': '17:49',
-      '50-59': '18:11',
-      '60-and-over': '18:53',
-    },
-  };
-
   function legacyAgeToPfraAgeGroup(age) {
     return {
       '< 25': 'under-25',
@@ -108,93 +87,20 @@
     return sex.toLowerCase();
   }
 
-  function pfraAgeToWalkAgeGroup(ageGroup) {
-    return {
-      'under-25': 'under-30',
-      '25-29': 'under-30',
-      '30-34': '30-39',
-      '35-39': '30-39',
-      '40-44': '40-49',
-      '45-49': '40-49',
-      '50-54': '50-59',
-      '55-59': '50-59',
-      '60-and-over': '60-and-over',
-    }[ageGroup];
-  }
-
   function toSeconds(value) {
-    if (value === undefined || value === null || value === '') return NaN;
-    if (typeof value === 'number') return value;
-    const normalized = value.startsWith(':') ? `0${value}` : value;
-    const [minutes, seconds] = normalized.split(':').map(Number);
-    return minutes * 60 + seconds;
-  }
-
-  function comparePerformance(performance, cell, table) {
-    const performanceValue = table.unit === 'min:sec' ? toSeconds(performance) : Number(performance);
-    const thresholdValue = table.unit === 'min:sec' ? toSeconds(cell.value) : Number(cell.value);
-
-    if (!Number.isFinite(performanceValue) || !Number.isFinite(thresholdValue)) return false;
-    if (cell.atLeast) return performanceValue >= thresholdValue;
-    if (cell.atMost) return performanceValue <= thresholdValue;
-    if (table.higherIsBetter) return performanceValue >= thresholdValue;
-    return performanceValue <= thresholdValue;
-  }
-
-  function scoreFromTable(table, ageGroup, sex, performance) {
-    for (const row of table.rows) {
-      const cell = row.values?.[ageGroup]?.[sex];
-      if (cell && comparePerformance(performance, cell, table)) {
-        return row.points;
-      }
-    }
-
-    return 0;
+    return pfraScoring.toSeconds(value);
   }
 
   function walkMaximumTime(ageGroup, sex) {
-    const walkAgeGroup = pfraAgeToWalkAgeGroup(ageGroup);
-    return walkMaximumTimes[sex]?.[walkAgeGroup];
-  }
-
-  function scoreWalk(ageGroup, sex, performance) {
-    const maxTime = walkMaximumTime(ageGroup, sex);
-    const performanceValue = toSeconds(performance);
-    const maxValue = toSeconds(maxTime);
-
-    if (!Number.isFinite(performanceValue) || !Number.isFinite(maxValue)) return 0;
-    return performanceValue <= maxValue ? 50 : 0;
-  }
-
-  function scoreWhtr(value) {
-    const ratio = Number(value);
-    if (!Number.isFinite(ratio)) return 0;
-    if (ratio <= 0.49) return 20;
-    if (ratio >= 0.60) return 0;
-
-    const rounded = Math.round(ratio * 100) / 100;
-    return {
-      0.50: 19,
-      0.51: 18,
-      0.52: 17,
-      0.53: 16,
-      0.54: 15,
-      0.55: 12.5,
-      0.56: 10,
-      0.57: 7.5,
-      0.58: 5,
-      0.59: 2.5,
-    }[rounded] ?? 0;
+    return standardsWalkMaximumTime(pfraStandards, ageGroup, sex);
   }
 
   function categoryForTotal(total) {
-    if (total < 75) return 'Unsatisfactory';
-    if (total < 90) return 'Satisfactory';
-    return 'Excellent';
+    return pfraScoring.categoryForTotal(total);
   }
 
   function formatScore(score) {
-    return Number.isInteger(score) ? score.toFixed(0) : score.toFixed(1);
+    return pfraScoring.formatScore(score);
   }
 
   function isPfraMode() {
@@ -234,33 +140,19 @@
   }
 
   function topCellValue(table, ageGroup, sex) {
-    return table?.rows?.[0]?.values?.[ageGroup]?.[sex]?.value;
+    return pfraScoring.topCellValue(table, ageGroup, sex);
   }
 
   function firstScoringCellValue(table, ageGroup, sex) {
-    for (let index = table.rows.length - 1; index >= 0; index -= 1) {
-      const cell = table.rows[index].values?.[ageGroup]?.[sex];
-      if (cell?.value !== undefined) return cell.value;
-    }
-
-    return undefined;
+    return pfraScoring.firstScoringCellValue(table, ageGroup, sex);
   }
 
   function formatPerformance(value, table) {
-    if (value === undefined) return '--';
-    if (table?.unit === 'min:sec' && typeof value === 'number') {
-      const minutes = Math.floor(value / 60);
-      const seconds = value % 60;
-      return `${minutes}:${String(seconds).padStart(2, '0')}`;
-    }
-
-    return value;
+    return pfraScoring.formatPerformance(value, table);
   }
 
   function secondsToTimeString(totalSeconds) {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${String(seconds).padStart(2, '0')}`;
+    return pfraScoring.secondsToTimeString(totalSeconds);
   }
 
   function currentAgeGroup() {
@@ -752,24 +644,22 @@
       return;
     }
 
-    const bodyScore = scoreWhtr(whtrInput.value);
-    const strengthScore = exemptions.strength
-      ? 0
-      : scoreFromTable(strengthTable, ageGroup, sex, strengthPerformance.value.trim());
-    const coreScore = exemptions.core
-      ? 0
-      : scoreFromTable(coreTable, ageGroup, sex, corePerformance.value.trim());
-    const cardioScore = exemptions.cardio
-      ? 0
-      : cardioEvent.value === 'two-kilometer-walk'
-      ? scoreWalk(ageGroup, sex, cardioPerformance.value.trim())
-      : scoreFromTable(cardioTable, ageGroup, sex, cardioPerformance.value.trim());
-    const availablePoints = 100
-      - (exemptions.strength ? 15 : 0)
-      - (exemptions.core ? 15 : 0)
-      - (exemptions.cardio ? 50 : 0);
-    const rawTotal = bodyScore + strengthScore + coreScore + cardioScore;
-    const total = availablePoints > 0 ? (rawTotal / availablePoints) * 100 : rawTotal;
+    const result = pfraScoring.scorePfraAssessment({
+      ageGroup,
+      sex,
+      standards: pfraStandards,
+      tables: pfraTables,
+      whtr: whtrInput.value,
+      strengthEvent: strengthEvent.value,
+      strengthPerformance: strengthPerformance.value.trim(),
+      coreEvent: coreEvent.value,
+      corePerformance: corePerformance.value.trim(),
+      cardioEvent: cardioEvent.value,
+      cardioPerformance: cardioPerformance.value.trim(),
+      exemptions,
+    });
+    const { body: bodyScore, strength: strengthScore, core: coreScore, cardio: cardioScore } = result.scores;
+    const { total } = result;
 
     bodyScoreText.innerText = formatScore(bodyScore);
     strengthScoreText.innerText = exemptions.strength ? 'EXEMPT' : formatScore(strengthScore);
@@ -780,7 +670,7 @@
     restoreLegacyMainScore();
     updateLegacyComponentText(
       { strength: strengthScore, core: coreScore, cardio: cardioScore },
-      { strength: strengthTable, core: coreTable, cardio: cardioTable },
+      result.tables,
       exemptions,
     );
     updatePfraLapTimes();
@@ -789,23 +679,16 @@
   async function loadTables() {
     if (!pfraStatus) return;
 
-    let loadedCount = 0;
-
     try {
-      await Promise.all(tableIds.map(async (tableId) => {
-        const response = await fetch(`./standards/extracted/tables/${tableId}.json?ts=${Date.now()}`, {
-          cache: 'no-store',
-        });
+      const loaded = await loadPfraStandards({
+        cacheBust: true,
+        onProgress: ({ loaded: loadedCount, total }) => {
+          pfraStatus.innerText = `Loading standards... ${loadedCount}/${total}`;
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error(`${tableId}.json returned ${response.status}`);
-        }
-
-        pfraTables[tableId] = await response.json();
-        loadedCount += 1;
-        pfraStatus.innerText = `Loading standards... ${loadedCount}/${tableIds.length}`;
-      }));
-
+      pfraStandards = loaded.standards;
+      pfraTables = loaded.tables;
       pfraStatus.innerText = 'Standards loaded from PFRA 2026 tables.';
       syncFromLegacyCalculator();
     } catch (error) {
@@ -814,7 +697,7 @@
   }
 
   if (pfraStatus && whtrInput && strengthEvent && coreEvent && cardioEvent) {
-    pfraStatus.innerText = `Loading standards... 0/${tableIds.length}`;
+    pfraStatus.innerText = 'Loading standards...';
 
     [whtrInput, strengthPerformance, corePerformance, cardioPerformance].forEach((input) => {
       input.addEventListener('input', updatePfraCalculator);
