@@ -19,6 +19,9 @@
   const pfraResult = document.getElementById('pfra-result');
   const standardsMode = document.getElementById('standards-mode');
   const totalScoreParagraph = document.getElementById('score-txt');
+  const legacyStrengthText = document.getElementById('push-txt-p');
+  const legacyCoreText = document.getElementById('sit-txt-p');
+  const legacyCardioText = document.getElementById('run-txt-p');
   const legacyPushSelect = document.getElementById('push-sel');
   const legacyPushInput = document.getElementById('push-txt');
   const legacyPushSlider = document.getElementById('push-slider');
@@ -181,6 +184,17 @@
     return undefined;
   }
 
+  function formatPerformance(value, table) {
+    if (value === undefined) return '--';
+    if (table?.unit === 'min:sec' && typeof value === 'number') {
+      const minutes = Math.floor(value / 60);
+      const seconds = value % 60;
+      return `${minutes}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    return value;
+  }
+
   function setSliderRange(slider, maxValue, minValue = 0) {
     if (!slider || maxValue === undefined) return;
 
@@ -228,6 +242,33 @@
         topCellValue(pfraTables['hamr-20-meter'], ageGroup, sex),
         firstScoringCellValue(pfraTables['hamr-20-meter'], ageGroup, sex),
       );
+    }
+  }
+
+  function updateLegacyComponentText(scores, tables) {
+    if (!isPfraMode()) return;
+
+    const ageGroup = legacyAgeToPfraAgeGroup(ageSelect.value);
+    const sex = legacySexToPfraSex(sexSelect.value);
+    const strengthMin = firstScoringCellValue(tables.strength, ageGroup, sex);
+    const strengthMax = topCellValue(tables.strength, ageGroup, sex);
+    const coreMin = firstScoringCellValue(tables.core, ageGroup, sex);
+    const coreMax = topCellValue(tables.core, ageGroup, sex);
+    const cardioMin = firstScoringCellValue(tables.cardio, ageGroup, sex);
+    const cardioMax = topCellValue(tables.cardio, ageGroup, sex);
+
+    if (legacyStrengthText) {
+      legacyStrengthText.innerHTML = `Strength Score: ${formatScore(scores.strength)} | Min: ${formatPerformance(strengthMin, tables.strength)} | Max: ${formatPerformance(strengthMax, tables.strength)}`;
+    }
+
+    if (legacyCoreText) {
+      legacyCoreText.innerHTML = `Core Score: ${formatScore(scores.core)} | Min: ${formatPerformance(coreMin, tables.core)} | Max: ${formatPerformance(coreMax, tables.core)}`;
+    }
+
+    if (legacyCardioText && cardioEvent.value === 'hamr-20-meter') {
+      legacyCardioText.innerHTML = `Cardio Score: ${formatScore(scores.cardio)} | Min: ${formatPerformance(cardioMin, tables.cardio)} | Max: ${formatPerformance(cardioMax, tables.cardio)}`;
+    } else if (legacyCardioText && cardioEvent.value === 'two-mile-run') {
+      legacyCardioText.innerHTML = `Cardio Score: ${formatScore(scores.cardio)} | PFRA 2-mile time: ${cardioPerformance.value || '--'}`;
     }
   }
 
@@ -313,6 +354,10 @@
     pfraResult.innerText = `PFRA Total: ${total.toFixed(1)} - ${categoryForTotal(total)}`;
     setMainScore(total);
     restoreLegacyMainScore();
+    updateLegacyComponentText(
+      { strength: strengthScore, core: coreScore, cardio: cardioScore },
+      { strength: strengthTable, core: coreTable, cardio: cardioTable },
+    );
   }
 
   async function loadTables() {
