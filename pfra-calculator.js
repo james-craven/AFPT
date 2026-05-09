@@ -17,6 +17,8 @@
   const coreScoreText = document.getElementById('pfra-core-score');
   const cardioScoreText = document.getElementById('pfra-cardio-score');
   const pfraResult = document.getElementById('pfra-result');
+  const standardsMode = document.getElementById('standards-mode');
+  const totalScoreParagraph = document.getElementById('score-txt');
   const legacyPushSelect = document.getElementById('push-sel');
   const legacyPushInput = document.getElementById('push-txt');
   const legacyPushSlider = document.getElementById('push-slider');
@@ -136,6 +138,34 @@
 
   function formatScore(score) {
     return Number.isInteger(score) ? score.toFixed(0) : score.toFixed(1);
+  }
+
+  function isPfraMode() {
+    return standardsMode?.value === 'pfra';
+  }
+
+  function setMainScore(total) {
+    if (!totalScoreParagraph || !isPfraMode()) return;
+
+    const category = categoryForTotal(total);
+    const failText = total < 75 ? 'Unsatisfactory!' : `${category}!`;
+    totalScoreParagraph.innerHTML = `PFRA Total Score: <span id="t">${total.toFixed(1)}<br>${failText}</span>`;
+
+    const totalText = document.getElementById('t');
+    if (!totalText) return;
+
+    if (total < 75) {
+      totalText.classList.add('score-txt-red');
+      totalText.classList.remove('score-txt-green');
+    } else {
+      totalText.classList.add('score-txt-green');
+      totalText.classList.remove('score-txt-red');
+    }
+  }
+
+  function restoreLegacyMainScore() {
+    if (isPfraMode() || typeof window.updateScoreMinMaxText !== 'function') return;
+    window.updateScoreMinMaxText();
   }
 
   function topCellValue(table, ageGroup, sex) {
@@ -281,6 +311,8 @@
     coreScoreText.innerText = formatScore(coreScore);
     cardioScoreText.innerText = formatScore(cardioScore);
     pfraResult.innerText = `PFRA Total: ${total.toFixed(1)} - ${categoryForTotal(total)}`;
+    setMainScore(total);
+    restoreLegacyMainScore();
   }
 
   async function loadTables() {
@@ -320,6 +352,8 @@
     [ageSelect, sexSelect].forEach((select) => {
       select?.addEventListener('change', syncFromLegacyCalculator);
     });
+
+    standardsMode?.addEventListener('change', syncFromLegacyCalculator);
 
     [
       legacyPushSelect,

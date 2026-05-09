@@ -299,7 +299,7 @@ section {
 
 }
 
-.sex-sel-label, .age-sel-label {
+.sex-sel-label, .age-sel-label, .standards-mode-label {
     display: inline-block;
     color: white;
     justify-content: center;
@@ -307,7 +307,7 @@ section {
     font-size: 1.5rem;
 }
 
-.age-sel, .sex-sel {
+.age-sel, .sex-sel, .standards-mode-sel {
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
     cursor: pointer;
@@ -334,6 +334,11 @@ section {
 .sex-sel {
     width: 100px;
     background-position: 70px center;
+}
+
+.standards-mode-sel {
+    width: 150px;
+    background-position: 122px center;
 }
 
 /* Section 4 - Strength Text */
