@@ -30,9 +30,11 @@
   const legacySitSlider = document.getElementById('sit-slider');
   const legacyPlankMinuteInput = document.getElementById('plankmintxt');
   const legacyCardioSelect = document.getElementById('cardio-sel');
+  const legacyTwoMileOption = legacyCardioSelect?.querySelector('option[value="1.5 Mile"]');
   const legacyRunMinuteInput = document.getElementById('run-mintxt');
   const legacyRunSecondInput = document.getElementById('run-sectxt');
   const legacyRunSlider = document.getElementById('run-slider');
+  const legacyLapText = document.getElementById('run-lap-times');
   const pfraTables = {};
 
   const tableIds = [
@@ -195,6 +197,12 @@
     return value;
   }
 
+  function secondsToTimeString(totalSeconds) {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${String(seconds).padStart(2, '0')}`;
+  }
+
   function setSliderRange(slider, maxValue, minValue = 0) {
     if (!slider || maxValue === undefined) return;
 
@@ -215,6 +223,8 @@
   }
 
   function updateLegacySliderRanges() {
+    if (!isPfraMode()) return;
+
     const ageGroup = legacyAgeToPfraAgeGroup(ageSelect.value);
     const sex = legacySexToPfraSex(sexSelect.value);
 
@@ -242,7 +252,43 @@
         topCellValue(pfraTables['hamr-20-meter'], ageGroup, sex),
         firstScoringCellValue(pfraTables['hamr-20-meter'], ageGroup, sex),
       );
+    } else if (legacyCardioSelect?.value === '1.5 Mile') {
+      setSliderRange(
+        legacyRunSlider,
+        toSeconds(firstScoringCellValue(pfraTables['two-mile-run'], ageGroup, sex)),
+        toSeconds(topCellValue(pfraTables['two-mile-run'], ageGroup, sex)),
+      );
     }
+  }
+
+  function updateCardioModeText() {
+    if (!legacyTwoMileOption) return;
+    legacyTwoMileOption.innerText = isPfraMode() ? '2 Mile' : '1.5 Mile';
+  }
+
+  function updatePfraLapTimes() {
+    if (!isPfraMode() || !legacyLapText) return;
+
+    if (cardioEvent.value === 'hamr-20-meter') {
+      legacyLapText.innerHTML = '';
+      return;
+    }
+
+    const totalSeconds = toSeconds(cardioPerformance.value);
+    if (!Number.isFinite(totalSeconds)) {
+      legacyLapText.innerHTML = '';
+      return;
+    }
+
+    const lapCount = 8;
+    const lapSeconds = Math.floor(totalSeconds / lapCount);
+    let text = `Req'd 8 Lap Time: ~${secondsToTimeString(lapSeconds)}`;
+
+    for (let lap = 1; lap <= lapCount; lap += 1) {
+      text += `<br>Lap ${lap}: ≤ ${secondsToTimeString(lapSeconds * lap)}`;
+    }
+
+    legacyLapText.innerHTML = text;
   }
 
   function updateLegacyComponentText(scores, tables) {
@@ -268,7 +314,7 @@
     if (legacyCardioText && cardioEvent.value === 'hamr-20-meter') {
       legacyCardioText.innerHTML = `Cardio Score: ${formatScore(scores.cardio)} | Min: ${formatPerformance(cardioMin, tables.cardio)} | Max: ${formatPerformance(cardioMax, tables.cardio)}`;
     } else if (legacyCardioText && cardioEvent.value === 'two-mile-run') {
-      legacyCardioText.innerHTML = `Cardio Score: ${formatScore(scores.cardio)} | PFRA 2-mile time: ${cardioPerformance.value || '--'}`;
+      legacyCardioText.innerHTML = `Cardio Score: ${formatScore(scores.cardio)} | Min: ${formatPerformance(cardioMin, tables.cardio)} | Max: ${formatPerformance(cardioMax, tables.cardio)}`;
     }
   }
 
@@ -286,6 +332,14 @@
   }
 
   function syncFromLegacyCalculator() {
+    updateCardioModeText();
+
+    if (!isPfraMode()) {
+      if (typeof window.ageSexChange === 'function') window.ageSexChange();
+      updatePfraCalculator();
+      return;
+    }
+
     updateLegacySliderRanges();
 
     if (legacyPushSelect?.value === 'Pushups') {
@@ -316,8 +370,9 @@
     } else if (legacyCardioSelect?.value === '1.5 Mile' && cardioEvent.value === 'two-mile-run') {
       const minutes = Number(legacyRunMinuteInput.value || 0);
       const seconds = Number(legacyRunSecondInput.value || 0);
-      if (minutes >= 12) {
-        cardioPerformance.value = `${minutes}:${String(seconds).padStart(2, '0')}`;
+      const totalSeconds = (minutes * 60) + seconds;
+      if (Number.isFinite(totalSeconds) && totalSeconds > 0) {
+        cardioPerformance.value = secondsToTimeString(totalSeconds);
       }
     }
 
@@ -358,6 +413,7 @@
       { strength: strengthScore, core: coreScore, cardio: cardioScore },
       { strength: strengthTable, core: coreTable, cardio: cardioTable },
     );
+    updatePfraLapTimes();
   }
 
   async function loadTables() {
