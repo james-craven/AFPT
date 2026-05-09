@@ -8,7 +8,8 @@ body {
     margin:0;
 }
 
-.dev-version-modal {
+.dev-version-modal,
+.pwa-update-modal {
     position: fixed;
     inset: 0;
     display: grid;
@@ -17,11 +18,13 @@ body {
     z-index: 10;
 }
 
-.dev-version-modal[hidden] {
+.dev-version-modal[hidden],
+.pwa-update-modal[hidden] {
     display: none;
 }
 
-.dev-version-panel {
+.dev-version-panel,
+.pwa-update-panel {
     width: min(90vw, 360px);
     border: 1px solid white;
     background: #003a6d;
@@ -30,23 +33,32 @@ body {
     text-align: center;
 }
 
-.dev-version-panel h2 {
+.dev-version-panel h2,
+.pwa-update-panel h2 {
     margin: 0 0 10px;
     font-size: 1.2rem;
 }
 
-.dev-version-panel p {
+.dev-version-panel p,
+.pwa-update-panel p {
     margin: 0 0 14px;
     line-height: 1.4;
 }
 
-.dev-version-panel button {
+.dev-version-panel button,
+.pwa-update-panel button {
     border: 1px solid white;
     background: transparent;
     color: white;
     cursor: pointer;
     font-weight: bold;
     padding: 10px 18px;
+}
+
+.pwa-update-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 select {

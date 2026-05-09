@@ -14,15 +14,27 @@ Then open:
 http://127.0.0.1:4173
 ```
 
-## Service worker
-
-Service worker registration is temporarily disabled in `index.html` during active development so stale PWA caches do not hide changes while iterating.
-
-The generated service worker is still checked in as `sw.js`. When PWA/offline behavior is re-enabled, regenerate it with:
+Local development unregisters service workers by default so stale caches do not hide changes. To test the production service worker locally, first run:
 
 ```sh
-npm run build:sw
+npm run build
 ```
+
+Then open:
+
+```text
+http://127.0.0.1:4173/?sw=1
+```
+
+## Service worker
+
+The app is offline-first in production. The generated service worker is checked in as `sw.js` so GitHub Pages can serve it directly. Regenerate it with:
+
+```sh
+npm run build
+```
+
+The offline modernization plan lives in `docs/OFFLINE_FIRST_PLAN.md`.
 
 ## Current modernization notes
 

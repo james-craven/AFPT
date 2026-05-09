@@ -4965,7 +4965,15 @@ async function showDevVersionModal() {
   modal.hidden = false;
 }
 
-showDevVersionModal();
+function shouldShowDevVersionModal() {
+  const params = new URLSearchParams(window.location.search);
+  const localHosts = new Set(['localhost', '127.0.0.1', '[::1]', '']);
+  return params.get('dev-build') === '1' || localHosts.has(window.location.hostname);
+}
+
+if (shouldShowDevVersionModal()) {
+  showDevVersionModal();
+}
 
 // Notes: I can use padding-left on span to move the number centered under the tick mark
 //I need to fix the function change all text boxes

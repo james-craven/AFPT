@@ -1,22 +1,55 @@
 module.exports = {
 	globDirectory: './',
 	globPatterns: [
-		'**/*.{html,css,js,png,webmanifest,m4a,mp3,ogg,mjs,webp}'
+		'index.html',
+		'style.css',
+		'main2.js',
+		'pfra-calculator.js',
+		'pwa.js',
+		'dev-build-info.json',
+		'manifest.webmanifest',
+		'icon-*.png',
+		'maskable_icon.png',
+		'arrow.png',
+		'pushups.png',
+		'running.png',
+		'situps.png',
+		'shuttle.mp3',
+		'standards/af-pfra-2026.json',
+		'standards/extracted/tables/*.json',
+		'web formatted jpgs/*.webp'
 	],
 	globIgnores: [
+		'node_modules/**/*',
 		'sw.js',
 		'sw.js.map',
 		'workbox-*.js',
-		'workbox-*.js.map'
+		'workbox-*.js.map',
+		'standards/sources/**/*',
+		'standards/extracted/PFRA-Scoring-Charts.txt',
+		'standards/extracted/PFRA-Scoring-Charts.notes.md'
 	],
 	swDest: 'sw.js',
+	inlineWorkboxRuntime: true,
+	sourcemap: false,
+	cleanupOutdatedCaches: true,
 	ignoreURLParametersMatching: [
 		/^utm_/,
-		/^fbclid$/
+		/^fbclid$/,
+		/^v$/,
+		/^ts$/,
+		/^qa$/,
+		/^sw$/,
+		/^dev-build$/
 	],
 	maximumFileSizeToCacheInBytes: 20000000,
 	clientsClaim: true,
-	skipWaiting: true,
+	skipWaiting: false,
+	navigateFallback: 'index.html',
+	navigateFallbackDenylist: [
+		/^\/_/,
+		/\/[^/?]+\.[^/]+$/
+	],
 	runtimeCaching: [
 			{
 			  urlPattern: ({request}) => {
@@ -26,12 +59,26 @@ module.exports = {
 			  },
 			  handler: 'CacheFirst',
 			  options: {
-				  rangeRequests: true
+				  cacheName: 'afpt-media-v1',
+				  rangeRequests: true,
+				  cacheableResponse: {
+					statuses: [0, 200]
+				  },
+				  expiration: {
+					maxEntries: 100,
+					maxAgeSeconds: 31536000
+				  }
 			  }
 			},
 			{
-				urlPattern: '**/*.{html,webmanifest,js,css,mjs}',
-				handler: 'NetworkFirst',
+				urlPattern: ({url}) => url.origin === self.location.origin && url.pathname.includes('/standards/'),
+				handler: 'StaleWhileRevalidate',
+				options: {
+					cacheName: 'afpt-standards-v1',
+					cacheableResponse: {
+						statuses: [0, 200]
+					}
+				}
 			},
 			  
 	],

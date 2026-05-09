@@ -1,19 +1,19 @@
 {
   "name": "mobilefirstafptcalc",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "description": "Offline-first Air Force fitness score calculator.",
   "scripts": {
     "dev": "python3 -m http.server 4173",
-    "build:sw": "workbox generateSW workbox-config.js",
+    "build": "npm run stamp:dev && npm run build:sw",
+    "build:sw": "node tools/build-sw.mjs",
     "extract:standards": "node tools/extract-pfra-tables.mjs",
     "stamp:dev": "node tools/write-dev-build-info.mjs",
-    "test": "node tools/validate-pfra-tables.mjs"
+    "test": "node tools/validate-pfra-tables.mjs && npm run build:sw && node tools/validate-pwa-cache.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "workbox-cli": "^6.5.4"
+  "devDependencies": {
+    "workbox-build": "^7.4.1"
   }
 }

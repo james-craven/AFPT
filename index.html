@@ -10,42 +10,9 @@
               content="This Air Force PT Calculator contains all the alt alternate components with exemptions!
                        This AF PT Calc even includes the score charts and sliders for easy real-time test score calculations! Shuttle run audio
                        is also available. Based on dafman 36-2905 this AF Fitness Calculator is the one stop shop to calculate AF PT Test scores."/>
-        <script>
-            // Temporarily disable the service worker during active development so
-            // local and GitHub Pages changes are not hidden by stale PWA caches.
-            if ("serviceWorker" in navigator) {
-                window.addEventListener("load", async () => {
-                    const registrations = await navigator.serviceWorker.getRegistrations();
-                    await Promise.all(registrations.map(registration => registration.unregister()));
-
-                    if (registrations.length > 0 && !sessionStorage.getItem("afpt-sw-disabled-reload")) {
-                        sessionStorage.setItem("afpt-sw-disabled-reload", "true");
-                        window.location.reload();
-                    }
-                });
-            }
-
-            /*
-            if ("serviceWorker" in navigator) {
-                window.addEventListener("load", async () => {
-                    let reloading = false;
-                    const registration = await navigator.serviceWorker.register("./sw.js");
-                    registration.addEventListener("updatefound", () => {
-                        if (!registration.installing) return;
-                        registration.installing.addEventListener("statechange", () => {
-                            if (registration.waiting && navigator.serviceWorker.controller && !reloading) {
-                                reloading = true;
-                                window.location.reload();
-                            }
-                        });
-                    });
-                });
-            }
-            */
-        </script>
         <link rel="apple-touch-icon" href="./icon-144x144.png">
         <link rel="icon" href="./icon-144x144.png">
-        <link rel="stylesheet" type="text/css" href="./style.css?v=20260509-tick-overlay">
+        <link rel="stylesheet" type="text/css" href="./style.css?v=20260509-offline-pwa">
         <link rel="manifest" href="./manifest.webmanifest">
       </head>
 <body>
@@ -54,6 +21,16 @@
             <h2>Development Build</h2>
             <p id="dev-version-text">Loading build info...</p>
             <button id="dev-version-close" type="button">Close</button>
+        </div>
+    </div>
+    <div id="pwa-update-modal" class="pwa-update-modal" hidden role="dialog" aria-labelledby="pwa-update-title">
+        <div class="pwa-update-panel">
+            <h2 id="pwa-update-title">Update Ready</h2>
+            <p>A new offline version is available.</p>
+            <div class="pwa-update-actions">
+                <button id="pwa-update-now" type="button">Update Now</button>
+                <button id="pwa-update-later" type="button">Later</button>
+            </div>
         </div>
     </div>
     <div id="modal" hidden>
@@ -91,7 +68,7 @@
                     <li id="walk-adjust-chart">See Walk/Shuttle Altitude Adjustment Chart</li>
                     <li id="shuttle-score-card">See Shuttle Score Card</li>
                     <li id="shuttle-audio-menu">Show Shuttle Audio</li>
-                    <li id="shuttle-audio-player" style="visibility:hidden"> <audio crossorigin="anonymous" preload="auto" src="./shuttle.mp3" controls="controls" id="shuttle-audio-control">
+                    <li id="shuttle-audio-player" style="visibility:hidden"> <audio crossorigin="anonymous" preload="metadata" src="./shuttle.mp3" controls="controls" id="shuttle-audio-control">
                         Your browser does not support the audio element.
                         </audio>
                     </li>
@@ -360,7 +337,8 @@
 
     <button onclick="alert(`Is Bright!`)">The Future</button> -->
 
-    <script src="./main2.js?v=20260509-tick-overlay"></script>
-    <script src="./pfra-calculator.js?v=20260509-tick-overlay"></script>
+    <script src="./main2.js?v=20260509-offline-pwa"></script>
+    <script src="./pfra-calculator.js?v=20260509-offline-pwa"></script>
+    <script src="./pwa.js?v=20260509-offline-pwa"></script>
 </body>
 </html>
