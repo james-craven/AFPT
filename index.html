@@ -45,7 +45,7 @@
         </script>
         <link rel="apple-touch-icon" href="./icon-144x144.png">
         <link rel="icon" href="./icon-144x144.png">
-        <link rel="stylesheet" type="text/css" href="./style.css?v=20260509-tick-hit-area">
+        <link rel="stylesheet" type="text/css" href="./style.css?v=20260509-tick-overlay">
         <link rel="manifest" href="./manifest.webmanifest">
       </head>
 <body>
@@ -155,7 +155,7 @@
     <section class="push-slide">
         <label for="push-slider" class="hidden-labels">pushups slider</label>
         <input type="range" id="push-slider" class="push-slider" min="0" max="100" value="0" list="steplist" step="1">
-        <div style="margin:2px;display:grid; position:relative"><button type="button" id="push-tick" class="slider-tick" style="color:white;position:absolute;">15</button></div>
+        <div class="slider-tick-layer"><button type="button" id="push-tick" class="slider-tick">15</button></div>
     </section>
 
     <!-- Section 7 - Situps Text -->
@@ -190,7 +190,7 @@
     <section class="sit-slide">
         <label for="sit-slider" class="hidden-labels">situps slider</label>
         <input type="range" id="sit-slider" class="sit-slider" min="0" max="100" value="0">
-        <div style="margin:2px;display:grid; position:relative;"><button type="button" id="sit-tick" class="slider-tick" style="color:white;position:absolute;">15</button></div>
+        <div class="slider-tick-layer"><button type="button" id="sit-tick" class="slider-tick">15</button></div>
     </section>
 
     <!-- Section 10 - Run Text -->
@@ -229,7 +229,7 @@
     <section class="run-slider-section">
         <label for="run-slider" class="hidden-labels">run slider</label>
         <input type="range" id="run-slider" class="run-slider" min="0" max="1136" value="1136">
-        <div style="margin:2px;display:grid; position:relative;"><button type="button" id="run-tick" class="slider-tick" style="color:white;position:absolute;">15</button></div>
+        <div class="slider-tick-layer"><button type="button" id="run-tick" class="slider-tick">15</button></div>
     </section>
 
     <!-- Run Lap Times -->
@@ -360,7 +360,7 @@
 
     <button onclick="alert(`Is Bright!`)">The Future</button> -->
 
-    <script src="./main2.js?v=20260509-tick-hit-area"></script>
-    <script src="./pfra-calculator.js?v=20260509-tick-hit-area"></script>
+    <script src="./main2.js?v=20260509-tick-overlay"></script>
+    <script src="./pfra-calculator.js?v=20260509-tick-overlay"></script>
 </body>
 </html>
