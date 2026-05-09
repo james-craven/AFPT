@@ -473,10 +473,12 @@
     tick.style.display = 'block';
     tick.style.left = `${left}px`;
     tick.style.cursor = 'pointer';
-    tick.onclick = () => {
+    const freshTick = tick.cloneNode(true);
+    tick.replaceWith(freshTick);
+    freshTick.addEventListener('click', () => {
       slider.value = threshold;
       slider.dispatchEvent(new Event('input', { bubbles: true }));
-    };
+    });
   }
 
   function updatePfraSliderFeedback(scores, tables, exemptions) {

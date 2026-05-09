@@ -149,17 +149,32 @@ section {
     display: none;
 }
 
-.push-slide span::before,
-.sit-slide span::before,
-.run-slider-section span::before {
+.slider-tick {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: 0;
+    display: block;
+    font: inherit;
+    min-width: 32px;
+    height: 34px;
+    line-height: 34px;
+    padding: 0;
+    text-align: center;
+    z-index: 6;
+    touch-action: manipulation;
+}
+
+.slider-tick::before {
     display:block;
     background-color:red;
     position:absolute;
+    top: 0;
+    left: 50%;
     height:4px;
     width:15px;
-    transform:rotate(90deg);
+    transform:translateX(-50%) rotate(90deg);
     content: '';
-    margin-top: -13.5px;
     cursor: pointer;
 }
 

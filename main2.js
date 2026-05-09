@@ -4298,6 +4298,13 @@ altitudeSel.addEventListener('change', () => {
   runSelChange();
 });
 
+function bindSingleTickClick(tick, handler) {
+  const freshTick = tick.cloneNode(true);
+  tick.replaceWith(freshTick);
+  freshTick.addEventListener('click', handler);
+  return freshTick;
+}
+
 function updateScoreMinMaxText() {
   let push_sel = pushSel.value;
   let min = pushSel.value == 'Pushups' ? pushmin : pushSel.value == 'Hand-Release' ? hrmin : '';
@@ -4321,10 +4328,10 @@ function updateScoreMinMaxText() {
   pushTick.innerText = min;
   pushTick.style.cursor = 'pointer';
 
-  pushTick.addEventListener('click', () => {
+  pushTick = bindSingleTickClick(pushTick, () => {
     pushSlider.value = min;
     pushSlideInput();
-  })
+  });
 
   let sit_sel = sitSel.value;
   let sit_min = sit_sel == 'Situps' ? sitmin : sit_sel == 'Reverse Crunch' ? rsitmin : sit_sel == 'Plank' ? runTimeString(plankmin) : '';
@@ -4348,10 +4355,10 @@ function updateScoreMinMaxText() {
     sitTick.innerText = sit_sel == 'Plank' ? runTimeString(plankmin) : sit_min;
     sitTick.style.cursor = 'pointer';
   
-    sitTick.addEventListener('click', () => {
+    sitTick = bindSingleTickClick(sitTick, () => {
       sitSlider.value = sit_min;
       sitSlideInput();
-    })
+    });
 
   let altDiff = calculateAltitudeDiff();
   let run_sel = runSel.value;
@@ -4388,10 +4395,10 @@ function updateScoreMinMaxText() {
     runTick.innerText = shuttlemin - altDiff.shuttle;
     runTick.style.cursor = 'pointer';
 
-    runTick.addEventListener('click', () => {
+    runTick = bindSingleTickClick(runTick, () => {
       runSlider.value = shuttlemin - altDiff.shuttle;
       runSlideInput();
-    })
+    });
   } else if (run_sel == 'Walk') {
     runTick.style.display = 'none';
     let runpercent = (walkmax - runmax) / (runmin - runmax);
@@ -4404,10 +4411,10 @@ function updateScoreMinMaxText() {
     runTick.innerText = runTimeString(walkmax + altDiff.walk);
     runTick.style.cursor = 'pointer';
 
-    runTick.addEventListener('click', () => {
+    runTick = bindSingleTickClick(runTick, () => {
       runSlider.value = walkmax + altDiff.walk;
       runSlideInput();
-    })
+    });
   }
 
   runscore = typeof (runscore) == 'number' ? runscore : runscore == 'Pass' ? 60 : 0;
