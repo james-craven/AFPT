@@ -1,91 +1,67 @@
 (async function () {
-  const [pfraScoring, standardsData] = await Promise.all([
+  const [domModule, pfraScoring, standardsData, pfraState, pfraUi] = await Promise.all([
+    import('./src/pfra/dom.mjs'),
     import('./src/pfra/scoring.mjs'),
     import('./src/pfra/standards.mjs'),
+    import('./src/pfra/state.mjs'),
+    import('./src/pfra/ui.mjs'),
   ]);
   const { loadPfraStandards, walkMaximumTime: standardsWalkMaximumTime } = standardsData;
-  const pfraStatus = document.getElementById('pfra-status');
-  const ageSelect = document.getElementById('age-sel');
-  const sexSelect = document.getElementById('sex-sel');
-  const whtrInput = document.getElementById('pfra-whtr');
-  const strengthEvent = document.getElementById('pfra-strength-event');
-  const strengthPerformance = document.getElementById('pfra-strength-performance');
-  const strengthLabel = document.getElementById('pfra-strength-label');
-  const coreEvent = document.getElementById('pfra-core-event');
-  const corePerformance = document.getElementById('pfra-core-performance');
-  const coreLabel = document.getElementById('pfra-core-label');
-  const cardioEvent = document.getElementById('pfra-cardio-event');
-  const cardioPerformance = document.getElementById('pfra-cardio-performance');
-  const cardioLabel = document.getElementById('pfra-cardio-label');
-  const bodyScoreText = document.getElementById('pfra-body-score');
-  const strengthScoreText = document.getElementById('pfra-strength-score');
-  const coreScoreText = document.getElementById('pfra-core-score');
-  const cardioScoreText = document.getElementById('pfra-cardio-score');
-  const pfraResult = document.getElementById('pfra-result');
-  const standardsMode = document.getElementById('standards-mode');
-  const totalScoreParagraph = document.getElementById('score-txt');
-  const legacyStrengthText = document.getElementById('push-txt-p');
-  const legacyCoreText = document.getElementById('sit-txt-p');
-  const legacyCardioText = document.getElementById('run-txt-p');
-  const legacyPushSelect = document.getElementById('push-sel');
-  const legacyPushInput = document.getElementById('push-txt');
-  const legacyPushSlider = document.getElementById('push-slider');
-  const legacySitSelect = document.getElementById('sit-sel');
-  const legacySitInput = document.getElementById('sit-txt');
-  const legacySitSlider = document.getElementById('sit-slider');
-  const legacyPlankMinuteInput = document.getElementById('plankmintxt');
-  const legacyCardioSelect = document.getElementById('cardio-sel');
-  const legacyTwoMileOption = legacyCardioSelect?.querySelector('option[value="1.5 Mile"]');
-  const legacyHamrOption = legacyCardioSelect?.querySelector('option[value="Shuttle Run"]');
-  const legacyWalkOption = legacyCardioSelect?.querySelector('option[value="Walk"]');
-  const legacyRunMinuteInput = document.getElementById('run-mintxt');
-  const legacyRunSecondInput = document.getElementById('run-sectxt');
-  const legacyRunSlider = document.getElementById('run-slider');
-  const legacyLapText = document.getElementById('run-lap-times');
+  const {
+    cardioEventForLegacy,
+    componentExemptionsFromLegacy,
+    coreEventForLegacy,
+    eventDefaults,
+    eventLabels,
+    legacyAgeToPfraAgeGroup,
+    legacySexToPfraSex,
+    strengthEventForLegacy,
+  } = pfraState;
+  const {
+    ageSelect,
+    body,
+    bodyScoreText,
+    cardioEvent,
+    cardioLabel,
+    cardioPerformance,
+    cardioScoreText,
+    coreEvent,
+    coreLabel,
+    corePerformance,
+    coreScoreText,
+    legacyCardioSelect,
+    legacyCardioText,
+    legacyCoreText,
+    legacyHamrOption,
+    legacyLapText,
+    legacyPlankMinuteInput,
+    legacyPushInput,
+    legacyPushSelect,
+    legacyPushSlider,
+    legacyRunMinuteInput,
+    legacyRunSecondInput,
+    legacyRunSlider,
+    legacySitInput,
+    legacySitSelect,
+    legacySitSlider,
+    legacyStrengthText,
+    legacyTwoMileOption,
+    legacyWalkOption,
+    pfraResult,
+    pfraStatus,
+    sexSelect,
+    standardsMode,
+    strengthEvent,
+    strengthLabel,
+    strengthPerformance,
+    strengthScoreText,
+    totalScoreParagraph,
+    whtrInput,
+  } = domModule.getPfraDom();
   let pfraStandards = null;
   let pfraTables = {};
   let lastStandardsMode = standardsMode?.value || 'legacy';
   let pfraCardioTracksStartingValue = false;
-
-  const eventDefaults = {
-    'push-up': '67',
-    'hand-release-push-up': '52',
-    'sit-up': '58',
-    'cross-leg-reverse-crunch': '60',
-    'forearm-plank': '3:40',
-    'two-mile-run': '13:25',
-    'hamr-20-meter': '87',
-    'two-kilometer-walk': '16:16',
-  };
-
-  const eventLabels = {
-    'push-up': 'STRENGTH REPS:',
-    'hand-release-push-up': 'STRENGTH REPS:',
-    'sit-up': 'CORE REPS:',
-    'cross-leg-reverse-crunch': 'CORE REPS:',
-    'forearm-plank': 'CORE TIME:',
-    'two-mile-run': 'CARDIO TIME:',
-    'hamr-20-meter': 'CARDIO SHUTTLES:',
-    'two-kilometer-walk': 'CARDIO WALK TIME:',
-  };
-
-  function legacyAgeToPfraAgeGroup(age) {
-    return {
-      '< 25': 'under-25',
-      '25-29': '25-29',
-      '30-34': '30-34',
-      '35-39': '35-39',
-      '40-44': '40-44',
-      '45-49': '45-49',
-      '50-54': '50-54',
-      '55-59': '55-59',
-      '60+': '60-and-over',
-    }[age];
-  }
-
-  function legacySexToPfraSex(sex) {
-    return sex.toLowerCase();
-  }
 
   function toSeconds(value) {
     return pfraScoring.toSeconds(value);
@@ -108,30 +84,17 @@
   }
 
   function componentExemptions() {
-    return {
-      strength: legacyPushSelect?.value === 'Exempt',
-      core: legacySitSelect?.value === 'Exempt',
-      cardio: legacyCardioSelect?.value === 'Exempt',
-    };
+    return componentExemptionsFromLegacy({
+      strength: legacyPushSelect?.value,
+      core: legacySitSelect?.value,
+      cardio: legacyCardioSelect?.value,
+    });
   }
 
   function setMainScore(total) {
     if (!totalScoreParagraph || !isPfraMode()) return;
 
-    const category = categoryForTotal(total);
-    const failText = total < 75 ? 'Unsatisfactory!' : `${category}!`;
-    totalScoreParagraph.innerHTML = `PFRA Total Score: <span id="t">${total.toFixed(1)}<br>${failText}</span>`;
-
-    const totalText = document.getElementById('t');
-    if (!totalText) return;
-
-    if (total < 75) {
-      totalText.classList.add('score-txt-red');
-      totalText.classList.remove('score-txt-green');
-    } else {
-      totalText.classList.add('score-txt-green');
-      totalText.classList.remove('score-txt-red');
-    }
+    pfraUi.renderPfraMainScore(totalScoreParagraph, total, categoryForTotal(total));
   }
 
   function restoreLegacyMainScore() {
@@ -292,36 +255,23 @@
   }
 
   function updateCardioModeText() {
-    document.body.classList.toggle('pfra-mode', isPfraMode());
-
-    if (legacyTwoMileOption) legacyTwoMileOption.innerText = isPfraMode() ? '2 Mile' : '1.5 Mile';
-    if (legacyHamrOption) legacyHamrOption.innerText = isPfraMode() ? '20m HAMR' : 'Shuttle Run';
-    if (legacyWalkOption) legacyWalkOption.innerText = isPfraMode() ? '2 km Walk' : 'Walk';
+    pfraUi.renderCardioModeText({
+      body,
+      isPfraMode: isPfraMode(),
+      legacyHamrOption,
+      legacyTwoMileOption,
+      legacyWalkOption,
+    });
   }
 
   function updatePfraLapTimes() {
-    if (!isPfraMode() || !legacyLapText) return;
-
-    if (legacyCardioSelect?.value === 'Exempt' || cardioEvent.value === 'hamr-20-meter' || cardioEvent.value === 'two-kilometer-walk') {
-      legacyLapText.innerHTML = '';
-      return;
-    }
-
-    const totalSeconds = toSeconds(cardioPerformance.value);
-    if (!Number.isFinite(totalSeconds)) {
-      legacyLapText.innerHTML = '';
-      return;
-    }
-
-    const lapCount = 8;
-    const lapSeconds = Math.floor(totalSeconds / lapCount);
-    let text = `Req'd 8 Lap Time: ~${secondsToTimeString(lapSeconds)}`;
-
-    for (let lap = 1; lap <= lapCount; lap += 1) {
-      text += `<br>Lap ${lap}: ≤ ${secondsToTimeString(Math.floor((totalSeconds * lap) / lapCount))}`;
-    }
-
-    legacyLapText.innerHTML = text;
+    pfraUi.renderPfraLapTimes({
+      cardioEventValue: cardioEvent.value,
+      cardioPerformance: cardioPerformance.value,
+      isPfraMode: isPfraMode(),
+      legacyCardioValue: legacyCardioSelect?.value,
+      legacyLapText,
+    });
   }
 
   function numericPerformanceValue(value, table) {
@@ -329,42 +279,11 @@
   }
 
   function setSliderPassState(slider, isPassing, isExempt) {
-    if (!slider) return;
-
-    if (isExempt) {
-      slider.classList.remove('slider-green', 'slider-red');
-      return;
-    }
-
-    slider.classList.toggle('slider-green', isPassing);
-    slider.classList.toggle('slider-red', !isPassing);
+    pfraUi.setSliderPassState(slider, isPassing, isExempt);
   }
 
   function updateThresholdTick(tickId, slider, thresholdValue, label, isVisible = true) {
     const tick = document.getElementById(tickId);
-    if (!tick || !slider || !isVisible) {
-      if (tick) tick.style.display = 'none';
-      return;
-    }
-
-    const min = Number(slider.min);
-    const max = Number(slider.max);
-    const threshold = Number(thresholdValue);
-    if (!Number.isFinite(min) || !Number.isFinite(max) || !Number.isFinite(threshold) || max === min) {
-      tick.style.display = 'none';
-      return;
-    }
-
-    tick.innerText = label;
-    const percent = Math.min(1, Math.max(0, (threshold - min) / (max - min)));
-    const sliderWidth = slider.getBoundingClientRect().width;
-    const tickWidth = tick.getBoundingClientRect().width;
-    const handleSize = 45;
-    const left = percent * (sliderWidth - handleSize) + handleSize / 2 - tickWidth / 2;
-
-    tick.style.display = 'block';
-    tick.style.left = `${left}px`;
-    tick.style.cursor = 'pointer';
     const bindTick = window.bindSliderTickClick || ((element, handler) => {
       element.sliderTickHandler = handler;
       if (element.dataset.sliderTickBound !== 'true') {
@@ -376,9 +295,13 @@
       return element;
     });
 
-    bindTick(tick, () => {
-      slider.value = threshold;
-      slider.dispatchEvent(new Event('input', { bubbles: true }));
+    pfraUi.updateThresholdTick({
+      bindTick,
+      isVisible,
+      label,
+      slider,
+      thresholdValue,
+      tick,
     });
   }
 
@@ -473,27 +396,13 @@
   }
 
   function setEventControlsFromLegacySelections() {
-    if (legacyPushSelect?.value === 'Pushups') {
-      strengthEvent.value = 'push-up';
-    } else if (legacyPushSelect?.value === 'Hand-Release') {
-      strengthEvent.value = 'hand-release-push-up';
-    }
+    const nextStrengthEvent = strengthEventForLegacy(legacyPushSelect?.value);
+    const nextCoreEvent = coreEventForLegacy(legacySitSelect?.value);
+    const nextCardioEvent = cardioEventForLegacy(legacyCardioSelect?.value);
 
-    if (legacySitSelect?.value === 'Situps') {
-      coreEvent.value = 'sit-up';
-    } else if (legacySitSelect?.value === 'Reverse Crunch') {
-      coreEvent.value = 'cross-leg-reverse-crunch';
-    } else if (legacySitSelect?.value === 'Plank') {
-      coreEvent.value = 'forearm-plank';
-    }
-
-    if (legacyCardioSelect?.value === 'Shuttle Run') {
-      cardioEvent.value = 'hamr-20-meter';
-    } else if (legacyCardioSelect?.value === 'Walk') {
-      cardioEvent.value = 'two-kilometer-walk';
-    } else if (legacyCardioSelect?.value === '1.5 Mile') {
-      cardioEvent.value = 'two-mile-run';
-    }
+    if (nextStrengthEvent) strengthEvent.value = nextStrengthEvent;
+    if (nextCoreEvent) coreEvent.value = nextCoreEvent;
+    if (nextCardioEvent) cardioEvent.value = nextCardioEvent;
   }
 
   function syncPfraPerformancesFromLegacyControls() {

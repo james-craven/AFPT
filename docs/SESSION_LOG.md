@@ -42,3 +42,11 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Updated PFRA validation tests to exercise WHtR, 2 km walk, full assessment scoring, and table scoring through shared functions.
 - Updated Workbox/PWA validation so the new modules are cached offline.
 - `npm test` passed after this phase.
+
+### Phase 2 Checkpoint
+
+- Added `src/pfra/dom.mjs` for PFRA/legacy DOM lookup.
+- Added `src/pfra/state.mjs` for PFRA defaults, labels, and legacy-to-PFRA event mapping.
+- Added `src/pfra/ui.mjs` for PFRA rendering helpers, lap text, slider states, and threshold tick positioning.
+- Kept `pfra-calculator.js` as the adapter that coordinates the existing UI with the new modules.
+- `npm test` passed after this phase.
