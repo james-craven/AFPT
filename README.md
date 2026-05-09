@@ -38,7 +38,22 @@ The offline modernization plan lives in `docs/OFFLINE_FIRST_PLAN.md`.
 
 ## Current modernization notes
 
-- Scoring standards are currently embedded in `main2.js`.
+- PFRA 2026 standards metadata lives in `standards/af-pfra-2026.json`.
+- PFRA scoring tables live in `standards/extracted/tables/`.
+- PFRA scoring and standards loading are split into vanilla ES modules under `src/pfra/`.
+- Legacy scoring standards are still embedded in `main2.js` and are documented in `docs/LEGACY_BOUNDARIES.md`.
 - Chart references are currently stored as image assets in `web formatted jpgs/`.
-- A future standards update system should move scoring rules into versioned data files before adding PDF/image import.
+- A future standards update system should keep the review/confirm workflow before accepting PDF/image imports.
 - The app is designed to stay static-hostable, low-cost, installable, and ad-free.
+
+## Migration docs
+
+- `AGENTS.md`
+- `docs/PROJECT_OVERVIEW.md`
+- `docs/ARCHITECTURE_TARGET.md`
+- `docs/REFACTOR_PLAN.md`
+- `docs/LEGACY_BOUNDARIES.md`
+- `docs/STATIC_HOSTING_CHECKLIST.md`
+- `docs/TEST_PLAN.md`
+- `docs/TODO.md`
+- `docs/SESSION_LOG.md`

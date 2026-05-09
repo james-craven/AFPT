@@ -58,3 +58,13 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added `docs/LEGACY_BOUNDARIES.md`.
 - Added `docs/STATIC_HOSTING_CHECKLIST.md`.
 - `workbox-config.js` now includes `src/pfra/*.mjs`; PWA validation checks the PFRA modules are precached.
+
+### Phase 5 Notes
+
+- Removed stale end-of-file comments from `main2.js`.
+- Updated README, standards docs, project overview, and test plan to match the migrated PFRA module structure.
+- Final verification completed:
+  - `npm test` passed.
+  - `npm audit` reported 0 vulnerabilities.
+  - `git diff --check` passed.
+  - Syntax checks passed for `main2.js`, `pfra-calculator.js`, `pwa.js`, `tools/browser-regression.mjs`, and all `src/pfra/*.mjs` modules.

@@ -9,7 +9,7 @@
 - [x] Phase 2: Split PFRA DOM lookup, state sync, rendering, and events where practical.
 - [x] Phase 3: Document legacy scoring boundaries and future removable code.
 - [x] Phase 4: Verify service-worker cache paths after module extraction.
-- [ ] Phase 5: Final docs update, verification, and checkpoint.
+- [x] Phase 5: Final docs update, verification, and checkpoint.
 
 ## Later Improvements
 

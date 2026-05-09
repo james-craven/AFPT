@@ -4991,7 +4991,3 @@ function shouldShowDevVersionModal() {
 if (shouldShowDevVersionModal()) {
   showDevVersionModal();
 }
-
-// Notes: I can use padding-left on span to move the number centered under the tick mark
-//I need to fix the function change all text boxes
-//

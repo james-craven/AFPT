@@ -18,16 +18,16 @@ Note: AFPC blocked direct command-line PDF downloads from this environment with 
 
 ## Extraction status
 
-- `af-pfra-2026.json` is a source-mapped scaffold, not yet a complete score table.
+- `af-pfra-2026.json` is the long-term PFRA standards source of truth for metadata, source files, body composition scoring, walk thresholds, and table file references.
 - `sources/PFRA-Scoring-Charts.pdf` is the manually downloaded source PDF.
 - `extracted/PFRA-Scoring-Charts.txt` is text extracted from that PDF for table parsing.
 - `extracted/tables/` contains generated structured tables from `npm run extract:standards`.
 - Waist-to-height ratio scoring and 2.0 kilometer walk maximums are captured because they are compact and uniform.
-- Event table extraction is still needed for push-up, hand-release push-up, sit-up, reverse crunch, plank, 2-mile run, and HAMR.
+- Event table extraction has been completed for push-up, hand-release push-up, sit-up, reverse crunch, plank, 2-mile run, and HAMR.
 
 ## Implementation direction
 
-The calculator should eventually load a standards file like `af-pfra-2026.json` instead of reading hardcoded tables from `main2.js`. Once that works for one component, we can migrate the rest incrementally.
+The PFRA calculator now loads `af-pfra-2026.json` and the extracted table files through `src/pfra/standards.mjs`. Legacy standards still live in `main2.js` until they are migrated into versioned data.
 
 ## Validation
 
