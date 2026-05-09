@@ -178,6 +178,8 @@ for (const table of tables) {
 
   const extracted = extractTable(pageText.split(/\r?\n/), table);
   const outputPath = path.join(outputDir, `${table.id}.json`);
-  fs.writeFileSync(outputPath, `${JSON.stringify(extracted, null, 2)}\n`);
+  const tempPath = `${outputPath}.tmp`;
+  fs.writeFileSync(tempPath, `${JSON.stringify(extracted, null, 2)}\n`);
+  fs.renameSync(tempPath, outputPath);
   console.log(`Wrote ${path.relative(rootDir, outputPath)} (${extracted.rows.length} rows)`);
 }

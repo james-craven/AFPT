@@ -28,3 +28,13 @@ Note: AFPC blocked direct command-line PDF downloads from this environment with 
 ## Implementation direction
 
 The calculator should eventually load a standards file like `af-pfra-2026.json` instead of reading hardcoded tables from `main2.js`. Once that works for one component, we can migrate the rest incrementally.
+
+## Validation
+
+Run:
+
+```sh
+npm test
+```
+
+This checks representative scoring examples against the extracted PFRA tables.

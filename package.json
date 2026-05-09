@@ -8,7 +8,7 @@
     "build:sw": "workbox generateSW workbox-config.js",
     "extract:standards": "node tools/extract-pfra-tables.mjs",
     "stamp:dev": "node tools/write-dev-build-info.mjs",
-    "test": "echo \"No automated tests yet\" && exit 0"
+    "test": "node tools/validate-pfra-tables.mjs"
   },
   "keywords": [],
   "author": "",
