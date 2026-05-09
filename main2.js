@@ -4944,6 +4944,15 @@ if (isIos() && !isPwa()) {
   addInstallMenuItem();
 }
 
+window.afptLegacy = Object.freeze({
+  ageSexChange,
+  bindSliderTickClick: bindSingleTickClick,
+  changeLapTime,
+  changeTxtboxes,
+  runSelChange,
+  updateScoreMinMaxText,
+});
+
 window.addEventListener('resize', updateScoreMinMaxText);
 
 async function showDevVersionModal() {

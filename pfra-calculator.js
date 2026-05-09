@@ -98,8 +98,9 @@
   }
 
   function restoreLegacyMainScore() {
-    if (isPfraMode() || typeof window.updateScoreMinMaxText !== 'function') return;
-    window.updateScoreMinMaxText();
+    const updateScore = window.afptLegacy?.updateScoreMinMaxText || window.updateScoreMinMaxText;
+    if (isPfraMode() || typeof updateScore !== 'function') return;
+    updateScore();
   }
 
   function topCellValue(table, ageGroup, sex) {
@@ -284,7 +285,7 @@
 
   function updateThresholdTick(tickId, slider, thresholdValue, label, isVisible = true) {
     const tick = document.getElementById(tickId);
-    const bindTick = window.bindSliderTickClick || ((element, handler) => {
+    const bindTick = window.afptLegacy?.bindSliderTickClick || window.bindSliderTickClick || ((element, handler) => {
       element.sliderTickHandler = handler;
       if (element.dataset.sliderTickBound !== 'true') {
         element.addEventListener('click', () => {
@@ -490,9 +491,10 @@
 
     updateCardioModeText();
 
-    if (!isPfraMode() && typeof window.ageSexChange === 'function') {
+    const syncLegacyAgeSex = window.afptLegacy?.ageSexChange || window.ageSexChange;
+    if (!isPfraMode() && typeof syncLegacyAgeSex === 'function') {
       pfraCardioTracksStartingValue = false;
-      window.ageSexChange();
+      syncLegacyAgeSex();
       lastStandardsMode = standardsMode?.value || 'legacy';
       return;
     }

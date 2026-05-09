@@ -50,3 +50,11 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added `src/pfra/ui.mjs` for PFRA rendering helpers, lap text, slider states, and threshold tick positioning.
 - Kept `pfra-calculator.js` as the adapter that coordinates the existing UI with the new modules.
 - `npm test` passed after this phase.
+
+### Phase 3 And 4 Notes
+
+- Added a formal `window.afptLegacy` boundary in `main2.js`.
+- Updated PFRA integration to prefer `window.afptLegacy` for legacy score sync, age/sex reset, and tick binding.
+- Added `docs/LEGACY_BOUNDARIES.md`.
+- Added `docs/STATIC_HOSTING_CHECKLIST.md`.
+- `workbox-config.js` now includes `src/pfra/*.mjs`; PWA validation checks the PFRA modules are precached.
