@@ -4299,11 +4299,19 @@ altitudeSel.addEventListener('change', () => {
 });
 
 function bindSingleTickClick(tick, handler) {
-  const freshTick = tick.cloneNode(true);
-  tick.replaceWith(freshTick);
-  freshTick.addEventListener('click', handler);
-  return freshTick;
+  tick.sliderTickHandler = handler;
+
+  if (tick.dataset.sliderTickBound !== 'true') {
+    tick.addEventListener('click', () => {
+      tick.sliderTickHandler?.();
+    });
+    tick.dataset.sliderTickBound = 'true';
+  }
+
+  return tick;
 }
+
+window.bindSliderTickClick = bindSingleTickClick;
 
 function updateScoreMinMaxText() {
   let push_sel = pushSel.value;

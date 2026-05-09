@@ -6,6 +6,7 @@
   const forceLocalServiceWorker = params.get('sw') === '1';
   const disableServiceWorker = params.get('no-sw') === '1';
   let refreshing = false;
+  let reloadOnControllerChange = false;
   let updateRegistration = null;
 
   function shouldEnableServiceWorker() {
@@ -22,6 +23,11 @@
     await Promise.all(registrations.map((registration) => registration.unregister()));
   }
 
+  function activateWaitingWorker(registration) {
+    reloadOnControllerChange = true;
+    registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
+  }
+
   function showUpdatePrompt(registration) {
     const modal = document.getElementById('pwa-update-modal');
     const updateButton = document.getElementById('pwa-update-now');
@@ -30,7 +36,7 @@
     updateRegistration = registration;
 
     if (!modal || !updateButton || !laterButton) {
-      registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
+      activateWaitingWorker(registration);
       return;
     }
 
@@ -38,7 +44,7 @@
 
     updateButton.onclick = () => {
       updateButton.disabled = true;
-      updateRegistration?.waiting?.postMessage({ type: 'SKIP_WAITING' });
+      activateWaitingWorker(updateRegistration);
     };
 
     laterButton.onclick = () => {
@@ -90,6 +96,7 @@
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!reloadOnControllerChange) return;
       if (refreshing) return;
       refreshing = true;
       window.location.reload();

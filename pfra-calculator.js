@@ -473,9 +473,18 @@
     tick.style.display = 'block';
     tick.style.left = `${left}px`;
     tick.style.cursor = 'pointer';
-    const freshTick = tick.cloneNode(true);
-    tick.replaceWith(freshTick);
-    freshTick.addEventListener('click', () => {
+    const bindTick = window.bindSliderTickClick || ((element, handler) => {
+      element.sliderTickHandler = handler;
+      if (element.dataset.sliderTickBound !== 'true') {
+        element.addEventListener('click', () => {
+          element.sliderTickHandler?.();
+        });
+        element.dataset.sliderTickBound = 'true';
+      }
+      return element;
+    });
+
+    bindTick(tick, () => {
       slider.value = threshold;
       slider.dispatchEvent(new Event('input', { bubbles: true }));
     });
@@ -633,6 +642,22 @@
     setTimeInputsFromSeconds(Number(legacyRunSlider.value));
   }
 
+  function setLegacyRunSliderFromTextInputs() {
+    if (!legacyRunSlider || legacyCardioSelect?.value === 'Exempt') return;
+
+    if (legacyCardioSelect?.value === 'Shuttle Run') {
+      const shuttles = Number(legacyRunSecondInput?.value || 0);
+      if (Number.isFinite(shuttles)) legacyRunSlider.value = shuttles;
+      return;
+    }
+
+    const minutes = Number(legacyRunMinuteInput?.value || 0);
+    const seconds = Number(legacyRunSecondInput?.value || 0);
+    const totalSeconds = (minutes * 60) + seconds;
+
+    if (Number.isFinite(totalSeconds)) legacyRunSlider.value = totalSeconds;
+  }
+
   function syncFromLegacyCalculator({ usePfraCardioStartingValue = pfraCardioTracksStartingValue } = {}) {
     updateCardioModeText();
 
@@ -680,6 +705,10 @@
   window.syncPfraFromLegacy = syncFromLegacyCalculator;
 
   function handleLegacyControlChange(event) {
+    const syncAfterLegacyHandlers = typeof queueMicrotask === 'function'
+      ? queueMicrotask
+      : (callback) => Promise.resolve().then(callback);
+
     if (isPfraMode()) {
       if (
         event?.currentTarget === legacyRunMinuteInput
@@ -687,6 +716,13 @@
         || event?.currentTarget === legacyRunSlider
       ) {
         pfraCardioTracksStartingValue = false;
+
+        if (
+          event?.currentTarget === legacyRunMinuteInput
+          || event?.currentTarget === legacyRunSecondInput
+        ) {
+          setLegacyRunSliderFromTextInputs();
+        }
       }
 
       if (event?.currentTarget === legacyCardioSelect) {
@@ -694,7 +730,7 @@
       }
     }
 
-    syncFromLegacyCalculator();
+    syncAfterLegacyHandlers(syncFromLegacyCalculator);
   }
 
   function updatePfraCalculator() {

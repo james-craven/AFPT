@@ -8,12 +8,14 @@
     "build:sw": "node tools/build-sw.mjs",
     "extract:standards": "node tools/extract-pfra-tables.mjs",
     "stamp:dev": "node tools/write-dev-build-info.mjs",
-    "test": "node tools/validate-pfra-tables.mjs && npm run build:sw && node tools/validate-pwa-cache.mjs"
+    "test": "node tools/validate-pfra-tables.mjs && npm run build:sw && node tools/validate-pwa-cache.mjs && npm run test:browser",
+    "test:browser": "node tools/browser-regression.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "playwright-core": "^1.59.1",
     "workbox-build": "^7.4.1"
   }
 }
