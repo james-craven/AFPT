@@ -57,6 +57,7 @@
     'forearm-plank': '3:40',
     'two-mile-run': '13:25',
     'hamr-20-meter': '87',
+    'two-kilometer-walk': '16:16',
   };
 
   const eventLabels = {
@@ -67,6 +68,24 @@
     'forearm-plank': 'CORE TIME:',
     'two-mile-run': 'CARDIO TIME:',
     'hamr-20-meter': 'CARDIO SHUTTLES:',
+    'two-kilometer-walk': 'CARDIO WALK TIME:',
+  };
+
+  const walkMaximumTimes = {
+    male: {
+      'under-30': '16:16',
+      '30-39': '16:18',
+      '40-49': '16:23',
+      '50-59': '16:40',
+      '60-and-over': '16:58',
+    },
+    female: {
+      'under-30': '17:22',
+      '30-39': '17:28',
+      '40-49': '17:49',
+      '50-59': '18:11',
+      '60-and-over': '18:53',
+    },
   };
 
   function legacyAgeToPfraAgeGroup(age) {
@@ -85,6 +104,20 @@
 
   function legacySexToPfraSex(sex) {
     return sex.toLowerCase();
+  }
+
+  function pfraAgeToWalkAgeGroup(ageGroup) {
+    return {
+      'under-25': 'under-30',
+      '25-29': 'under-30',
+      '30-34': '30-39',
+      '35-39': '30-39',
+      '40-44': '40-49',
+      '45-49': '40-49',
+      '50-54': '50-59',
+      '55-59': '50-59',
+      '60-and-over': '60-and-over',
+    }[ageGroup];
   }
 
   function toSeconds(value) {
@@ -114,6 +147,20 @@
     }
 
     return 0;
+  }
+
+  function walkMaximumTime(ageGroup, sex) {
+    const walkAgeGroup = pfraAgeToWalkAgeGroup(ageGroup);
+    return walkMaximumTimes[sex]?.[walkAgeGroup];
+  }
+
+  function scoreWalk(ageGroup, sex, performance) {
+    const maxTime = walkMaximumTime(ageGroup, sex);
+    const performanceValue = toSeconds(performance);
+    const maxValue = toSeconds(maxTime);
+
+    if (!Number.isFinite(performanceValue) || !Number.isFinite(maxValue)) return 0;
+    return performanceValue <= maxValue ? 50 : 0;
   }
 
   function scoreWhtr(value) {
@@ -149,6 +196,14 @@
 
   function isPfraMode() {
     return standardsMode?.value === 'pfra';
+  }
+
+  function componentExemptions() {
+    return {
+      strength: legacyPushSelect?.value === 'Exempt',
+      core: legacySitSelect?.value === 'Exempt',
+      cardio: legacyCardioSelect?.value === 'Exempt',
+    };
   }
 
   function setMainScore(total) {
@@ -260,6 +315,12 @@
         toSeconds(firstScoringCellValue(pfraTables['two-mile-run'], ageGroup, sex)),
         toSeconds(topCellValue(pfraTables['two-mile-run'], ageGroup, sex)),
       );
+    } else if (legacyCardioSelect?.value === 'Walk') {
+      setSliderRange(
+        legacyRunSlider,
+        toSeconds(walkMaximumTime(ageGroup, sex)),
+        0,
+      );
     }
   }
 
@@ -274,7 +335,7 @@
   function updatePfraLapTimes() {
     if (!isPfraMode() || !legacyLapText) return;
 
-    if (cardioEvent.value === 'hamr-20-meter') {
+    if (cardioEvent.value === 'hamr-20-meter' || cardioEvent.value === 'two-kilometer-walk') {
       legacyLapText.innerHTML = '';
       return;
     }
@@ -312,33 +373,53 @@
 
       legacyRunSlider.value = shuttles;
       legacyRunSecondInput.value = shuttles;
+    } else if (legacyCardioSelect?.value === 'Walk' && cardioEvent.value === 'two-kilometer-walk') {
+      const totalSeconds = toSeconds(cardioPerformance.value || eventDefaults['two-kilometer-walk']);
+      if (!Number.isFinite(totalSeconds)) return;
+
+      legacyRunSlider.value = totalSeconds;
+      legacyRunMinuteInput.value = Math.floor(totalSeconds / 60);
+      legacyRunSecondInput.value = String(totalSeconds % 60).padStart(2, '0');
     }
   }
 
-  function updateLegacyComponentText(scores, tables) {
+  function updateLegacyComponentText(scores, tables, exemptions) {
     if (!isPfraMode()) return;
 
     const ageGroup = legacyAgeToPfraAgeGroup(ageSelect.value);
     const sex = legacySexToPfraSex(sexSelect.value);
-    const strengthMin = firstScoringCellValue(tables.strength, ageGroup, sex);
-    const strengthMax = topCellValue(tables.strength, ageGroup, sex);
-    const coreMin = firstScoringCellValue(tables.core, ageGroup, sex);
-    const coreMax = topCellValue(tables.core, ageGroup, sex);
-    const cardioMin = firstScoringCellValue(tables.cardio, ageGroup, sex);
-    const cardioMax = topCellValue(tables.cardio, ageGroup, sex);
+    const strengthMin = tables.strength ? firstScoringCellValue(tables.strength, ageGroup, sex) : undefined;
+    const strengthMax = tables.strength ? topCellValue(tables.strength, ageGroup, sex) : undefined;
+    const coreMin = tables.core ? firstScoringCellValue(tables.core, ageGroup, sex) : undefined;
+    const coreMax = tables.core ? topCellValue(tables.core, ageGroup, sex) : undefined;
+    const cardioMin = tables.cardio
+      ? firstScoringCellValue(tables.cardio, ageGroup, sex)
+      : undefined;
+    const cardioMax = tables.cardio
+      ? topCellValue(tables.cardio, ageGroup, sex)
+      : walkMaximumTime(ageGroup, sex);
 
-    if (legacyStrengthText) {
+    if (legacyStrengthText && exemptions.strength) {
+      legacyStrengthText.innerHTML = 'Strength Score: EXEMPT';
+    } else if (legacyStrengthText) {
       legacyStrengthText.innerHTML = `Strength Score: ${formatScore(scores.strength)} | Min: ${formatPerformance(strengthMin, tables.strength)} | Max: ${formatPerformance(strengthMax, tables.strength)}`;
     }
 
-    if (legacyCoreText) {
+    if (legacyCoreText && exemptions.core) {
+      legacyCoreText.innerHTML = 'Core Score: EXEMPT';
+    } else if (legacyCoreText) {
       legacyCoreText.innerHTML = `Core Score: ${formatScore(scores.core)} | Min: ${formatPerformance(coreMin, tables.core)} | Max: ${formatPerformance(coreMax, tables.core)}`;
     }
 
-    if (legacyCardioText && cardioEvent.value === 'hamr-20-meter') {
+    if (legacyCardioText && exemptions.cardio) {
+      legacyCardioText.innerHTML = 'Cardio Score: EXEMPT';
+    } else if (legacyCardioText && cardioEvent.value === 'hamr-20-meter') {
       legacyCardioText.innerHTML = `Cardio Score: ${formatScore(scores.cardio)} | Min: ${formatPerformance(cardioMin, tables.cardio)} | Max: ${formatPerformance(cardioMax, tables.cardio)}`;
     } else if (legacyCardioText && cardioEvent.value === 'two-mile-run') {
       legacyCardioText.innerHTML = `Cardio Score: ${formatScore(scores.cardio)} | Min: ${formatPerformance(cardioMin, tables.cardio)} | Max: ${formatPerformance(cardioMax, tables.cardio)}`;
+    } else if (legacyCardioText && cardioEvent.value === 'two-kilometer-walk') {
+      const result = scores.cardio === 50 ? 'Pass' : 'Fail';
+      legacyCardioText.innerHTML = `Cardio Score: ${formatScore(scores.cardio)} (${result}) | Max: ${cardioMax}`;
     }
   }
 
@@ -389,13 +470,18 @@
         cardioEvent.value = 'hamr-20-meter';
       } else if (legacyCardioSelect?.value === '1.5 Mile') {
         cardioEvent.value = 'two-mile-run';
+      } else if (legacyCardioSelect?.value === 'Walk') {
+        cardioEvent.value = 'two-kilometer-walk';
       }
 
       applyPfraCardioToLegacyControls();
     } else if (legacyCardioSelect?.value === 'Shuttle Run') {
       cardioEvent.value = 'hamr-20-meter';
       cardioPerformance.value = legacyRunSecondInput.value || eventDefaults[cardioEvent.value];
-    } else if (cardioEvent.value === 'hamr-20-meter') {
+    } else if (legacyCardioSelect?.value === 'Walk') {
+      cardioEvent.value = 'two-kilometer-walk';
+      cardioPerformance.value = `${Number(legacyRunMinuteInput.value || 0)}:${String(Number(legacyRunSecondInput.value || 0)).padStart(2, '0')}`;
+    } else if (legacyCardioSelect?.value === '1.5 Mile' && cardioEvent.value === 'hamr-20-meter') {
       cardioEvent.value = 'two-mile-run';
       cardioPerformance.value = eventDefaults[cardioEvent.value];
     } else if (legacyCardioSelect?.value === '1.5 Mile' && cardioEvent.value === 'two-mile-run') {
@@ -429,31 +515,48 @@
 
     const ageGroup = legacyAgeToPfraAgeGroup(ageSelect.value);
     const sex = legacySexToPfraSex(sexSelect.value);
+    const exemptions = componentExemptions();
     const strengthTable = pfraTables[strengthEvent.value];
     const coreTable = pfraTables[coreEvent.value];
-    const cardioTable = pfraTables[cardioEvent.value];
+    const cardioTable = cardioEvent.value === 'two-kilometer-walk'
+      ? null
+      : pfraTables[cardioEvent.value];
 
-    if (!strengthTable || !coreTable || !cardioTable) {
+    if ((!strengthTable && !exemptions.strength) || (!coreTable && !exemptions.core) || (!cardioTable && cardioEvent.value !== 'two-kilometer-walk' && !exemptions.cardio)) {
       pfraResult.innerText = 'PFRA Total: standards not loaded';
       return;
     }
 
     const bodyScore = scoreWhtr(whtrInput.value);
-    const strengthScore = scoreFromTable(strengthTable, ageGroup, sex, strengthPerformance.value.trim());
-    const coreScore = scoreFromTable(coreTable, ageGroup, sex, corePerformance.value.trim());
-    const cardioScore = scoreFromTable(cardioTable, ageGroup, sex, cardioPerformance.value.trim());
-    const total = bodyScore + strengthScore + coreScore + cardioScore;
+    const strengthScore = exemptions.strength
+      ? 0
+      : scoreFromTable(strengthTable, ageGroup, sex, strengthPerformance.value.trim());
+    const coreScore = exemptions.core
+      ? 0
+      : scoreFromTable(coreTable, ageGroup, sex, corePerformance.value.trim());
+    const cardioScore = exemptions.cardio
+      ? 0
+      : cardioEvent.value === 'two-kilometer-walk'
+      ? scoreWalk(ageGroup, sex, cardioPerformance.value.trim())
+      : scoreFromTable(cardioTable, ageGroup, sex, cardioPerformance.value.trim());
+    const availablePoints = 100
+      - (exemptions.strength ? 15 : 0)
+      - (exemptions.core ? 15 : 0)
+      - (exemptions.cardio ? 50 : 0);
+    const rawTotal = bodyScore + strengthScore + coreScore + cardioScore;
+    const total = availablePoints > 0 ? (rawTotal / availablePoints) * 100 : rawTotal;
 
     bodyScoreText.innerText = formatScore(bodyScore);
-    strengthScoreText.innerText = formatScore(strengthScore);
-    coreScoreText.innerText = formatScore(coreScore);
-    cardioScoreText.innerText = formatScore(cardioScore);
+    strengthScoreText.innerText = exemptions.strength ? 'EXEMPT' : formatScore(strengthScore);
+    coreScoreText.innerText = exemptions.core ? 'EXEMPT' : formatScore(coreScore);
+    cardioScoreText.innerText = exemptions.cardio ? 'EXEMPT' : formatScore(cardioScore);
     pfraResult.innerText = `PFRA Total: ${total.toFixed(1)} - ${categoryForTotal(total)}`;
     setMainScore(total);
     restoreLegacyMainScore();
     updateLegacyComponentText(
       { strength: strengthScore, core: coreScore, cardio: cardioScore },
       { strength: strengthTable, core: coreTable, cardio: cardioTable },
+      exemptions,
     );
     updatePfraLapTimes();
   }
