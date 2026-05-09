@@ -29,7 +29,9 @@ node -c tools/browser-regression.mjs
 `npm test` runs:
 
 - `tools/validate-pfra-tables.mjs`
-  - Validates representative PFRA table scores.
+  - Validates fixture-backed PFRA scoring examples from `tools/fixtures/pfra-scoring-examples.json`.
+  - Covers direct event tables, WHtR, 2 km walk thresholds, and full-assessment totals.
+  - Includes male and female examples, young/middle/older age groups, max values, minimum scoring values, failing values, and immediate threshold boundary cases.
 - `npm run build:sw`
   - Regenerates `sw.js`.
 - `tools/validate-pwa-cache.mjs`

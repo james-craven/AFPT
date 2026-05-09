@@ -81,3 +81,16 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Confirmed PFRA mode loads, updates cardio labels, shows the 2-mile run score text, and renders 8 lap times.
 - Confirmed a validated PFRA max-score example returns `PFRA Total: 100.0 - Excellent`.
 - Confirmed live PWA/offline behavior in a persistent Chrome profile: service worker activated for scope `https://james-craven.github.io/AFPT/`, the page reloaded offline, PFRA standards loaded offline, and PFRA run scoring text rendered offline.
+
+### PFRA Scoring Verification Expansion
+
+- Reviewed the previous 16 PFRA checks: 10 direct event-table examples, 3 WHtR examples, 2 walk-threshold examples, and 1 full-assessment max example.
+- Added `tools/fixtures/pfra-scoring-examples.json` as the clear fixture source for scoring examples.
+- Expanded automated scoring coverage to 98 examples:
+  - 75 direct table examples across strength, core, run, plank, and HAMR events.
+  - 8 WHtR examples.
+  - 10 two-kilometer walk pass/fail threshold examples.
+  - 5 full-assessment examples.
+- Added max, minimum, failing, midpoint, and immediate threshold-boundary examples across male/female and young/middle/older age groups.
+- Preserved the known current examples in the fixture with `previous-*` ids.
+- Source-table ambiguity: `standards/af-pfra-2026.json` still reports `source-mapped-incomplete`, while the generated event-table files are marked `needsReview:false`; final production confidence should include continued PDF spot checks or an independent row-by-row audit.

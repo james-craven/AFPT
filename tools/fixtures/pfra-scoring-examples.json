@@ -1,0 +1,921 @@
+{
+  "description": "PFRA 2026 scoring examples validated against standards/af-pfra-2026.json and standards/extracted/tables/*.json.",
+  "source": {
+    "standardsFile": "standards/af-pfra-2026.json",
+    "tableDirectory": "standards/extracted/tables",
+    "sourcePdf": "standards/sources/PFRA-Scoring-Charts.pdf",
+    "sourcePdfSha256": "9ee7689f8f52e48e060cb88846d2dfc2bccab76ae41d2a433d08f2ac7e89aea3",
+    "effectiveDate": "2026-03-01"
+  },
+  "notes": [
+    "The previous inline validator covered 10 table examples, 3 WHtR examples, 2 walk threshold examples, and 1 full-assessment max example.",
+    "Boundary examples use exact extracted table thresholds plus one step immediately outside the threshold where practical.",
+    "The standards metadata still says source-mapped-incomplete even though the extracted event table files are marked needsReview:false; final confidence still depends on continued source-PDF spot checks."
+  ],
+  "tableCases": [
+    {
+      "id": "previous-push-up-under-25-male-max",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": 67,
+      "expectedPoints": 15,
+      "expectedMatchedValue": 67
+    },
+    {
+      "id": "previous-push-up-60-plus-female-minimum",
+      "tableId": "push-up",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 3,
+      "expectedPoints": 2.5,
+      "expectedMatchedValue": 3
+    },
+    {
+      "id": "previous-hand-release-25-29-female-max",
+      "tableId": "hand-release-push-up",
+      "ageGroup": "25-29",
+      "sex": "female",
+      "performance": 40,
+      "expectedPoints": 15,
+      "expectedMatchedValue": 40
+    },
+    {
+      "id": "previous-sit-up-50-54-male-mid-row",
+      "tableId": "sit-up",
+      "ageGroup": "50-54",
+      "sex": "male",
+      "performance": 34,
+      "expectedPoints": 9,
+      "expectedMatchedValue": 34
+    },
+    {
+      "id": "previous-cross-leg-60-plus-female-minimum",
+      "tableId": "cross-leg-reverse-crunch",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 17,
+      "expectedPoints": 2.5,
+      "expectedMatchedValue": 17
+    },
+    {
+      "id": "previous-plank-under-25-male-max",
+      "tableId": "forearm-plank",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "3:40",
+      "expectedPoints": 15,
+      "expectedMatchedValue": "3:40"
+    },
+    {
+      "id": "previous-run-under-25-male-max",
+      "tableId": "two-mile-run",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "13:25",
+      "expectedPoints": 50,
+      "expectedMatchedValue": "13:25"
+    },
+    {
+      "id": "previous-run-60-plus-female-minimum",
+      "tableId": "two-mile-run",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "29:40",
+      "expectedPoints": 35,
+      "expectedMatchedValue": "29:40"
+    },
+    {
+      "id": "previous-hamr-under-25-male-max",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": 87,
+      "expectedPoints": 50,
+      "expectedMatchedValue": 87
+    },
+    {
+      "id": "previous-hamr-60-plus-female-minimum",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 11,
+      "expectedPoints": 35,
+      "expectedMatchedValue": 11
+    },
+    {
+      "id": "push-up-under-25-male-one-below-max",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": 66,
+      "expectedPoints": 14.5,
+      "expectedMatchedValue": 66
+    },
+    {
+      "id": "push-up-under-25-male-midpoint",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": 48,
+      "expectedPoints": 8.5,
+      "expectedMatchedValue": 48
+    },
+    {
+      "id": "push-up-under-25-male-one-below-midpoint",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": 47,
+      "expectedPoints": 8,
+      "expectedMatchedValue": 46
+    },
+    {
+      "id": "push-up-under-25-male-minimum",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": 30,
+      "expectedPoints": 2.5,
+      "expectedMatchedValue": 30
+    },
+    {
+      "id": "push-up-under-25-male-below-minimum",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": 29,
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    },
+    {
+      "id": "push-up-under-25-female-max",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": 50,
+      "expectedPoints": 15,
+      "expectedMatchedValue": 50
+    },
+    {
+      "id": "push-up-under-25-female-one-below-max",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": 49,
+      "expectedPoints": 14.5,
+      "expectedMatchedValue": 49
+    },
+    {
+      "id": "push-up-under-25-female-midpoint",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": 32,
+      "expectedPoints": 8.5,
+      "expectedMatchedValue": 32
+    },
+    {
+      "id": "push-up-under-25-female-one-below-midpoint",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": 31,
+      "expectedPoints": 8,
+      "expectedMatchedValue": 30
+    },
+    {
+      "id": "push-up-under-25-female-minimum",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": 15,
+      "expectedPoints": 2.5,
+      "expectedMatchedValue": 15
+    },
+    {
+      "id": "push-up-under-25-female-below-minimum",
+      "tableId": "push-up",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": 14,
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    },
+    {
+      "id": "hand-release-30-34-female-max",
+      "tableId": "hand-release-push-up",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 38,
+      "expectedPoints": 15,
+      "expectedMatchedValue": 38
+    },
+    {
+      "id": "hand-release-30-34-female-one-below-max",
+      "tableId": "hand-release-push-up",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 37,
+      "expectedPoints": 14.5,
+      "expectedMatchedValue": 37
+    },
+    {
+      "id": "hand-release-30-34-female-midpoint",
+      "tableId": "hand-release-push-up",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 25,
+      "expectedPoints": 8.5,
+      "expectedMatchedValue": 25
+    },
+    {
+      "id": "hand-release-30-34-female-one-below-midpoint",
+      "tableId": "hand-release-push-up",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 24,
+      "expectedPoints": 8,
+      "expectedMatchedValue": 24
+    },
+    {
+      "id": "hand-release-30-34-female-minimum",
+      "tableId": "hand-release-push-up",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 13,
+      "expectedPoints": 2.5,
+      "expectedMatchedValue": 13
+    },
+    {
+      "id": "hand-release-30-34-female-below-minimum",
+      "tableId": "hand-release-push-up",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 12,
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    },
+    {
+      "id": "sit-up-45-49-male-max",
+      "tableId": "sit-up",
+      "ageGroup": "45-49",
+      "sex": "male",
+      "performance": 48,
+      "expectedPoints": 15,
+      "expectedMatchedValue": 48
+    },
+    {
+      "id": "sit-up-45-49-male-one-below-max",
+      "tableId": "sit-up",
+      "ageGroup": "45-49",
+      "sex": "male",
+      "performance": 47,
+      "expectedPoints": 14.5,
+      "expectedMatchedValue": 47
+    },
+    {
+      "id": "sit-up-45-49-male-midpoint",
+      "tableId": "sit-up",
+      "ageGroup": "45-49",
+      "sex": "male",
+      "performance": 35,
+      "expectedPoints": 8.5,
+      "expectedMatchedValue": 35
+    },
+    {
+      "id": "sit-up-45-49-male-one-below-midpoint",
+      "tableId": "sit-up",
+      "ageGroup": "45-49",
+      "sex": "male",
+      "performance": 34,
+      "expectedPoints": 8,
+      "expectedMatchedValue": 34
+    },
+    {
+      "id": "sit-up-45-49-male-minimum",
+      "tableId": "sit-up",
+      "ageGroup": "45-49",
+      "sex": "male",
+      "performance": 23,
+      "expectedPoints": 2.5,
+      "expectedMatchedValue": 23
+    },
+    {
+      "id": "sit-up-45-49-male-below-minimum",
+      "tableId": "sit-up",
+      "ageGroup": "45-49",
+      "sex": "male",
+      "performance": 22,
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    },
+    {
+      "id": "cross-leg-60-plus-female-max",
+      "tableId": "cross-leg-reverse-crunch",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 42,
+      "expectedPoints": 15,
+      "expectedMatchedValue": 42
+    },
+    {
+      "id": "cross-leg-60-plus-female-one-below-max",
+      "tableId": "cross-leg-reverse-crunch",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 41,
+      "expectedPoints": 14.5,
+      "expectedMatchedValue": 41
+    },
+    {
+      "id": "cross-leg-60-plus-female-midpoint",
+      "tableId": "cross-leg-reverse-crunch",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 29,
+      "expectedPoints": 8.5,
+      "expectedMatchedValue": 29
+    },
+    {
+      "id": "cross-leg-60-plus-female-one-below-midpoint",
+      "tableId": "cross-leg-reverse-crunch",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 28,
+      "expectedPoints": 8,
+      "expectedMatchedValue": 28
+    },
+    {
+      "id": "cross-leg-60-plus-female-below-minimum",
+      "tableId": "cross-leg-reverse-crunch",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 16,
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    },
+    {
+      "id": "plank-under-25-male-one-below-max",
+      "tableId": "forearm-plank",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "3:39",
+      "expectedPoints": 14.5,
+      "expectedMatchedValue": "3:35"
+    },
+    {
+      "id": "plank-under-25-male-midpoint",
+      "tableId": "forearm-plank",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "2:35",
+      "expectedPoints": 8.5,
+      "expectedMatchedValue": "2:35"
+    },
+    {
+      "id": "plank-under-25-male-one-below-midpoint",
+      "tableId": "forearm-plank",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "2:34",
+      "expectedPoints": 8,
+      "expectedMatchedValue": "2:30"
+    },
+    {
+      "id": "plank-under-25-male-minimum",
+      "tableId": "forearm-plank",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "1:35",
+      "expectedPoints": 2.5,
+      "expectedMatchedValue": "1:35"
+    },
+    {
+      "id": "plank-under-25-male-below-minimum",
+      "tableId": "forearm-plank",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "1:34",
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    },
+    {
+      "id": "plank-60-plus-female-max",
+      "tableId": "forearm-plank",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "2:55",
+      "expectedPoints": 15,
+      "expectedMatchedValue": "2:55"
+    },
+    {
+      "id": "plank-60-plus-female-one-below-max",
+      "tableId": "forearm-plank",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "2:54",
+      "expectedPoints": 14.5,
+      "expectedMatchedValue": "2:50"
+    },
+    {
+      "id": "plank-60-plus-female-midpoint",
+      "tableId": "forearm-plank",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "1:50",
+      "expectedPoints": 8.5,
+      "expectedMatchedValue": "1:50"
+    },
+    {
+      "id": "plank-60-plus-female-one-below-midpoint",
+      "tableId": "forearm-plank",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "1:49",
+      "expectedPoints": 8,
+      "expectedMatchedValue": "1:45"
+    },
+    {
+      "id": "plank-60-plus-female-minimum-leading-colon",
+      "tableId": "forearm-plank",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": ":50",
+      "expectedPoints": 2.5,
+      "expectedMatchedValue": ":50"
+    },
+    {
+      "id": "plank-60-plus-female-below-minimum-leading-colon",
+      "tableId": "forearm-plank",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": ":49",
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    },
+    {
+      "id": "run-under-25-male-one-second-after-max",
+      "tableId": "two-mile-run",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "13:26",
+      "expectedPoints": 49.5,
+      "expectedMatchedValue": "13:44"
+    },
+    {
+      "id": "run-under-25-male-one-second-after-midpoint",
+      "tableId": "two-mile-run",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "16:36",
+      "expectedPoints": 40,
+      "expectedMatchedValue": "16:54"
+    },
+    {
+      "id": "run-under-25-male-minimum",
+      "tableId": "two-mile-run",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "19:45",
+      "expectedPoints": 35,
+      "expectedMatchedValue": "19:45"
+    },
+    {
+      "id": "run-under-25-male-below-minimum",
+      "tableId": "two-mile-run",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "19:46",
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    },
+    {
+      "id": "run-under-25-female-max",
+      "tableId": "two-mile-run",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": "15:30",
+      "expectedPoints": 50,
+      "expectedMatchedValue": "15:30"
+    },
+    {
+      "id": "run-under-25-female-one-second-after-max",
+      "tableId": "two-mile-run",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": "15:31",
+      "expectedPoints": 49.5,
+      "expectedMatchedValue": "16:00"
+    },
+    {
+      "id": "run-under-25-female-midpoint",
+      "tableId": "two-mile-run",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": "20:27",
+      "expectedPoints": 41,
+      "expectedMatchedValue": "20:27"
+    },
+    {
+      "id": "run-under-25-female-one-second-after-midpoint",
+      "tableId": "two-mile-run",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": "20:28",
+      "expectedPoints": 40,
+      "expectedMatchedValue": "20:56"
+    },
+    {
+      "id": "run-under-25-female-minimum",
+      "tableId": "two-mile-run",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": "25:23",
+      "expectedPoints": 35,
+      "expectedMatchedValue": "25:23"
+    },
+    {
+      "id": "run-under-25-female-below-minimum",
+      "tableId": "two-mile-run",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": "25:24",
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    },
+    {
+      "id": "run-60-plus-female-max",
+      "tableId": "two-mile-run",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "18:20",
+      "expectedPoints": 50,
+      "expectedMatchedValue": "18:20"
+    },
+    {
+      "id": "run-60-plus-female-one-second-after-max",
+      "tableId": "two-mile-run",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "18:21",
+      "expectedPoints": 49.5,
+      "expectedMatchedValue": "18:54"
+    },
+    {
+      "id": "run-60-plus-female-midpoint",
+      "tableId": "two-mile-run",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "24:00",
+      "expectedPoints": 41,
+      "expectedMatchedValue": "24:00"
+    },
+    {
+      "id": "run-60-plus-female-one-second-after-midpoint",
+      "tableId": "two-mile-run",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "24:01",
+      "expectedPoints": 40,
+      "expectedMatchedValue": "24:34"
+    },
+    {
+      "id": "run-60-plus-female-below-minimum",
+      "tableId": "two-mile-run",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "29:41",
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    },
+    {
+      "id": "hamr-30-34-female-max",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 63,
+      "expectedPoints": 50,
+      "expectedMatchedValue": 63
+    },
+    {
+      "id": "hamr-30-34-female-one-below-max",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 62,
+      "expectedPoints": 49.5,
+      "expectedMatchedValue": 60
+    },
+    {
+      "id": "hamr-30-34-female-midpoint",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 36,
+      "expectedPoints": 41,
+      "expectedMatchedValue": 36
+    },
+    {
+      "id": "hamr-30-34-female-one-below-midpoint",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 35,
+      "expectedPoints": 40,
+      "expectedMatchedValue": 34
+    },
+    {
+      "id": "hamr-30-34-female-minimum",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 19,
+      "expectedPoints": 35,
+      "expectedMatchedValue": 19
+    },
+    {
+      "id": "hamr-30-34-female-below-minimum",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": 18,
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    },
+    {
+      "id": "hamr-60-plus-female-max",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 50,
+      "expectedPoints": 50,
+      "expectedMatchedValue": 50
+    },
+    {
+      "id": "hamr-60-plus-female-one-below-max",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 49,
+      "expectedPoints": 49.5,
+      "expectedMatchedValue": 47
+    },
+    {
+      "id": "hamr-60-plus-female-midpoint",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 26,
+      "expectedPoints": 41,
+      "expectedMatchedValue": 26
+    },
+    {
+      "id": "hamr-60-plus-female-one-below-midpoint",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 25,
+      "expectedPoints": 40,
+      "expectedMatchedValue": 24
+    },
+    {
+      "id": "hamr-60-plus-female-below-minimum",
+      "tableId": "hamr-20-meter",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": 10,
+      "expectedPoints": 0,
+      "expectedMatchedValue": null
+    }
+  ],
+  "whtrCases": [
+    {
+      "id": "previous-whtr-max",
+      "value": "0.49",
+      "expectedPoints": 20
+    },
+    {
+      "id": "whtr-below-max-threshold",
+      "value": "0.48",
+      "expectedPoints": 20
+    },
+    {
+      "id": "whtr-first-non-max-step",
+      "value": "0.50",
+      "expectedPoints": 19
+    },
+    {
+      "id": "whtr-mid-step",
+      "value": "0.54",
+      "expectedPoints": 15
+    },
+    {
+      "id": "previous-whtr-midpoint",
+      "value": "0.55",
+      "expectedPoints": 12.5
+    },
+    {
+      "id": "whtr-last-scoring-step",
+      "value": "0.59",
+      "expectedPoints": 2.5
+    },
+    {
+      "id": "previous-whtr-zero",
+      "value": "0.60",
+      "expectedPoints": 0
+    },
+    {
+      "id": "whtr-above-zero-threshold",
+      "value": "0.61",
+      "expectedPoints": 0
+    }
+  ],
+  "walkCases": [
+    {
+      "id": "previous-walk-under-25-female-pass",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": "17:22",
+      "expectedPoints": 50
+    },
+    {
+      "id": "previous-walk-under-25-female-fail",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "performance": "17:23",
+      "expectedPoints": 0
+    },
+    {
+      "id": "walk-under-25-male-pass",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "16:16",
+      "expectedPoints": 50
+    },
+    {
+      "id": "walk-under-25-male-fail",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "performance": "16:17",
+      "expectedPoints": 0
+    },
+    {
+      "id": "walk-30-34-female-pass",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": "17:28",
+      "expectedPoints": 50
+    },
+    {
+      "id": "walk-30-34-female-fail",
+      "ageGroup": "30-34",
+      "sex": "female",
+      "performance": "17:29",
+      "expectedPoints": 0
+    },
+    {
+      "id": "walk-60-plus-male-pass",
+      "ageGroup": "60-and-over",
+      "sex": "male",
+      "performance": "16:58",
+      "expectedPoints": 50
+    },
+    {
+      "id": "walk-60-plus-male-fail",
+      "ageGroup": "60-and-over",
+      "sex": "male",
+      "performance": "16:59",
+      "expectedPoints": 0
+    },
+    {
+      "id": "walk-60-plus-female-pass",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "18:53",
+      "expectedPoints": 50
+    },
+    {
+      "id": "walk-60-plus-female-fail",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "performance": "18:54",
+      "expectedPoints": 0
+    }
+  ],
+  "assessmentCases": [
+    {
+      "id": "previous-full-assessment-under-25-male-max",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "whtr": "0.49",
+      "strengthEvent": "push-up",
+      "strengthPerformance": "67",
+      "coreEvent": "sit-up",
+      "corePerformance": "58",
+      "cardioEvent": "two-mile-run",
+      "cardioPerformance": "13:25",
+      "expectedScores": {
+        "body": 20,
+        "strength": 15,
+        "core": 15,
+        "cardio": 50
+      },
+      "expectedRawTotal": 100,
+      "expectedAvailablePoints": 100,
+      "expectedTotal": 100,
+      "expectedCategory": "Excellent"
+    },
+    {
+      "id": "assessment-under-25-female-min-cardio-satisfactory",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "whtr": "0.49",
+      "strengthEvent": "push-up",
+      "strengthPerformance": "50",
+      "coreEvent": "sit-up",
+      "corePerformance": "54",
+      "cardioEvent": "two-mile-run",
+      "cardioPerformance": "25:23",
+      "expectedScores": {
+        "body": 20,
+        "strength": 15,
+        "core": 15,
+        "cardio": 35
+      },
+      "expectedRawTotal": 85,
+      "expectedAvailablePoints": 100,
+      "expectedTotal": 85,
+      "expectedCategory": "Satisfactory"
+    },
+    {
+      "id": "assessment-60-plus-female-walk-pass-excellent",
+      "ageGroup": "60-and-over",
+      "sex": "female",
+      "whtr": "0.54",
+      "strengthEvent": "hand-release-push-up",
+      "strengthPerformance": "26",
+      "coreEvent": "forearm-plank",
+      "corePerformance": "2:55",
+      "cardioEvent": "two-kilometer-walk",
+      "cardioPerformance": "18:53",
+      "expectedScores": {
+        "body": 15,
+        "strength": 15,
+        "core": 15,
+        "cardio": 50
+      },
+      "expectedRawTotal": 95,
+      "expectedAvailablePoints": 100,
+      "expectedTotal": 95,
+      "expectedCategory": "Excellent"
+    },
+    {
+      "id": "assessment-under-25-male-cardio-exempt-normalized",
+      "ageGroup": "under-25",
+      "sex": "male",
+      "whtr": "0.49",
+      "strengthEvent": "push-up",
+      "strengthPerformance": "67",
+      "coreEvent": "sit-up",
+      "corePerformance": "58",
+      "cardioEvent": "two-mile-run",
+      "cardioPerformance": "",
+      "exemptions": {
+        "cardio": true
+      },
+      "expectedScores": {
+        "body": 20,
+        "strength": 15,
+        "core": 15,
+        "cardio": 0
+      },
+      "expectedRawTotal": 50,
+      "expectedAvailablePoints": 50,
+      "expectedTotal": 100,
+      "expectedCategory": "Excellent"
+    },
+    {
+      "id": "assessment-under-25-female-all-components-failing",
+      "ageGroup": "under-25",
+      "sex": "female",
+      "whtr": "0.60",
+      "strengthEvent": "push-up",
+      "strengthPerformance": "14",
+      "coreEvent": "cross-leg-reverse-crunch",
+      "corePerformance": "32",
+      "cardioEvent": "two-mile-run",
+      "cardioPerformance": "25:24",
+      "expectedScores": {
+        "body": 0,
+        "strength": 0,
+        "core": 0,
+        "cardio": 0
+      },
+      "expectedRawTotal": 0,
+      "expectedAvailablePoints": 100,
+      "expectedTotal": 0,
+      "expectedCategory": "Unsatisfactory"
+    }
+  ]
+}

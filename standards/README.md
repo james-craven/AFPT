@@ -38,3 +38,5 @@ npm test
 ```
 
 This checks representative scoring examples against the extracted PFRA tables.
+
+The PFRA examples live in `tools/fixtures/pfra-scoring-examples.json` so source-backed scoring coverage can be reviewed without reading test code. Current fixture coverage includes direct table scores, WHtR, 2 km walk pass/fail thresholds, and full-assessment totals.

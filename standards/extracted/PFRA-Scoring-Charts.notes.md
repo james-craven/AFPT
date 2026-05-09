@@ -61,10 +61,10 @@ The WHtR table is uniform across age and sex:
 | Female | 50-59 | 18:11 |
 | Female | 60+ | 18:53 |
 
-## Next extraction targets
+## Remaining confidence targets
 
-1. Add validation tests that compare known source examples against calculator output.
-2. Wire one extracted table into the app as the first data-driven component.
+1. Continue spot-checking extracted JSON rows against rendered PDF pages before a public launch.
+2. Keep fixture-backed validation examples in `tools/fixtures/pfra-scoring-examples.json` aligned with any future standards updates.
 
 ## Generated tables
 
