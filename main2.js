@@ -4590,7 +4590,7 @@ function runSelChange() {
       toggleShuttle();
     }
 
-    window.syncPfraFromLegacy({ usePfraCardioDefault: runSel.value !== 'Exempt' });
+    window.syncPfraFromLegacy({ usePfraCardioStartingValue: runSel.value !== 'Exempt' });
     return;
   }
 

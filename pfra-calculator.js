@@ -39,6 +39,7 @@
   const legacyLapText = document.getElementById('run-lap-times');
   const pfraTables = {};
   let lastStandardsMode = standardsMode?.value || 'legacy';
+  let pfraCardioTracksStartingValue = false;
 
   const tableIds = [
     'push-up',
@@ -281,6 +282,19 @@
     const table = pfraTables[eventId];
     const defaultValue = table ? topCellValue(table, ageGroup, sex) : undefined;
     return formatPerformance(defaultValue, table) || eventDefaults[eventId];
+  }
+
+  function startingCardioPerformanceForEvent(eventId) {
+    const ageGroup = currentAgeGroup();
+    const sex = currentSex();
+
+    if (eventId === 'two-kilometer-walk') {
+      return walkMaximumTime(ageGroup, sex) || eventDefaults[eventId];
+    }
+
+    const table = pfraTables[eventId];
+    const startingValue = table ? firstScoringCellValue(table, ageGroup, sex) : undefined;
+    return formatPerformance(startingValue, table) || defaultPerformanceForEvent(eventId);
   }
 
   function setTimeInputsFromSeconds(totalSeconds) {
@@ -601,23 +615,23 @@
     }
   }
 
-  function applyPfraCardioDefaultToLegacyControls() {
-    const defaultPerformance = defaultPerformanceForEvent(cardioEvent.value);
+  function applyPfraCardioStartingValueToLegacyControls() {
+    const startingPerformance = startingCardioPerformanceForEvent(cardioEvent.value);
 
     if (legacyCardioSelect?.value === 'Shuttle Run') {
-      legacyRunSlider.value = Number(defaultPerformance);
+      legacyRunSlider.value = Number(startingPerformance);
       legacyRunSecondInput.value = legacyRunSlider.value;
       return;
     }
 
-    const totalSeconds = toSeconds(defaultPerformance);
+    const totalSeconds = toSeconds(startingPerformance);
     if (!Number.isFinite(totalSeconds)) return;
 
     legacyRunSlider.value = totalSeconds;
     setTimeInputsFromSeconds(Number(legacyRunSlider.value));
   }
 
-  function syncFromLegacyCalculator({ usePfraCardioDefault = false } = {}) {
+  function syncFromLegacyCalculator({ usePfraCardioStartingValue = pfraCardioTracksStartingValue } = {}) {
     updateCardioModeText();
 
     if (!isPfraMode()) {
@@ -628,8 +642,9 @@
     setEventControlsFromLegacySelections();
     updateLegacySliderRanges();
 
-    if (usePfraCardioDefault && legacyCardioSelect?.value !== 'Exempt') {
-      applyPfraCardioDefaultToLegacyControls();
+    if (usePfraCardioStartingValue && legacyCardioSelect?.value !== 'Exempt') {
+      pfraCardioTracksStartingValue = true;
+      applyPfraCardioStartingValueToLegacyControls();
     }
 
     syncLegacyInputsFromSliders();
@@ -643,22 +658,42 @@
     const enteringPfraMode = standardsMode?.value === 'pfra' && lastStandardsMode !== 'pfra';
     const legacyRunWasUntouchedDefault = legacyCardioSelect?.value === '1.5 Mile'
       && Number(legacyRunSlider?.value) === Number(legacyRunSlider?.max);
+    pfraCardioTracksStartingValue = enteringPfraMode && legacyRunWasUntouchedDefault;
 
     updateCardioModeText();
 
     if (!isPfraMode() && typeof window.ageSexChange === 'function') {
+      pfraCardioTracksStartingValue = false;
       window.ageSexChange();
       lastStandardsMode = standardsMode?.value || 'legacy';
       return;
     }
 
     syncFromLegacyCalculator({
-      usePfraCardioDefault: enteringPfraMode && legacyRunWasUntouchedDefault,
+      usePfraCardioStartingValue: pfraCardioTracksStartingValue,
     });
     lastStandardsMode = standardsMode?.value || 'legacy';
   }
 
   window.syncPfraFromLegacy = syncFromLegacyCalculator;
+
+  function handleLegacyControlChange(event) {
+    if (isPfraMode()) {
+      if (
+        event?.currentTarget === legacyRunMinuteInput
+        || event?.currentTarget === legacyRunSecondInput
+        || event?.currentTarget === legacyRunSlider
+      ) {
+        pfraCardioTracksStartingValue = false;
+      }
+
+      if (event?.currentTarget === legacyCardioSelect) {
+        pfraCardioTracksStartingValue = legacyCardioSelect.value !== 'Exempt';
+      }
+    }
+
+    syncFromLegacyCalculator();
+  }
 
   function updatePfraCalculator() {
     if (!pfraResult || !ageSelect || !sexSelect) return;
@@ -766,8 +801,8 @@
       legacyRunSecondInput,
       legacyRunSlider,
     ].forEach((control) => {
-      control?.addEventListener('change', syncFromLegacyCalculator);
-      control?.addEventListener('input', syncFromLegacyCalculator);
+      control?.addEventListener('change', handleLegacyControlChange);
+      control?.addEventListener('input', handleLegacyControlChange);
     });
 
     [strengthEvent, coreEvent, cardioEvent].forEach((select) => {
