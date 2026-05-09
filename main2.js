@@ -25,6 +25,10 @@ const pushBtn = document.getElementById('push-btn');
 const sitBtn = document.getElementById('sit-btn');
 const runBtn = document.getElementById('run-btn');
 
+function isPfraModeActive() {
+  return document.getElementById('standards-mode')?.value === 'pfra';
+}
+
 let runmin;
 let runmax;
 let sitmin;
@@ -4563,6 +4567,33 @@ function toggleShuttle() {
 }
 
 function runSelChange() {
+  if (isPfraModeActive() && typeof window.syncPfraFromLegacy === 'function') {
+    if (runSel.value == '1.5 Mile') {
+      runSlider.classList.add('run-slider');
+      runSlider.classList.remove('shuttle-slider');
+      toggleShuttle();
+      runSlider.removeAttribute('disabled');
+      removeTxtboxEventListeners(sectxt, runSlider);
+      addTxtboxEventListeners(mintxt, runSlider, sectxt);
+    } else if (runSel.value == 'Shuttle Run') {
+      toggleShuttle();
+      removeTxtboxEventListeners(mintxt, runSlider, sectxt);
+      addTxtboxEventListeners(sectxt, runSlider);
+      runSlider.removeAttribute('disabled');
+    } else if (runSel.value == 'Walk') {
+      toggleShuttle();
+      runSlider.removeAttribute('disabled');
+      removeTxtboxEventListeners(sectxt, runSlider);
+      addTxtboxEventListeners(mintxt, runSlider, sectxt);
+    } else if (runSel.value == 'Exempt') {
+      runSlider.disabled = true;
+      toggleShuttle();
+    }
+
+    window.syncPfraFromLegacy({ usePfraCardioDefault: runSel.value !== 'Exempt' });
+    return;
+  }
+
   let altDiff = calculateAltitudeDiff();
   if (runSel.value == '1.5 Mile') {
     runSlider.max = runmax + altDiff.run;
@@ -4607,6 +4638,12 @@ runSel.addEventListener('change', runSelChange);
 function ageSexChange() {
   minMaxValueAge();
   setScoreArrays();
+
+  if (isPfraModeActive() && typeof window.syncPfraFromLegacy === 'function') {
+    window.syncPfraFromLegacy();
+    return;
+  }
+
   pushSelChange();
   sitSelChange();
   runSelChange();

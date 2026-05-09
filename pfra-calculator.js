@@ -38,6 +38,7 @@
   const legacyRunSlider = document.getElementById('run-slider');
   const legacyLapText = document.getElementById('run-lap-times');
   const pfraTables = {};
+  let lastStandardsMode = standardsMode?.value || 'legacy';
 
   const tableIds = [
     'push-up',
@@ -121,6 +122,7 @@
   }
 
   function toSeconds(value) {
+    if (value === undefined || value === null || value === '') return NaN;
     if (typeof value === 'number') return value;
     const normalized = value.startsWith(':') ? `0${value}` : value;
     const [minutes, seconds] = normalized.split(':').map(Number);
@@ -260,12 +262,45 @@
     return `${minutes}:${String(seconds).padStart(2, '0')}`;
   }
 
+  function currentAgeGroup() {
+    return legacyAgeToPfraAgeGroup(ageSelect.value);
+  }
+
+  function currentSex() {
+    return legacySexToPfraSex(sexSelect.value);
+  }
+
+  function defaultPerformanceForEvent(eventId) {
+    const ageGroup = currentAgeGroup();
+    const sex = currentSex();
+
+    if (eventId === 'two-kilometer-walk') {
+      return walkMaximumTime(ageGroup, sex) || eventDefaults[eventId];
+    }
+
+    const table = pfraTables[eventId];
+    const defaultValue = table ? topCellValue(table, ageGroup, sex) : undefined;
+    return formatPerformance(defaultValue, table) || eventDefaults[eventId];
+  }
+
+  function setTimeInputsFromSeconds(totalSeconds) {
+    if (!legacyRunMinuteInput || !legacyRunSecondInput) return;
+    legacyRunMinuteInput.value = Math.floor(totalSeconds / 60);
+    legacyRunSecondInput.value = String(totalSeconds % 60).padStart(2, '0');
+  }
+
+  function setPlankInputsFromSeconds(totalSeconds) {
+    if (!legacySitInput || !legacyPlankMinuteInput) return;
+    legacySitInput.value = Math.floor(totalSeconds / 60);
+    legacyPlankMinuteInput.value = String(totalSeconds % 60).padStart(2, '0');
+  }
+
   function setSliderRange(slider, maxValue, minValue = 0) {
-    if (!slider || maxValue === undefined) return;
+    if (!slider || maxValue === undefined) return undefined;
 
     const numericMax = Number(maxValue);
     const numericMin = Number(minValue);
-    if (!Number.isFinite(numericMax) || !Number.isFinite(numericMin)) return;
+    if (!Number.isFinite(numericMax) || !Number.isFinite(numericMin)) return undefined;
 
     slider.min = numericMin;
     slider.max = numericMax;
@@ -277,13 +312,15 @@
     if (Number(slider.value) < numericMin) {
       slider.value = numericMin;
     }
+
+    return Number(slider.value);
   }
 
   function updateLegacySliderRanges() {
     if (!isPfraMode()) return;
 
-    const ageGroup = legacyAgeToPfraAgeGroup(ageSelect.value);
-    const sex = legacySexToPfraSex(sexSelect.value);
+    const ageGroup = currentAgeGroup();
+    const sex = currentSex();
 
     if (legacyPushSelect?.value === 'Pushups') {
       setSliderRange(legacyPushSlider, topCellValue(pfraTables['push-up'], ageGroup, sex));
@@ -333,8 +370,7 @@
 
     if (legacySitInput && legacySitSlider && legacySitSelect?.value !== 'Exempt') {
       if (legacySitSelect.value === 'Plank') {
-        legacySitInput.value = Math.floor(Number(legacySitSlider.value) / 60);
-        legacyPlankMinuteInput.value = String(Number(legacySitSlider.value) % 60).padStart(2, '0');
+        setPlankInputsFromSeconds(Number(legacySitSlider.value));
       } else {
         legacySitInput.value = legacySitSlider.value;
       }
@@ -344,8 +380,7 @@
       if (legacyCardioSelect.value === 'Shuttle Run') {
         legacyRunSecondInput.value = legacyRunSlider.value;
       } else {
-        legacyRunMinuteInput.value = Math.floor(Number(legacyRunSlider.value) / 60);
-        legacyRunSecondInput.value = String(Number(legacyRunSlider.value) % 60).padStart(2, '0');
+        setTimeInputsFromSeconds(Number(legacyRunSlider.value));
       }
     }
   }
@@ -361,7 +396,7 @@
   function updatePfraLapTimes() {
     if (!isPfraMode() || !legacyLapText) return;
 
-    if (cardioEvent.value === 'hamr-20-meter' || cardioEvent.value === 'two-kilometer-walk') {
+    if (legacyCardioSelect?.value === 'Exempt' || cardioEvent.value === 'hamr-20-meter' || cardioEvent.value === 'two-kilometer-walk') {
       legacyLapText.innerHTML = '';
       return;
     }
@@ -377,43 +412,99 @@
     let text = `Req'd 8 Lap Time: ~${secondsToTimeString(lapSeconds)}`;
 
     for (let lap = 1; lap <= lapCount; lap += 1) {
-      text += `<br>Lap ${lap}: ≤ ${secondsToTimeString(lapSeconds * lap)}`;
+      text += `<br>Lap ${lap}: ≤ ${secondsToTimeString(Math.floor((totalSeconds * lap) / lapCount))}`;
     }
 
     legacyLapText.innerHTML = text;
   }
 
-  function applyPfraCardioToLegacyControls() {
-    if (!isPfraMode()) return;
+  function numericPerformanceValue(value, table) {
+    return table?.unit === 'min:sec' ? toSeconds(value) : Number(value);
+  }
 
-    if (legacyCardioSelect?.value === '1.5 Mile' && cardioEvent.value === 'two-mile-run') {
-      const totalSeconds = toSeconds(cardioPerformance.value || eventDefaults['two-mile-run']);
-      if (!Number.isFinite(totalSeconds)) return;
+  function setSliderPassState(slider, isPassing, isExempt) {
+    if (!slider) return;
 
-      legacyRunSlider.value = totalSeconds;
-      legacyRunMinuteInput.value = Math.floor(totalSeconds / 60);
-      legacyRunSecondInput.value = String(totalSeconds % 60).padStart(2, '0');
-    } else if (legacyCardioSelect?.value === 'Shuttle Run' && cardioEvent.value === 'hamr-20-meter') {
-      const shuttles = Number(cardioPerformance.value || eventDefaults['hamr-20-meter']);
-      if (!Number.isFinite(shuttles)) return;
-
-      legacyRunSlider.value = shuttles;
-      legacyRunSecondInput.value = shuttles;
-    } else if (legacyCardioSelect?.value === 'Walk' && cardioEvent.value === 'two-kilometer-walk') {
-      const totalSeconds = toSeconds(cardioPerformance.value || eventDefaults['two-kilometer-walk']);
-      if (!Number.isFinite(totalSeconds)) return;
-
-      legacyRunSlider.value = totalSeconds;
-      legacyRunMinuteInput.value = Math.floor(totalSeconds / 60);
-      legacyRunSecondInput.value = String(totalSeconds % 60).padStart(2, '0');
+    if (isExempt) {
+      slider.classList.remove('slider-green', 'slider-red');
+      return;
     }
+
+    slider.classList.toggle('slider-green', isPassing);
+    slider.classList.toggle('slider-red', !isPassing);
+  }
+
+  function updateThresholdTick(tickId, slider, thresholdValue, label, isVisible = true) {
+    const tick = document.getElementById(tickId);
+    if (!tick || !slider || !isVisible) {
+      if (tick) tick.style.display = 'none';
+      return;
+    }
+
+    const min = Number(slider.min);
+    const max = Number(slider.max);
+    const threshold = Number(thresholdValue);
+    if (!Number.isFinite(min) || !Number.isFinite(max) || !Number.isFinite(threshold) || max === min) {
+      tick.style.display = 'none';
+      return;
+    }
+
+    tick.innerText = label;
+    const percent = Math.min(1, Math.max(0, (threshold - min) / (max - min)));
+    const sliderWidth = slider.getBoundingClientRect().width;
+    const tickWidth = tick.getBoundingClientRect().width;
+    const handleSize = 45;
+    const left = percent * (sliderWidth - handleSize) + handleSize / 2 - tickWidth / 2;
+
+    tick.style.display = 'block';
+    tick.style.left = `${left}px`;
+    tick.style.cursor = 'pointer';
+    tick.onclick = () => {
+      slider.value = threshold;
+      slider.dispatchEvent(new Event('input', { bubbles: true }));
+    };
+  }
+
+  function updatePfraSliderFeedback(scores, tables, exemptions) {
+    const ageGroup = currentAgeGroup();
+    const sex = currentSex();
+    const strengthMin = tables.strength ? firstScoringCellValue(tables.strength, ageGroup, sex) : undefined;
+    const coreMin = tables.core ? firstScoringCellValue(tables.core, ageGroup, sex) : undefined;
+    const cardioMin = tables.cardio ? firstScoringCellValue(tables.cardio, ageGroup, sex) : undefined;
+
+    setSliderPassState(legacyPushSlider, scores.strength > 0, exemptions.strength);
+    updateThresholdTick(
+      'push-tick',
+      legacyPushSlider,
+      numericPerformanceValue(strengthMin, tables.strength),
+      formatPerformance(strengthMin, tables.strength),
+      !exemptions.strength,
+    );
+
+    setSliderPassState(legacySitSlider, scores.core > 0, exemptions.core);
+    updateThresholdTick(
+      'sit-tick',
+      legacySitSlider,
+      numericPerformanceValue(coreMin, tables.core),
+      formatPerformance(coreMin, tables.core),
+      !exemptions.core,
+    );
+
+    setSliderPassState(legacyRunSlider, scores.cardio > 0, exemptions.cardio);
+    updateThresholdTick(
+      'run-tick',
+      legacyRunSlider,
+      numericPerformanceValue(cardioMin, tables.cardio),
+      formatPerformance(cardioMin, tables.cardio),
+      !exemptions.cardio && cardioEvent.value === 'hamr-20-meter',
+    );
   }
 
   function updateLegacyComponentText(scores, tables, exemptions) {
     if (!isPfraMode()) return;
 
-    const ageGroup = legacyAgeToPfraAgeGroup(ageSelect.value);
-    const sex = legacySexToPfraSex(sexSelect.value);
+    const ageGroup = currentAgeGroup();
+    const sex = currentSex();
     const strengthMin = tables.strength ? firstScoringCellValue(tables.strength, ageGroup, sex) : undefined;
     const strengthMax = tables.strength ? topCellValue(tables.strength, ageGroup, sex) : undefined;
     const coreMin = tables.core ? firstScoringCellValue(tables.core, ageGroup, sex) : undefined;
@@ -447,12 +538,14 @@
       const result = scores.cardio === 50 ? 'Pass' : 'Fail';
       legacyCardioText.innerHTML = `Cardio Score: ${formatScore(scores.cardio)} (${result}) | Max: ${cardioMax}`;
     }
+
+    updatePfraSliderFeedback(scores, tables, exemptions);
   }
 
   function updateLabelsAndDefaults(changedSelect) {
-    if (changedSelect === strengthEvent) strengthPerformance.value = eventDefaults[strengthEvent.value];
-    if (changedSelect === coreEvent) corePerformance.value = eventDefaults[coreEvent.value];
-    if (changedSelect === cardioEvent) cardioPerformance.value = eventDefaults[cardioEvent.value];
+    if (changedSelect === strengthEvent) strengthPerformance.value = defaultPerformanceForEvent(strengthEvent.value);
+    if (changedSelect === coreEvent) corePerformance.value = defaultPerformanceForEvent(coreEvent.value);
+    if (changedSelect === cardioEvent) cardioPerformance.value = defaultPerformanceForEvent(cardioEvent.value);
 
     strengthLabel.innerText = eventLabels[strengthEvent.value];
     coreLabel.innerText = eventLabels[coreEvent.value];
@@ -462,7 +555,69 @@
     cardioPerformance.inputMode = cardioEvent.value === 'two-mile-run' ? 'numeric' : 'numeric';
   }
 
-  function syncFromLegacyCalculator({ preserveCardio = false } = {}) {
+  function setEventControlsFromLegacySelections() {
+    if (legacyPushSelect?.value === 'Pushups') {
+      strengthEvent.value = 'push-up';
+    } else if (legacyPushSelect?.value === 'Hand-Release') {
+      strengthEvent.value = 'hand-release-push-up';
+    }
+
+    if (legacySitSelect?.value === 'Situps') {
+      coreEvent.value = 'sit-up';
+    } else if (legacySitSelect?.value === 'Reverse Crunch') {
+      coreEvent.value = 'cross-leg-reverse-crunch';
+    } else if (legacySitSelect?.value === 'Plank') {
+      coreEvent.value = 'forearm-plank';
+    }
+
+    if (legacyCardioSelect?.value === 'Shuttle Run') {
+      cardioEvent.value = 'hamr-20-meter';
+    } else if (legacyCardioSelect?.value === 'Walk') {
+      cardioEvent.value = 'two-kilometer-walk';
+    } else if (legacyCardioSelect?.value === '1.5 Mile') {
+      cardioEvent.value = 'two-mile-run';
+    }
+  }
+
+  function syncPfraPerformancesFromLegacyControls() {
+    if (legacyPushSelect?.value !== 'Exempt') {
+      strengthPerformance.value = legacyPushSlider.value || defaultPerformanceForEvent(strengthEvent.value);
+    }
+
+    if (legacySitSelect?.value !== 'Exempt') {
+      if (legacySitSelect?.value === 'Plank') {
+        corePerformance.value = secondsToTimeString(Number(legacySitSlider.value || 0));
+      } else {
+        corePerformance.value = legacySitSlider.value || defaultPerformanceForEvent(coreEvent.value);
+      }
+    }
+
+    if (legacyCardioSelect?.value !== 'Exempt') {
+      if (legacyCardioSelect?.value === 'Shuttle Run') {
+        cardioPerformance.value = legacyRunSlider.value || defaultPerformanceForEvent(cardioEvent.value);
+      } else {
+        cardioPerformance.value = secondsToTimeString(Number(legacyRunSlider.value || 0));
+      }
+    }
+  }
+
+  function applyPfraCardioDefaultToLegacyControls() {
+    const defaultPerformance = defaultPerformanceForEvent(cardioEvent.value);
+
+    if (legacyCardioSelect?.value === 'Shuttle Run') {
+      legacyRunSlider.value = Number(defaultPerformance);
+      legacyRunSecondInput.value = legacyRunSlider.value;
+      return;
+    }
+
+    const totalSeconds = toSeconds(defaultPerformance);
+    if (!Number.isFinite(totalSeconds)) return;
+
+    legacyRunSlider.value = totalSeconds;
+    setTimeInputsFromSeconds(Number(legacyRunSlider.value));
+  }
+
+  function syncFromLegacyCalculator({ usePfraCardioDefault = false } = {}) {
     updateCardioModeText();
 
     if (!isPfraMode()) {
@@ -470,68 +625,40 @@
       return;
     }
 
+    setEventControlsFromLegacySelections();
     updateLegacySliderRanges();
+
+    if (usePfraCardioDefault && legacyCardioSelect?.value !== 'Exempt') {
+      applyPfraCardioDefaultToLegacyControls();
+    }
+
     syncLegacyInputsFromSliders();
-
-    if (legacyPushSelect?.value === 'Pushups') {
-      strengthEvent.value = 'push-up';
-      strengthPerformance.value = legacyPushSlider.value || eventDefaults[strengthEvent.value];
-    } else if (legacyPushSelect?.value === 'Hand-Release') {
-      strengthEvent.value = 'hand-release-push-up';
-      strengthPerformance.value = legacyPushSlider.value || eventDefaults[strengthEvent.value];
-    }
-
-    if (legacySitSelect?.value === 'Situps') {
-      coreEvent.value = 'sit-up';
-      corePerformance.value = legacySitSlider.value || eventDefaults[coreEvent.value];
-    } else if (legacySitSelect?.value === 'Reverse Crunch') {
-      coreEvent.value = 'cross-leg-reverse-crunch';
-      corePerformance.value = legacySitSlider.value || eventDefaults[coreEvent.value];
-    } else if (legacySitSelect?.value === 'Plank') {
-      coreEvent.value = 'forearm-plank';
-      corePerformance.value = secondsToTimeString(Number(legacySitSlider.value || 0));
-    }
-
-    if (preserveCardio) {
-      if (legacyCardioSelect?.value === 'Shuttle Run') {
-        cardioEvent.value = 'hamr-20-meter';
-      } else if (legacyCardioSelect?.value === '1.5 Mile') {
-        cardioEvent.value = 'two-mile-run';
-      } else if (legacyCardioSelect?.value === 'Walk') {
-        cardioEvent.value = 'two-kilometer-walk';
-      }
-
-      applyPfraCardioToLegacyControls();
-    } else if (legacyCardioSelect?.value === 'Shuttle Run') {
-      cardioEvent.value = 'hamr-20-meter';
-      cardioPerformance.value = legacyRunSlider.value || eventDefaults[cardioEvent.value];
-    } else if (legacyCardioSelect?.value === 'Walk') {
-      cardioEvent.value = 'two-kilometer-walk';
-      cardioPerformance.value = secondsToTimeString(Number(legacyRunSlider.value || 0));
-    } else if (legacyCardioSelect?.value === '1.5 Mile' && cardioEvent.value === 'hamr-20-meter') {
-      cardioEvent.value = 'two-mile-run';
-      cardioPerformance.value = eventDefaults[cardioEvent.value];
-    } else if (legacyCardioSelect?.value === '1.5 Mile' && cardioEvent.value === 'two-mile-run') {
-      const totalSeconds = Number(legacyRunSlider.value || 0);
-      if (Number.isFinite(totalSeconds) && totalSeconds > 0) {
-        cardioPerformance.value = secondsToTimeString(totalSeconds);
-      }
-    }
+    syncPfraPerformancesFromLegacyControls();
 
     updateLabelsAndDefaults();
     updatePfraCalculator();
   }
 
   function standardsModeChange() {
+    const enteringPfraMode = standardsMode?.value === 'pfra' && lastStandardsMode !== 'pfra';
+    const legacyRunWasUntouchedDefault = legacyCardioSelect?.value === '1.5 Mile'
+      && Number(legacyRunSlider?.value) === Number(legacyRunSlider?.max);
+
     updateCardioModeText();
 
     if (!isPfraMode() && typeof window.ageSexChange === 'function') {
       window.ageSexChange();
+      lastStandardsMode = standardsMode?.value || 'legacy';
       return;
     }
 
-    syncFromLegacyCalculator({ preserveCardio: true });
+    syncFromLegacyCalculator({
+      usePfraCardioDefault: enteringPfraMode && legacyRunWasUntouchedDefault,
+    });
+    lastStandardsMode = standardsMode?.value || 'legacy';
   }
+
+  window.syncPfraFromLegacy = syncFromLegacyCalculator;
 
   function updatePfraCalculator() {
     if (!pfraResult || !ageSelect || !sexSelect) return;
