@@ -296,6 +296,25 @@
     legacyLapText.innerHTML = text;
   }
 
+  function applyPfraCardioToLegacyControls() {
+    if (!isPfraMode()) return;
+
+    if (legacyCardioSelect?.value === '1.5 Mile' && cardioEvent.value === 'two-mile-run') {
+      const totalSeconds = toSeconds(cardioPerformance.value || eventDefaults['two-mile-run']);
+      if (!Number.isFinite(totalSeconds)) return;
+
+      legacyRunSlider.value = totalSeconds;
+      legacyRunMinuteInput.value = Math.floor(totalSeconds / 60);
+      legacyRunSecondInput.value = String(totalSeconds % 60).padStart(2, '0');
+    } else if (legacyCardioSelect?.value === 'Shuttle Run' && cardioEvent.value === 'hamr-20-meter') {
+      const shuttles = Number(cardioPerformance.value || eventDefaults['hamr-20-meter']);
+      if (!Number.isFinite(shuttles)) return;
+
+      legacyRunSlider.value = shuttles;
+      legacyRunSecondInput.value = shuttles;
+    }
+  }
+
   function updateLegacyComponentText(scores, tables) {
     if (!isPfraMode()) return;
 
@@ -336,11 +355,10 @@
     cardioPerformance.inputMode = cardioEvent.value === 'two-mile-run' ? 'numeric' : 'numeric';
   }
 
-  function syncFromLegacyCalculator() {
+  function syncFromLegacyCalculator({ preserveCardio = false } = {}) {
     updateCardioModeText();
 
     if (!isPfraMode()) {
-      if (typeof window.ageSexChange === 'function') window.ageSexChange();
       updatePfraCalculator();
       return;
     }
@@ -366,7 +384,15 @@
       corePerformance.value = `${Number(legacySitInput.value || 0)}:${String(Number(legacyPlankMinuteInput.value || 0)).padStart(2, '0')}`;
     }
 
-    if (legacyCardioSelect?.value === 'Shuttle Run') {
+    if (preserveCardio) {
+      if (legacyCardioSelect?.value === 'Shuttle Run') {
+        cardioEvent.value = 'hamr-20-meter';
+      } else if (legacyCardioSelect?.value === '1.5 Mile') {
+        cardioEvent.value = 'two-mile-run';
+      }
+
+      applyPfraCardioToLegacyControls();
+    } else if (legacyCardioSelect?.value === 'Shuttle Run') {
       cardioEvent.value = 'hamr-20-meter';
       cardioPerformance.value = legacyRunSecondInput.value || eventDefaults[cardioEvent.value];
     } else if (cardioEvent.value === 'hamr-20-meter') {
@@ -383,6 +409,17 @@
 
     updateLabelsAndDefaults();
     updatePfraCalculator();
+  }
+
+  function standardsModeChange() {
+    updateCardioModeText();
+
+    if (!isPfraMode() && typeof window.ageSexChange === 'function') {
+      window.ageSexChange();
+      return;
+    }
+
+    syncFromLegacyCalculator({ preserveCardio: true });
   }
 
   function updatePfraCalculator() {
@@ -459,7 +496,7 @@
       select?.addEventListener('change', syncFromLegacyCalculator);
     });
 
-    standardsMode?.addEventListener('change', syncFromLegacyCalculator);
+    standardsMode?.addEventListener('change', standardsModeChange);
 
     [
       legacyPushSelect,
