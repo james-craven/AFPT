@@ -138,6 +138,69 @@
     return Number.isInteger(score) ? score.toFixed(0) : score.toFixed(1);
   }
 
+  function topCellValue(table, ageGroup, sex) {
+    return table?.rows?.[0]?.values?.[ageGroup]?.[sex]?.value;
+  }
+
+  function firstScoringCellValue(table, ageGroup, sex) {
+    for (let index = table.rows.length - 1; index >= 0; index -= 1) {
+      const cell = table.rows[index].values?.[ageGroup]?.[sex];
+      if (cell?.value !== undefined) return cell.value;
+    }
+
+    return undefined;
+  }
+
+  function setSliderRange(slider, maxValue, minValue = 0) {
+    if (!slider || maxValue === undefined) return;
+
+    const numericMax = Number(maxValue);
+    const numericMin = Number(minValue);
+    if (!Number.isFinite(numericMax) || !Number.isFinite(numericMin)) return;
+
+    slider.min = numericMin;
+    slider.max = numericMax;
+
+    if (Number(slider.value) > numericMax) {
+      slider.value = numericMax;
+    }
+
+    if (Number(slider.value) < numericMin) {
+      slider.value = numericMin;
+    }
+  }
+
+  function updateLegacySliderRanges() {
+    const ageGroup = legacyAgeToPfraAgeGroup(ageSelect.value);
+    const sex = legacySexToPfraSex(sexSelect.value);
+
+    if (legacyPushSelect?.value === 'Pushups') {
+      setSliderRange(legacyPushSlider, topCellValue(pfraTables['push-up'], ageGroup, sex));
+    } else if (legacyPushSelect?.value === 'Hand-Release') {
+      setSliderRange(legacyPushSlider, topCellValue(pfraTables['hand-release-push-up'], ageGroup, sex));
+    }
+
+    if (legacySitSelect?.value === 'Situps') {
+      setSliderRange(legacySitSlider, topCellValue(pfraTables['sit-up'], ageGroup, sex));
+    } else if (legacySitSelect?.value === 'Reverse Crunch') {
+      setSliderRange(legacySitSlider, topCellValue(pfraTables['cross-leg-reverse-crunch'], ageGroup, sex));
+    } else if (legacySitSelect?.value === 'Plank') {
+      setSliderRange(
+        legacySitSlider,
+        toSeconds(topCellValue(pfraTables['forearm-plank'], ageGroup, sex)),
+        toSeconds(firstScoringCellValue(pfraTables['forearm-plank'], ageGroup, sex)),
+      );
+    }
+
+    if (legacyCardioSelect?.value === 'Shuttle Run') {
+      setSliderRange(
+        legacyRunSlider,
+        topCellValue(pfraTables['hamr-20-meter'], ageGroup, sex),
+        firstScoringCellValue(pfraTables['hamr-20-meter'], ageGroup, sex),
+      );
+    }
+  }
+
   function updateLabelsAndDefaults(changedSelect) {
     if (changedSelect === strengthEvent) strengthPerformance.value = eventDefaults[strengthEvent.value];
     if (changedSelect === coreEvent) corePerformance.value = eventDefaults[coreEvent.value];
@@ -152,6 +215,8 @@
   }
 
   function syncFromLegacyCalculator() {
+    updateLegacySliderRanges();
+
     if (legacyPushSelect?.value === 'Pushups') {
       strengthEvent.value = 'push-up';
       strengthPerformance.value = legacyPushInput.value || eventDefaults[strengthEvent.value];
@@ -253,7 +318,7 @@
     });
 
     [ageSelect, sexSelect].forEach((select) => {
-      select?.addEventListener('change', updatePfraCalculator);
+      select?.addEventListener('change', syncFromLegacyCalculator);
     });
 
     [
