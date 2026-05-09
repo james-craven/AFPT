@@ -17,6 +17,17 @@
   const coreScoreText = document.getElementById('pfra-core-score');
   const cardioScoreText = document.getElementById('pfra-cardio-score');
   const pfraResult = document.getElementById('pfra-result');
+  const legacyPushSelect = document.getElementById('push-sel');
+  const legacyPushInput = document.getElementById('push-txt');
+  const legacyPushSlider = document.getElementById('push-slider');
+  const legacySitSelect = document.getElementById('sit-sel');
+  const legacySitInput = document.getElementById('sit-txt');
+  const legacySitSlider = document.getElementById('sit-slider');
+  const legacyPlankMinuteInput = document.getElementById('plankmintxt');
+  const legacyCardioSelect = document.getElementById('cardio-sel');
+  const legacyRunMinuteInput = document.getElementById('run-mintxt');
+  const legacyRunSecondInput = document.getElementById('run-sectxt');
+  const legacyRunSlider = document.getElementById('run-slider');
   const pfraTables = {};
 
   const tableIds = [
@@ -140,6 +151,44 @@
     cardioPerformance.inputMode = cardioEvent.value === 'two-mile-run' ? 'numeric' : 'numeric';
   }
 
+  function syncFromLegacyCalculator() {
+    if (legacyPushSelect?.value === 'Pushups') {
+      strengthEvent.value = 'push-up';
+      strengthPerformance.value = legacyPushInput.value || eventDefaults[strengthEvent.value];
+    } else if (legacyPushSelect?.value === 'Hand-Release') {
+      strengthEvent.value = 'hand-release-push-up';
+      strengthPerformance.value = legacyPushInput.value || eventDefaults[strengthEvent.value];
+    }
+
+    if (legacySitSelect?.value === 'Situps') {
+      coreEvent.value = 'sit-up';
+      corePerformance.value = legacySitInput.value || eventDefaults[coreEvent.value];
+    } else if (legacySitSelect?.value === 'Reverse Crunch') {
+      coreEvent.value = 'cross-leg-reverse-crunch';
+      corePerformance.value = legacySitInput.value || eventDefaults[coreEvent.value];
+    } else if (legacySitSelect?.value === 'Plank') {
+      coreEvent.value = 'forearm-plank';
+      corePerformance.value = `${Number(legacySitInput.value || 0)}:${String(Number(legacyPlankMinuteInput.value || 0)).padStart(2, '0')}`;
+    }
+
+    if (legacyCardioSelect?.value === 'Shuttle Run') {
+      cardioEvent.value = 'hamr-20-meter';
+      cardioPerformance.value = legacyRunSecondInput.value || eventDefaults[cardioEvent.value];
+    } else if (cardioEvent.value === 'hamr-20-meter') {
+      cardioEvent.value = 'two-mile-run';
+      cardioPerformance.value = eventDefaults[cardioEvent.value];
+    } else if (legacyCardioSelect?.value === '1.5 Mile' && cardioEvent.value === 'two-mile-run') {
+      const minutes = Number(legacyRunMinuteInput.value || 0);
+      const seconds = Number(legacyRunSecondInput.value || 0);
+      if (minutes >= 12) {
+        cardioPerformance.value = `${minutes}:${String(seconds).padStart(2, '0')}`;
+      }
+    }
+
+    updateLabelsAndDefaults();
+    updatePfraCalculator();
+  }
+
   function updatePfraCalculator() {
     if (!pfraResult || !ageSelect || !sexSelect) return;
 
@@ -190,7 +239,7 @@
       }));
 
       pfraStatus.innerText = 'Standards loaded from PFRA 2026 tables.';
-      updatePfraCalculator();
+      syncFromLegacyCalculator();
     } catch (error) {
       pfraStatus.innerText = `Unable to load PFRA standards: ${error.message}`;
     }
@@ -205,6 +254,23 @@
 
     [ageSelect, sexSelect].forEach((select) => {
       select?.addEventListener('change', updatePfraCalculator);
+    });
+
+    [
+      legacyPushSelect,
+      legacyPushInput,
+      legacyPushSlider,
+      legacySitSelect,
+      legacySitInput,
+      legacySitSlider,
+      legacyPlankMinuteInput,
+      legacyCardioSelect,
+      legacyRunMinuteInput,
+      legacyRunSecondInput,
+      legacyRunSlider,
+    ].forEach((control) => {
+      control?.addEventListener('change', syncFromLegacyCalculator);
+      control?.addEventListener('input', syncFromLegacyCalculator);
     });
 
     [strengthEvent, coreEvent, cardioEvent].forEach((select) => {
