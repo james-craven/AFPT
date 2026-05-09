@@ -68,3 +68,16 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
   - `npm audit` reported 0 vulnerabilities.
   - `git diff --check` passed.
   - Syntax checks passed for `main2.js`, `pfra-calculator.js`, `pwa.js`, `tools/browser-regression.mjs`, and all `src/pfra/*.mjs` modules.
+
+### GitHub Pages Deployment Verification
+
+- Verified live site URL: `https://james-craven.github.io/AFPT/`.
+- Public GitHub Pages API endpoints returned 404 without authentication, so deployment status was verified from the live Pages site instead.
+- Live Pages response returned HTTP 200 with a `Last-Modified` timestamp after the push to `master`.
+- Confirmed deployed `pfra-calculator.js`, `src/pfra/scoring.mjs`, and `sw.js` include the migrated PFRA module structure.
+- Confirmed all 75 service-worker precache URLs return successful responses from GitHub Pages.
+- Browser verification on the live site passed with no console/runtime errors.
+- Confirmed Legacy mode loads and shows the expected default run score text.
+- Confirmed PFRA mode loads, updates cardio labels, shows the 2-mile run score text, and renders 8 lap times.
+- Confirmed a validated PFRA max-score example returns `PFRA Total: 100.0 - Excellent`.
+- Confirmed live PWA/offline behavior in a persistent Chrome profile: service worker activated for scope `https://james-craven.github.io/AFPT/`, the page reloaded offline, PFRA standards loaded offline, and PFRA run scoring text rendered offline.
