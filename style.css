@@ -385,6 +385,11 @@ section {
     color: white;
 }
 
+body.pfra-mode .pushsit-see-chart-btn,
+body.pfra-mode .cardio-see-chart-btn {
+    visibility: hidden;
+}
+
 .push-txt {
     height: 40px;
     border-radius: 5px;
@@ -949,6 +954,10 @@ tr, th, td {
 .pfra-fields {
     display: grid;
     gap: 0.45rem;
+}
+
+.pfra-internal-field {
+    display: none;
 }
 
 .pfra-panel label {

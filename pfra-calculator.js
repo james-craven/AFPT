@@ -31,6 +31,8 @@
   const legacyPlankMinuteInput = document.getElementById('plankmintxt');
   const legacyCardioSelect = document.getElementById('cardio-sel');
   const legacyTwoMileOption = legacyCardioSelect?.querySelector('option[value="1.5 Mile"]');
+  const legacyHamrOption = legacyCardioSelect?.querySelector('option[value="Shuttle Run"]');
+  const legacyWalkOption = legacyCardioSelect?.querySelector('option[value="Walk"]');
   const legacyRunMinuteInput = document.getElementById('run-mintxt');
   const legacyRunSecondInput = document.getElementById('run-sectxt');
   const legacyRunSlider = document.getElementById('run-slider');
@@ -262,8 +264,11 @@
   }
 
   function updateCardioModeText() {
-    if (!legacyTwoMileOption) return;
-    legacyTwoMileOption.innerText = isPfraMode() ? '2 Mile' : '1.5 Mile';
+    document.body.classList.toggle('pfra-mode', isPfraMode());
+
+    if (legacyTwoMileOption) legacyTwoMileOption.innerText = isPfraMode() ? '2 Mile' : '1.5 Mile';
+    if (legacyHamrOption) legacyHamrOption.innerText = isPfraMode() ? '20m HAMR' : 'Shuttle Run';
+    if (legacyWalkOption) legacyWalkOption.innerText = isPfraMode() ? '2 km Walk' : 'Walk';
   }
 
   function updatePfraLapTimes() {
