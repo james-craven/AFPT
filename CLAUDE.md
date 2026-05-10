@@ -12,6 +12,22 @@ standards data → pure scoring functions → app state → slot variant rendere
 
 One calculator engine. Shared state/actions. Named layout slots. Registered variants. Theme presets. Future user overrides.
 
+## Design Reference
+
+Mock files live in `design-reference/`:
+- `shared.jsx` — theme palettes (`THEMES`), CSS custom property token names, shared primitives
+- `mock-tactical.jsx`, `mock-stencil.jsx`, `mock-blues.jsx`, `mock-light.jsx`, `mock-fitness.jsx` — per-theme layout layouts
+
+**Read these files before any visual UI implementation.** They define the visual language and CSS token system the production code should implement.
+
+Rules:
+- Do not import React, Babel, CDN scripts, or mock seed data (`AFPT_DATA`) into production.
+- Use `design-reference/` as a read-only visual specification.
+- Use `shared.jsx`'s `THEMES` object as the authoritative source for CSS custom property values (`--bg`, `--panel`, `--ink`, `--accent`, etc.).
+- Font stacks must fall back to system fonts (app is offline-first — no hard remote font dependencies).
+
+See `docs/VISUAL_ALIGNMENT_AUDIT.md` for the current gap analysis.
+
 ## Non-Negotiables
 
 - No React, TypeScript, Babel-in-browser, CDN runtimes, server, database, or framework.

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AFPT Calculator — Unified Mock</title>
+<meta name="viewport" content="width=1400" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Special+Elite&family=Stardos+Stencil:wght@400;700&family=Black+Ops+One&family=Bebas+Neue&family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #f0eee9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+  #root { width: 100%; height: 100%; }
+  .ab-scroll::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="android-frame.jsx"></script>
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="mocks/mock-tactical.jsx"></script>
+<script type="text/babel" src="mocks/mock-stencil.jsx"></script>
+<script type="text/babel" src="mocks/mock-blues.jsx"></script>
+<script type="text/babel" src="mocks/mock-light.jsx"></script>
+<script type="text/babel" src="mocks/mock-fitness.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const { useState } = React;
+
+const MOCKS = {
+  tactical: { Comp: window.MockTactical, label: 'Tactical HUD' },
+  stencil:  { Comp: window.MockStencil,  label: 'Stencil Ops' },
+  blues:    { Comp: window.MockBlues,    label: 'AF Dress Blues' },
+  light:    { Comp: window.MockLight,    label: 'Connect Light' },
+  fitness:  { Comp: window.MockFitness,  label: 'Fitness Gradient' },
+};
+
+function PhoneFrame({ kind, w, h, children }) {
+  if (kind === 'ios') {
+    return (
+      <IOSDevice width={w} height={h} dark={true} home={false}>
+        <div className="ab-scroll" style={{ position: 'absolute', inset: 0, overflow: 'auto', borderRadius: 'inherit' }}>
+          {children}
+        </div>
+      </IOSDevice>
+    );
+  }
+  return (
+    <AndroidDevice width={w} height={h} dark={true}>
+      <div className="ab-scroll" style={{ position: 'absolute', inset: 0, overflow: 'auto' }}>
+        {children}
+      </div>
+    </AndroidDevice>
+  );
+}
+
+// One unified artboard. Theme-switcher in the footer of each mock
+// changes BOTH the palette AND the layout (each theme picks the mock
+// it was named after). Frame toggle flips iOS / Android.
+function UnifiedArtboard({ w, h }) {
+  const [theme, setTheme] = useState('tactical');
+  const [frame, setFrame] = useState('ios');
+  const Mock = MOCKS[theme].Comp;
+  return (
+    <PhoneFrame kind={frame} w={w} h={h}>
+      <Mock
+        themeKey={theme} onTheme={setTheme}
+        frameKind={frame} onFrameChange={setFrame}
+      />
+    </PhoneFrame>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas title="AFPT Calculator — unified mock"
+      subtitle="Theme dots in the footer swap the entire layout · Frame toggle flips iOS / Android · Sex / Age / Standard always visible">
+      <DCSection id="mock" title="One mock, five layouts" subtitle="Tap a theme dot in the footer to swap the layout. Tap iOS / Android to flip the frame.">
+        <DCArtboard id="unified" label="AFPT Calculator · theme = layout · frame = iOS/Android" width={420} height={1240}>
+          <UnifiedArtboard w={420} h={1240} />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="legend" title="What each theme picks">
+        <DCPostIt x={0} y={0} w={300}>
+          <b>Theme = layout swap</b><br/>
+          • <b>Tactical</b> — number + EXC badge · slider+field · 8-row laps + pace bars<br/>
+          • <b>Stencil</b> — stencil score · tap-edit · lap bar chart<br/>
+          • <b>Blues</b> — ring gauge · −/+ steppers · striped table<br/>
+          • <b>Connect</b> — card+pill · slider+field · rows + mini-bars<br/>
+          • <b>Fitness</b> — gradient ring · tap-edit + slider · 4-up tile grid
+        </DCPostIt>
+        <DCPostIt x={320} y={0} w={280}>
+          <b>Held constant across all themes</b><br/>
+          • Frame toggle (iOS / Android)<br/>
+          • Settings ⚙ button in the header<br/>
+          • Sex / Age / Standard dropdowns visible on main<br/>
+          • Top content sits below the status bar / notch<br/>
+          • All 3 components + score chart drawer
+        </DCPostIt>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
+</content>
+<parameter name="asset">AFPT Calculator Mocks

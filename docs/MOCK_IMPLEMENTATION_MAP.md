@@ -1,5 +1,20 @@
 # Mock Implementation Map
 
+## Design Reference Location
+
+Mock files are now in `design-reference/` in the repo root:
+
+- `shared.jsx` — theme palettes (`THEMES`), CSS custom property token names (`--bg`, `--panel`, `--ink`, `--accent`, etc.), shared primitives (ThemeSwitcher, ChartDrawer, DemographicsRow)
+- `mock-tactical.jsx` — Tactical HUD layout
+- `mock-stencil.jsx` — Stencil Ops layout
+- `mock-blues.jsx` — AF Dress Blues layout
+- `mock-light.jsx` — Connect Light layout
+- `mock-fitness.jsx` — Fitness Gradient layout
+
+**Read these files before implementing any visual UI phase.** Do not copy React, Babel, CDN scripts, or `AFPT_DATA` mock values into production.
+
+See `docs/VISUAL_ALIGNMENT_AUDIT.md` for gap analysis between current implementation and mock intent.
+
 ## Design Source Summary
 
 The uploaded mock describes a unified phone artboard with five visual presets:
