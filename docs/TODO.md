@@ -13,10 +13,12 @@
 - [x] Scoring verification: expand PFRA examples into a fixture-backed suite covering max, minimum, failing, and boundary values.
 - [x] UI redesign planning: create feature parity matrix, mock implementation map, redesign plan, and UI test plan.
 - [x] UI redesign planning: define modular theme presets, layout slots, and swappable visual variants.
+- [x] UI implementation Phase 1 foundation: add layout slots, variant registry, theme presets, data attributes, and safe preset selector without replacing the calculator UI.
 
 ## Later Improvements
 
 - Execute the UI redesign against `docs/LAYOUT_VARIANT_SYSTEM.md`, `docs/THEME_PARITY_MATRIX.md`, and `docs/FEATURE_PARITY_MATRIX.md` without changing calculator behavior.
+- Build the shared normalized UI state/action contract for future renderers.
 - Add a dev-only layout variant picker after the shared render/action contract exists.
 - Add persistent user layout customization after all theme presets pass parity.
 - Move legacy standards out of `main2.js` into versioned data.

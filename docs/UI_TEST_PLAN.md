@@ -27,6 +27,8 @@ This currently validates:
 Existing browser tests in `tools/browser-regression.mjs` must continue to cover:
 
 - Hamburger/settings hit area.
+- Theme foundation loads the default preset and resolves every registered preset with slot-compatible variants.
+- Theme switching preserves current score text and slider value.
 - Legacy default run score.
 - Legacy minimum tick click behavior.
 - Legacy shuttle and run switching.

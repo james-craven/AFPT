@@ -5,6 +5,7 @@ The redesign is successful only if every row in docs/FEATURE_PARITY_MATRIX.md is
 Status values during planning:
 
 - `Planned`: must be preserved or implemented during redesign.
+- `Implemented`: completed in the current codebase.
 - `Optional`: desirable, but not required for first parity.
 - `Mock-only`: visual exploration scaffolding that should not ship.
 - `Later`: planned after theme preset parity.
@@ -53,10 +54,10 @@ Status values during planning:
 | Real PFRA scoring data | `standards/af-pfra-2026.json`, `standards/extracted/tables/*.json` | Data layer unchanged | Planned | `tools/validate-pfra-tables.mjs` |
 | Browser regression suite | `tools/browser-regression.mjs` | Updated selectors as UI changes | Planned | `npm test` |
 | Shared render/action contract | Current direct DOM wiring, PFRA modules | UI contract feeding all variants | Planned | Browser tests drive same actions through redesigned UI |
-| Layout slot registry | New variant system | `appShell`, `scoreHeader`, cards, lap, chart, settings slots | Planned | Unit/browser smoke checks resolve every required slot |
-| Variant registry | Full mock layout set | Slot-scoped renderer registry | Planned | Each registered variant receives state and dispatches actions |
-| Theme preset registry | Mock theme switcher | Presets choose slot variants | Planned | Switching presets preserves score/state |
-| Theme selector | Mock `ThemeSwitcher`, `THEMES` | Settings/footer preset selector | Planned | Browser test after implementation |
+| Layout slot registry | `src/ui/layout-variants.mjs` | `appShell`, `scoreHeader`, cards, lap, chart, settings slots | Implemented | Registry validation and browser tests |
+| Variant registry | `src/ui/layout-variants.mjs` | Slot-scoped renderer registry | Implemented | Registered variants resolve for all presets |
+| Theme preset registry | `src/ui/layout-variants.mjs` | Presets choose slot variants | Implemented | Switching presets preserves score/state |
+| Theme selector | `src/ui/theme-controller.mjs`, `#theme-preset-select` | Current menu preset selector | Implemented | Browser test after implementation |
 | Theme presets expose required features | Full mock layout set | Tactical, Stencil, Blues, Light, Fitness presets | Planned | `docs/THEME_PARITY_MATRIX.md` plus browser tests |
 | Variant behavior parity | New variant system | All variants for a slot | Planned | Variant swap does not alter scoring or hide required controls |
 | User layout overrides | Future customization | Settings customization panel | Later | Dev variant picker first, then persistence tests |

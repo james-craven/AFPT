@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="tactical" data-theme-preset="tactical">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -15,7 +15,7 @@
         <link rel="stylesheet" type="text/css" href="./style.css?v=20260509-offline-pwa">
         <link rel="manifest" href="./manifest.webmanifest">
       </head>
-<body>
+<body data-theme="tactical" data-theme-preset="tactical">
     <div id="dev-version-modal" class="dev-version-modal" hidden>
         <div class="dev-version-panel">
             <h2>Development Build</h2>
@@ -71,6 +71,16 @@
                     <li id="shuttle-audio-player" style="visibility:hidden"> <audio crossorigin="anonymous" preload="metadata" src="./shuttle.mp3" controls="controls" id="shuttle-audio-control">
                         Your browser does not support the audio element.
                         </audio>
+                    </li>
+                    <li class="theme-menu-item">
+                        <label for="theme-preset-select">Theme Preset</label>
+                        <select id="theme-preset-select" aria-label="Theme preset">
+                            <option value="tactical">Tactical HUD</option>
+                            <option value="stencil">Stencil Ops</option>
+                            <option value="blues">AF Dress Blues</option>
+                            <option value="light">Connect Light</option>
+                            <option value="fitness">Fitness Gradient</option>
+                        </select>
                     </li>
                 </ul>
             </section>
@@ -339,6 +349,7 @@
 
     <script src="./main2.js?v=20260509-offline-pwa"></script>
     <script src="./pfra-calculator.js?v=20260509-offline-pwa"></script>
+    <script type="module" src="./src/ui/theme-controller.mjs?v=20260510-theme-foundation"></script>
     <script src="./pwa.js?v=20260509-offline-pwa"></script>
 </body>
 </html>

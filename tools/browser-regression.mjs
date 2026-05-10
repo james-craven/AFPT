@@ -195,6 +195,67 @@ async function assertHamburgerHitArea(page) {
   assert.equal(await page.locator('#menu-toggle').isChecked(), false, 'hamburger lower hit area closes the menu');
 }
 
+async function setThemePreset(page, preset) {
+  await page.waitForFunction(() => window.afptTheme && document.getElementById('theme-preset-select'));
+
+  if (!(await page.locator('#menu-toggle').isChecked())) {
+    await page.locator('.menu-btn-container').click();
+  }
+
+  await page.locator('#theme-preset-select').selectOption(preset);
+  await page.waitForFunction(
+    (expectedPreset) => document.documentElement.dataset.themePreset === expectedPreset,
+    preset,
+  );
+
+  if (await page.locator('#menu-toggle').isChecked()) {
+    await page.locator('.menu-btn-container').click();
+  }
+}
+
+async function assertThemeFoundation(page, nextPreset) {
+  await page.waitForFunction(() => window.afptTheme && document.documentElement.dataset.themePreset);
+
+  assert.equal(
+    await page.locator('html').getAttribute('data-theme-preset'),
+    'tactical',
+    'default theme preset is applied',
+  );
+  assert.equal(
+    await page.locator('body').getAttribute('data-theme-preset'),
+    'tactical',
+    'default body theme preset is applied',
+  );
+
+  const registryStatus = await page.evaluate(() => Object.fromEntries(
+    Object.keys(window.afptTheme.THEME_PRESETS).map((presetId) => {
+      const resolved = window.afptTheme.resolveThemePreset(presetId);
+      return [presetId, resolved.validation];
+    }),
+  ));
+
+  for (const [presetId, validation] of Object.entries(registryStatus)) {
+    assert.equal(validation.isValid, true, `${presetId} preset resolves to registered variants`);
+    assert.deepEqual(validation.incompatibleVariants, [], `${presetId} preset variants match their slots`);
+    assert.deepEqual(validation.missingSlots, [], `${presetId} preset has all slots`);
+    assert.deepEqual(validation.unknownVariants, [], `${presetId} preset has known variants`);
+  }
+
+  const scoreBefore = await text(page, '#run-txt-p');
+  const sliderBefore = await inputValue(page, '#run-slider');
+  await setThemePreset(page, nextPreset);
+
+  assert.equal(await page.locator('html').getAttribute('data-theme-preset'), nextPreset);
+  assert.equal(await page.locator('body').getAttribute('data-theme-preset'), nextPreset);
+  assert.equal(
+    await page.evaluate(() => localStorage.getItem(window.afptTheme.THEME_STORAGE_KEY)),
+    nextPreset,
+    'theme preset persists locally',
+  );
+  assert.equal(await text(page, '#run-txt-p'), scoreBefore, 'theme switch preserves score text');
+  assert.equal(await inputValue(page, '#run-slider'), sliderBefore, 'theme switch preserves slider value');
+}
+
 async function runLegacyRegression(browser, baseUrl, label, contextOptions = {}) {
   const { context, failures, page } = await newPage(browser, baseUrl, `?no-sw=1&qa=legacy-regression-${label}`, contextOptions);
 
@@ -202,6 +263,7 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
 
   assert.equal(await inputValue(page, '#run-slider'), '1136');
   assert.equal(await text(page, '#run-txt-p'), 'Run Score: 35 | Min: 18:56 | Max: 10:23');
+  await assertThemeFoundation(page, 'stencil');
 
   await page.locator('#push-txt').fill('47');
   await page.locator('#push-tick').click();
@@ -262,6 +324,7 @@ async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(await inputValue(page, '#run-mintxt'), '25');
   assert.equal(await inputValue(page, '#run-sectxt'), '23');
   assert.equal(await text(page, '#run-lap-times'), "Req'd 8 Lap Time: ~3:10 Lap 1: <= 3:10 Lap 2: <= 6:20 Lap 3: <= 9:31 Lap 4: <= 12:41 Lap 5: <= 15:51 Lap 6: <= 19:02 Lap 7: <= 22:12 Lap 8: <= 25:23");
+  await assertThemeFoundation(page, 'fitness');
 
   await page.locator('#push-txt').fill('50');
   await page.locator('#push-tick').click();

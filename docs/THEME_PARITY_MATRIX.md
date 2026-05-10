@@ -17,7 +17,7 @@ Every theme preset must expose the same calculator capabilities, even when the p
 | `coreCard` | `tactical-dense` | `stencil-clipped` | `blues-polished` | `light-clean` | `fitness-gradient-card` | Event, exemption, reps/plank input, slider, score, chart reachable |
 | `cardioCard` | `tactical-dense` | `stencil-clipped` | `blues-polished` | `light-clean` | `fitness-gradient-card` | Run/HAMR/walk/exempt, altitude, inputs, slider, score, chart reachable |
 | `lapDisplay` | `tactical-horizontal-bars` | `stencil-vertical-bars` | `blues-table` | `light-rows` | `fitness-tiles` | Legacy 6-lap and PFRA 8-lap information preserved |
-| `chartDisplay` | `tactical-drawer` | `stencil-drawer` | `blues-drawer` | `light-drawer` | `fitness-glass-drawer` | Current chart content reachable |
+| `chartDisplay` | `tactical-drawer` | `stencil-drawer` | `blues-chart-drawer` | `light-chart-drawer` | `fitness-glass-chart` | Current chart content reachable |
 | `inputControls` | `slider-plus-field` | `tap-edit-plus-slider` | `stepper-plus-slider` | `numeric-field-plus-slider` | `tap-edit-plus-slider` | Text/slider sync and min ticks preserved |
 | `componentScoreDisplay` | `hud-chip` | `stencil-points` | `progress-strip` | `clean-chip` | `gradient-chip` | Component score and exempt state visible |
 

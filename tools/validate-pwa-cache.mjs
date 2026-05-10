@@ -13,6 +13,8 @@ const requiredAssets = [
   'src/pfra/state.mjs',
   'src/pfra/standards.mjs',
   'src/pfra/ui.mjs',
+  'src/ui/layout-variants.mjs',
+  'src/ui/theme-controller.mjs',
   'pwa.js',
   'manifest.webmanifest',
   'dev-build-info.json',

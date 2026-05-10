@@ -35,7 +35,7 @@ Themes are presets. Variants are renderers for slots. User customization later o
 | `componentCard` | `tactical-dense` | `stencil-clipped` | `blues-polished` | `light-clean` | `fitness-gradient-card` |
 | `lapDisplay` | `tactical-horizontal-bars` | `stencil-vertical-bars` | `blues-table` | `light-rows` | `fitness-tiles` |
 | `settingsPanel` | `tactical-panel` | `stencil-compact-panel` | `blues-drawer` | `light-drawer` | `fitness-glass-drawer` |
-| `chartDisplay` | `tactical-drawer` | `stencil-drawer` | `blues-drawer` | `light-drawer` | `fitness-glass-drawer` |
+| `chartDisplay` | `tactical-drawer` | `stencil-drawer` | `blues-chart-drawer` | `light-chart-drawer` | `fitness-glass-chart` |
 | `inputControls` | `slider-plus-field` | `tap-edit-plus-slider` | `stepper-plus-slider` | `numeric-field-plus-slider` | `tap-edit-plus-slider` |
 | `componentScoreDisplay` | `hud-chip` | `stencil-points` | `progress-strip` | `clean-chip` | `gradient-chip` |
 | `demographicsControls` | `visible-compact-selects` | `visible-shared-row` | `visible-shared-row` | `visible-shared-row` | `visible-glass-selects` |

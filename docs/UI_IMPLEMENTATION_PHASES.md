@@ -46,6 +46,8 @@ Create static registries for:
 
 Done when a selected theme resolves to a complete map of slot variants without rendering duplicate calculator logic.
 
+Foundation status: `src/ui/layout-variants.mjs` now defines the initial layout slots, theme presets, and placeholder variant registry. `src/ui/theme-controller.mjs` applies the active preset through `data-theme` and `data-theme-preset` attributes while the existing UI remains intact.
+
 ## Phase 3: Base Shell
 
 Create one production shell that:

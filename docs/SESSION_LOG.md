@@ -129,3 +129,12 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added `docs/THEME_PARITY_MATRIX.md` to track required cross-theme feature parity.
 - Added `docs/UI_IMPLEMENTATION_PHASES.md` to sequence the shared render contract, registries, presets, dev variant picker, persistence, and public customization UI.
 - Updated the redesign plan, mock map, feature parity matrix, UI test plan, and TODO to reflect this rule: a theme preset chooses variants, a user customization overrides variants, and neither themes nor variants own scoring logic.
+
+### UI Variant Foundation
+
+- Added `src/ui/layout-variants.mjs` with layout slots, five theme presets, placeholder/default variants, and preset validation helpers.
+- Added `src/ui/theme-controller.mjs` to apply the active preset using `data-theme` and `data-theme-preset` attributes on `html` and `body`.
+- Added `#theme-preset-select` to the existing hamburger menu as a safe preset selector without replacing the current menu or calculator layout.
+- Added CSS token definitions for the five presets while keeping the current layout and calculator controls intact.
+- Updated Workbox and PWA cache validation so the new UI modules are available offline.
+- Updated browser regression coverage to verify default theme load, preset registry validity, slot-compatible variants, preset persistence, and score/slider invariance after theme switching.

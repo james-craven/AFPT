@@ -1,0 +1,228 @@
+export const DEFAULT_THEME_PRESET = 'tactical';
+export const THEME_STORAGE_KEY = 'afpt.themePreset';
+
+export const LAYOUT_SLOTS = Object.freeze([
+  'appShell',
+  'scoreHeader',
+  'demographicsControls',
+  'standardsSwitcher',
+  'settingsPanel',
+  'bodyCompositionCard',
+  'strengthCard',
+  'coreCard',
+  'cardioCard',
+  'lapDisplay',
+  'chartDisplay',
+  'inputControls',
+  'componentScoreDisplay',
+  'navigationPattern',
+]);
+
+const COMPONENT_CARD_SLOTS = Object.freeze([
+  'bodyCompositionCard',
+  'strengthCard',
+  'coreCard',
+  'cardioCard',
+]);
+
+function defineVariant(id, slot, label, compatibleSlots = [slot]) {
+  return Object.freeze({
+    id,
+    label,
+    slot,
+    compatibleSlots: Object.freeze(compatibleSlots),
+    status: 'foundation',
+  });
+}
+
+export const VARIANT_REGISTRY = Object.freeze({
+  'legacy-shell': defineVariant('legacy-shell', 'appShell', 'Current app shell'),
+  'tactical-shell': defineVariant('tactical-shell', 'appShell', 'Tactical shell'),
+  'stencil-shell': defineVariant('stencil-shell', 'appShell', 'Stencil shell'),
+  'blues-shell': defineVariant('blues-shell', 'appShell', 'AF Blues shell'),
+  'light-shell': defineVariant('light-shell', 'appShell', 'Connect Light shell'),
+  'fitness-shell': defineVariant('fitness-shell', 'appShell', 'Fitness shell'),
+
+  'tactical-score-number': defineVariant('tactical-score-number', 'scoreHeader', 'Tactical score number'),
+  'stencil-score-block': defineVariant('stencil-score-block', 'scoreHeader', 'Stencil score block'),
+  'blues-ring': defineVariant('blues-ring', 'scoreHeader', 'Blues score ring'),
+  'light-card': defineVariant('light-card', 'scoreHeader', 'Light score card'),
+  'fitness-gradient-ring': defineVariant('fitness-gradient-ring', 'scoreHeader', 'Fitness gradient ring'),
+
+  'visible-compact-selects': defineVariant('visible-compact-selects', 'demographicsControls', 'Compact visible selects'),
+  'visible-shared-row': defineVariant('visible-shared-row', 'demographicsControls', 'Shared visible row'),
+  'visible-glass-selects': defineVariant('visible-glass-selects', 'demographicsControls', 'Glass visible selects'),
+
+  'current-standards-select': defineVariant('current-standards-select', 'standardsSwitcher', 'Current standards select'),
+
+  'tactical-panel': defineVariant('tactical-panel', 'settingsPanel', 'Tactical settings panel'),
+  'stencil-compact-panel': defineVariant('stencil-compact-panel', 'settingsPanel', 'Stencil compact panel'),
+  'blues-drawer': defineVariant('blues-drawer', 'settingsPanel', 'Blues drawer'),
+  'light-drawer': defineVariant('light-drawer', 'settingsPanel', 'Light drawer'),
+  'fitness-glass-drawer': defineVariant('fitness-glass-drawer', 'settingsPanel', 'Fitness glass drawer'),
+
+  'tactical-dense': defineVariant('tactical-dense', 'componentCard', 'Tactical dense card', COMPONENT_CARD_SLOTS),
+  'stencil-clipped': defineVariant('stencil-clipped', 'componentCard', 'Stencil clipped card', COMPONENT_CARD_SLOTS),
+  'blues-polished': defineVariant('blues-polished', 'componentCard', 'Blues polished card', COMPONENT_CARD_SLOTS),
+  'light-clean': defineVariant('light-clean', 'componentCard', 'Light clean card', COMPONENT_CARD_SLOTS),
+  'fitness-gradient-card': defineVariant('fitness-gradient-card', 'componentCard', 'Fitness gradient card', COMPONENT_CARD_SLOTS),
+
+  'tactical-horizontal-bars': defineVariant('tactical-horizontal-bars', 'lapDisplay', 'Tactical horizontal bars'),
+  'stencil-vertical-bars': defineVariant('stencil-vertical-bars', 'lapDisplay', 'Stencil vertical bars'),
+  'blues-table': defineVariant('blues-table', 'lapDisplay', 'Blues table'),
+  'light-rows': defineVariant('light-rows', 'lapDisplay', 'Light rows'),
+  'fitness-tiles': defineVariant('fitness-tiles', 'lapDisplay', 'Fitness tiles'),
+
+  'tactical-drawer': defineVariant('tactical-drawer', 'chartDisplay', 'Tactical chart drawer'),
+  'stencil-drawer': defineVariant('stencil-drawer', 'chartDisplay', 'Stencil chart drawer'),
+  'blues-chart-drawer': defineVariant('blues-chart-drawer', 'chartDisplay', 'Blues chart drawer'),
+  'light-chart-drawer': defineVariant('light-chart-drawer', 'chartDisplay', 'Light chart drawer'),
+  'fitness-glass-chart': defineVariant('fitness-glass-chart', 'chartDisplay', 'Fitness glass chart'),
+
+  'slider-plus-field': defineVariant('slider-plus-field', 'inputControls', 'Slider plus field'),
+  'tap-edit-plus-slider': defineVariant('tap-edit-plus-slider', 'inputControls', 'Tap edit plus slider'),
+  'stepper-plus-slider': defineVariant('stepper-plus-slider', 'inputControls', 'Stepper plus slider'),
+  'numeric-field-plus-slider': defineVariant('numeric-field-plus-slider', 'inputControls', 'Numeric field plus slider'),
+
+  'hud-chip': defineVariant('hud-chip', 'componentScoreDisplay', 'HUD score chip'),
+  'stencil-points': defineVariant('stencil-points', 'componentScoreDisplay', 'Stencil points'),
+  'progress-strip': defineVariant('progress-strip', 'componentScoreDisplay', 'Progress strip'),
+  'clean-chip': defineVariant('clean-chip', 'componentScoreDisplay', 'Clean score chip'),
+  'gradient-chip': defineVariant('gradient-chip', 'componentScoreDisplay', 'Gradient score chip'),
+
+  'current-navigation': defineVariant('current-navigation', 'navigationPattern', 'Current navigation'),
+});
+
+function preset(id, label, variants) {
+  return Object.freeze({
+    id,
+    label,
+    variants: Object.freeze(variants),
+  });
+}
+
+export const THEME_PRESETS = Object.freeze({
+  tactical: preset('tactical', 'Tactical HUD', {
+    appShell: 'tactical-shell',
+    scoreHeader: 'tactical-score-number',
+    demographicsControls: 'visible-compact-selects',
+    standardsSwitcher: 'current-standards-select',
+    settingsPanel: 'tactical-panel',
+    bodyCompositionCard: 'tactical-dense',
+    strengthCard: 'tactical-dense',
+    coreCard: 'tactical-dense',
+    cardioCard: 'tactical-dense',
+    lapDisplay: 'tactical-horizontal-bars',
+    chartDisplay: 'tactical-drawer',
+    inputControls: 'slider-plus-field',
+    componentScoreDisplay: 'hud-chip',
+    navigationPattern: 'current-navigation',
+  }),
+  stencil: preset('stencil', 'Stencil Ops', {
+    appShell: 'stencil-shell',
+    scoreHeader: 'stencil-score-block',
+    demographicsControls: 'visible-shared-row',
+    standardsSwitcher: 'current-standards-select',
+    settingsPanel: 'stencil-compact-panel',
+    bodyCompositionCard: 'stencil-clipped',
+    strengthCard: 'stencil-clipped',
+    coreCard: 'stencil-clipped',
+    cardioCard: 'stencil-clipped',
+    lapDisplay: 'stencil-vertical-bars',
+    chartDisplay: 'stencil-drawer',
+    inputControls: 'tap-edit-plus-slider',
+    componentScoreDisplay: 'stencil-points',
+    navigationPattern: 'current-navigation',
+  }),
+  blues: preset('blues', 'AF Dress Blues', {
+    appShell: 'blues-shell',
+    scoreHeader: 'blues-ring',
+    demographicsControls: 'visible-shared-row',
+    standardsSwitcher: 'current-standards-select',
+    settingsPanel: 'blues-drawer',
+    bodyCompositionCard: 'blues-polished',
+    strengthCard: 'blues-polished',
+    coreCard: 'blues-polished',
+    cardioCard: 'blues-polished',
+    lapDisplay: 'blues-table',
+    chartDisplay: 'blues-chart-drawer',
+    inputControls: 'stepper-plus-slider',
+    componentScoreDisplay: 'progress-strip',
+    navigationPattern: 'current-navigation',
+  }),
+  light: preset('light', 'Connect Light', {
+    appShell: 'light-shell',
+    scoreHeader: 'light-card',
+    demographicsControls: 'visible-shared-row',
+    standardsSwitcher: 'current-standards-select',
+    settingsPanel: 'light-drawer',
+    bodyCompositionCard: 'light-clean',
+    strengthCard: 'light-clean',
+    coreCard: 'light-clean',
+    cardioCard: 'light-clean',
+    lapDisplay: 'light-rows',
+    chartDisplay: 'light-chart-drawer',
+    inputControls: 'numeric-field-plus-slider',
+    componentScoreDisplay: 'clean-chip',
+    navigationPattern: 'current-navigation',
+  }),
+  fitness: preset('fitness', 'Fitness Gradient', {
+    appShell: 'fitness-shell',
+    scoreHeader: 'fitness-gradient-ring',
+    demographicsControls: 'visible-glass-selects',
+    standardsSwitcher: 'current-standards-select',
+    settingsPanel: 'fitness-glass-drawer',
+    bodyCompositionCard: 'fitness-gradient-card',
+    strengthCard: 'fitness-gradient-card',
+    coreCard: 'fitness-gradient-card',
+    cardioCard: 'fitness-gradient-card',
+    lapDisplay: 'fitness-tiles',
+    chartDisplay: 'fitness-glass-chart',
+    inputControls: 'tap-edit-plus-slider',
+    componentScoreDisplay: 'gradient-chip',
+    navigationPattern: 'current-navigation',
+  }),
+});
+
+export function themePresetOptions() {
+  return Object.values(THEME_PRESETS).map(({ id, label }) => ({ id, label }));
+}
+
+export function isKnownThemePreset(id) {
+  return Object.hasOwn(THEME_PRESETS, id);
+}
+
+export function validateThemePreset(preset = THEME_PRESETS[DEFAULT_THEME_PRESET]) {
+  const missingSlots = LAYOUT_SLOTS.filter((slot) => !preset.variants[slot]);
+  const unknownVariants = Object.entries(preset.variants)
+    .filter(([, variantId]) => !VARIANT_REGISTRY[variantId])
+    .map(([slot, variantId]) => `${slot}:${variantId}`);
+  const incompatibleVariants = Object.entries(preset.variants)
+    .filter(([slot, variantId]) => {
+      const variant = VARIANT_REGISTRY[variantId];
+      return variant && !variant.compatibleSlots.includes(slot);
+    })
+    .map(([slot, variantId]) => `${slot}:${variantId}`);
+
+  return {
+    isValid: missingSlots.length === 0 && unknownVariants.length === 0 && incompatibleVariants.length === 0,
+    incompatibleVariants,
+    missingSlots,
+    unknownVariants,
+  };
+}
+
+export function resolveThemePreset(presetId = DEFAULT_THEME_PRESET, overrides = {}) {
+  const preset = THEME_PRESETS[presetId] || THEME_PRESETS[DEFAULT_THEME_PRESET];
+  const variants = {
+    ...preset.variants,
+    ...overrides,
+  };
+
+  return Object.freeze({
+    id: preset.id,
+    label: preset.label,
+    variants: Object.freeze(variants),
+    validation: validateThemePreset({ variants }),
+  });
+}

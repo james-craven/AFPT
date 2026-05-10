@@ -41,6 +41,7 @@ The offline modernization plan lives in `docs/OFFLINE_FIRST_PLAN.md`.
 - PFRA 2026 standards metadata lives in `standards/af-pfra-2026.json`.
 - PFRA scoring tables live in `standards/extracted/tables/`.
 - PFRA scoring and standards loading are split into vanilla ES modules under `src/pfra/`.
+- UI theme preset and layout variant foundations live under `src/ui/`.
 - Legacy scoring standards are still embedded in `main2.js` and are documented in `docs/LEGACY_BOUNDARIES.md`.
 - Chart references are currently stored as image assets in `web formatted jpgs/`.
 - A future standards update system should keep the review/confirm workflow before accepting PDF/image imports.

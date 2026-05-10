@@ -2,6 +2,76 @@
     box-sizing: border-box;
 }
 
+:root {
+    --afpt-bg: #003a6df0;
+    --afpt-panel: #003a6d;
+    --afpt-panel-2: rgba(0, 0, 0, 0.3);
+    --afpt-border: rgba(255, 255, 255, 0.45);
+    --afpt-border-strong: #ffffff;
+    --afpt-ink: #ffffff;
+    --afpt-ink-dim: rgba(255, 255, 255, 0.75);
+    --afpt-accent: #00ddff;
+    --afpt-accent-2: #90ee90;
+    --afpt-warn: #f5c542;
+    --afpt-bad: rgb(250, 54, 54);
+}
+
+:root[data-theme="stencil"] {
+    --afpt-bg: #1a1d12;
+    --afpt-panel: #252916;
+    --afpt-panel-2: #2f3319;
+    --afpt-border: rgba(170, 182, 118, 0.25);
+    --afpt-border-strong: rgba(213, 196, 128, 0.6);
+    --afpt-ink: #e9e1c2;
+    --afpt-ink-dim: #a59c75;
+    --afpt-accent: #d5c480;
+    --afpt-accent-2: #b8c46a;
+    --afpt-warn: #e6a740;
+    --afpt-bad: #c8513f;
+}
+
+:root[data-theme="blues"] {
+    --afpt-bg: #0d1726;
+    --afpt-panel: #15233a;
+    --afpt-panel-2: #1c2c47;
+    --afpt-border: rgba(199, 206, 221, 0.18);
+    --afpt-border-strong: rgba(199, 206, 221, 0.4);
+    --afpt-ink: #eef1f7;
+    --afpt-ink-dim: #9aa5bd;
+    --afpt-accent: #c0c8d8;
+    --afpt-accent-2: #e2c275;
+    --afpt-warn: #e2c275;
+    --afpt-bad: #c95a5a;
+}
+
+:root[data-theme="light"] {
+    --afpt-bg: #f5f6fa;
+    --afpt-panel: #ffffff;
+    --afpt-panel-2: #f0f3f8;
+    --afpt-border: rgba(20, 30, 55, 0.08);
+    --afpt-border-strong: rgba(20, 30, 55, 0.18);
+    --afpt-ink: #0e1726;
+    --afpt-ink-dim: #5d6577;
+    --afpt-accent: #2a6fdb;
+    --afpt-accent-2: #1f8a5b;
+    --afpt-warn: #d97706;
+    --afpt-bad: #c0392b;
+}
+
+:root[data-theme="fitness"] {
+    --afpt-bg: #1b0d2a;
+    --afpt-panel: rgba(255, 255, 255, 0.07);
+    --afpt-panel-2: rgba(255, 255, 255, 0.04);
+    --afpt-border: rgba(255, 255, 255, 0.1);
+    --afpt-border-strong: rgba(255, 255, 255, 0.22);
+    --afpt-ink: #ffffff;
+    --afpt-ink-dim: rgba(255, 255, 255, 0.65);
+    --afpt-accent: #ff5dab;
+    --afpt-accent-2: #ffb547;
+    --afpt-warn: #ffb547;
+    --afpt-bad: #ff5d7c;
+}
+
 body {
     background: #003a6df0;
     font-weight: bold;
@@ -288,6 +358,26 @@ section {
   }
   .menu > li:not(:last-child) {
     border-bottom: 1px solid rgb(255, 255, 255);
+  }
+
+  .theme-menu-item {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .theme-menu-item label {
+    color: var(--afpt-ink);
+    font-size: 1rem;
+    text-transform: uppercase;
+  }
+
+  .theme-menu-item select {
+    background-color: var(--afpt-panel-2);
+    border-color: var(--afpt-border-strong);
+    color: var(--afpt-ink);
+    margin: 0;
+    width: 190px;
   }
 
 
