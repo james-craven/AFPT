@@ -658,6 +658,31 @@ async function assertThemeFoundation(page, nextPreset) {
   assert.equal(stripAfter.selectedComponent, stripBefore.selectedComponent, 'theme switch preserves selected component');
 }
 
+async function assertSettingsPanelAlignment(page) {
+  await openSettingsHub(page);
+
+  const alignment = await page.evaluate(() => {
+    const panel = document.getElementById('settings-hub-panel');
+    const toggle = document.getElementById('settings-hub-toggle');
+    if (!panel || !toggle) return null;
+    const panelRect = panel.getBoundingClientRect();
+    const toggleRect = toggle.getBoundingClientRect();
+    return {
+      panelRight: Math.round(panelRect.right),
+      toggleRight: Math.round(toggleRect.right),
+      viewportWidth: window.innerWidth,
+    };
+  });
+
+  assert.ok(alignment, 'settings panel and toggle are present');
+  assert.ok(
+    Math.abs(alignment.panelRight - alignment.toggleRight) < 60,
+    `settings panel right edge (${alignment.panelRight}px) aligns with toggle right edge (${alignment.toggleRight}px) — delta must be <60px`,
+  );
+
+  await closeSettingsHub(page);
+}
+
 async function assertDesktopCardAlignment(page) {
   const widths = await page.evaluate(() => {
     const rect = (sel) => document.querySelector(sel)?.getBoundingClientRect().width ?? null;
@@ -691,6 +716,7 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
 
   if (label === 'desktop') {
     await assertDesktopCardAlignment(page);
+    await assertSettingsPanelAlignment(page);
   }
 
   assert.equal(await inputValue(page, '#run-slider'), '1136');

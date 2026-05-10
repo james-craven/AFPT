@@ -311,7 +311,7 @@ section {
     overflow-y: auto;
     padding: 1rem;
     position: fixed;
-    right: max(0px, calc((100vw - 400px) / 2));
+    right: 0;
     top: 56px;
     width: min(100vw - 24px, 376px);
     z-index: 7;
@@ -395,6 +395,7 @@ section {
     cursor: default;
     justify-content: center;
 }
+
 
 .settings-menu > li.settings-audio-player::after {
     content: '';
