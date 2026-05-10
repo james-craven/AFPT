@@ -588,15 +588,22 @@ async function assertDesktopCardAlignment(page) {
     return {
       scoreHeader: rect('#score-header'),
       strengthCard: rect('#strength-card'),
+      topBar: rect('.info-section'),
     };
   });
-  const { scoreHeader, strengthCard } = widths;
+  const { scoreHeader, strengthCard, topBar } = widths;
   assert.ok(scoreHeader !== null, 'score header is in the DOM');
   assert.ok(strengthCard !== null, 'strength card is in the DOM');
   assert.ok(
     Math.abs(scoreHeader - strengthCard) < 40,
     `desktop card widths are aligned: score-header=${scoreHeader?.toFixed(0)}px strength-card=${strengthCard?.toFixed(0)}px (delta must be <40px)`,
   );
+  if (topBar !== null) {
+    assert.ok(
+      Math.abs(topBar - scoreHeader) < 40,
+      `top bar width aligns with card column: top-bar=${topBar?.toFixed(0)}px score-header=${scoreHeader?.toFixed(0)}px (delta must be <40px)`,
+    );
+  }
 }
 
 async function runLegacyRegression(browser, baseUrl, label, contextOptions = {}) {

@@ -14,7 +14,8 @@
     --afpt-accent-2: #90ee90;
     --afpt-warn: #f5c542;
     --afpt-bad: rgb(250, 54, 54);
-    --afpt-card-max-width: 368px;
+    --afpt-app-max-width: 640px;
+    --afpt-card-max-width: var(--afpt-app-max-width);
 }
 
 :root[data-theme="tactical"] {
@@ -172,7 +173,7 @@ section {
     display: grid;
     /* background: #003a6df0; */
     /* border: 1px solid white; */
-    max-width: 400px;
+    max-width: var(--afpt-app-max-width);
     margin: 0 auto;
     /* border-bottom: white solid 1px; */
     padding: 0 1em;
@@ -181,7 +182,7 @@ section {
     height:50px;
     display:grid;
     margin: 0 auto;
-    max-width:400px;
+    max-width: var(--afpt-app-max-width);
     width: 100%;
 }
 .info-section {
@@ -197,10 +198,12 @@ section {
   color: #FFF;
   height: 50px;
   width: 100%;
-  max-width: 400px;
+  max-width: var(--afpt-app-max-width);
   padding: 0 1em;
   align-items: center!important;
   position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 3!important;
 }
 .logo {

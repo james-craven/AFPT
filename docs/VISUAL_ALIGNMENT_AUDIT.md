@@ -139,7 +139,15 @@ The chart button is part of the editor header, not a separate section. The `push
 
 ### Priority 0 — Desktop Layout Geometry (DONE)
 
-Added `--afpt-card-max-width: 368px` as a shared token. All primary card/section elements now use `max-width: var(--afpt-card-max-width); width: calc(100% - 1rem); margin-inline: auto;` matching the score header. Widening to Option B (560–760px) requires changing one variable.
+Added `--afpt-app-max-width: 640px` as the shared app-frame width. `--afpt-card-max-width` references it so changing the frame changes everything.
+
+All three conflicting width anchors unified:
+- Generic `section` rule: was `400px`, now `var(--afpt-app-max-width)`
+- `.info-section-wrapper`: was `400px`, now `var(--afpt-app-max-width)`
+- `.info-section` (fixed top bar): was `400px` left-aligned, now `var(--afpt-app-max-width)` with `left: 50%; transform: translateX(-50%)` centering
+- Score header, demographics, strength card, pfra-panel, runlaps-row, legacy sections: all `640px` via the variable chain
+
+Browser regression verifies score header, strength card, and top bar are all within 40px of each other on desktop.
 
 ### Priority 1 — CSS Custom Property Token System (DONE)
 

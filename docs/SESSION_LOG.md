@@ -2,6 +2,21 @@
 
 ## 2026-05-10
 
+### Phase 7 Visual Realignment — Part 3: App-Frame Width Contract
+
+**Problem:** The previous 368px fix matched the wrong anchor. The top bar, generic sections, and score header each had different hardcoded max-widths (400px, 400px, 368px), none centered consistently, and all too narrow for desktop.
+
+**Decision:** Use `--afpt-app-max-width: 640px` as the single app-frame width. `--afpt-card-max-width` aliases it so changing one variable changes the whole column.
+
+**Changes:**
+- Added `--afpt-app-max-width: 640px` to `:root`. Changed `--afpt-card-max-width` from hardcoded `368px` to `var(--afpt-app-max-width)`.
+- `section { max-width }` updated from `400px` to `var(--afpt-app-max-width)`.
+- `.info-section-wrapper { max-width }` updated from `400px` to `var(--afpt-app-max-width)`.
+- `.info-section { max-width }` updated from `400px` to `var(--afpt-app-max-width)`. Added `left: 50%; transform: translateX(-50%)` to center the fixed top bar on desktop (works correctly on mobile too).
+- Score header, demographics, all cards already used `var(--afpt-card-max-width)` — they inherit 640px automatically.
+- `assertDesktopCardAlignment()` extended to also check `.info-section` width is within 40px of `#score-header`.
+- `npm test` passed.
+
 ### Phase 7 Visual Realignment — Part 2: Desktop Layout Geometry Fix
 
 **Problem identified:** After the token-color realignment, mobile looked correct but on desktop the strength card and PFRA panel stretched to 100% body width while the score header and demographic controls were constrained to `max-width: 368px`. This made the layout look inconsistent rather than like a unified column.
