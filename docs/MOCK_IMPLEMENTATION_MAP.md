@@ -2,7 +2,7 @@
 
 ## Design Source Summary
 
-The uploaded mock describes a unified phone artboard with five visual themes:
+The uploaded mock describes a unified phone artboard with five visual presets:
 
 - Tactical HUD
 - Stencil Ops
@@ -19,43 +19,60 @@ The available mock files provide:
 - iOS and Android presentation frames.
 - Five concrete layouts: Tactical HUD, Stencil Ops, AF Dress Blues, Connect Light, and Fitness Gradient.
 
-All referenced layout files are now available in Downloads and have been reviewed.
+Production should treat those mocks as variant inspiration, not as separate app implementations.
+
+## Core Mapping Rule
+
+One shared calculator behavior/state/scoring system feeds many interchangeable visual renderers.
+
+Themes are presets. Variants are renderers for slots. User customization later overrides slot choices.
+
+## Variant Slot Map
+
+| Slot | Tactical | Stencil | Blues | Connect Light | Fitness |
+|---|---|---|---|---|---|
+| `scoreHeader` | `tactical-score-number` | `stencil-score-block` | `blues-ring` | `light-card` | `fitness-gradient-ring` |
+| `componentCard` | `tactical-dense` | `stencil-clipped` | `blues-polished` | `light-clean` | `fitness-gradient-card` |
+| `lapDisplay` | `tactical-horizontal-bars` | `stencil-vertical-bars` | `blues-table` | `light-rows` | `fitness-tiles` |
+| `settingsPanel` | `tactical-panel` | `stencil-compact-panel` | `blues-drawer` | `light-drawer` | `fitness-glass-drawer` |
+| `chartDisplay` | `tactical-drawer` | `stencil-drawer` | `blues-drawer` | `light-drawer` | `fitness-glass-drawer` |
+| `inputControls` | `slider-plus-field` | `tap-edit-plus-slider` | `stepper-plus-slider` | `numeric-field-plus-slider` | `tap-edit-plus-slider` |
+| `componentScoreDisplay` | `hud-chip` | `stencil-points` | `progress-strip` | `clean-chip` | `gradient-chip` |
+| `demographicsControls` | `visible-compact-selects` | `visible-shared-row` | `visible-shared-row` | `visible-shared-row` | `visible-glass-selects` |
 
 ## Layout Takeaways
 
 | Mock | Useful Production Ideas | Cautions |
 |---|---|---|
-| Tactical HUD | Dense score header, always-visible sex/age/standard controls, component tabs, visible altitude control, full 8-row lap plan with pace bars | Strong tactical styling may be too intense as the only default |
-| Stencil Ops | Clear status threshold bar, strong chart button placement, compact settings drawer, lap bar chart | Heavy stencil styling and clip-path cards should be theme-only |
-| AF Dress Blues | Score ring/dial, polished component cards, stepper controls, visible altitude, clean lap table | Ring and stepper controls may add complexity before parity |
-| Connect Light | Most production-friendly card style, readable score card, clean active editor, simple lap rows | Settings drawer should not hide controls that need to stay visible |
-| Fitness Gradient | Strong score ring and compact lap tiles | Gradient/glass styling is more expressive than utilitarian and should be optional |
-
-Primary implementation recommendation: start with a Tactical/Connect hybrid. Keep the Tactical information density and visible controls, but use the quieter Connect Light card language as the default visual finish.
+| Tactical HUD | Dense score header, always-visible sex/age/standard controls, component tabs, visible altitude control, full 8-row lap plan with pace bars | Styling should be a preset, not the only default |
+| Stencil Ops | Clear status threshold bar, strong chart button placement, compact settings drawer, lap bar chart | Heavy stencil styling and clipped cards should remain variants |
+| AF Dress Blues | Score ring/dial, polished component cards, stepper controls, visible altitude, clean lap table | Ring and stepper controls need careful mobile space and accessibility checks |
+| Connect Light | Most production-friendly card style, readable score card, clean active editor, simple lap rows | Must not hide required controls in settings |
+| Fitness Gradient | Strong score ring and compact lap tiles | Gradient/glass styling should be optional and tested for readability |
 
 ## Production Mapping
 
 | Mock Concept | Production Meaning | Implementation Direction |
 |---|---|---|
-| Score header | Current total score and category | Render from `updateScoreMinMaxText` for legacy and `renderPfraMainScore`/PFRA result for PFRA |
+| Theme dots | Preset selector | Resolve a theme preset into slot variants; do not load separate calculator pages |
+| Score header | Current total score and category | Render from normalized state using selected `scoreHeader` variant |
 | Status badge | Excellent/Satisfactory/Unsatisfactory/pass/fail state | Derive from real score/category, not mock `status` |
-| Sex selector | Current `#sex-sel` | Move visually into header while keeping state wiring |
-| Age selector | Current `#age-sel` | Move visually into header while keeping age mapping |
-| Standard selector | Current `#standards-mode` | Keep Legacy/PFRA switch visible |
-| Component cards | Current strength/core/cardio/body sections | Wrap existing controls into body, strength, core, and cardio cards |
-| Slider + field controls | Existing range and text inputs | Preserve synchronization and min tick behavior |
-| Run timing/lap display | `#run-lap-times` legacy 6-lap and PFRA 8-lap renderers | Place in cardio card details area |
-| Score chart drawer | Current chart modal and mock `ChartDrawer` | Build a vanilla drawer; initially reuse existing chart image assets |
-| Settings button | Mock header gear | Open a vanilla settings drawer/modal for install, audio, updates, dev build, and future theme |
-| Theme selector | Mock `ThemeSwitcher` | Optional first-class setting after parity; use CSS variables only and keep the same layout |
-| Legacy/PFRA switching | Current standards selector | Keep as production mode control, not a theme |
+| Sex selector | Current `#sex-sel` | Render through `demographicsControls`; dispatch real state/control updates |
+| Age selector | Current `#age-sel` | Render through `demographicsControls`; keep age mapping |
+| Standard selector | Current `#standards-mode` | Render through `standardsSwitcher`; keep Legacy/PFRA behavior |
+| Component cards | Current body/strength/core/cardio sections | Render through card variants using real component data |
+| Slider + field controls | Existing range and text inputs | Render through input-control variants; preserve synchronization and min tick behavior |
+| Run timing/lap display | `#run-lap-times` legacy 6-lap and PFRA 8-lap renderers | Render same normalized lap data through selected `lapDisplay` variant |
+| Score chart drawer | Current chart modal and mock `ChartDrawer` | Render through `chartDisplay`; initially reuse existing chart image assets |
+| Settings button | Mock header gear | Render selected `settingsPanel`; include real install/audio/update/dev controls |
+| Legacy/PFRA switching | Current standards selector | Keep as production mode control, not a visual theme |
 | PWA/offline support | Current service worker and manifest | Leave runtime behavior unchanged; restyle prompts only after tests pass |
 
 ## What To Borrow Carefully
 
 ### Theme Tokens
 
-The mock's `THEMES` object is a good source of names and color relationships:
+The mock's `THEMES` object is a useful source of color relationships:
 
 - `--bg`
 - `--panel`
@@ -69,7 +86,7 @@ The mock's `THEMES` object is a good source of names and color relationships:
 - `--warn`
 - `--bad`
 
-Production should translate these into CSS variables in `style.css`, with a default theme first. Do not ship remote Google Fonts as a hard dependency for the offline app unless they are bundled or replaced by system fonts.
+Production should translate these into CSS variables in `style.css`. Do not ship remote Google Fonts as a hard dependency for the offline app unless they are bundled or replaced by system fonts.
 
 ### Score Chart Drawer
 
@@ -81,7 +98,7 @@ The mock drawer is useful as an interaction model, but its rows are generated fr
 
 ### Component Cards
 
-Cards should be functional containers, not decorative wrappers around disconnected demo values. Each card should show:
+Cards should be functional containers, not decorative wrappers around disconnected demo values. Each card variant must expose:
 
 - Event selector.
 - Current performance input.
@@ -99,25 +116,25 @@ Cards should be functional containers, not decorative wrappers around disconnect
 - `DesignCanvas`, `DCSection`, `DCArtboard`, post-it notes, or artboard state.
 - iOS/Android device frames and frame toggle.
 - The chart row generator inside mock `ChartDrawer`.
-- Theme dots that swap entire layouts. Production theme dots should change appearance only.
+- Five duplicated full-page calculators.
 - Mock settings rows that are placeholders rather than real app behavior.
 
 ## Suggested Production DOM Strategy
 
 Prefer one of these low-risk approaches:
 
-1. Keep existing element IDs and move/reshape markup carefully so current event bindings survive.
-2. If markup must change, update `src/pfra/dom.mjs`, `main2.js`, and `tools/browser-regression.mjs` together in the same phase.
-3. Add new wrapper elements/classes around existing inputs before deleting old sections.
-4. Remove old markup only when the parity matrix row for that feature is implemented and tested.
+1. Keep existing element IDs until a shared action contract can replace direct DOM dependencies.
+2. Add wrapper elements/classes around existing inputs before deleting old sections.
+3. If markup must change, update `src/pfra/dom.mjs`, `main2.js`, and `tools/browser-regression.mjs` together in the same phase.
+4. Remove old markup only when the parity matrix row for that feature is implemented and tested across the active preset.
 
 ## Mock-Specific Decisions
 
 - Frame toggle: mock-only.
-- Layout-per-theme: mock-only.
+- Theme presets: planned production feature.
+- Layout-per-theme hardcoded pages: mock-only.
 - Settings gear: planned production feature.
-- Theme dots: optional production feature after parity.
+- Theme dots: planned as preset selector after parity.
 - Visible demographics row: planned production feature.
 - Score chart drawer: planned production feature.
-- Five theme palettes: optional source for future themes; start with one default production layout.
-- Default layout direction: Tactical/Connect hybrid.
+- User slot overrides: planned later, after presets are implemented.

@@ -7,6 +7,7 @@ Status values during planning:
 - `Planned`: must be preserved or implemented during redesign.
 - `Optional`: desirable, but not required for first parity.
 - `Mock-only`: visual exploration scaffolding that should not ship.
+- `Later`: planned after theme preset parity.
 
 | Existing Feature | Current File/Function | New UI Location | Status | Verification |
 |---|---|---|---|---|
@@ -51,12 +52,18 @@ Status values during planning:
 | Service-worker update flow | `pwa.js`, `sw.js` | Unchanged behavior, restyled prompt | Planned | PWA smoke test |
 | Real PFRA scoring data | `standards/af-pfra-2026.json`, `standards/extracted/tables/*.json` | Data layer unchanged | Planned | `tools/validate-pfra-tables.mjs` |
 | Browser regression suite | `tools/browser-regression.mjs` | Updated selectors as UI changes | Planned | `npm test` |
-| Theme selector | Mock `ThemeSwitcher`, `THEMES` | Settings/footer theme row | Optional | Browser test after implementation |
-| Themeable single layout | Full mock layout set | Tactical/Connect hybrid default | Planned | Visual/browser checks after each phase |
+| Shared render/action contract | Current direct DOM wiring, PFRA modules | UI contract feeding all variants | Planned | Browser tests drive same actions through redesigned UI |
+| Layout slot registry | New variant system | `appShell`, `scoreHeader`, cards, lap, chart, settings slots | Planned | Unit/browser smoke checks resolve every required slot |
+| Variant registry | Full mock layout set | Slot-scoped renderer registry | Planned | Each registered variant receives state and dispatches actions |
+| Theme preset registry | Mock theme switcher | Presets choose slot variants | Planned | Switching presets preserves score/state |
+| Theme selector | Mock `ThemeSwitcher`, `THEMES` | Settings/footer preset selector | Planned | Browser test after implementation |
+| Theme presets expose required features | Full mock layout set | Tactical, Stencil, Blues, Light, Fitness presets | Planned | `docs/THEME_PARITY_MATRIX.md` plus browser tests |
+| Variant behavior parity | New variant system | All variants for a slot | Planned | Variant swap does not alter scoring or hide required controls |
+| User layout overrides | Future customization | Settings customization panel | Later | Dev variant picker first, then persistence tests |
 | Settings button | Mock header settings concept | Header settings drawer | Planned | Browser test opens/closes settings |
 | Donation/support link | Not currently implemented | Settings/about section | Optional | Manual link check if added |
 | iOS/Android frame toggle | Mock `FrameToggle`, device frames | None in production | Mock-only | Not Applicable |
 | Design canvas/artboards | `design-canvas.jsx` | None in production | Mock-only | Not Applicable |
 | Mock seed data | `AFPT_DATA` | None in production | Mock-only | Not Applicable |
 | React/Babel/CDN runtime | Mock HTML scripts | None in production | Mock-only | Not Applicable |
-| Layout-per-theme switching | Mock `UnifiedArtboard`, `ThemeSwitcher` | None in production | Mock-only | Not Applicable |
+| Duplicated layout-per-theme calculators | Mock `UnifiedArtboard`, full mock pages | None in production | Mock-only | Not Applicable |

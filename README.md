@@ -55,5 +55,8 @@ The offline modernization plan lives in `docs/OFFLINE_FIRST_PLAN.md`.
 - `docs/LEGACY_BOUNDARIES.md`
 - `docs/STATIC_HOSTING_CHECKLIST.md`
 - `docs/TEST_PLAN.md`
+- `docs/LAYOUT_VARIANT_SYSTEM.md`
+- `docs/THEME_PARITY_MATRIX.md`
+- `docs/UI_IMPLEMENTATION_PHASES.md`
 - `docs/TODO.md`
 - `docs/SESSION_LOG.md`

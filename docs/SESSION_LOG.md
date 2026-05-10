@@ -118,5 +118,14 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
   - `/Users/jamescraven/Downloads/mock-fitness.jsx`
 - Removed the planning caveat about missing `mocks/mock-*.jsx` files.
 - Updated the mock implementation map with per-layout takeaways.
-- Recommended a Tactical/Connect hybrid for the production redesign: Tactical information density with the quieter Connect Light visual finish.
-- Reaffirmed that production theme switching should change CSS variables only, not swap entire layouts.
+- Recommended a Tactical/Connect hybrid as the first production direction: Tactical information density with the quieter Connect Light visual finish.
+- Initially constrained theme switching to visual styling only; this was superseded by the later layout variant planning section.
+
+### UI Layout Variant Planning
+
+- Updated the UI redesign strategy from a single themeable layout to a modular layout variant system.
+- Clarified that all five Claude visual directions should become user-selectable theme presets, not isolated hardcoded calculators.
+- Added `docs/LAYOUT_VARIANT_SYSTEM.md` to define layout slots, variant rules, theme presets, and future user overrides.
+- Added `docs/THEME_PARITY_MATRIX.md` to track required cross-theme feature parity.
+- Added `docs/UI_IMPLEMENTATION_PHASES.md` to sequence the shared render contract, registries, presets, dev variant picker, persistence, and public customization UI.
+- Updated the redesign plan, mock map, feature parity matrix, UI test plan, and TODO to reflect this rule: a theme preset chooses variants, a user customization overrides variants, and neither themes nor variants own scoring logic.

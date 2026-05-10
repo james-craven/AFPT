@@ -12,10 +12,13 @@
 - [x] Phase 5: Final docs update, verification, and checkpoint.
 - [x] Scoring verification: expand PFRA examples into a fixture-backed suite covering max, minimum, failing, and boundary values.
 - [x] UI redesign planning: create feature parity matrix, mock implementation map, redesign plan, and UI test plan.
+- [x] UI redesign planning: define modular theme presets, layout slots, and swappable visual variants.
 
 ## Later Improvements
 
-- Execute the UI redesign against `docs/FEATURE_PARITY_MATRIX.md` without changing calculator behavior.
+- Execute the UI redesign against `docs/LAYOUT_VARIANT_SYSTEM.md`, `docs/THEME_PARITY_MATRIX.md`, and `docs/FEATURE_PARITY_MATRIX.md` without changing calculator behavior.
+- Add a dev-only layout variant picker after the shared render/action contract exists.
+- Add persistent user layout customization after all theme presets pass parity.
 - Move legacy standards out of `main2.js` into versioned data.
 - Add a review-first standards import workflow for PDFs/images.
 - Add more browser regression cases for exemptions, walk scoring, plank time entry, and alternate component combinations.

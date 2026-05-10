@@ -52,10 +52,13 @@ Add or update browser checks as rows become implemented in `docs/FEATURE_PARITY_
 - Core card event, input, plank time, slider, min tick, chart button, and exemption all work.
 - Cardio card run, HAMR, walk, time inputs, slider, lap display, chart button, altitude selector, and exemption all work.
 - Chart drawer opens from each component and can close by button and scrim.
-- Theme selector, if implemented, persists, changes CSS variables only, keeps the same layout, and does not change scoring behavior.
+- Theme preset switching preserves selected sex, age, standard, events, values, exemptions, total score, and component scores.
+- Every theme preset exposes the same required calculator features listed in `docs/THEME_PARITY_MATRIX.md`.
+- Individual layout variant switching, once added, changes only the selected slot renderer and does not alter scoring.
+- Variant changes do not hide required controls for the affected slot.
 - Text does not overflow compact controls at mobile width.
 - Touch targets for buttons, sliders, and drawer controls are large enough to use on phone.
-- The default Tactical/Connect hybrid layout keeps demographics, standards, score, and primary component controls visible without requiring a settings drawer.
+- The Tactical and Connect/Light presets keep demographics, standards, score, and primary component controls visible without requiring a settings drawer.
 
 ## Manual Checks
 
@@ -74,5 +77,6 @@ Before declaring UI parity:
 - Each implemented row has an automated or manual verification method.
 - `npm test` passes.
 - No UI implementation depends on React, Babel, CDN runtime scripts, or mock seed data.
-- Theme switching does not swap entire layouts.
+- Theme switching resolves registered slot variants rather than instantiating separate calculator implementations.
+- Variants receive shared state and dispatch shared actions.
 - PWA/offline behavior still works.

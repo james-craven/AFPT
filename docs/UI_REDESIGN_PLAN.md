@@ -4,7 +4,21 @@
 
 Replace the current visual design while preserving the working calculator. The existing app is the source of truth for behavior, scoring, standards data, PWA/offline behavior, and deployment. The uploaded Claude mock is a visual reference only.
 
-The redesign is successful only if every row in docs/FEATURE_PARITY_MATRIX.md is marked Implemented, Deferred by explicit decision, or Not Applicable, with a verification method.
+The redesign is successful only if every row in `docs/FEATURE_PARITY_MATRIX.md` is marked Implemented, Deferred by explicit decision, or Not Applicable, with a verification method.
+
+## Strategic Direction
+
+Do not build five separate calculators or five isolated app pages. Build one calculator with swappable layout variants.
+
+```text
+Theme = preset bundle
+Layout element = swappable component variant
+User customization = override one piece of the preset
+```
+
+A theme preset chooses variants. A user customization overrides variants. Neither themes nor variants own scoring logic.
+
+If a feature exists in one variant, equivalent functionality must be reachable in every other variant, even if presented differently.
 
 ## Reference Inputs
 
@@ -42,29 +56,57 @@ Uploaded mock files inspected:
 - Do not replace real PFRA scoring with mock values.
 - Do not remove legacy calculator access.
 - Do not break PWA install, service-worker update prompts, offline reload, shuttle audio, or cached standards.
+- Do not duplicate scoring, standards loading, or app-state logic inside themes or variants.
 - Do not remove current chart access until the replacement drawer is proven.
 
-## Visual Direction To Borrow
+## Variant System
 
-- Compact mobile-first app shell.
-- Large score-first header with clear status badge.
-- Always-visible sex, age, and standards controls.
-- Component-card layout for body composition, strength, core, and cardio.
-- Dense score/details rows inside cards rather than separate scattered sections.
-- Drawer-style score charts instead of the current full-screen image modal.
-- Theme tokens expressed as CSS variables.
-- Settings entry point for development/version/offline/theme controls.
+The production UI should be organized around layout slots:
 
-## Recommended Production Direction
+- `appShell`
+- `scoreHeader`
+- `demographicsControls`
+- `standardsSwitcher`
+- `settingsPanel`
+- `bodyCompositionCard`
+- `strengthCard`
+- `coreCard`
+- `cardioCard`
+- `lapDisplay`
+- `chartDisplay`
+- `inputControls`
+- `componentScoreDisplay`
+- `navigationPattern`
 
-Use the Tactical and Light mocks as the main implementation references:
+Each slot can have multiple visual variants. Theme presets choose default variants for the slots, and future user preferences can override individual slots.
 
-- Tactical has the strongest feature-fit for this app because demographics, standard, altitude, component cards, chart access, and detailed lap rows stay visible and dense.
-- Light has the cleanest production feel for repeated real use on phones.
-- Blues offers a useful score-ring idea, but a ring gauge should be optional because it consumes vertical space.
-- Stencil and Fitness are useful theme inspiration, but their stronger visual styling should come after parity, not in the first production redesign.
+Example:
 
-The first implementation should ship one stable layout with themeable CSS variables, not five layout-swapping versions.
+```js
+const THEME_PRESETS = {
+  tactical: {
+    scoreHeader: 'tactical-score-number',
+    componentCard: 'tactical-dense',
+    lapDisplay: 'tactical-horizontal-bars',
+    chartDisplay: 'tactical-drawer',
+    settingsPanel: 'tactical-panel',
+  },
+};
+
+const userLayoutPreferences = {
+  baseTheme: 'tactical',
+  overrides: {
+    scoreHeader: 'blues-ring',
+    lapDisplay: 'stencil-vertical-bars',
+  },
+};
+```
+
+The final UI is resolved as:
+
+```text
+base theme preset + user overrides = actual UI
+```
 
 ## Mock Pieces That Are Demo-Only
 
@@ -75,28 +117,29 @@ The first implementation should ship one stable layout with themeable CSS variab
 - Frame toggle.
 - Mock seed data in `AFPT_DATA`.
 - Stub chart rows generated inside `ChartDrawer`.
-- Layout switching where theme dots swap the entire app layout.
+- Five separate full-page layout implementations.
 - Remote Google Font dependency unless fonts are bundled or replaced with system fonts.
 - Mock-only settings values such as `Units`, `Notifications`, and frame toggles unless separately implemented as real app features.
 
 ## Implementation Order
 
-1. Add design tokens and CSS variables without changing behavior.
-2. Add a new app shell/header around the existing controls and score output.
-3. Move sex, age, standards, and settings controls into the new shell while keeping existing IDs and event bindings working.
-4. Convert PFRA body/strength/core/cardio sections into component cards one at a time.
-5. Preserve and restyle sliders, text inputs, min ticks, exemptions, and event selectors within those cards.
-6. Replace the run/lap section with a card-based run details area that still uses real PFRA/legacy lap calculations.
-7. Replace chart modal access with a drawer that initially reuses the current chart image sources.
-8. Add one theme selector that changes CSS variables only after core calculator behavior passes browser tests.
-9. Verify legacy mode, PFRA mode, charts, audio, install/update prompts, and offline behavior.
-10. Remove old unused UI markup and CSS only after the feature parity matrix is complete.
+1. Define the shared UI state/action contract.
+2. Define the theme preset registry.
+3. Define the layout slot registry.
+4. Define the variant registry.
+5. Build one production app shell that resolves slots from the active theme preset.
+6. Implement Tactical and Connect/Light variants first because they best match the current feature set and a practical phone UI.
+7. Add Stencil, Blues, and Fitness variants as preset bundles after core parity is stable.
+8. Add a hidden/dev settings variant picker for internal testing.
+9. Add persistent user layout preferences later.
+10. Add the public customization UI only after all theme presets pass parity tests.
 
 ## Phase Gates
 
 Each major phase must:
 
 - Update `docs/FEATURE_PARITY_MATRIX.md`.
+- Update `docs/THEME_PARITY_MATRIX.md`.
 - Update `docs/UI_TEST_PLAN.md` if test coverage changes.
 - Run `npm test`.
 - Fix any new regression before continuing.
@@ -106,6 +149,7 @@ Each major phase must:
 Stop and ask before implementation if:
 
 - A UI change would remove a major current feature.
-- A current feature has no clear place in the new UI.
+- A current feature has no clear place in the slot/variant model.
 - A framework, TypeScript, remote runtime dependency, or build-system change seems necessary.
 - A scoring behavior conflict is discovered.
+- A variant cannot expose equivalent functionality to other variants.
