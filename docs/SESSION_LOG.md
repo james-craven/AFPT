@@ -155,3 +155,10 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added score header markup in `index.html` and visually retained `#score-txt` as the hidden source-of-truth output for legacy/PFRA renderers.
 - Added foundation styles for the registered `scoreHeader` variants: `light-card`, `tactical-score-number`, `stencil-score-block`, `blues-ring`, and `fitness-gradient-ring`.
 - Updated browser regression coverage so Legacy and PFRA score headers must mirror the real score source, and theme switching must change the score header variant without changing score value or status.
+
+### Header Demographics Controls
+
+- Moved the real `#sex-sel`, `#age-sel`, and `#standards-mode` controls into the score/header area instead of creating mirrored controls.
+- Kept existing IDs and event bindings so `main2.js`, `pfra-calculator.js`, and `src/pfra/dom.mjs` remain authoritative for behavior.
+- Added compact header-control styling for the three controls while keeping them visible and usable on mobile.
+- Updated browser regression coverage for desktop/mobile visibility, sex/age range updates, Legacy/PFRA switching, score-header mirroring after control changes, and theme switching preserving selected sex/age/mode.

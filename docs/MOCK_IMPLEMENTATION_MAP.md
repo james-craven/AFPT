@@ -57,9 +57,9 @@ Themes are presets. Variants are renderers for slots. User customization later o
 | Theme dots | Preset selector | Resolve a theme preset into slot variants; do not load separate calculator pages |
 | Score header | Current total score and category | Implemented through `src/ui/score-header.mjs`; mirrors `#score-txt` using selected `scoreHeader` variant |
 | Status badge | Excellent/Satisfactory/Unsatisfactory/pass/fail state | Derives from real `#score-txt` output, not mock `status` |
-| Sex selector | Current `#sex-sel` | Render through `demographicsControls`; dispatch real state/control updates |
-| Age selector | Current `#age-sel` | Render through `demographicsControls`; keep age mapping |
-| Standard selector | Current `#standards-mode` | Render through `standardsSwitcher`; keep Legacy/PFRA behavior |
+| Sex selector | Current `#sex-sel` | Moved real control into header; future `demographicsControls` variants should keep same behavior |
+| Age selector | Current `#age-sel` | Moved real control into header; future `demographicsControls` variants should keep age mapping |
+| Standard selector | Current `#standards-mode` | Moved real control into header; future `standardsSwitcher` variants should keep Legacy/PFRA behavior |
 | Component cards | Current body/strength/core/cardio sections | Render through card variants using real component data |
 | Slider + field controls | Existing range and text inputs | Render through input-control variants; preserve synchronization and min tick behavior |
 | Run timing/lap display | `#run-lap-times` legacy 6-lap and PFRA 8-lap renderers | Render same normalized lap data through selected `lapDisplay` variant |

@@ -35,6 +35,8 @@ Settings foundation status: the shared `settingsPanel` foundation is implemented
 
 Score header foundation status: `src/ui/score-header.mjs` renders the active preset's `scoreHeader` variant by mirroring the existing `#score-txt` output. It does not calculate scores. The current implementation includes foundation styles for all five registered score header variants, with deeper theme polish still planned.
 
+Demographics controls status: the real `#sex-sel`, `#age-sel`, and `#standards-mode` controls now live in the score/header area. They are moved, not mirrored, so existing event bindings remain authoritative. Theme-specific demographics variants are still planned.
+
 ## Required Cross-Theme Tests
 
 - Switching themes does not change selected sex, age, standard, events, performance values, exemptions, or score results.

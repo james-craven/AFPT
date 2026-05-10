@@ -48,6 +48,7 @@ node -c tools/browser-regression.mjs
   - Checks minimum tick click behavior.
   - Checks settings/control hub touch target, open/close behavior, and preserved reference controls.
   - Checks offline reload with the service worker.
+  - Checks header sex, age, and standards controls remain visible and preserve behavior.
 
 ## Manual Smoke Checks
 

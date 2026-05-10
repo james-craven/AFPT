@@ -639,23 +639,58 @@ section {
     text-shadow: -1px -1px 0 rgb(0, 0, 0), 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000;
 }
 
-/* Sextion 3 - Sex/Age Select */
+/* Section 3 - Header Controls */
 
 .sex-age-sel-section {
-    grid-template-columns: .5fr 1fr .5fr 1fr;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 1em;
-    grid-column-gap: .5em;
+    align-items: end;
+    display: grid;
+    gap: 0.45rem;
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 0.82fr) minmax(0, 1.24fr);
+    margin: 0 auto 0.85rem;
+    max-width: 368px;
+    padding: 0;
+    width: calc(100% - 1rem);
+}
 
+.header-control {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
 }
 
 .sex-sel-label, .age-sel-label, .standards-mode-label {
-    display: inline-block;
+    color: rgba(255, 255, 255, 0.86);
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.sex-age-sel-section .age-sel,
+.sex-age-sel-section .sex-sel,
+.sex-age-sel-section .standards-mode-sel {
+    background-color: rgba(0, 0, 0, 0.24);
+    background-position: calc(100% - 10px) center;
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    color: white;
+    font-size: 0.86rem;
+    min-height: 42px;
+    min-width: 0;
+    padding: 0.58rem 1.65rem 0.58rem 0.55rem;
+    width: 100%;
+}
+
+.sex-age-sel-section select:focus-visible {
+    outline: 3px solid var(--afpt-accent-2);
+    outline-offset: 2px;
+}
+
+/* Legacy fallback for component-era control labels outside the header. */
+.sex-sel-label, .age-sel-label, .standards-mode-label {
     color: white;
     justify-content: center;
     align-items: center;
-    font-size: 1.5rem;
 }
 
 .age-sel, .sex-sel, .standards-mode-sel {

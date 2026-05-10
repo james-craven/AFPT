@@ -12,7 +12,7 @@
                        is also available. Based on dafman 36-2905 this AF Fitness Calculator is the one stop shop to calculate AF PT Test scores."/>
         <link rel="apple-touch-icon" href="./icon-144x144.png">
         <link rel="icon" href="./icon-144x144.png">
-        <link rel="stylesheet" type="text/css" href="./style.css?v=20260510-score-header">
+        <link rel="stylesheet" type="text/css" href="./style.css?v=20260510-header-controls">
         <link rel="manifest" href="./manifest.webmanifest">
       </head>
 <body data-theme="tactical" data-theme-preset="tactical">
@@ -116,18 +116,16 @@
                 <span id="score-header-value" class="score-header__value">60.0</span>
             </div>
         </article>
-        <p id="score-txt" class="score-source-text" aria-hidden="true">Total Score: 60.0<br>
-        Fail! Minimum Not Met!</p>
-    </section>
-
-    <!-- Section 3 - Sex Label & Select -->
-    <section class="sex-age-sel-section">
-            <label for="" class="sex-sel-label">SEX:</label>
+        <div class="sex-age-sel-section header-controls" aria-label="Demographic and standards controls">
+            <div class="header-control">
+                <label for="sex-sel" class="sex-sel-label">SEX</label>
                 <select name="sex" id="sex-sel" class="sex-sel">
                     <option value="Female">Female</option>
                     <option value="Male">Male</option>
                 </select>
-            <label for="" class="age-sel-label">AGE:</label>
+            </div>
+            <div class="header-control">
+                <label for="age-sel" class="age-sel-label">AGE</label>
                 <select name="age" id="age-sel" class="age-sel">
                     <option value="&lt; 25">&lt; 25</option>
                     <option value="25-29">25-29</option>
@@ -139,11 +137,17 @@
                     <option value="55-59">55-59</option>
                     <option value="60+">60+</option>
                 </select>
-            <label for="standards-mode" class="standards-mode-label">STANDARD:</label>
+            </div>
+            <div class="header-control">
+                <label for="standards-mode" class="standards-mode-label">STANDARD</label>
                 <select name="standards" id="standards-mode" class="standards-mode-sel">
                     <option value="legacy">Legacy</option>
                     <option value="pfra">PFRA 2026</option>
                 </select>
+            </div>
+        </div>
+        <p id="score-txt" class="score-source-text" aria-hidden="true">Total Score: 60.0<br>
+        Fail! Minimum Not Met!</p>
     </section>
 
     <!-- Section 4 - Strength Text -->

@@ -63,6 +63,8 @@ Settings/control hub foundation status: the old hamburger checkbox pattern has b
 
 Score header foundation status: the first visual slot renderer now mirrors the existing `#score-txt` source through the active `scoreHeader` variant. This keeps score calculation in the legacy/PFRA renderers while allowing visual variants to change independently.
 
+Demographics controls foundation status: the real sex, age, and standards controls now live in the score/header area with existing IDs and event handlers preserved. Theme-specific control variants still come later.
+
 ## Phase 4: First Presets
 
 Implement the Tactical and Connect Light presets first:

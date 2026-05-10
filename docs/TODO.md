@@ -16,6 +16,7 @@
 - [x] UI implementation Phase 1 foundation: add layout slots, variant registry, theme presets, data attributes, and safe preset selector without replacing the calculator UI.
 - [x] UI implementation Phase 2 foundation: replace the hamburger pattern with a shared settings/control hub while preserving existing menu functions.
 - [x] UI implementation Phase 3 foundation: add score header slot rendering that mirrors real score output through active theme variants.
+- [x] UI implementation Phase 4 foundation: move real sex, age, and standards controls into the score/header area.
 
 ## Later Improvements
 
@@ -23,6 +24,7 @@
 - Build the shared normalized UI state/action contract for future renderers.
 - Expand settings hub browser coverage for every individual chart shortcut.
 - Polish the score header variants after the demographic/header and lap-display slots are implemented.
+- Build theme-specific demographic control variants after the shared state/action contract exists.
 - Add a dev-only layout variant picker after the shared render/action contract exists.
 - Add persistent user layout customization after all theme presets pass parity.
 - Move legacy standards out of `main2.js` into versioned data.

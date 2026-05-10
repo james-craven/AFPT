@@ -260,6 +260,26 @@ async function scoreHeaderState(page) {
   });
 }
 
+async function headerControlState(page) {
+  return page.evaluate(() => ({
+    age: document.getElementById('age-sel')?.value,
+    mode: document.getElementById('standards-mode')?.value,
+    sex: document.getElementById('sex-sel')?.value,
+  }));
+}
+
+async function assertHeaderControlsVisible(page) {
+  for (const selector of ['#sex-sel', '#age-sel', '#standards-mode']) {
+    const control = page.locator(selector);
+    await control.scrollIntoViewIfNeeded();
+    const box = await control.boundingBox();
+    assert.ok(box, `${selector} has a layout box`);
+    assert.ok(box.width >= 76, `${selector} remains usable width`);
+    assert.ok(box.height >= 40, `${selector} remains usable height`);
+    assert.equal(await control.isVisible(), true, `${selector} is visible`);
+  }
+}
+
 async function assertScoreHeaderMirrorsSource(page, { mode, variant }) {
   await page.waitForFunction(() => document.getElementById('score-header')?.dataset.scoreRaw);
   const state = await scoreHeaderState(page);
@@ -317,8 +337,10 @@ async function assertThemeFoundation(page, nextPreset) {
   const scoreBefore = await text(page, '#run-txt-p');
   const sliderBefore = await inputValue(page, '#run-slider');
   const headerBefore = await scoreHeaderState(page);
+  const controlsBefore = await headerControlState(page);
   await setThemePreset(page, nextPreset);
   const headerAfter = await scoreHeaderState(page);
+  const controlsAfter = await headerControlState(page);
   const expectedVariant = await page.evaluate(
     (presetId) => window.afptTheme.resolveThemePreset(presetId).variants.scoreHeader,
     nextPreset,
@@ -337,12 +359,14 @@ async function assertThemeFoundation(page, nextPreset) {
   assert.equal(headerAfter.status, headerBefore.status, 'theme switch preserves score header status');
   assert.equal(headerAfter.variant, expectedVariant, 'theme switch applies preset score header variant');
   assert.notEqual(headerAfter.className, headerBefore.className, 'theme switch changes score header presentation');
+  assert.deepEqual(controlsAfter, controlsBefore, 'theme switch preserves header controls');
 }
 
 async function runLegacyRegression(browser, baseUrl, label, contextOptions = {}) {
   const { context, failures, page } = await newPage(browser, baseUrl, `?no-sw=1&qa=legacy-regression-${label}`, contextOptions);
 
   await assertSettingsHubParity(page);
+  await assertHeaderControlsVisible(page);
 
   assert.equal(await inputValue(page, '#run-slider'), '1136');
   assert.equal(await text(page, '#run-txt-p'), 'Run Score: 35 | Min: 18:56 | Max: 10:23');
@@ -350,7 +374,21 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
     mode: 'Legacy',
     variant: 'tactical-score-number',
   });
+
+  const defaultRunText = await text(page, '#run-txt-p');
+  await page.locator('#sex-sel').selectOption('Male');
+  await page.locator('#age-sel').selectOption('30-34');
+  assert.equal(await inputValue(page, '#sex-sel'), 'Male');
+  assert.equal(await inputValue(page, '#age-sel'), '30-34');
+  assert.notEqual(await text(page, '#run-txt-p'), defaultRunText, 'sex/age changes update legacy ranges');
+  await assertScoreHeaderMirrorsSource(page, {
+    mode: 'Legacy',
+    variant: 'tactical-score-number',
+  });
   await assertThemeFoundation(page, 'stencil');
+  await page.locator('#sex-sel').selectOption('Female');
+  await page.locator('#age-sel').selectOption('< 25');
+  assert.equal(await text(page, '#run-txt-p'), defaultRunText, 'restored sex/age returns legacy ranges');
 
   await page.locator('#push-txt').fill('47');
   await page.locator('#push-tick').click();
@@ -398,6 +436,7 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
 async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
   const { context, failures, page } = await newPage(browser, baseUrl, `?no-sw=1&qa=pfra-regression-${label}`, contextOptions);
 
+  await assertHeaderControlsVisible(page);
   await page.locator('#standards-mode').selectOption('pfra');
   assert.equal(
     await page.locator('#cardio-sel').evaluate((select) => Array.from(select.options).map((option) => option.text).join(' ')),
