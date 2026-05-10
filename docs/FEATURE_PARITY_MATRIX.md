@@ -19,8 +19,8 @@ Status values during planning:
 | Sex selector | `#sex-sel`, `main2.js`, `src/pfra/dom.mjs` | Header demographic controls | Planned | Browser test changes sex and score labels/ranges update |
 | Age selector | `#age-sel`, `main2.js`, `src/pfra/state.mjs` | Header demographic controls | Planned | Browser test changes age and preserves edited values where expected |
 | Standard selector | `#standards-mode` | Header demographic controls | Planned | Browser test validates option text and behavior |
-| Score total | `#score-txt`, `updateScoreMinMaxText`, `renderPfraMainScore` | Score-first header | Planned | Browser test validates legacy and PFRA totals |
-| Status text/badge | `#score-txt`, category logic | Header badge near score | Planned | Browser test checks Excellent/Satisfactory/Unsatisfactory |
+| Score total | `#score-txt`, `updateScoreMinMaxText`, `renderPfraMainScore`, `src/ui/score-header.mjs` | Score-first header | Implemented | Browser test validates legacy/PFRA score header mirrors real score source |
+| Status text/badge | `#score-txt`, category logic, `src/ui/score-header.mjs` | Header badge near score | Implemented | Browser test checks status comes from real score source |
 | Development build timestamp modal | `#dev-version-modal`, `main2.js` | Settings/debug panel | Implemented | Browser test verifies control exists; local/dev modal still loads |
 | PWA update modal | `#pwa-update-modal`, `pwa.js`, `window.afptPwa` | Settings update check plus existing modal | Implemented | Browser test verifies update control/API; offline regression still passes |
 | Install prompt modal | `#install-modal`, `beforeinstallprompt`, `installApp` | Settings install affordance | Implemented | Browser test verifies install control exists; manual install prompt check |

@@ -147,3 +147,11 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added settings access for build info and a manual PWA update check without changing service-worker update modal behavior.
 - Added `src/ui/settings-hub.mjs` for open/close, overlay, Escape key, keyboard activation, and action-close behavior.
 - Updated browser regression coverage for settings touch target size, open/close behavior, score/slider invariance, run altitude chart access, shuttle audio access, install control, PWA update control/API, and build-info control.
+
+### Score Header Foundation
+
+- Added `src/ui/score-header.mjs` as the first real visual slot renderer.
+- The score header observes and mirrors `#score-txt`, which remains owned by `main2.js` and `src/pfra/ui.mjs`; no scoring rules or standards modules were changed.
+- Added score header markup in `index.html` and visually retained `#score-txt` as the hidden source-of-truth output for legacy/PFRA renderers.
+- Added foundation styles for the registered `scoreHeader` variants: `light-card`, `tactical-score-number`, `stencil-score-block`, `blues-ring`, and `fitness-gradient-ring`.
+- Updated browser regression coverage so Legacy and PFRA score headers must mirror the real score source, and theme switching must change the score header variant without changing score value or status.

@@ -22,6 +22,7 @@ node -c src/pfra/standards.mjs
 node -c src/pfra/state.mjs
 node -c src/pfra/ui.mjs
 node -c src/ui/layout-variants.mjs
+node -c src/ui/score-header.mjs
 node -c src/ui/settings-hub.mjs
 node -c src/ui/theme-controller.mjs
 node -c tools/browser-regression.mjs
@@ -43,6 +44,7 @@ node -c tools/browser-regression.mjs
   - Runs Chrome regression checks for desktop and mobile viewports.
   - Checks legacy default scoring text.
   - Checks PFRA mode labels, slider ranges, text entry, age changes, and cardio switching.
+  - Checks the score header mirrors real Legacy/PFRA score output and changes variants without changing score state.
   - Checks minimum tick click behavior.
   - Checks settings/control hub touch target, open/close behavior, and preserved reference controls.
   - Checks offline reload with the service worker.

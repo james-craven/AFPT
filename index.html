@@ -12,7 +12,7 @@
                        is also available. Based on dafman 36-2905 this AF Fitness Calculator is the one stop shop to calculate AF PT Test scores."/>
         <link rel="apple-touch-icon" href="./icon-144x144.png">
         <link rel="icon" href="./icon-144x144.png">
-        <link rel="stylesheet" type="text/css" href="./style.css?v=20260510-settings-hub">
+        <link rel="stylesheet" type="text/css" href="./style.css?v=20260510-score-header">
         <link rel="manifest" href="./manifest.webmanifest">
       </head>
 <body data-theme="tactical" data-theme-preset="tactical">
@@ -106,7 +106,17 @@
                 </div>
             </section>
         </div>
-        <p id="score-txt">Total Score: 60.0<br>
+        <article id="score-header" class="score-header score-header--light-card" data-score-variant="light-card" aria-live="polite">
+            <div class="score-header__meta">
+                <span id="score-header-mode" class="score-header__mode">Legacy</span>
+                <span id="score-header-status" class="score-header__status">Minimum Not Met</span>
+            </div>
+            <div class="score-header__main">
+                <span class="score-header__label">Total Score</span>
+                <span id="score-header-value" class="score-header__value">60.0</span>
+            </div>
+        </article>
+        <p id="score-txt" class="score-source-text" aria-hidden="true">Total Score: 60.0<br>
         Fail! Minimum Not Met!</p>
     </section>
 
@@ -368,10 +378,11 @@
 
     <button onclick="alert(`Is Bright!`)">The Future</button> -->
 
-    <script src="./main2.js?v=20260510-settings-hub"></script>
+    <script src="./main2.js?v=20260510-score-header"></script>
     <script src="./pfra-calculator.js?v=20260509-offline-pwa"></script>
     <script type="module" src="./src/ui/settings-hub.mjs?v=20260510-settings-hub"></script>
     <script type="module" src="./src/ui/theme-controller.mjs?v=20260510-theme-foundation"></script>
+    <script type="module" src="./src/ui/score-header.mjs?v=20260510-score-header"></script>
     <script src="./pwa.js?v=20260510-settings-hub"></script>
 </body>
 </html>

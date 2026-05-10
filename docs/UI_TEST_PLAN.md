@@ -28,6 +28,7 @@ Existing browser tests in `tools/browser-regression.mjs` must continue to cover:
 
 - Settings/control hub hit area, open/close behavior, and score-state invariance.
 - Settings/control hub reference controls for run altitude chart, shuttle audio, install, PWA update, and build info access.
+- Score header appears in Legacy and PFRA modes, mirrors the real `#score-txt` value/status, and changes presentation on theme switch without changing score state.
 - Theme foundation loads the default preset and resolves every registered preset with slot-compatible variants.
 - Theme switching preserves current score text and slider value.
 - Legacy default run score.
@@ -46,7 +47,6 @@ Existing browser tests in `tools/browser-regression.mjs` must continue to cover:
 
 Add or update browser checks as rows become implemented in `docs/FEATURE_PARITY_MATRIX.md`:
 
-- Header score and status badge reflect real score/category.
 - Sex, age, and standards controls are visible in mobile viewport.
 - Settings drawer opens and closes.
 - Settings drawer exposes install/update/audio/dev-build controls or intentionally deferred replacements.

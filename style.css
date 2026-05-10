@@ -479,6 +479,150 @@ section {
     margin-bottom:.3em;
 }
 
+.score-source-text {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.score-header {
+    align-items: stretch;
+    color: var(--afpt-ink);
+    display: grid;
+    gap: 0.45rem;
+    margin: 0.65rem auto 0.5rem;
+    max-width: 368px;
+    min-height: 108px;
+    overflow: hidden;
+    padding: 0.8rem 0.95rem;
+    position: relative;
+    width: calc(100% - 1rem);
+}
+
+.score-header__meta,
+.score-header__main {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    min-width: 0;
+}
+
+.score-header__mode,
+.score-header__status,
+.score-header__label {
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.score-header__mode,
+.score-header__status {
+    border: 1px solid var(--afpt-border);
+    color: var(--afpt-ink-dim);
+    font-size: 0.72rem;
+    min-height: 28px;
+    padding: 0.35rem 0.48rem;
+}
+
+.score-header__status {
+    color: var(--afpt-ink);
+}
+
+.score-header[data-score-status="fail"] .score-header__status {
+    border-color: var(--afpt-bad);
+    color: var(--afpt-bad);
+}
+
+.score-header[data-score-status="pass"] .score-header__status {
+    border-color: var(--afpt-accent-2);
+    color: var(--afpt-accent-2);
+}
+
+.score-header__label {
+    color: var(--afpt-ink-dim);
+    font-size: 0.78rem;
+}
+
+.score-header__value {
+    color: var(--afpt-ink);
+    font-size: 3rem;
+    line-height: 1;
+}
+
+.score-header--light-card {
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border-strong);
+    border-radius: 8px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+}
+
+.score-header--tactical-score-number {
+    background: rgba(0, 13, 24, 0.92);
+    border: 1px solid var(--afpt-accent);
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px rgba(0, 221, 255, 0.22);
+}
+
+.score-header--tactical-score-number::before {
+    background: linear-gradient(90deg, transparent, rgba(0, 221, 255, 0.38), transparent);
+    content: '';
+    height: 2px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.score-header--tactical-score-number .score-header__value {
+    color: var(--afpt-accent);
+}
+
+.score-header--stencil-score-block {
+    background: #121618;
+    border: 2px solid var(--afpt-border-strong);
+    border-radius: 0;
+}
+
+.score-header--stencil-score-block .score-header__value {
+    color: #f4f1e8;
+}
+
+.score-header--blues-ring {
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border-strong);
+    border-radius: 8px;
+}
+
+.score-header--blues-ring .score-header__main {
+    gap: 0.9rem;
+}
+
+.score-header--blues-ring .score-header__value {
+    align-items: center;
+    aspect-ratio: 1;
+    border: 6px solid var(--afpt-accent-2);
+    border-radius: 50%;
+    display: grid;
+    font-size: 1.85rem;
+    justify-content: center;
+    min-width: 94px;
+}
+
+.score-header--fitness-gradient-ring {
+    background: linear-gradient(135deg, rgba(11, 18, 32, 0.96), rgba(0, 150, 136, 0.74));
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    border-radius: 8px;
+}
+
+.score-header--fitness-gradient-ring .score-header__value {
+    color: #ffffff;
+}
+
 .hidden-labels {
     position:absolute;
     top: -9999px;

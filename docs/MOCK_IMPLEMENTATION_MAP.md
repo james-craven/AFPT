@@ -55,8 +55,8 @@ Themes are presets. Variants are renderers for slots. User customization later o
 | Mock Concept | Production Meaning | Implementation Direction |
 |---|---|---|
 | Theme dots | Preset selector | Resolve a theme preset into slot variants; do not load separate calculator pages |
-| Score header | Current total score and category | Render from normalized state using selected `scoreHeader` variant |
-| Status badge | Excellent/Satisfactory/Unsatisfactory/pass/fail state | Derive from real score/category, not mock `status` |
+| Score header | Current total score and category | Implemented through `src/ui/score-header.mjs`; mirrors `#score-txt` using selected `scoreHeader` variant |
+| Status badge | Excellent/Satisfactory/Unsatisfactory/pass/fail state | Derives from real `#score-txt` output, not mock `status` |
 | Sex selector | Current `#sex-sel` | Render through `demographicsControls`; dispatch real state/control updates |
 | Age selector | Current `#age-sel` | Render through `demographicsControls`; keep age mapping |
 | Standard selector | Current `#standards-mode` | Render through `standardsSwitcher`; keep Legacy/PFRA behavior |

@@ -61,6 +61,8 @@ Done when the shell loads and existing browser regressions still pass.
 
 Settings/control hub foundation status: the old hamburger checkbox pattern has been replaced by a shared settings drawer while preserving current reference, install, update, build-info, audio, and theme controls. Theme-specific settings panel variants still come later.
 
+Score header foundation status: the first visual slot renderer now mirrors the existing `#score-txt` source through the active `scoreHeader` variant. This keeps score calculation in the legacy/PFRA renderers while allowing visual variants to change independently.
+
 ## Phase 4: First Presets
 
 Implement the Tactical and Connect Light presets first:

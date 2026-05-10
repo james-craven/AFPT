@@ -33,9 +33,12 @@ Every theme preset must expose the same calculator capabilities, even when the p
 
 Settings foundation status: the shared `settingsPanel` foundation is implemented through `src/ui/settings-hub.mjs` and is currently shared across all presets. Theme-specific settings panel variants are still planned.
 
+Score header foundation status: `src/ui/score-header.mjs` renders the active preset's `scoreHeader` variant by mirroring the existing `#score-txt` output. It does not calculate scores. The current implementation includes foundation styles for all five registered score header variants, with deeper theme polish still planned.
+
 ## Required Cross-Theme Tests
 
 - Switching themes does not change selected sex, age, standard, events, performance values, exemptions, or score results.
+- Switching themes changes the score header variant without changing the mirrored score value or status.
 - Each theme exposes Legacy and PFRA access.
 - Each theme exposes chart access for strength, core, and cardio.
 - Each theme exposes settings access for install/update/audio/dev status or records an explicit deferral.

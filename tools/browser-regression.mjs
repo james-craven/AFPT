@@ -243,6 +243,37 @@ async function assertSettingsHubParity(page) {
   assert.equal(await inputValue(page, '#run-slider'), sliderBefore, 'closing settings preserves slider value');
 }
 
+async function scoreHeaderState(page) {
+  return page.evaluate(() => {
+    const header = document.getElementById('score-header');
+    const source = document.getElementById('score-txt');
+    return {
+      aria: header?.getAttribute('aria-label'),
+      className: header?.className,
+      mode: document.getElementById('score-header-mode')?.textContent.trim(),
+      raw: header?.dataset.scoreRaw,
+      source: source?.innerText.replace(/\s+/g, ' ').trim(),
+      status: document.getElementById('score-header-status')?.textContent.trim(),
+      value: document.getElementById('score-header-value')?.textContent.trim(),
+      variant: header?.dataset.scoreVariant,
+    };
+  });
+}
+
+async function assertScoreHeaderMirrorsSource(page, { mode, variant }) {
+  await page.waitForFunction(() => document.getElementById('score-header')?.dataset.scoreRaw);
+  const state = await scoreHeaderState(page);
+
+  assert.equal(state.mode, mode, `${mode} score header mode`);
+  assert.equal(state.variant, variant, `${mode} score header variant`);
+  assert.match(state.value, /^\d+\.\d$/, `${mode} score header value`);
+  assert.ok(state.source.includes(state.value), `${mode} score header value comes from source score text`);
+  assert.ok(state.source.toLowerCase().includes(state.status.toLowerCase()), `${mode} score header status comes from source score text`);
+  assert.ok(state.aria.includes(state.value), `${mode} score header aria label includes value`);
+
+  return state;
+}
+
 async function setThemePreset(page, preset) {
   await page.waitForFunction(() => window.afptTheme && document.getElementById('theme-preset-select'));
   await openSettingsHub(page);
@@ -285,7 +316,13 @@ async function assertThemeFoundation(page, nextPreset) {
 
   const scoreBefore = await text(page, '#run-txt-p');
   const sliderBefore = await inputValue(page, '#run-slider');
+  const headerBefore = await scoreHeaderState(page);
   await setThemePreset(page, nextPreset);
+  const headerAfter = await scoreHeaderState(page);
+  const expectedVariant = await page.evaluate(
+    (presetId) => window.afptTheme.resolveThemePreset(presetId).variants.scoreHeader,
+    nextPreset,
+  );
 
   assert.equal(await page.locator('html').getAttribute('data-theme-preset'), nextPreset);
   assert.equal(await page.locator('body').getAttribute('data-theme-preset'), nextPreset);
@@ -296,6 +333,10 @@ async function assertThemeFoundation(page, nextPreset) {
   );
   assert.equal(await text(page, '#run-txt-p'), scoreBefore, 'theme switch preserves score text');
   assert.equal(await inputValue(page, '#run-slider'), sliderBefore, 'theme switch preserves slider value');
+  assert.equal(headerAfter.value, headerBefore.value, 'theme switch preserves score header value');
+  assert.equal(headerAfter.status, headerBefore.status, 'theme switch preserves score header status');
+  assert.equal(headerAfter.variant, expectedVariant, 'theme switch applies preset score header variant');
+  assert.notEqual(headerAfter.className, headerBefore.className, 'theme switch changes score header presentation');
 }
 
 async function runLegacyRegression(browser, baseUrl, label, contextOptions = {}) {
@@ -305,6 +346,10 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
 
   assert.equal(await inputValue(page, '#run-slider'), '1136');
   assert.equal(await text(page, '#run-txt-p'), 'Run Score: 35 | Min: 18:56 | Max: 10:23');
+  await assertScoreHeaderMirrorsSource(page, {
+    mode: 'Legacy',
+    variant: 'tactical-score-number',
+  });
   await assertThemeFoundation(page, 'stencil');
 
   await page.locator('#push-txt').fill('47');
@@ -366,6 +411,10 @@ async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(await inputValue(page, '#run-mintxt'), '25');
   assert.equal(await inputValue(page, '#run-sectxt'), '23');
   assert.equal(await text(page, '#run-lap-times'), "Req'd 8 Lap Time: ~3:10 Lap 1: <= 3:10 Lap 2: <= 6:20 Lap 3: <= 9:31 Lap 4: <= 12:41 Lap 5: <= 15:51 Lap 6: <= 19:02 Lap 7: <= 22:12 Lap 8: <= 25:23");
+  await assertScoreHeaderMirrorsSource(page, {
+    mode: 'PFRA 2026',
+    variant: 'tactical-score-number',
+  });
   await assertThemeFoundation(page, 'fitness');
 
   await page.locator('#push-txt').fill('50');
