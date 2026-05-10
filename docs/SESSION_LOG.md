@@ -275,3 +275,17 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Updated token-scoped overrides from `#strength-card .strength-txt` etc. to `#strength-editor .strength-txt` etc.; kept `.strength-card` variant CSS in style.css (slot still registered).
 - Updated `browser-regression.mjs`: `strengthCardState()` now reads from `#strength-editor`; `assertStrengthCard()` targets `#strength-editor` and `.component-editor__pfra-score`; `assertThemeFoundation()` removes strength card variant assertions; `assertDesktopCardAlignment()` uses `#active-component-editor`.
 - All tests pass: 98 PFRA fixtures, SW build (84 files), PWA cache (28 required assets), browser regressions.
+
+## Handoff checkpoint — end of Phase C session
+
+**Repo state:** master is clean at commit `7d19189`.
+
+**What exists now:**
+- `#component-summary-strip` — three-button selector strip (PUSH / CORE / RUN) with theme variant wiring.
+- `#active-component-editor` — container with `#strength-editor`, `#core-editor`, `#cardio-editor`. Panel switching via `selectComponent()` in `src/ui/component-editor.mjs`.
+- `#strength-editor` — contains all real strength controls (`.strength-txt`, `.push-sel-chart`, `.push-slide`). `#pfra-strength-score` lives here. Old `#strength-card` is gone.
+- Core and Cardio are still in their old stacked sections below `#active-component-editor`. `#core-editor` and `#cardio-editor` are empty.
+
+**Next task:** Phase D — move Core controls into `#core-editor`. See `CLAUDE.md` → "Current Next Phase" and `docs/NEXT_SESSION_PROMPT.md` for the exact continuation prompt.
+
+**Tests:** 98 PFRA fixtures, SW build (84 files), PWA cache (28 required assets), browser regressions — all pass.

@@ -26,7 +26,7 @@
 - [x] Component editor Phase A: `#component-summary-strip` with PUSH/CORE/RUN buttons, selection state, `src/ui/component-editor.mjs`, variant system wiring.
 - [x] Component editor Phase B: `#active-component-editor` container with three empty editor panels (`#strength-editor`, `#core-editor`, `#cardio-editor`); panel switching via `selectComponent()`.
 - [x] Component editor Phase C: move strength controls (`#push-sel`, `#push-txt`, `#push-slider`, `#push-tick`, `#push-btn`) into `#strength-editor`; remove `#strength-card` wrapper.
-- [ ] Component editor Phase D: move core controls into `#core-editor`.
+- [ ] Component editor Phase D: move core controls (`.situp-txt`, `.sit-sel-chart`, `.sit-slide`, `#sit-sel`, `#sit-btn`, `#sit-txt`, `#plankmintxt`, `#sit-slider`, `#sit-tick`) into `#core-editor`; add `component-editor__header` with `#pfra-core-score`; remove old stacked core sections.
 - [ ] Component editor Phase E: move cardio controls into `#cardio-editor`.
 - [ ] Component editor Phase F: component switching hides non-selected editors (already wired; verify values survive switching).
 - [ ] Component editor Phase G: live value mirroring in summary cards; add `#pfra-core-score` and `#pfra-cardio-score`.

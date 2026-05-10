@@ -77,6 +77,9 @@ Legacy scoring boundary: `window.afptLegacy` exposes `ageSexChange`, `bindSlider
 - **Phase 4** — Header demographics: real `#sex-sel`, `#age-sel`, `#standards-mode` moved (not mirrored) into header; existing event bindings preserved.
 - **Phase 5** — Lap display: `src/ui/lap-display.mjs` mirrors `#run-lap-times`; foundation renderers for all five `lapDisplay` variants.
 - **Phase 6** — Chart drawer: `src/ui/chart-drawer.mjs` wraps `#modal`/`#modal-img` in drawer shell; chart image sources remain in legacy handlers.
+- **Component Editor Phase A** — `#component-summary-strip` with PUSH/CORE/RUN summary buttons; `src/ui/component-editor.mjs` with `selectedComponent` state and variant wiring.
+- **Component Editor Phase B** — `#active-component-editor` container with three empty panels (`#strength-editor`, `#core-editor`, `#cardio-editor`); panel switching via `selectComponent()`.
+- **Component Editor Phase C** — Real strength controls moved into `#strength-editor` (`.strength-txt`, `.push-sel-chart`, `.push-slide` with all IDs preserved). Old `#strength-card` removed. `strength-card.mjs` script tag removed (file kept on disk).
 
 ## Layout Slots (from `docs/LAYOUT_VARIANT_SYSTEM.md`)
 
@@ -104,17 +107,31 @@ git status
 
 Push normally to `master` only if tests pass. Never force push.
 
+## Current State (as of Phase C completion)
+
+- `#strength-editor` contains the real strength controls. `#strength-card` is gone.
+- `#core-editor` and `#cardio-editor` exist in the DOM but are empty — the real Core and Cardio controls are still in their old stacked sections below.
+- Do not visually polish component editors yet. Do not move Cardio before Core.
+
 ## Current Next Phase
 
-**Phase 7A — Body composition card shell** (`bodyCompositionCard` slot)
+**Component Editor Phase D — Move Core controls into `#core-editor`**
 
-- Wrap/move real `#pfra-whtr` input and `#pfra-body-score` output into a `bodyCompositionCard` slot.
-- Preserve existing IDs and event bindings.
-- Add styling hooks for `light-clean`, `tactical-dense`, `stencil-clipped`, `blues-polished`, `fitness-gradient-card` variants.
-- Ensure all five theme presets resolve to a valid `bodyCompositionCard` variant.
-- Add browser regression checks: WHtR visible in PFRA mode, changes update score, score header mirrors update, theme switching preserves value, Legacy/PFRA switching works.
+Move these existing elements into `#core-editor`:
+- `.situp-txt` containing `#sit-txt-p`
+- `.sit-sel-chart` (id `#sit-sel-chart-section`) containing `#sit-sel`, `#sit-btn`, `#sit-txt`, `.plank-colon`, `#plankmintxt`
+- `.sit-slide` containing `#sit-slider` and `#sit-tick`
+- Add `component-editor__header` with title "CORE" and `#pfra-core-score` span (PFRA-mode only, same pattern as `#pfra-strength-score`)
 
-Recommended card order after body composition: strength → core → cardio (most complex last).
+Rules:
+- Preserve all IDs and event bindings.
+- Do not duplicate controls.
+- Do not change scoring logic.
+- Do not move Cardio yet.
+- Remove old stacked core sections from the DOM after moving.
+- Update CSS scoped overrides from old selectors to `#core-editor`.
+- Update browser regression tests to match new DOM location.
+- Run `npm test`, `git diff --check`, commit and push.
 
 ## Key Docs
 
