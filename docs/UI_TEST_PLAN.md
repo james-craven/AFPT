@@ -32,8 +32,9 @@ Existing browser tests in `tools/browser-regression.mjs` must continue to cover:
 - Header sex, age, and standards controls are visible on desktop/mobile, drive the existing real controls, and survive theme switching.
 - Lap display appears for Legacy 6-lap and PFRA 8-lap modes, mirrors `#run-lap-times`, and changes presentation on theme switch without changing lap values.
 - Chart drawer opens every current chart shortcut with the existing image source and closes by button, Escape, and scrim.
+- Body composition card is visible in PFRA mode, hidden in legacy mode; WHtR input changes update body score and total; score header mirrors updated total; theme switching preserves WHtR value, body score, and applies the preset variant.
 - Theme foundation loads the default preset and resolves every registered preset with slot-compatible variants.
-- Theme switching preserves current score text and slider value.
+- Theme switching preserves current score text, slider value, WHtR value, and body score.
 - Legacy default run score.
 - Legacy minimum tick click behavior.
 - Legacy shuttle and run switching.

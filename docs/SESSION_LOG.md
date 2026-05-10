@@ -172,6 +172,17 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Exposed a temporary dev-friendly `window.afptLapDisplay` variant override API without adding public customization UI.
 - Updated browser regression coverage so Legacy 6-lap and PFRA 8-lap values must remain intact while theme switching changes lap presentation only.
 
+### Body Composition Card Foundation (Phase 7A)
+
+- Created `src/ui/body-composition-card.mjs` for the `bodyCompositionCard` slot.
+- Moved the real `#pfra-whtr` input and `#pfra-body-score` output from the raw `.pfra-fields`/`.pfra-score-grid` markup into a `#body-composition-card` wrapper element inside `#pfra-panel`.
+- Existing IDs and event bindings preserved; `pfra-calculator.js` and `src/pfra/scoring.mjs` remain authoritative for all scoring behavior.
+- Added foundation variant styles for `light-clean`, `tactical-dense`, `stencil-clipped`, `blues-polished`, and `fitness-gradient-card`. All five variants share the same markup; variants differ through CSS class modifiers.
+- The card is visible only in PFRA mode, inheriting the existing `body:not(.pfra-mode) .pfra-panel { display: none }` rule.
+- Added browser regression coverage: card visible in PFRA, hidden in legacy, WHtR change updates body score and total score header mirrors it, theme switching preserves WHtR value and body score, theme switch applies the correct preset variant and changes card presentation.
+- Updated `docs/FEATURE_PARITY_MATRIX.md`, `docs/THEME_PARITY_MATRIX.md`, `docs/UI_TEST_PLAN.md`, `docs/TODO.md`.
+- `npm test` passed: 82 cached files, 28 required offline assets, all browser regressions.
+
 ### Chart Drawer Foundation
 
 - Added `src/ui/chart-drawer.mjs` for the `chartDisplay` slot.

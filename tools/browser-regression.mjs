@@ -346,6 +346,42 @@ async function lapDisplayState(page) {
   });
 }
 
+async function bodyCompositionCardState(page) {
+  return page.evaluate(() => {
+    const card = document.getElementById('body-composition-card');
+    const whtrInput = document.getElementById('pfra-whtr');
+    const bodyScore = document.getElementById('pfra-body-score');
+    return {
+      cardVariant: card?.dataset.cardVariant,
+      className: card?.className,
+      visible: card ? getComputedStyle(card.closest('.pfra-panel') || card).display !== 'none' : false,
+      whtrValue: whtrInput?.value,
+      bodyScoreText: bodyScore?.textContent.trim(),
+    };
+  });
+}
+
+async function assertBodyCompositionCard(page) {
+  await page.waitForFunction(() => document.getElementById('body-composition-card'));
+
+  const state = await bodyCompositionCardState(page);
+  assert.ok(state.cardVariant, 'body-composition-card has a variant applied');
+  assert.ok(state.visible, 'body-composition-card is visible in PFRA mode');
+
+  const whtrBefore = state.whtrValue;
+  const testWhtr = whtrBefore === '0.49' ? '0.55' : '0.49';
+  await setControlValue(page, '#pfra-whtr', testWhtr, 'input');
+  await page.waitForTimeout(100);
+
+  const scoreAfter = await bodyCompositionCardState(page);
+  assert.notEqual(scoreAfter.bodyScoreText, '--', 'WHtR change updates body score');
+
+  const headerAfter = await scoreHeaderState(page);
+  assert.match(headerAfter.value, /^\d+\.\d$/, 'score header mirrors updated total after WHtR change');
+
+  await setControlValue(page, '#pfra-whtr', whtrBefore, 'input');
+}
+
 async function headerControlState(page) {
   return page.evaluate(() => ({
     age: document.getElementById('age-sel')?.value,
@@ -442,10 +478,14 @@ async function assertThemeFoundation(page, nextPreset) {
   const headerBefore = await scoreHeaderState(page);
   const controlsBefore = await headerControlState(page);
   const lapBefore = await lapDisplayState(page);
+  const whtrBefore = await inputValue(page, '#pfra-whtr');
+  const bodyCardBefore = await bodyCompositionCardState(page);
   await setThemePreset(page, nextPreset);
   const headerAfter = await scoreHeaderState(page);
   const controlsAfter = await headerControlState(page);
   const lapAfter = await lapDisplayState(page);
+  const whtrAfter = await inputValue(page, '#pfra-whtr');
+  const bodyCardAfter = await bodyCompositionCardState(page);
   const expectedVariant = await page.evaluate(
     (presetId) => window.afptTheme.resolveThemePreset(presetId).variants.scoreHeader,
     nextPreset,
@@ -472,6 +512,14 @@ async function assertThemeFoundation(page, nextPreset) {
   assert.equal(lapAfter.raw, lapBefore.raw, 'theme switch preserves lap values');
   assert.equal(lapAfter.variant, expectedLapVariant, 'theme switch applies preset lap display variant');
   assert.notEqual(lapAfter.className, lapBefore.className, 'theme switch changes lap display presentation');
+  assert.equal(whtrAfter, whtrBefore, 'theme switch preserves WHtR value');
+  assert.equal(bodyCardAfter.bodyScoreText, bodyCardBefore.bodyScoreText, 'theme switch preserves body score');
+  const expectedBodyVariant = await page.evaluate(
+    (presetId) => window.afptTheme.resolveThemePreset(presetId).variants.bodyCompositionCard,
+    nextPreset,
+  );
+  assert.equal(bodyCardAfter.cardVariant, expectedBodyVariant, 'theme switch applies preset body composition variant');
+  assert.notEqual(bodyCardAfter.className, bodyCardBefore.className, 'theme switch changes body composition card presentation');
 }
 
 async function runLegacyRegression(browser, baseUrl, label, contextOptions = {}) {
@@ -506,6 +554,12 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
     variant: 'stencil-vertical-bars',
   });
   await assertChartDrawerShortcuts(page);
+
+  const bodyCardLegacy = await page.evaluate(() => {
+    const pfraPanel = document.querySelector('.pfra-panel');
+    return pfraPanel ? getComputedStyle(pfraPanel).display : 'none';
+  });
+  assert.equal(bodyCardLegacy, 'none', 'body-composition-card hidden in legacy mode via pfra-panel');
 
   await page.locator('#push-txt').fill('47');
   await page.locator('#push-tick').click();
@@ -576,6 +630,7 @@ async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
     count: 8,
     variant: 'fitness-tiles',
   });
+  await assertBodyCompositionCard(page);
 
   await page.locator('#push-txt').fill('50');
   await page.locator('#push-tick').click();

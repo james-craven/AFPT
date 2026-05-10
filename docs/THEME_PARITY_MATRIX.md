@@ -41,6 +41,8 @@ Lap display foundation status: `src/ui/lap-display.mjs` mirrors the already-rend
 
 Chart drawer foundation status: `src/ui/chart-drawer.mjs` wraps the existing `#modal` and `#modal-img` chart image flow with drawer presentation and active `chartDisplay` variants. Chart image sources remain owned by the existing legacy handlers.
 
+Body composition card foundation status: `src/ui/body-composition-card.mjs` wraps the real `#pfra-whtr` input and `#pfra-body-score` output in a `#body-composition-card` slot element. The card applies the active `bodyCompositionCard` variant class from the theme preset. Scoring is unchanged — `pfra-calculator.js` and `src/pfra/scoring.mjs` remain authoritative. Foundation styles exist for all five registered variants: `light-clean`, `tactical-dense`, `stencil-clipped`, `blues-polished`, and `fitness-gradient-card`. The card is visible only in PFRA mode (inherited from `.pfra-panel` display rules).
+
 ## Required Cross-Theme Tests
 
 - Switching themes does not change selected sex, age, standard, events, performance values, exemptions, or score results.

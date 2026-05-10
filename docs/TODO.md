@@ -19,6 +19,7 @@
 - [x] UI implementation Phase 4 foundation: move real sex, age, and standards controls into the score/header area.
 - [x] UI implementation Phase 5 foundation: add lap display slot rendering that mirrors real legacy/PFRA lap output through active theme variants.
 - [x] UI implementation Phase 6 foundation: wrap existing chart image sources in a chart drawer with active chartDisplay variants.
+- [x] UI implementation Phase 7A foundation: body composition card shell wrapping real `#pfra-whtr` input and `#pfra-body-score` in a `bodyCompositionCard` slot with all five variant styles.
 
 ## Later Improvements
 

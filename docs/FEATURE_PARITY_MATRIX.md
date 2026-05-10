@@ -42,7 +42,7 @@ Status values during planning:
 | Altitude adjustment selector | `#alt-select`, altitude helpers in `main2.js` | Cardio details/settings row | Planned | Browser test for legacy altitude score changes |
 | Slider pass/fail color | `slider-green`, `slider-red`, PFRA UI helpers | Component card slider state | Planned | Browser test or visual assertion for class changes |
 | Minimum threshold ticks | `#push-tick`, `#sit-tick`, `#run-tick` | Component card slider threshold marker | Planned | Existing browser tick-click tests |
-| PFRA WHtR input | `#pfra-whtr`, `scoreWhtr` | Body composition card | Planned | Browser/scoring test for WHtR score updates |
+| PFRA WHtR input | `#pfra-whtr`, `scoreWhtr` | Body composition card | Implemented | Browser test: WHtR visible in PFRA, changes update body/total score, hidden in legacy |
 | PFRA component score grid | `#pfra-body-score`, `#pfra-strength-score`, `#pfra-core-score`, `#pfra-cardio-score` | Component card score chips | Planned | Browser test validates component scores |
 | PFRA standards loading status | `#pfra-status`, `loadPfraStandards` | Settings/status row | Planned | Browser test waits for standards loaded |
 | PFRA 2-mile labels | `renderCardioModeText`, `#cardio-sel` option text | Cardio card event labels | Planned | Existing browser test validates `2 Mile 20m HAMR 2 km Walk Exempt` |

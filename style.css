@@ -1681,6 +1681,130 @@ tr, th, td {
     font-weight: bold;
 }
 
+/* Body composition card slot */
+.body-composition-card {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 4px;
+}
+
+.body-composition-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.body-composition-card__title {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.body-composition-card__score {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.body-composition-card__field {
+    display: grid;
+    gap: 0.3rem;
+}
+
+.body-composition-card__label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.body-composition-card__input {
+    width: 100%;
+    max-width: none;
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+/* Variant: light-clean */
+.body-composition-card--light-clean {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.body-composition-card--light-clean .body-composition-card__input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: white;
+}
+
+/* Variant: tactical-dense */
+.body-composition-card--tactical-dense {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 3px solid rgba(255, 255, 255, 0.6);
+    border-radius: 2px;
+}
+
+.body-composition-card--tactical-dense .body-composition-card__title {
+    font-family: monospace;
+    letter-spacing: 0.08em;
+}
+
+.body-composition-card--tactical-dense .body-composition-card__input {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-family: monospace;
+}
+
+/* Variant: stencil-clipped */
+.body-composition-card--stencil-clipped {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+
+.body-composition-card--stencil-clipped .body-composition-card__input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Variant: blues-polished */
+.body-composition-card--blues-polished {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.body-composition-card--blues-polished .body-composition-card__input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+    color: white;
+}
+
+/* Variant: fitness-gradient-card */
+.body-composition-card--fitness-gradient-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+}
+
+.body-composition-card--fitness-gradient-card .body-composition-card__input {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    color: white;
+}
+
 .article-content {
     display: grid;
     grid-template-columns: 1fr;
