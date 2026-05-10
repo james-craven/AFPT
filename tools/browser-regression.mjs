@@ -260,6 +260,23 @@ async function scoreHeaderState(page) {
   });
 }
 
+async function lapDisplayState(page) {
+  return page.evaluate(() => {
+    const normalizeLapText = (text = '') => text.replace(/≤/g, '<=').replace(/\s+/g, ' ').trim();
+    const display = document.getElementById('lap-display');
+    const source = document.getElementById('run-lap-times');
+    return {
+      className: display?.className,
+      count: Number(display?.dataset.lapCount || 0),
+      display: normalizeLapText(display?.innerText),
+      raw: display?.dataset.lapRaw,
+      source: normalizeLapText(source?.innerText),
+      variant: display?.dataset.lapVariant,
+      visible: display ? !display.hidden : false,
+    };
+  });
+}
+
 async function headerControlState(page) {
   return page.evaluate(() => ({
     age: document.getElementById('age-sel')?.value,
@@ -278,6 +295,23 @@ async function assertHeaderControlsVisible(page) {
     assert.ok(box.height >= 40, `${selector} remains usable height`);
     assert.equal(await control.isVisible(), true, `${selector} is visible`);
   }
+}
+
+async function assertLapDisplayMirrorsSource(page, { count, variant }) {
+  await page.waitForFunction(() => document.getElementById('lap-display')?.dataset.lapRaw);
+  const state = await lapDisplayState(page);
+
+  assert.equal(state.visible, true, 'lap display is visible');
+  assert.equal(state.variant, variant, 'lap display variant');
+  assert.equal(state.count, count, 'lap display lap count');
+  assert.equal(state.raw, state.source, 'lap display mirrors source text');
+  assert.match(state.display, new RegExp(`${count} laps`, 'i'), 'lap display includes lap count');
+  const firstLapTime = state.raw.match(/Lap 1: <= ([^ ]+)/)?.[1];
+  const finalLapTime = state.raw.match(new RegExp(`Lap ${count}: <= ([^ ]+)`))?.[1];
+  assert.ok(firstLapTime && state.display.includes(firstLapTime), 'lap display includes first lap target');
+  assert.ok(finalLapTime && state.display.includes(finalLapTime), 'lap display includes final lap target');
+
+  return state;
 }
 
 async function assertScoreHeaderMirrorsSource(page, { mode, variant }) {
@@ -338,11 +372,17 @@ async function assertThemeFoundation(page, nextPreset) {
   const sliderBefore = await inputValue(page, '#run-slider');
   const headerBefore = await scoreHeaderState(page);
   const controlsBefore = await headerControlState(page);
+  const lapBefore = await lapDisplayState(page);
   await setThemePreset(page, nextPreset);
   const headerAfter = await scoreHeaderState(page);
   const controlsAfter = await headerControlState(page);
+  const lapAfter = await lapDisplayState(page);
   const expectedVariant = await page.evaluate(
     (presetId) => window.afptTheme.resolveThemePreset(presetId).variants.scoreHeader,
+    nextPreset,
+  );
+  const expectedLapVariant = await page.evaluate(
+    (presetId) => window.afptTheme.resolveThemePreset(presetId).variants.lapDisplay,
     nextPreset,
   );
 
@@ -360,6 +400,9 @@ async function assertThemeFoundation(page, nextPreset) {
   assert.equal(headerAfter.variant, expectedVariant, 'theme switch applies preset score header variant');
   assert.notEqual(headerAfter.className, headerBefore.className, 'theme switch changes score header presentation');
   assert.deepEqual(controlsAfter, controlsBefore, 'theme switch preserves header controls');
+  assert.equal(lapAfter.raw, lapBefore.raw, 'theme switch preserves lap values');
+  assert.equal(lapAfter.variant, expectedLapVariant, 'theme switch applies preset lap display variant');
+  assert.notEqual(lapAfter.className, lapBefore.className, 'theme switch changes lap display presentation');
 }
 
 async function runLegacyRegression(browser, baseUrl, label, contextOptions = {}) {
@@ -389,6 +432,10 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
   await page.locator('#sex-sel').selectOption('Female');
   await page.locator('#age-sel').selectOption('< 25');
   assert.equal(await text(page, '#run-txt-p'), defaultRunText, 'restored sex/age returns legacy ranges');
+  await assertLapDisplayMirrorsSource(page, {
+    count: 6,
+    variant: 'stencil-vertical-bars',
+  });
 
   await page.locator('#push-txt').fill('47');
   await page.locator('#push-tick').click();
@@ -455,6 +502,10 @@ async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
     variant: 'tactical-score-number',
   });
   await assertThemeFoundation(page, 'fitness');
+  await assertLapDisplayMirrorsSource(page, {
+    count: 8,
+    variant: 'fitness-tiles',
+  });
 
   await page.locator('#push-txt').fill('50');
   await page.locator('#push-tick').click();

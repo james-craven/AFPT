@@ -62,7 +62,7 @@ Themes are presets. Variants are renderers for slots. User customization later o
 | Standard selector | Current `#standards-mode` | Moved real control into header; future `standardsSwitcher` variants should keep Legacy/PFRA behavior |
 | Component cards | Current body/strength/core/cardio sections | Render through card variants using real component data |
 | Slider + field controls | Existing range and text inputs | Render through input-control variants; preserve synchronization and min tick behavior |
-| Run timing/lap display | `#run-lap-times` legacy 6-lap and PFRA 8-lap renderers | Render same normalized lap data through selected `lapDisplay` variant |
+| Run timing/lap display | `#run-lap-times` legacy 6-lap and PFRA 8-lap renderers | Implemented through `src/ui/lap-display.mjs`; mirrors the existing rendered lap text through selected `lapDisplay` variant |
 | Score chart drawer | Current chart modal and mock `ChartDrawer` | Render through `chartDisplay`; initially reuse existing chart image assets |
 | Settings button | Mock header gear | Shared settings hub now preserves real install/audio/update/dev controls; theme-specific `settingsPanel` variants come later |
 | Legacy/PFRA switching | Current standards selector | Keep as production mode control, not a visual theme |

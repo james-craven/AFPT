@@ -256,8 +256,9 @@
 
     <!-- Run Lap Times -->
     <section class="runlaps-row">
-        <p class="run-lap-times" id="run-lap-times"></p>
-        <div>
+        <div id="lap-display" class="lap-display lap-display--light-rows" data-lap-variant="light-rows" aria-live="polite"></div>
+        <p class="run-lap-times lap-source-text" id="run-lap-times" aria-hidden="true"></p>
+        <div class="altitude-control">
             <select id="alt-select">
                 <option value="Altitude Adjust">Altitude Adjust</option>
                 <option value="Group 1 (5250-5499ft)">Group 1 (5250-5499ft)</option>
@@ -387,6 +388,7 @@
     <script type="module" src="./src/ui/settings-hub.mjs?v=20260510-settings-hub"></script>
     <script type="module" src="./src/ui/theme-controller.mjs?v=20260510-theme-foundation"></script>
     <script type="module" src="./src/ui/score-header.mjs?v=20260510-score-header"></script>
+    <script type="module" src="./src/ui/lap-display.mjs?v=20260510-lap-display"></script>
     <script src="./pwa.js?v=20260510-settings-hub"></script>
 </body>
 </html>

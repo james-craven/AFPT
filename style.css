@@ -975,6 +975,191 @@ body.pfra-mode #alt-select {
     font-size: 15px;
 }
 
+.lap-source-text {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.lap-display {
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border);
+    color: var(--afpt-ink);
+    display: grid;
+    gap: 0.65rem;
+    margin: 1em 0 0.4em;
+    min-height: 96px;
+    padding: 0.75rem;
+    width: 100%;
+}
+
+.lap-display[hidden] {
+    display: none;
+}
+
+.lap-display__summary {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+}
+
+.lap-display__eyebrow,
+.lap-display__lap {
+    color: var(--afpt-ink-dim);
+    font-size: 0.72rem;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.lap-display__required {
+    color: var(--afpt-ink);
+    font-size: 1rem;
+    letter-spacing: 0;
+}
+
+.lap-display__rows,
+.lap-display__bars,
+.lap-display__vertical-bars,
+.lap-display__tiles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.lap-display__rows,
+.lap-display__bars {
+    display: grid;
+    gap: 0.4rem;
+}
+
+.lap-display__row,
+.lap-display__bar-row {
+    align-items: center;
+    display: grid;
+    gap: 0.45rem;
+}
+
+.lap-display__row {
+    background: var(--afpt-panel-2);
+    border: 1px solid var(--afpt-border);
+    grid-template-columns: 1fr auto;
+    min-height: 36px;
+    padding: 0.35rem 0.5rem;
+}
+
+.lap-display__time {
+    color: var(--afpt-ink);
+    font-size: 0.86rem;
+    letter-spacing: 0;
+}
+
+.lap-display--light-rows {
+    border-radius: 8px;
+}
+
+.lap-display--tactical-horizontal-bars {
+    background: rgba(0, 13, 24, 0.92);
+    border-color: var(--afpt-accent);
+    border-radius: 4px;
+}
+
+.lap-display__bar-row {
+    grid-template-columns: 28px minmax(0, 1fr) 54px;
+}
+
+.lap-display__bar-track {
+    background: rgba(255, 255, 255, 0.12);
+    display: block;
+    height: 8px;
+    overflow: hidden;
+}
+
+.lap-display__bar-fill {
+    background: var(--afpt-accent);
+    display: block;
+    height: 100%;
+}
+
+.lap-display--stencil-vertical-bars {
+    background: #121618;
+    border: 2px solid var(--afpt-border-strong);
+    border-radius: 0;
+}
+
+.lap-display__vertical-bars {
+    align-items: end;
+    display: grid;
+    gap: 0.35rem;
+    grid-template-columns: repeat(auto-fit, minmax(28px, 1fr));
+    min-height: 118px;
+}
+
+.lap-display__vertical-item {
+    align-items: center;
+    display: grid;
+    gap: 0.25rem;
+    grid-template-rows: auto 1fr auto;
+    height: 118px;
+    justify-items: center;
+}
+
+.lap-display__vertical-bar {
+    align-self: end;
+    background: var(--afpt-accent-2);
+    display: block;
+    width: 100%;
+}
+
+.lap-display--fitness-tiles {
+    background: linear-gradient(135deg, rgba(11, 18, 32, 0.96), rgba(0, 150, 136, 0.74));
+    border-color: rgba(255, 255, 255, 0.38);
+    border-radius: 8px;
+}
+
+.lap-display__tiles {
+    display: grid;
+    gap: 0.45rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lap-display__tile {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    display: grid;
+    gap: 0.25rem;
+    min-height: 54px;
+    padding: 0.45rem;
+}
+
+.lap-display--blues-table {
+    border-radius: 8px;
+}
+
+.lap-display__table {
+    border-collapse: collapse;
+    color: var(--afpt-ink);
+    width: 100%;
+}
+
+.lap-display__table th,
+.lap-display__table td {
+    border-bottom: 1px solid var(--afpt-border);
+    font-size: 0.82rem;
+    padding: 0.35rem;
+    text-align: left;
+}
+
+.lap-display__fallback {
+    margin: 0;
+}
+
 
 
 input[type=tel] {
@@ -1188,17 +1373,17 @@ input[type=range] {
 
 .runlaps-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
 }
 
-.runlaps-row div {
+.runlaps-row .altitude-control {
     margin: 1em 0;
     display: grid;
     justify-content: right;
     align-content: start;
 }
 
-.runlaps-row div select {
+.runlaps-row .altitude-control select {
     width: 200px;
     background-position: 170px center;
 }

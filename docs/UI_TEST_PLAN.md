@@ -30,6 +30,7 @@ Existing browser tests in `tools/browser-regression.mjs` must continue to cover:
 - Settings/control hub reference controls for run altitude chart, shuttle audio, install, PWA update, and build info access.
 - Score header appears in Legacy and PFRA modes, mirrors the real `#score-txt` value/status, and changes presentation on theme switch without changing score state.
 - Header sex, age, and standards controls are visible on desktop/mobile, drive the existing real controls, and survive theme switching.
+- Lap display appears for Legacy 6-lap and PFRA 8-lap modes, mirrors `#run-lap-times`, and changes presentation on theme switch without changing lap values.
 - Theme foundation loads the default preset and resolves every registered preset with slot-compatible variants.
 - Theme switching preserves current score text and slider value.
 - Legacy default run score.
@@ -53,7 +54,7 @@ Add or update browser checks as rows become implemented in `docs/FEATURE_PARITY_
 - Body composition card updates WHtR score in PFRA mode.
 - Strength card event, input, slider, min tick, chart button, and exemption all work.
 - Core card event, input, plank time, slider, min tick, chart button, and exemption all work.
-- Cardio card run, HAMR, walk, time inputs, slider, lap display, chart button, altitude selector, and exemption all work.
+- Cardio card run, HAMR, walk, time inputs, slider, chart button, altitude selector, and exemption all work.
 - Chart drawer opens from each component and can close by button and scrim.
 - Theme preset switching preserves selected sex, age, standard, events, values, exemptions, total score, and component scores.
 - Every theme preset exposes the same required calculator features listed in `docs/THEME_PARITY_MATRIX.md`.

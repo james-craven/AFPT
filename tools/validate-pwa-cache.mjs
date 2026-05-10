@@ -13,6 +13,7 @@ const requiredAssets = [
   'src/pfra/state.mjs',
   'src/pfra/standards.mjs',
   'src/pfra/ui.mjs',
+  'src/ui/lap-display.mjs',
   'src/ui/layout-variants.mjs',
   'src/ui/score-header.mjs',
   'src/ui/settings-hub.mjs',

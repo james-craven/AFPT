@@ -162,3 +162,12 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Kept existing IDs and event bindings so `main2.js`, `pfra-calculator.js`, and `src/pfra/dom.mjs` remain authoritative for behavior.
 - Added compact header-control styling for the three controls while keeping them visible and usable on mobile.
 - Updated browser regression coverage for desktop/mobile visibility, sex/age range updates, Legacy/PFRA switching, score-header mirroring after control changes, and theme switching preserving selected sex/age/mode.
+
+### Lap Display Foundation
+
+- Added `src/ui/lap-display.mjs` for the `lapDisplay` slot.
+- Kept legacy `changeLapTime` and PFRA `renderPfraLapTimes` as the only lap calculation/rendering sources.
+- Visually hid `#run-lap-times` as the source-of-truth text and rendered `#lap-display` from that already-rendered output.
+- Added foundation renderers for `light-rows`, `tactical-horizontal-bars`, `stencil-vertical-bars`, `fitness-tiles`, and `blues-table`.
+- Exposed a temporary dev-friendly `window.afptLapDisplay` variant override API without adding public customization UI.
+- Updated browser regression coverage so Legacy 6-lap and PFRA 8-lap values must remain intact while theme switching changes lap presentation only.

@@ -21,6 +21,7 @@ node -c src/pfra/scoring.mjs
 node -c src/pfra/standards.mjs
 node -c src/pfra/state.mjs
 node -c src/pfra/ui.mjs
+node -c src/ui/lap-display.mjs
 node -c src/ui/layout-variants.mjs
 node -c src/ui/score-header.mjs
 node -c src/ui/settings-hub.mjs
@@ -49,6 +50,7 @@ node -c tools/browser-regression.mjs
   - Checks settings/control hub touch target, open/close behavior, and preserved reference controls.
   - Checks offline reload with the service worker.
   - Checks header sex, age, and standards controls remain visible and preserve behavior.
+  - Checks lap display variants mirror existing Legacy/PFRA lap output.
 
 ## Manual Smoke Checks
 

@@ -65,6 +65,8 @@ Score header foundation status: the first visual slot renderer now mirrors the e
 
 Demographics controls foundation status: the real sex, age, and standards controls now live in the score/header area with existing IDs and event handlers preserved. Theme-specific control variants still come later.
 
+Lap display foundation status: the `lapDisplay` slot now mirrors `#run-lap-times` through registered visual variants while leaving legacy/PFRA lap calculations unchanged.
+
 ## Phase 4: First Presets
 
 Implement the Tactical and Connect Light presets first:

@@ -37,10 +37,13 @@ Score header foundation status: `src/ui/score-header.mjs` renders the active pre
 
 Demographics controls status: the real `#sex-sel`, `#age-sel`, and `#standards-mode` controls now live in the score/header area. They are moved, not mirrored, so existing event bindings remain authoritative. Theme-specific demographics variants are still planned.
 
+Lap display foundation status: `src/ui/lap-display.mjs` mirrors the already-rendered `#run-lap-times` text through the active `lapDisplay` variant. It does not calculate lap times. Foundation renderers exist for all five registered lap display variants.
+
 ## Required Cross-Theme Tests
 
 - Switching themes does not change selected sex, age, standard, events, performance values, exemptions, or score results.
 - Switching themes changes the score header variant without changing the mirrored score value or status.
+- Switching themes changes the lap display variant without changing the mirrored lap values.
 - Each theme exposes Legacy and PFRA access.
 - Each theme exposes chart access for strength, core, and cardio.
 - Each theme exposes settings access for install/update/audio/dev status or records an explicit deferral.

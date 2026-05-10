@@ -46,8 +46,8 @@ Status values during planning:
 | PFRA component score grid | `#pfra-body-score`, `#pfra-strength-score`, `#pfra-core-score`, `#pfra-cardio-score` | Component card score chips | Planned | Browser test validates component scores |
 | PFRA standards loading status | `#pfra-status`, `loadPfraStandards` | Settings/status row | Planned | Browser test waits for standards loaded |
 | PFRA 2-mile labels | `renderCardioModeText`, `#cardio-sel` option text | Cardio card event labels | Planned | Existing browser test validates `2 Mile 20m HAMR 2 km Walk Exempt` |
-| PFRA 8-lap timing | `renderPfraLapTimes`, `#run-lap-times` | Cardio run details | Planned | Existing browser test validates 8 lap rows |
-| Legacy 6-lap timing | `changeLapTime`, `#run-lap-times` | Cardio run details | Planned | Existing browser test validates 6 lap rows |
+| PFRA 8-lap timing | `renderPfraLapTimes`, `#run-lap-times`, `src/ui/lap-display.mjs` | Cardio run details through `lapDisplay` variant | Implemented | Browser test validates source rows and mirrored variant output |
+| Legacy 6-lap timing | `changeLapTime`, `#run-lap-times`, `src/ui/lap-display.mjs` | Cardio run details through `lapDisplay` variant | Implemented | Browser test validates source rows and mirrored variant output |
 | PWA manifest/icons | `manifest.webmanifest`, icon files | Unchanged app metadata | Planned | PWA cache validation |
 | Offline precache | `workbox-config.js`, `sw.js` | Unchanged runtime | Planned | `npm test`, offline browser regression |
 | Service-worker update flow | `pwa.js`, `sw.js` | Unchanged behavior, restyled prompt | Planned | PWA smoke test |

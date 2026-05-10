@@ -44,6 +44,7 @@ The offline modernization plan lives in `docs/OFFLINE_FIRST_PLAN.md`.
 - UI theme preset and layout variant foundations live under `src/ui/`.
 - The visible settings/control hub lives in `src/ui/settings-hub.mjs`; existing calculator scoring remains outside the UI theme layer.
 - The score header renderer lives in `src/ui/score-header.mjs` and mirrors existing score output rather than recalculating scores.
+- The lap display renderer lives in `src/ui/lap-display.mjs` and mirrors existing lap output rather than recalculating lap times.
 - Legacy scoring standards are still embedded in `main2.js` and are documented in `docs/LEGACY_BOUNDARIES.md`.
 - Chart references are currently stored as image assets in `web formatted jpgs/`.
 - A future standards update system should keep the review/confirm workflow before accepting PDF/image imports.
