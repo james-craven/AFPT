@@ -14,6 +14,7 @@
     --afpt-accent-2: #90ee90;
     --afpt-warn: #f5c542;
     --afpt-bad: rgb(250, 54, 54);
+    --afpt-card-max-width: 368px;
 }
 
 :root[data-theme="tactical"] {
@@ -511,7 +512,7 @@ section {
     display: grid;
     gap: 0.45rem;
     margin: 0.65rem auto 0.5rem;
-    max-width: 368px;
+    max-width: var(--afpt-card-max-width);
     min-height: 108px;
     overflow: hidden;
     padding: 0.8rem 0.95rem;
@@ -661,7 +662,7 @@ section {
     gap: 0.45rem;
     grid-template-columns: minmax(0, 0.82fr) minmax(0, 0.82fr) minmax(0, 1.24fr);
     margin: 0 auto 0.85rem;
-    max-width: 368px;
+    max-width: var(--afpt-card-max-width);
     padding: 0;
     width: calc(100% - 1rem);
 }
@@ -698,6 +699,23 @@ section {
 .sex-age-sel-section select:focus-visible {
     outline: 3px solid var(--afpt-accent-2);
     outline-offset: 2px;
+}
+
+/* Shared app-column layout contract — all primary card/section elements
+   match the score header's max-width and centering so the page reads as
+   a single column on desktop rather than a mix of narrow and full-width sections. */
+#strength-card,
+.situp-txt,
+.sit-sel-chart,
+.sit-slide,
+.run-txt,
+.cardio-sel-chart,
+.run-slider-section,
+.runlaps-row,
+.pfra-panel {
+    max-width: var(--afpt-card-max-width);
+    width: calc(100% - 1rem);
+    margin-inline: auto;
 }
 
 /* Legacy fallback for component-era control labels outside the header. */

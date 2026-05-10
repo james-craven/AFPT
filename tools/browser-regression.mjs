@@ -582,11 +582,32 @@ async function assertThemeFoundation(page, nextPreset) {
   assert.notEqual(strengthAfter.className, strengthBefore.className, 'theme switch changes strength card presentation');
 }
 
+async function assertDesktopCardAlignment(page) {
+  const widths = await page.evaluate(() => {
+    const rect = (sel) => document.querySelector(sel)?.getBoundingClientRect().width ?? null;
+    return {
+      scoreHeader: rect('#score-header'),
+      strengthCard: rect('#strength-card'),
+    };
+  });
+  const { scoreHeader, strengthCard } = widths;
+  assert.ok(scoreHeader !== null, 'score header is in the DOM');
+  assert.ok(strengthCard !== null, 'strength card is in the DOM');
+  assert.ok(
+    Math.abs(scoreHeader - strengthCard) < 40,
+    `desktop card widths are aligned: score-header=${scoreHeader?.toFixed(0)}px strength-card=${strengthCard?.toFixed(0)}px (delta must be <40px)`,
+  );
+}
+
 async function runLegacyRegression(browser, baseUrl, label, contextOptions = {}) {
   const { context, failures, page } = await newPage(browser, baseUrl, `?no-sw=1&qa=legacy-regression-${label}`, contextOptions);
 
   await assertSettingsHubParity(page);
   await assertHeaderControlsVisible(page);
+
+  if (label === 'desktop') {
+    await assertDesktopCardAlignment(page);
+  }
 
   assert.equal(await inputValue(page, '#run-slider'), '1136');
   assert.equal(await text(page, '#run-txt-p'), 'Run Score: 35 | Min: 18:56 | Max: 10:23');

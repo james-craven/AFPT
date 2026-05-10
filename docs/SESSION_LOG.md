@@ -1,5 +1,22 @@
 # Session Log
 
+## 2026-05-10
+
+### Phase 7 Visual Realignment — Part 2: Desktop Layout Geometry Fix
+
+**Problem identified:** After the token-color realignment, mobile looked correct but on desktop the strength card and PFRA panel stretched to 100% body width while the score header and demographic controls were constrained to `max-width: 368px`. This made the layout look inconsistent rather than like a unified column.
+
+**Root cause:** The score header and demographics had `max-width: 368px; margin: 0 auto;` but `#strength-card`, `.pfra-panel`, `.runlaps-row`, and the legacy situp/run sections had no max-width constraint.
+
+**Decision:** Option A — match all primary card/section elements to the score header's existing 368px constraint. Option B (wider desktop column) is documented as the intended future direction; the 368px value is now expressed as `--afpt-card-max-width` so it can be widened in a single change later.
+
+**Changes:**
+- Added `--afpt-card-max-width: 368px` to `:root` as a shared layout token.
+- Updated `.score-header` and `.sex-age-sel-section` to use `var(--afpt-card-max-width)` instead of the hardcoded value.
+- Added a shared app-column rule applying `max-width: var(--afpt-card-max-width); width: calc(100% - 1rem); margin-inline: auto;` to `#strength-card`, `.situp-txt`, `.sit-sel-chart`, `.sit-slide`, `.run-txt`, `.cardio-sel-chart`, `.run-slider-section`, `.runlaps-row`, and `.pfra-panel`.
+- Added `assertDesktopCardAlignment(page)` to `tools/browser-regression.mjs`: on the desktop pass it measures rendered widths of `#score-header` and `#strength-card` and asserts they are within 40px of each other.
+- `npm test` passed.
+
 ## 2026-05-09
 
 ### Context

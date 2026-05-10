@@ -1,6 +1,6 @@
 # Visual Alignment Audit
 
-Status: Phase 7 visual realignment complete. CSS token system added; card CSS refactored.
+Status: Phase 7 visual realignment complete. CSS token system added; card CSS refactored. Desktop layout geometry fixed.
 
 Mock source files live in `design-reference/`. Read them before any visual implementation work.
 
@@ -137,7 +137,11 @@ The chart button is part of the editor header, not a separate section. The `push
 
 ## Priority Fix Order
 
-### Priority 1 — CSS Custom Property Token System (blocks all visual work)
+### Priority 0 — Desktop Layout Geometry (DONE)
+
+Added `--afpt-card-max-width: 368px` as a shared token. All primary card/section elements now use `max-width: var(--afpt-card-max-width); width: calc(100% - 1rem); margin-inline: auto;` matching the score header. Widening to Option B (560–760px) requires changing one variable.
+
+### Priority 1 — CSS Custom Property Token System (DONE)
 
 Add per-preset CSS custom property definitions to `style.css` implementing the five theme palettes from `design-reference/shared.jsx`. Example:
 
