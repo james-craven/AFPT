@@ -352,15 +352,58 @@ async function componentEditorState(page) {
     const strengthBtn = document.getElementById('summary-strength');
     const coreBtn = document.getElementById('summary-core');
     const cardioBtn = document.getElementById('summary-cardio');
+    const editorVisible = (id) => {
+      const el = document.getElementById(id);
+      return el ? !el.hasAttribute('hidden') : null;
+    };
     return {
+      cardioEditorVisible: editorVisible('cardio-editor'),
       cardioPressed: cardioBtn?.getAttribute('aria-pressed'),
+      coreEditorVisible: editorVisible('core-editor'),
       corePressed: coreBtn?.getAttribute('aria-pressed'),
       selectedComponent: window.afptComponentEditor?.getSelectedComponent(),
+      strengthEditorVisible: editorVisible('strength-editor'),
       strengthPressed: strengthBtn?.getAttribute('aria-pressed'),
       stripVariant: strip?.dataset.stripVariant,
       stripVisible: strip ? getComputedStyle(strip).display !== 'none' : false,
     };
   });
+}
+
+async function assertActiveComponentEditor(page) {
+  await page.waitForFunction(() => document.getElementById('active-component-editor'));
+
+  const initial = await componentEditorState(page);
+  assert.ok(initial.strengthEditorVisible === true, 'strength editor visible by default');
+  assert.ok(initial.coreEditorVisible === false, 'core editor hidden by default');
+  assert.ok(initial.cardioEditorVisible === false, 'cardio editor hidden by default');
+
+  await page.locator('#summary-core').click();
+  await page.waitForFunction(() => document.getElementById('summary-core')?.getAttribute('aria-pressed') === 'true');
+  const afterCore = await componentEditorState(page);
+  assert.equal(afterCore.strengthEditorVisible, false, 'strength editor hidden after selecting core');
+  assert.equal(afterCore.coreEditorVisible, true, 'core editor visible after selecting core');
+  assert.equal(afterCore.cardioEditorVisible, false, 'cardio editor hidden after selecting core');
+
+  await page.locator('#summary-cardio').click();
+  await page.waitForFunction(() => document.getElementById('summary-cardio')?.getAttribute('aria-pressed') === 'true');
+  const afterCardio = await componentEditorState(page);
+  assert.equal(afterCardio.strengthEditorVisible, false, 'strength editor hidden after selecting cardio');
+  assert.equal(afterCardio.coreEditorVisible, false, 'core editor hidden after selecting cardio');
+  assert.equal(afterCardio.cardioEditorVisible, true, 'cardio editor visible after selecting cardio');
+
+  await page.locator('#summary-strength').click();
+  await page.waitForFunction(() => document.getElementById('summary-strength')?.getAttribute('aria-pressed') === 'true');
+  const afterStrength = await componentEditorState(page);
+  assert.equal(afterStrength.strengthEditorVisible, true, 'strength editor visible after re-selecting strength');
+  assert.equal(afterStrength.coreEditorVisible, false, 'core editor hidden after re-selecting strength');
+  assert.equal(afterStrength.cardioEditorVisible, false, 'cardio editor hidden after re-selecting strength');
+
+  const overflow = await page.evaluate(() => {
+    const container = document.getElementById('active-component-editor');
+    return container ? container.scrollWidth > container.clientWidth : false;
+  });
+  assert.equal(overflow, false, 'active component editor has no horizontal overflow');
 }
 
 async function assertComponentSummaryStrip(page) {
@@ -656,6 +699,9 @@ async function assertThemeFoundation(page, nextPreset) {
   );
   assert.equal(stripAfter.stripVariant, expectedStripVariant, 'theme switch applies preset summary strip variant');
   assert.equal(stripAfter.selectedComponent, stripBefore.selectedComponent, 'theme switch preserves selected component');
+  assert.equal(stripAfter.strengthEditorVisible, stripBefore.strengthEditorVisible, 'theme switch preserves strength editor visibility');
+  assert.equal(stripAfter.coreEditorVisible, stripBefore.coreEditorVisible, 'theme switch preserves core editor visibility');
+  assert.equal(stripAfter.cardioEditorVisible, stripBefore.cardioEditorVisible, 'theme switch preserves cardio editor visibility');
 }
 
 async function assertSettingsPanelAlignment(page) {
@@ -713,6 +759,7 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
   await assertSettingsHubParity(page);
   await assertHeaderControlsVisible(page);
   await assertComponentSummaryStrip(page);
+  await assertActiveComponentEditor(page);
 
   if (label === 'desktop') {
     await assertDesktopCardAlignment(page);
@@ -800,6 +847,7 @@ async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
 
   await assertHeaderControlsVisible(page);
   await assertComponentSummaryStrip(page);
+  await assertActiveComponentEditor(page);
   await page.locator('#standards-mode').selectOption('pfra');
   assert.equal(
     await page.locator('#cardio-sel').evaluate((select) => Array.from(select.options).map((option) => option.text).join(' ')),

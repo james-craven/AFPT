@@ -6,6 +6,11 @@ const SUMMARY_BUTTONS = {
   core: 'summary-core',
   cardio: 'summary-cardio',
 };
+const EDITOR_PANELS = {
+  strength: 'strength-editor',
+  core: 'core-editor',
+  cardio: 'cardio-editor',
+};
 
 let selectedComponent = 'strength';
 
@@ -33,8 +38,18 @@ export function selectComponent(component) {
     const btn = document.getElementById(id);
     if (btn) btn.setAttribute('aria-pressed', String(comp === component));
   }
-  const editor = document.getElementById('active-component-editor');
-  if (editor) editor.dataset.activeComponent = component;
+  const editorContainer = document.getElementById('active-component-editor');
+  if (editorContainer) editorContainer.dataset.activeComponent = component;
+  for (const [comp, id] of Object.entries(EDITOR_PANELS)) {
+    const panel = document.getElementById(id);
+    if (panel) {
+      if (comp === component) {
+        panel.removeAttribute('hidden');
+      } else {
+        panel.setAttribute('hidden', '');
+      }
+    }
+  }
   document.dispatchEvent(new CustomEvent('afpt:componentchange', { bubbles: true, detail: { component } }));
 }
 

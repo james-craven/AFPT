@@ -813,6 +813,25 @@ body:not(.pfra-mode) .component-summary-card__score {
     background: linear-gradient(135deg, var(--afpt-panel), var(--afpt-panel-2));
 }
 
+/* Active Component Editor */
+
+.active-component-editor {
+    max-width: var(--afpt-card-max-width);
+    width: calc(100% - 1rem);
+    margin-inline: auto;
+    margin-top: 0.5rem;
+}
+
+.component-editor {
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border);
+    padding: 0.75rem;
+}
+
+.component-editor[hidden] {
+    display: none;
+}
+
 /* Legacy fallback for component-era control labels outside the header. */
 .sex-sel-label, .age-sel-label, .standards-mode-label {
     color: white;

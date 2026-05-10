@@ -1,5 +1,32 @@
 # Session Log
 
+## 2026-05-10 (continued)
+
+### Component Editor Architecture Phase B: activeComponentEditor Container
+
+- Added `#active-component-editor` div with `data-active-component="strength"` to `index.html`, placed between `#component-summary-strip` and `#strength-card`.
+- Added three empty editor panels: `#strength-editor` (visible by default), `#core-editor` (hidden), `#cardio-editor` (hidden). No controls moved yet.
+- Extended `selectComponent()` in `src/ui/component-editor.mjs` to toggle the `hidden` attribute on the three editor panels so only the active component's panel is visible.
+- Added CSS for `.active-component-editor` (shared app-column sizing) and `.component-editor` (token-based panel background/border); `.component-editor[hidden] { display: none }` ensures hidden panels are removed from layout.
+- Added `assertActiveComponentEditor()` browser regression: verifies strength visible by default, all three click paths show correct editor, theme switch preserves visibility state.
+- Added editor visibility fields (`strengthEditorVisible`, `coreEditorVisible`, `cardioEditorVisible`) to `componentEditorState()`.
+- Added theme-switch preservation checks for editor visibility in `assertThemeFoundation`.
+- `npm test` passed: 84 cached files, 28 required offline assets, all browser regressions.
+
+### Settings Hub Placement Fix
+
+- Root cause: `.info-section` has `transform: translateX(-50%)`, making it the CSS containing block for all `position: fixed` descendants — including `.settings-hub-panel`. The old `right: max(0px, calc((100vw - 400px) / 2))` was computed relative to the info-section's right edge, not the viewport, pushing the panel far left.
+- Fix: `right: 0` places the panel flush to the info-section's right edge = exactly the app frame right edge on all viewport widths.
+- Added `assertSettingsPanelAlignment()` browser regression verifying panel right edge is within 60px of the settings toggle right edge on desktop.
+
+### Component Editor Architecture Phase A: componentSummaryStrip
+
+- Created `docs/COMPONENT_EDITOR_ARCHITECTURE.md` defining the universal mock pattern (all five mocks share: 3-column summary strip + one active editor) and why the Phase 7A/7B stacked-card approach was wrong.
+- Added `#component-summary-strip` with PUSH/CORE/RUN summary card buttons to `index.html`.
+- Created `src/ui/component-editor.mjs` with `selectedComponent` state, `selectComponent()`, variant class switching, `afpt:themechange` listener, `afpt:componentchange` event dispatch, and `window.afptComponentEditor` API.
+- Added `componentSummaryStrip`, `componentSummaryCard`, `activeComponentEditor` slots to `LAYOUT_SLOTS` in `layout-variants.mjs`; added 10 new variants; updated all 5 theme presets.
+- `npm test` passed.
+
 ## 2026-05-10
 
 ### Phase 7 Visual Realignment — Part 3: App-Frame Width Contract
