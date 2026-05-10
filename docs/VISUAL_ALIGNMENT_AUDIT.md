@@ -1,6 +1,6 @@
 # Visual Alignment Audit
 
-Status: Phase 7A/7B complete. This audit compares current implementation against mock intent.
+Status: Phase 7 visual realignment complete. CSS token system added; card CSS refactored.
 
 Mock source files live in `design-reference/`. Read them before any visual implementation work.
 
@@ -192,12 +192,12 @@ Implement with token-based CSS from the start — do not repeat the wrapper-only
 
 ## Before/After Status
 
-| Slot | Before 7A/7B | After 7A/7B | Target |
-|---|---|---|---|
-| `bodyCompositionCard` | No wrapper | Wrapper + controls | Token-based visual language |
-| `strengthCard` | No wrapper | Wrapper + controls | Token-based visual language, chart button styled |
-| `scoreHeader` | Mirrors score-txt | Mirrors score-txt + variants | + Threshold bar |
-| `lapDisplay` | Mirrors lap text | Mirrors lap text + 5 variant renderers | Token-based colors |
-| `chartDisplay` | Full-screen modal | Drawer shell + variants | Token-based colors |
-| `settingsPanel` | Hamburger | Settings hub drawer | Token-based colors |
-| CSS token system | Absent | Absent | Must add before further visual work |
+| Slot | Before 7A/7B | After 7A/7B | After token realignment | Target |
+|---|---|---|---|---|
+| `bodyCompositionCard` | No wrapper | Wrapper + controls, hardcoded rgba | Token-based visual language | + Score ring |
+| `strengthCard` | No wrapper | Wrapper + controls, hardcoded rgba | Token-based, chart button accent-styled | + Editor panel layout |
+| `scoreHeader` | Mirrors score-txt | Mirrors score-txt + variants | Unchanged | + Threshold bar |
+| `lapDisplay` | Mirrors lap text | Mirrors lap text + 5 variant renderers | Unchanged (tokens next) | Token-based colors |
+| `chartDisplay` | Full-screen modal | Drawer shell + variants | Unchanged (tokens next) | Token-based colors |
+| `settingsPanel` | Hamburger | Settings hub drawer | Unchanged (tokens next) | Token-based colors |
+| CSS token system | Absent | Absent | `[data-theme="tactical"]` added; body bg tokenized | Complete |
