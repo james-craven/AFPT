@@ -158,6 +158,24 @@
         Fail! Minimum Not Met!</p>
     </section>
 
+    <div id="component-summary-strip" class="component-summary-strip" data-strip-variant="">
+        <button id="summary-strength" class="component-summary-card" data-component="strength" aria-pressed="true">
+            <span class="component-summary-card__name">PUSH</span>
+            <span class="component-summary-card__value" data-value-for="strength">--</span>
+            <span class="component-summary-card__score" data-score-for="strength"></span>
+        </button>
+        <button id="summary-core" class="component-summary-card" data-component="core" aria-pressed="false">
+            <span class="component-summary-card__name">CORE</span>
+            <span class="component-summary-card__value" data-value-for="core">--</span>
+            <span class="component-summary-card__score" data-score-for="core"></span>
+        </button>
+        <button id="summary-cardio" class="component-summary-card" data-component="cardio" aria-pressed="false">
+            <span class="component-summary-card__name">RUN</span>
+            <span class="component-summary-card__value" data-value-for="cardio">--</span>
+            <span class="component-summary-card__score" data-score-for="cardio"></span>
+        </button>
+    </div>
+
     <div id="strength-card" class="strength-card strength-card--light-clean" data-card-variant="light-clean">
         <div class="strength-card__header">
             <h3 class="strength-card__title">Strength</h3>
@@ -413,6 +431,7 @@
     <script type="module" src="./src/ui/chart-drawer.mjs?v=20260510-chart-drawer"></script>
     <script type="module" src="./src/ui/body-composition-card.mjs?v=20260510-body-comp"></script>
     <script type="module" src="./src/ui/strength-card.mjs?v=20260510-strength-card"></script>
+    <script type="module" src="./src/ui/component-editor.mjs?v=20260510-component-editor"></script>
     <script src="./pwa.js?v=20260510-settings-hub"></script>
 </body>
 </html>

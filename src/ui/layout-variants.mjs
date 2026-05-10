@@ -8,6 +8,9 @@ export const LAYOUT_SLOTS = Object.freeze([
   'standardsSwitcher',
   'settingsPanel',
   'bodyCompositionCard',
+  'componentSummaryStrip',
+  'componentSummaryCard',
+  'activeComponentEditor',
   'strengthCard',
   'coreCard',
   'cardioCard',
@@ -24,6 +27,8 @@ const COMPONENT_CARD_SLOTS = Object.freeze([
   'coreCard',
   'cardioCard',
 ]);
+
+const SUMMARY_CARD_SLOTS = Object.freeze(['componentSummaryStrip', 'componentSummaryCard']);
 
 function defineVariant(id, slot, label, compatibleSlots = [slot]) {
   return Object.freeze({
@@ -90,6 +95,18 @@ export const VARIANT_REGISTRY = Object.freeze({
   'clean-chip': defineVariant('clean-chip', 'componentScoreDisplay', 'Clean score chip'),
   'gradient-chip': defineVariant('gradient-chip', 'componentScoreDisplay', 'Gradient score chip'),
 
+  'tactical-dense-strip': defineVariant('tactical-dense-strip', 'componentSummaryStrip', 'Tactical dense summary strip', SUMMARY_CARD_SLOTS),
+  'stencil-clipped-strip': defineVariant('stencil-clipped-strip', 'componentSummaryStrip', 'Stencil clipped summary strip', SUMMARY_CARD_SLOTS),
+  'blues-polished-strip': defineVariant('blues-polished-strip', 'componentSummaryStrip', 'Blues polished summary strip', SUMMARY_CARD_SLOTS),
+  'light-clean-strip': defineVariant('light-clean-strip', 'componentSummaryStrip', 'Light clean summary strip', SUMMARY_CARD_SLOTS),
+  'fitness-gradient-strip': defineVariant('fitness-gradient-strip', 'componentSummaryStrip', 'Fitness gradient summary strip', SUMMARY_CARD_SLOTS),
+
+  'tactical-editor-panel': defineVariant('tactical-editor-panel', 'activeComponentEditor', 'Tactical editor panel'),
+  'stencil-editor-panel': defineVariant('stencil-editor-panel', 'activeComponentEditor', 'Stencil editor panel'),
+  'blues-editor-panel': defineVariant('blues-editor-panel', 'activeComponentEditor', 'Blues editor panel'),
+  'light-editor-panel': defineVariant('light-editor-panel', 'activeComponentEditor', 'Light editor panel'),
+  'fitness-editor-panel': defineVariant('fitness-editor-panel', 'activeComponentEditor', 'Fitness editor panel'),
+
   'current-navigation': defineVariant('current-navigation', 'navigationPattern', 'Current navigation'),
 });
 
@@ -109,6 +126,9 @@ export const THEME_PRESETS = Object.freeze({
     standardsSwitcher: 'current-standards-select',
     settingsPanel: 'tactical-panel',
     bodyCompositionCard: 'tactical-dense',
+    componentSummaryStrip: 'tactical-dense-strip',
+    componentSummaryCard: 'tactical-dense-strip',
+    activeComponentEditor: 'tactical-editor-panel',
     strengthCard: 'tactical-dense',
     coreCard: 'tactical-dense',
     cardioCard: 'tactical-dense',
@@ -125,6 +145,9 @@ export const THEME_PRESETS = Object.freeze({
     standardsSwitcher: 'current-standards-select',
     settingsPanel: 'stencil-compact-panel',
     bodyCompositionCard: 'stencil-clipped',
+    componentSummaryStrip: 'stencil-clipped-strip',
+    componentSummaryCard: 'stencil-clipped-strip',
+    activeComponentEditor: 'stencil-editor-panel',
     strengthCard: 'stencil-clipped',
     coreCard: 'stencil-clipped',
     cardioCard: 'stencil-clipped',
@@ -141,6 +164,9 @@ export const THEME_PRESETS = Object.freeze({
     standardsSwitcher: 'current-standards-select',
     settingsPanel: 'blues-drawer',
     bodyCompositionCard: 'blues-polished',
+    componentSummaryStrip: 'blues-polished-strip',
+    componentSummaryCard: 'blues-polished-strip',
+    activeComponentEditor: 'blues-editor-panel',
     strengthCard: 'blues-polished',
     coreCard: 'blues-polished',
     cardioCard: 'blues-polished',
@@ -157,6 +183,9 @@ export const THEME_PRESETS = Object.freeze({
     standardsSwitcher: 'current-standards-select',
     settingsPanel: 'light-drawer',
     bodyCompositionCard: 'light-clean',
+    componentSummaryStrip: 'light-clean-strip',
+    componentSummaryCard: 'light-clean-strip',
+    activeComponentEditor: 'light-editor-panel',
     strengthCard: 'light-clean',
     coreCard: 'light-clean',
     cardioCard: 'light-clean',
@@ -173,6 +202,9 @@ export const THEME_PRESETS = Object.freeze({
     standardsSwitcher: 'current-standards-select',
     settingsPanel: 'fitness-glass-drawer',
     bodyCompositionCard: 'fitness-gradient-card',
+    componentSummaryStrip: 'fitness-gradient-strip',
+    componentSummaryCard: 'fitness-gradient-strip',
+    activeComponentEditor: 'fitness-editor-panel',
     strengthCard: 'fitness-gradient-card',
     coreCard: 'fitness-gradient-card',
     cardioCard: 'fitness-gradient-card',

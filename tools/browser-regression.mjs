@@ -346,6 +346,74 @@ async function lapDisplayState(page) {
   });
 }
 
+async function componentEditorState(page) {
+  return page.evaluate(() => {
+    const strip = document.getElementById('component-summary-strip');
+    const strengthBtn = document.getElementById('summary-strength');
+    const coreBtn = document.getElementById('summary-core');
+    const cardioBtn = document.getElementById('summary-cardio');
+    return {
+      cardioPressed: cardioBtn?.getAttribute('aria-pressed'),
+      corePressed: coreBtn?.getAttribute('aria-pressed'),
+      selectedComponent: window.afptComponentEditor?.getSelectedComponent(),
+      strengthPressed: strengthBtn?.getAttribute('aria-pressed'),
+      stripVariant: strip?.dataset.stripVariant,
+      stripVisible: strip ? getComputedStyle(strip).display !== 'none' : false,
+    };
+  });
+}
+
+async function assertComponentSummaryStrip(page) {
+  await page.waitForFunction(() => document.getElementById('component-summary-strip'));
+
+  const initial = await componentEditorState(page);
+  assert.ok(initial.stripVisible, 'component summary strip is visible');
+  assert.ok(initial.stripVariant, 'component summary strip has a variant applied');
+  assert.equal(initial.strengthPressed, 'true', 'strength is selected by default');
+  assert.equal(initial.corePressed, 'false', 'core is not selected by default');
+  assert.equal(initial.cardioPressed, 'false', 'cardio is not selected by default');
+  assert.equal(initial.selectedComponent, 'strength', 'selectedComponent is strength by default');
+
+  await page.locator('#summary-core').click();
+  await page.waitForFunction(() => document.getElementById('summary-core')?.getAttribute('aria-pressed') === 'true');
+  const afterCore = await componentEditorState(page);
+  assert.equal(afterCore.strengthPressed, 'false', 'strength deselected after clicking core');
+  assert.equal(afterCore.corePressed, 'true', 'core selected after clicking core');
+  assert.equal(afterCore.cardioPressed, 'false', 'cardio not selected after clicking core');
+  assert.equal(afterCore.selectedComponent, 'core', 'selectedComponent is core after clicking core');
+
+  await page.locator('#summary-cardio').click();
+  await page.waitForFunction(() => document.getElementById('summary-cardio')?.getAttribute('aria-pressed') === 'true');
+  const afterCardio = await componentEditorState(page);
+  assert.equal(afterCardio.strengthPressed, 'false', 'strength not selected after clicking cardio');
+  assert.equal(afterCardio.corePressed, 'false', 'core not selected after clicking cardio');
+  assert.equal(afterCardio.cardioPressed, 'true', 'cardio selected after clicking cardio');
+  assert.equal(afterCardio.selectedComponent, 'cardio', 'selectedComponent is cardio after clicking cardio');
+
+  await page.locator('#summary-strength').click();
+  await page.waitForFunction(() => document.getElementById('summary-strength')?.getAttribute('aria-pressed') === 'true');
+  const afterStrength = await componentEditorState(page);
+  assert.equal(afterStrength.strengthPressed, 'true', 'strength re-selected after clicking strength');
+  assert.equal(afterStrength.selectedComponent, 'strength', 'selectedComponent returns to strength');
+
+  const stripLayout = await page.evaluate(() => {
+    const cards = document.querySelectorAll('.component-summary-card');
+    const strip = document.getElementById('component-summary-strip');
+    const stripWidth = strip?.getBoundingClientRect().width ?? 0;
+    return {
+      cardWidths: Array.from(cards).map((c) => c.getBoundingClientRect().width),
+      count: cards.length,
+      stripWidth,
+    };
+  });
+  assert.equal(stripLayout.count, 3, 'all 3 summary cards are in the DOM');
+  for (const w of stripLayout.cardWidths) {
+    assert.ok(w > 0, 'each summary card has positive width');
+  }
+  const totalCardWidth = stripLayout.cardWidths.reduce((sum, w) => sum + w, 0);
+  assert.ok(totalCardWidth <= stripLayout.stripWidth + 12, 'all 3 cards fit within strip width');
+}
+
 async function strengthCardState(page) {
   return page.evaluate(() => {
     const card = document.getElementById('strength-card');
@@ -531,6 +599,7 @@ async function assertThemeFoundation(page, nextPreset) {
   const whtrBefore = await inputValue(page, '#pfra-whtr');
   const bodyCardBefore = await bodyCompositionCardState(page);
   const strengthBefore = await strengthCardState(page);
+  const stripBefore = await componentEditorState(page);
   await setThemePreset(page, nextPreset);
   const headerAfter = await scoreHeaderState(page);
   const controlsAfter = await headerControlState(page);
@@ -580,6 +649,13 @@ async function assertThemeFoundation(page, nextPreset) {
   );
   assert.equal(strengthAfter.cardVariant, expectedStrengthVariant, 'theme switch applies preset strength card variant');
   assert.notEqual(strengthAfter.className, strengthBefore.className, 'theme switch changes strength card presentation');
+  const stripAfter = await componentEditorState(page);
+  const expectedStripVariant = await page.evaluate(
+    (presetId) => window.afptTheme.resolveThemePreset(presetId).variants.componentSummaryStrip,
+    nextPreset,
+  );
+  assert.equal(stripAfter.stripVariant, expectedStripVariant, 'theme switch applies preset summary strip variant');
+  assert.equal(stripAfter.selectedComponent, stripBefore.selectedComponent, 'theme switch preserves selected component');
 }
 
 async function assertDesktopCardAlignment(page) {
@@ -611,6 +687,7 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
 
   await assertSettingsHubParity(page);
   await assertHeaderControlsVisible(page);
+  await assertComponentSummaryStrip(page);
 
   if (label === 'desktop') {
     await assertDesktopCardAlignment(page);
@@ -696,6 +773,7 @@ async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
   const { context, failures, page } = await newPage(browser, baseUrl, `?no-sw=1&qa=pfra-regression-${label}`, contextOptions);
 
   await assertHeaderControlsVisible(page);
+  await assertComponentSummaryStrip(page);
   await page.locator('#standards-mode').selectOption('pfra');
   assert.equal(
     await page.locator('#cardio-sel').evaluate((select) => Array.from(select.options).map((option) => option.text).join(' ')),

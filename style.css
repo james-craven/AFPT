@@ -721,6 +721,97 @@ section {
     margin-inline: auto;
 }
 
+/* Component Summary Strip */
+
+.component-summary-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    max-width: var(--afpt-card-max-width);
+    width: calc(100% - 1rem);
+    margin-inline: auto;
+    margin-top: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.component-summary-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.5rem 0.25rem;
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border);
+    border-radius: 4px;
+    color: inherit;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: center;
+    transition: border-color 0.15s, background 0.15s;
+    width: 100%;
+}
+
+.component-summary-card[aria-pressed="true"] {
+    background: var(--afpt-panel-2);
+    border-color: var(--afpt-accent);
+}
+
+.component-summary-card__name {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--afpt-ink-dim);
+}
+
+.component-summary-card[aria-pressed="true"] .component-summary-card__name {
+    color: var(--afpt-accent);
+}
+
+.component-summary-card__value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--afpt-ink);
+}
+
+.component-summary-card__score {
+    font-size: 0.7rem;
+    color: var(--afpt-accent-2);
+}
+
+body:not(.pfra-mode) .component-summary-card__score {
+    display: none;
+}
+
+/* Strip variant modifiers */
+
+.component-summary-strip--tactical-dense-strip .component-summary-card {
+    border-left: 2px solid var(--afpt-border-strong);
+    border-radius: 0;
+}
+
+.component-summary-strip--tactical-dense-strip .component-summary-card[aria-pressed="true"] {
+    border-left-color: var(--afpt-accent);
+}
+
+.component-summary-strip--stencil-clipped-strip .component-summary-card {
+    clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+    border-radius: 0;
+}
+
+.component-summary-strip--blues-polished-strip .component-summary-card {
+    border-radius: 8px;
+}
+
+.component-summary-strip--light-clean-strip .component-summary-card {
+    border-radius: 12px;
+}
+
+.component-summary-strip--fitness-gradient-strip .component-summary-card {
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--afpt-panel), var(--afpt-panel-2));
+}
+
 /* Legacy fallback for component-era control labels outside the header. */
 .sex-sel-label, .age-sel-label, .standards-mode-label {
     color: white;
