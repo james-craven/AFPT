@@ -39,6 +39,8 @@ Demographics controls status: the real `#sex-sel`, `#age-sel`, and `#standards-m
 
 Lap display foundation status: `src/ui/lap-display.mjs` mirrors the already-rendered `#run-lap-times` text through the active `lapDisplay` variant. It does not calculate lap times. Foundation renderers exist for all five registered lap display variants.
 
+Chart drawer foundation status: `src/ui/chart-drawer.mjs` wraps the existing `#modal` and `#modal-img` chart image flow with drawer presentation and active `chartDisplay` variants. Chart image sources remain owned by the existing legacy handlers.
+
 ## Required Cross-Theme Tests
 
 - Switching themes does not change selected sex, age, standard, events, performance values, exemptions, or score results.
@@ -46,6 +48,7 @@ Lap display foundation status: `src/ui/lap-display.mjs` mirrors the already-rend
 - Switching themes changes the lap display variant without changing the mirrored lap values.
 - Each theme exposes Legacy and PFRA access.
 - Each theme exposes chart access for strength, core, and cardio.
+- Chart drawer switching changes presentation without changing chart image source.
 - Each theme exposes settings access for install/update/audio/dev status or records an explicit deferral.
 - Each theme exposes lap information with equivalent meaning.
 - Each theme passes mobile viewport checks.

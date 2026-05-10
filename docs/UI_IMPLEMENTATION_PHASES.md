@@ -67,6 +67,8 @@ Demographics controls foundation status: the real sex, age, and standards contro
 
 Lap display foundation status: the `lapDisplay` slot now mirrors `#run-lap-times` through registered visual variants while leaving legacy/PFRA lap calculations unchanged.
 
+Chart drawer foundation status: the `chartDisplay` slot now wraps the existing chart image modal flow in a drawer shell while leaving chart image source selection in the existing handlers.
+
 ## Phase 4: First Presets
 
 Implement the Tactical and Connect Light presets first:

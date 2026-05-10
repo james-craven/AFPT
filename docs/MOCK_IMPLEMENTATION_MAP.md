@@ -63,7 +63,7 @@ Themes are presets. Variants are renderers for slots. User customization later o
 | Component cards | Current body/strength/core/cardio sections | Render through card variants using real component data |
 | Slider + field controls | Existing range and text inputs | Render through input-control variants; preserve synchronization and min tick behavior |
 | Run timing/lap display | `#run-lap-times` legacy 6-lap and PFRA 8-lap renderers | Implemented through `src/ui/lap-display.mjs`; mirrors the existing rendered lap text through selected `lapDisplay` variant |
-| Score chart drawer | Current chart modal and mock `ChartDrawer` | Render through `chartDisplay`; initially reuse existing chart image assets |
+| Score chart drawer | Current chart modal and mock `ChartDrawer` | Implemented through `src/ui/chart-drawer.mjs`; reuses existing chart image assets |
 | Settings button | Mock header gear | Shared settings hub now preserves real install/audio/update/dev controls; theme-specific `settingsPanel` variants come later |
 | Legacy/PFRA switching | Current standards selector | Keep as production mode control, not a visual theme |
 | PWA/offline support | Current service worker and manifest | Leave runtime behavior unchanged; restyle prompts only after tests pass |
@@ -131,10 +131,10 @@ Prefer one of these low-risk approaches:
 ## Mock-Specific Decisions
 
 - Frame toggle: mock-only.
-- Theme presets: planned production feature.
+- Theme presets: implemented as the preset registry and current settings selector.
 - Layout-per-theme hardcoded pages: mock-only.
-- Settings gear: planned production feature.
-- Theme dots: planned as preset selector after parity.
-- Visible demographics row: planned production feature.
-- Score chart drawer: planned production feature.
+- Settings gear: implemented as the settings/control hub foundation.
+- Theme dots: represented by the current preset selector until a polished control is added.
+- Visible demographics row: implemented by moving the real controls into the header area.
+- Score chart drawer: implemented as an image-source-preserving drawer foundation.
 - User slot overrides: planned later, after presets are implemented.

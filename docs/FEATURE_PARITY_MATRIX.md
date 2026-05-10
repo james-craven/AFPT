@@ -25,11 +25,11 @@ Status values during planning:
 | PWA update modal | `#pwa-update-modal`, `pwa.js`, `window.afptPwa` | Settings update check plus existing modal | Implemented | Browser test verifies update control/API; offline regression still passes |
 | Install prompt modal | `#install-modal`, `beforeinstallprompt`, `installApp` | Settings install affordance | Implemented | Browser test verifies install control exists; manual install prompt check |
 | Hamburger/menu access | `#settings-hub-toggle`, `#settings-hub-panel`, `.settings-menu`, `main2.js` | Settings button/drawer | Implemented | Browser test for touch target, open/close, and menu controls |
-| Run altitude adjustment chart | `#run-adjust-chart`, chart image modal | Settings reference link, later score chart drawer | Implemented | Browser test opens modal/image |
-| Walk/shuttle altitude adjustment chart | `#walk-adjust-chart`, chart image modal | Settings reference link, later score chart drawer | Implemented | Existing DOM handler preserved; expand browser coverage later |
-| Shuttle score card | `#shuttle-score-card`, chart image modal | Settings reference link, later score chart drawer | Implemented | Existing DOM handler preserved; expand browser coverage later |
+| Run altitude adjustment chart | `#run-adjust-chart`, chart drawer image | Settings reference link and chart drawer | Implemented | Browser test opens drawer/image |
+| Walk/shuttle altitude adjustment chart | `#walk-adjust-chart`, chart drawer image | Settings reference link and chart drawer | Implemented | Browser test opens drawer/image |
+| Shuttle score card | `#shuttle-score-card`, chart drawer image | Settings reference link and chart drawer | Implemented | Browser test opens drawer/image |
 | Shuttle audio player | `#shuttle-audio-menu`, `#shuttle-audio-control`, `shuttle.mp3` | Settings/audio section | Implemented | Browser test verifies audio element exists and asset is cached |
-| Component chart modal | `#modal`, `#modal-img`, `#push-btn`, `#sit-btn`, `#run-btn` | Component score chart drawer | Planned | Browser test opens chart for strength/core/cardio |
+| Component chart modal | `#modal`, `#modal-img`, `#push-btn`, `#sit-btn`, `#run-btn`, `src/ui/chart-drawer.mjs` | Component score chart drawer | Implemented | Browser test opens chart drawer for strength/core/cardio |
 | Strength event selection | `#push-sel`, `#pfra-strength-event` | Strength component card | Planned | Browser test switches Push-up/Hand-release/Exempt |
 | Strength input | `#push-txt`, `#push-slider`, min tick | Strength component card controls | Planned | Browser test for text, slider, min tick, score updates |
 | Core event selection | `#sit-sel`, `#pfra-core-event` | Core component card | Planned | Browser test switches Sit-up/Reverse Crunch/Plank/Exempt |

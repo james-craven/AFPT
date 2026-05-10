@@ -171,3 +171,12 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added foundation renderers for `light-rows`, `tactical-horizontal-bars`, `stencil-vertical-bars`, `fitness-tiles`, and `blues-table`.
 - Exposed a temporary dev-friendly `window.afptLapDisplay` variant override API without adding public customization UI.
 - Updated browser regression coverage so Legacy 6-lap and PFRA 8-lap values must remain intact while theme switching changes lap presentation only.
+
+### Chart Drawer Foundation
+
+- Added `src/ui/chart-drawer.mjs` for the `chartDisplay` slot.
+- Reused the existing `#modal` and `#modal-img` IDs so current chart click handlers keep choosing chart image sources.
+- Replaced the visual full-screen chart modal with a drawer-style shell, scrim, close button, Escape close behavior, and active chart variant classes.
+- Added foundation styling hooks for `light-chart-drawer`, `tactical-drawer`, `stencil-drawer`, `blues-chart-drawer`, and `fitness-glass-chart`.
+- Kept chart data as the existing image assets; no chart images were converted to structured tables.
+- Updated browser regression coverage for run altitude, walk/shuttle altitude, shuttle score, strength, core, and cardio chart shortcuts plus close-by-button, close-by-Escape, and close-by-scrim behavior.

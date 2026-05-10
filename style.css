@@ -1388,19 +1388,121 @@ input[type=range] {
     background-position: 170px center;
 }
 
-#modal {
-    z-index: 2;
+#modal,
+.chart-drawer {
+    bottom: 0;
+    display: grid;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 9;
 }
 
-.close-btn {
+#modal[hidden],
+.chart-drawer[hidden] {
+    display: none;
+}
+
+.chart-drawer__scrim {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(0, 11, 22, 0.58);
+    border: 0;
     cursor: pointer;
-    position: absolute;
-    color:black;
-    font-size:40px;
-    top: 10px;
-    left: 20px;
-    padding: 12px 16px;
-    z-index:1;
+    grid-area: 1 / 1;
+    padding: 0;
+}
+
+.chart-drawer__panel {
+    align-self: end;
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border-strong);
+    box-shadow: 0 -18px 46px rgba(0, 0, 0, 0.38);
+    color: var(--afpt-ink);
+    display: grid;
+    gap: 0.75rem;
+    grid-area: 1 / 1;
+    justify-self: center;
+    max-height: calc(100vh - 42px);
+    max-width: 400px;
+    overflow: hidden;
+    padding: 0.85rem;
+    width: min(100vw, 400px);
+}
+
+.chart-drawer__header {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+}
+
+.chart-drawer__header h2 {
+    color: var(--afpt-ink);
+    font-size: 1rem;
+    letter-spacing: 0;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.close-btn,
+.chart-drawer__close {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--afpt-panel-2);
+    border: 1px solid var(--afpt-border-strong);
+    border-radius: 6px;
+    color: var(--afpt-ink);
+    cursor: pointer;
+    font-size: 0.85rem;
+    min-height: 38px;
+    padding: 0 0.85rem;
+}
+
+.chart-drawer__close:focus-visible,
+.chart-drawer__scrim:focus-visible {
+    outline: 3px solid var(--afpt-accent-2);
+    outline-offset: -4px;
+}
+
+.chart-drawer__image-frame {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--afpt-border);
+    max-height: calc(100vh - 130px);
+    overflow: auto;
+    padding: 0.35rem;
+}
+
+.chart-drawer__image-frame img,
+#modal-img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+    width: 100%;
+}
+
+.chart-drawer--tactical-drawer .chart-drawer__panel {
+    background: rgba(0, 13, 24, 0.97);
+    border-color: var(--afpt-accent);
+    border-radius: 4px 4px 0 0;
+}
+
+.chart-drawer--stencil-drawer .chart-drawer__panel {
+    background: #121618;
+    border: 2px solid var(--afpt-border-strong);
+    border-radius: 0;
+}
+
+.chart-drawer--blues-chart-drawer .chart-drawer__panel,
+.chart-drawer--light-chart-drawer .chart-drawer__panel {
+    border-radius: 8px 8px 0 0;
+}
+
+.chart-drawer--fitness-glass-chart .chart-drawer__panel {
+    background: linear-gradient(135deg, rgba(11, 18, 32, 0.97), rgba(0, 150, 136, 0.78));
+    border-color: rgba(255, 255, 255, 0.38);
+    border-radius: 8px 8px 0 0;
 }
 
 .install-modal {

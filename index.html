@@ -12,7 +12,7 @@
                        is also available. Based on dafman 36-2905 this AF Fitness Calculator is the one stop shop to calculate AF PT Test scores."/>
         <link rel="apple-touch-icon" href="./icon-144x144.png">
         <link rel="icon" href="./icon-144x144.png">
-        <link rel="stylesheet" type="text/css" href="./style.css?v=20260510-header-controls">
+        <link rel="stylesheet" type="text/css" href="./style.css?v=20260510-chart-drawer">
         <link rel="manifest" href="./manifest.webmanifest">
       </head>
 <body data-theme="tactical" data-theme-preset="tactical">
@@ -33,9 +33,17 @@
             </div>
         </div>
     </div>
-    <div id="modal" hidden>
-        <span class="close-btn" id="close-btn" role="button">&times;</span>
-        <img id="modal-img"></img>
+    <div id="modal" class="chart-drawer chart-drawer--light-chart-drawer" data-chart-variant="light-chart-drawer" hidden role="dialog" aria-modal="true" aria-labelledby="chart-drawer-title">
+        <button id="chart-drawer-scrim" class="chart-drawer__scrim" type="button" aria-label="Close chart"></button>
+        <section class="chart-drawer__panel">
+            <header class="chart-drawer__header">
+                <h2 id="chart-drawer-title">Score Chart</h2>
+                <button class="close-btn chart-drawer__close" id="close-btn" type="button">Close</button>
+            </header>
+            <div class="chart-drawer__image-frame">
+                <img id="modal-img" alt="Score chart">
+            </div>
+        </section>
     </div>
     <div class="install-modal" id="install-modal">
         <article class="modal__article">
@@ -389,6 +397,7 @@
     <script type="module" src="./src/ui/theme-controller.mjs?v=20260510-theme-foundation"></script>
     <script type="module" src="./src/ui/score-header.mjs?v=20260510-score-header"></script>
     <script type="module" src="./src/ui/lap-display.mjs?v=20260510-lap-display"></script>
+    <script type="module" src="./src/ui/chart-drawer.mjs?v=20260510-chart-drawer"></script>
     <script src="./pwa.js?v=20260510-settings-hub"></script>
 </body>
 </html>

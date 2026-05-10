@@ -18,14 +18,15 @@
 - [x] UI implementation Phase 3 foundation: add score header slot rendering that mirrors real score output through active theme variants.
 - [x] UI implementation Phase 4 foundation: move real sex, age, and standards controls into the score/header area.
 - [x] UI implementation Phase 5 foundation: add lap display slot rendering that mirrors real legacy/PFRA lap output through active theme variants.
+- [x] UI implementation Phase 6 foundation: wrap existing chart image sources in a chart drawer with active chartDisplay variants.
 
 ## Later Improvements
 
 - Execute the UI redesign against `docs/LAYOUT_VARIANT_SYSTEM.md`, `docs/THEME_PARITY_MATRIX.md`, and `docs/FEATURE_PARITY_MATRIX.md` without changing calculator behavior.
 - Build the shared normalized UI state/action contract for future renderers.
-- Expand settings hub browser coverage for every individual chart shortcut.
 - Polish the score header variants after the demographic/header and lap-display slots are implemented.
 - Polish lap display variants after the chart drawer and component shell slots are implemented.
+- Convert chart images to structured data only after chart drawer parity is stable.
 - Build theme-specific demographic control variants after the shared state/action contract exists.
 - Add a dev-only layout variant picker after the shared render/action contract exists.
 - Add persistent user layout customization after all theme presets pass parity.

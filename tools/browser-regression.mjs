@@ -198,6 +198,80 @@ async function closeSettingsHub(page) {
   await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
 }
 
+async function chartDrawerState(page) {
+  return page.evaluate(() => {
+    const drawer = document.getElementById('modal');
+    const image = document.getElementById('modal-img');
+    return {
+      hidden: drawer?.hasAttribute('hidden'),
+      imageAlt: image?.getAttribute('alt'),
+      imageSrc: image?.getAttribute('src') || '',
+      open: drawer?.dataset.chartOpen,
+      title: document.getElementById('chart-drawer-title')?.innerText.trim(),
+      variant: drawer?.dataset.chartVariant,
+    };
+  });
+}
+
+async function openChartAndAssert(page, selector, expectedSource, { viaSettings = false } = {}) {
+  if (viaSettings) await openSettingsHub(page);
+  await page.locator(selector).click();
+  await page.waitForFunction(
+    (expected) => {
+      const drawer = document.getElementById('modal');
+      const image = document.getElementById('modal-img');
+      return drawer && !drawer.hasAttribute('hidden') && image?.getAttribute('src')?.includes(expected);
+    },
+    expectedSource,
+  );
+
+  const state = await chartDrawerState(page);
+  assert.equal(state.hidden, false, `${selector} opens chart drawer`);
+  assert.equal(state.open, 'true', `${selector} marks drawer open`);
+  assert.ok(state.imageSrc.includes(expectedSource), `${selector} displays expected chart source`);
+  assert.ok(state.imageAlt && state.imageAlt !== 'Score chart', `${selector} sets chart alt text`);
+  assert.ok(state.title && state.title !== 'Score Chart', `${selector} sets chart title`);
+  assert.equal(
+    state.variant,
+    await page.evaluate(() => window.afptTheme.getActiveThemePreset().variants.chartDisplay),
+    `${selector} uses active chart variant`,
+  );
+
+  return state;
+}
+
+async function closeChartByButton(page) {
+  await page.locator('#close-btn').click();
+  await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
+}
+
+async function closeChartByEscape(page) {
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
+}
+
+async function closeChartByScrim(page) {
+  await page.locator('#chart-drawer-scrim').click({ position: { x: 10, y: 10 } });
+  await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
+}
+
+async function assertChartDrawerShortcuts(page) {
+  await openChartAndAssert(page, '#walk-adjust-chart', 'walkAltitudeAdjust.webp', { viaSettings: true });
+  await closeChartByEscape(page);
+
+  await openChartAndAssert(page, '#shuttle-score-card', 'shuttleScores.webp', { viaSettings: true });
+  await closeChartByScrim(page);
+
+  await openChartAndAssert(page, '#push-btn', 'Strength_Abs.webp');
+  await closeChartByButton(page);
+
+  await openChartAndAssert(page, '#sit-btn', 'Strength_Abs.webp');
+  await closeChartByEscape(page);
+
+  await openChartAndAssert(page, '#run-btn', 'cardio.webp');
+  await closeChartByButton(page);
+}
+
 async function assertSettingsHubParity(page) {
   const buttonBox = await page.locator('#settings-hub-toggle').boundingBox();
   assert.ok(buttonBox, 'settings hub button has a click target');
@@ -215,13 +289,8 @@ async function assertSettingsHubParity(page) {
   assert.equal(await text(page, '#run-txt-p'), scoreBefore, 'opening settings preserves score text');
   assert.equal(await inputValue(page, '#run-slider'), sliderBefore, 'opening settings preserves slider value');
 
-  await page.locator('#run-adjust-chart').click();
-  await page.waitForFunction(() => {
-    const modal = document.getElementById('modal');
-    const image = document.getElementById('modal-img');
-    return modal && !modal.hasAttribute('hidden') && image?.src.includes('runAltitudeAdjust.webp');
-  });
-  await page.locator('#close-btn').click();
+  await openChartAndAssert(page, '#run-adjust-chart', 'runAltitudeAdjust.webp');
+  await closeChartByButton(page);
 
   await openSettingsHub(page);
   await page.locator('#shuttle-audio-menu').click();
@@ -436,6 +505,7 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
     count: 6,
     variant: 'stencil-vertical-bars',
   });
+  await assertChartDrawerShortcuts(page);
 
   await page.locator('#push-txt').fill('47');
   await page.locator('#push-tick').click();
