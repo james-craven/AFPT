@@ -16,6 +16,20 @@
     --afpt-bad: rgb(250, 54, 54);
 }
 
+:root[data-theme="tactical"] {
+    --afpt-bg: #040b12;
+    --afpt-panel: #08141d;
+    --afpt-panel-2: #0d1c27;
+    --afpt-border: rgba(29, 233, 255, 0.22);
+    --afpt-border-strong: rgba(29, 233, 255, 0.55);
+    --afpt-ink: #dff7ff;
+    --afpt-ink-dim: #7ba9b8;
+    --afpt-accent: #1de9ff;
+    --afpt-accent-2: #37ff8b;
+    --afpt-warn: #ffb547;
+    --afpt-bad: #ff4d6d;
+}
+
 :root[data-theme="stencil"] {
     --afpt-bg: #1a1d12;
     --afpt-panel: #252916;
@@ -73,7 +87,7 @@
 }
 
 body {
-    background: #003a6df0;
+    background: var(--afpt-bg);
     font-weight: bold;
     margin:0;
 }
@@ -1701,14 +1715,14 @@ tr, th, td {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: white;
+    color: var(--afpt-ink-dim);
 }
 
 .strength-card__score {
     margin: 0;
     font-size: 0.9rem;
     font-weight: 700;
-    color: white;
+    color: var(--afpt-accent-2);
     white-space: nowrap;
 }
 
@@ -1718,32 +1732,36 @@ body:not(.pfra-mode) .strength-card__score {
 
 /* Variant: light-clean */
 .strength-card--light-clean {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border);
     border-radius: 4px;
     overflow: hidden;
 }
 
 /* Variant: tactical-dense */
 .strength-card--tactical-dense {
-    background: rgba(0, 0, 0, 0.2);
-    border-left: 3px solid rgba(255, 255, 255, 0.4);
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border);
+    border-left: 3px solid var(--afpt-accent);
     border-radius: 2px;
 }
 
 .strength-card--tactical-dense .strength-card__title {
-    font-family: monospace;
+    font-family: ui-monospace, monospace;
     letter-spacing: 0.08em;
 }
 
 /* Variant: stencil-clipped */
 .strength-card--stencil-clipped {
-    background: rgba(0, 0, 0, 0.15);
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border-strong);
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
 }
 
 /* Variant: blues-polished */
 .strength-card--blues-polished {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border);
     border-radius: 6px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
     overflow: hidden;
@@ -1751,9 +1769,41 @@ body:not(.pfra-mode) .strength-card__score {
 
 /* Variant: fitness-gradient-card */
 .strength-card--fitness-gradient-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+    background: linear-gradient(135deg, var(--afpt-panel) 0%, var(--afpt-panel-2) 100%);
+    border: 1px solid var(--afpt-border);
     border-radius: 8px;
     overflow: hidden;
+}
+
+/* Token-scoped overrides for legacy inner sections inside strength-card */
+#strength-card .strength-txt {
+    border-top: 1px solid var(--afpt-border);
+}
+
+#strength-card .strength-txt-p,
+#strength-card .sit-txt-p {
+    color: var(--afpt-ink);
+}
+
+#strength-card .push-slide {
+    border-bottom: 1px solid var(--afpt-border);
+}
+
+#strength-card .pushsit-see-chart-btn a {
+    color: var(--afpt-accent);
+}
+
+#strength-card .pushsit-see-chart-btn button,
+#strength-card #push-btn {
+    background: transparent;
+    border: 1px solid var(--afpt-accent);
+    color: var(--afpt-accent);
+}
+
+#strength-card .pushsit-see-chart-btn button:hover,
+#strength-card #push-btn:hover {
+    background: var(--afpt-accent);
+    color: var(--afpt-bg);
 }
 
 /* Body composition card slot */
@@ -1777,12 +1827,14 @@ body:not(.pfra-mode) .strength-card__score {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    color: var(--afpt-ink-dim);
 }
 
 .body-composition-card__score {
     margin: 0;
     font-size: 0.9rem;
     font-weight: 700;
+    color: var(--afpt-accent-2);
     white-space: nowrap;
 }
 
@@ -1795,6 +1847,7 @@ body:not(.pfra-mode) .strength-card__score {
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    color: var(--afpt-ink-dim);
 }
 
 .body-composition-card__input {
@@ -1808,76 +1861,76 @@ body:not(.pfra-mode) .strength-card__score {
 
 /* Variant: light-clean */
 .body-composition-card--light-clean {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border);
 }
 
 .body-composition-card--light-clean .body-composition-card__input {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    color: white;
+    background: var(--afpt-panel-2);
+    border: 1px solid var(--afpt-border-strong);
+    color: var(--afpt-ink);
 }
 
 /* Variant: tactical-dense */
 .body-composition-card--tactical-dense {
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 3px solid rgba(255, 255, 255, 0.6);
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border);
+    border-left: 3px solid var(--afpt-accent);
     border-radius: 2px;
 }
 
 .body-composition-card--tactical-dense .body-composition-card__title {
-    font-family: monospace;
+    font-family: ui-monospace, monospace;
     letter-spacing: 0.08em;
 }
 
 .body-composition-card--tactical-dense .body-composition-card__input {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    font-family: monospace;
+    background: var(--afpt-panel-2);
+    border: 1px solid var(--afpt-border-strong);
+    color: var(--afpt-ink);
+    font-family: ui-monospace, monospace;
 }
 
 /* Variant: stencil-clipped */
 .body-composition-card--stencil-clipped {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border-strong);
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
 }
 
 .body-composition-card--stencil-clipped .body-composition-card__input {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
+    background: var(--afpt-panel-2);
+    border: 1px solid var(--afpt-border-strong);
+    color: var(--afpt-ink);
 }
 
 /* Variant: blues-polished */
 .body-composition-card--blues-polished {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: var(--afpt-panel);
+    border: 1px solid var(--afpt-border);
     border-radius: 6px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .body-composition-card--blues-polished .body-composition-card__input {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: var(--afpt-panel-2);
+    border: 1px solid var(--afpt-border-strong);
     border-radius: 4px;
-    color: white;
+    color: var(--afpt-ink);
 }
 
 /* Variant: fitness-gradient-card */
 .body-composition-card--fitness-gradient-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, var(--afpt-panel) 0%, var(--afpt-panel-2) 100%);
+    border: 1px solid var(--afpt-border);
     border-radius: 8px;
 }
 
 .body-composition-card--fitness-gradient-card .body-composition-card__input {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: var(--afpt-panel-2);
+    border: 1px solid var(--afpt-border-strong);
     border-radius: 6px;
-    color: white;
+    color: var(--afpt-ink);
 }
 
 .article-content {
