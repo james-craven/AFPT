@@ -30,8 +30,8 @@ Status values during planning:
 | Shuttle score card | `#shuttle-score-card`, chart drawer image | Settings reference link and chart drawer | Implemented | Browser test opens drawer/image |
 | Shuttle audio player | `#shuttle-audio-menu`, `#shuttle-audio-control`, `shuttle.mp3` | Settings/audio section | Implemented | Browser test verifies audio element exists and asset is cached |
 | Component chart modal | `#modal`, `#modal-img`, `#push-btn`, `#sit-btn`, `#run-btn`, `src/ui/chart-drawer.mjs` | Component score chart drawer | Implemented | Browser test opens chart drawer for strength/core/cardio |
-| Strength event selection | `#push-sel`, `#pfra-strength-event` | Strength component card | Planned | Browser test switches Push-up/Hand-release/Exempt |
-| Strength input | `#push-txt`, `#push-slider`, min tick | Strength component card controls | Planned | Browser test for text, slider, min tick, score updates |
+| Strength event selection | `#push-sel`, `#pfra-strength-event` | Strength component card | Implemented | Browser test: event switch updates score text, exemption sets PFRA score to EXEMPT |
+| Strength input | `#push-txt`, `#push-slider`, min tick | Strength component card controls | Implemented | Browser test: text/slider/min tick preserved, score updates, score header mirrors total |
 | Core event selection | `#sit-sel`, `#pfra-core-event` | Core component card | Planned | Browser test switches Sit-up/Reverse Crunch/Plank/Exempt |
 | Core input | `#sit-txt`, `#plankmintxt`, `#sit-slider`, min tick | Core component card controls | Planned | Browser test for reps, plank time, slider, score updates |
 | Cardio event selection | `#cardio-sel`, `#pfra-cardio-event` | Cardio component card | Planned | Browser test switches run/HAMR/walk/exempt |

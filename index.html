@@ -158,35 +158,42 @@
         Fail! Minimum Not Met!</p>
     </section>
 
-    <!-- Section 4 - Strength Text -->
-    <section class="strength-txt">
-        <p class="strength-txt-p" id="push-txt-p">
-        </p>
-    </section>
-
-    <!-- Section 5 - Pushups Select & See Chart Btn -->
-    <section class="push-sel-chart">
-        <div class="strength-sel-div">
-            <select name="" id="push-sel" class="strength-sel">
-                <option value="Pushups">Pushups</option>
-                <option value="Hand-Release">Hand-Release</option>
-                <option value="Exempt">Exempt</option>
-            </select>
+    <div id="strength-card" class="strength-card strength-card--light-clean" data-card-variant="light-clean">
+        <div class="strength-card__header">
+            <h3 class="strength-card__title">Strength</h3>
+            <p class="strength-card__score"><span id="pfra-strength-score">--</span> / 15</p>
         </div>
-        <div class="pushsit-see-chart-btn">
-            <button id="push-btn">See Chart</button>
-        </div>
-        <label for="push-txt" class="hidden-labels">pushups textbox</label>
-        <input type="tel" pattern="[0-9]+" class="push-txt" id="push-txt">
-        <input type="tel" class="hrpush-txt">
-    </section>
 
-    <!-- Section 6 - Pushups Slider -->
-    <section class="push-slide">
-        <label for="push-slider" class="hidden-labels">pushups slider</label>
-        <input type="range" id="push-slider" class="push-slider" min="0" max="100" value="0" list="steplist" step="1">
-        <div class="slider-tick-layer"><button type="button" id="push-tick" class="slider-tick">15</button></div>
-    </section>
+        <!-- Section 4 - Strength Text -->
+        <section class="strength-txt">
+            <p class="strength-txt-p" id="push-txt-p">
+            </p>
+        </section>
+
+        <!-- Section 5 - Pushups Select & See Chart Btn -->
+        <section class="push-sel-chart">
+            <div class="strength-sel-div">
+                <select name="" id="push-sel" class="strength-sel">
+                    <option value="Pushups">Pushups</option>
+                    <option value="Hand-Release">Hand-Release</option>
+                    <option value="Exempt">Exempt</option>
+                </select>
+            </div>
+            <div class="pushsit-see-chart-btn">
+                <button id="push-btn">See Chart</button>
+            </div>
+            <label for="push-txt" class="hidden-labels">pushups textbox</label>
+            <input type="tel" pattern="[0-9]+" class="push-txt" id="push-txt">
+            <input type="tel" class="hrpush-txt">
+        </section>
+
+        <!-- Section 6 - Pushups Slider -->
+        <section class="push-slide">
+            <label for="push-slider" class="hidden-labels">pushups slider</label>
+            <input type="range" id="push-slider" class="push-slider" min="0" max="100" value="0" list="steplist" step="1">
+            <div class="slider-tick-layer"><button type="button" id="push-tick" class="slider-tick">15</button></div>
+        </section>
+    </div>
 
     <!-- Section 7 - Situps Text -->
     <section class="situp-txt">
@@ -327,7 +334,6 @@
         </div>
 
         <div class="pfra-score-grid" aria-live="polite">
-            <p>Strength: <span id="pfra-strength-score">--</span> / 15</p>
             <p>Core: <span id="pfra-core-score">--</span> / 15</p>
             <p>Cardio: <span id="pfra-cardio-score">--</span> / 50</p>
         </div>
@@ -406,6 +412,7 @@
     <script type="module" src="./src/ui/lap-display.mjs?v=20260510-lap-display"></script>
     <script type="module" src="./src/ui/chart-drawer.mjs?v=20260510-chart-drawer"></script>
     <script type="module" src="./src/ui/body-composition-card.mjs?v=20260510-body-comp"></script>
+    <script type="module" src="./src/ui/strength-card.mjs?v=20260510-strength-card"></script>
     <script src="./pwa.js?v=20260510-settings-hub"></script>
 </body>
 </html>

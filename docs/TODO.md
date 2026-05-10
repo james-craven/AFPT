@@ -20,6 +20,7 @@
 - [x] UI implementation Phase 5 foundation: add lap display slot rendering that mirrors real legacy/PFRA lap output through active theme variants.
 - [x] UI implementation Phase 6 foundation: wrap existing chart image sources in a chart drawer with active chartDisplay variants.
 - [x] UI implementation Phase 7A foundation: body composition card shell wrapping real `#pfra-whtr` input and `#pfra-body-score` in a `bodyCompositionCard` slot with all five variant styles.
+- [x] UI implementation Phase 7B foundation: strength card shell wrapping real legacy strength sections in a `strengthCard` slot with PFRA score display and all five variant styles.
 
 ## Later Improvements
 

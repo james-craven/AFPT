@@ -33,6 +33,7 @@ Existing browser tests in `tools/browser-regression.mjs` must continue to cover:
 - Lap display appears for Legacy 6-lap and PFRA 8-lap modes, mirrors `#run-lap-times`, and changes presentation on theme switch without changing lap values.
 - Chart drawer opens every current chart shortcut with the existing image source and closes by button, Escape, and scrim.
 - Body composition card is visible in PFRA mode, hidden in legacy mode; WHtR input changes update body score and total; score header mirrors updated total; theme switching preserves WHtR value, body score, and applies the preset variant.
+- Strength card is always visible; PFRA score display shown only in PFRA mode; event switching updates score text; exemption sets PFRA strength score to EXEMPT; score header mirrors total; theme switching preserves event selection and input value and applies the preset variant.
 - Theme foundation loads the default preset and resolves every registered preset with slot-compatible variants.
 - Theme switching preserves current score text, slider value, WHtR value, and body score.
 - Legacy default run score.

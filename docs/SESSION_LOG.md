@@ -172,6 +172,18 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Exposed a temporary dev-friendly `window.afptLapDisplay` variant override API without adding public customization UI.
 - Updated browser regression coverage so Legacy 6-lap and PFRA 8-lap values must remain intact while theme switching changes lap presentation only.
 
+### Strength Card Foundation (Phase 7B)
+
+- Created `src/ui/strength-card.mjs` for the `strengthCard` slot.
+- Wrapped the real legacy strength sections (`.strength-txt`, `.push-sel-chart`, `.push-slide` — containing `#push-sel`, `#push-txt`, `#push-slider`, `#push-tick`, `#push-btn`) in a `#strength-card` wrapper. All existing IDs, class names, and event bindings remain unchanged.
+- Added a card header with title and `#pfra-strength-score` display; the score is hidden in legacy mode via `body:not(.pfra-mode) .strength-card__score { display: none }`.
+- Removed `#pfra-strength-score` from `.pfra-score-grid` (now lives in the strength card header).
+- `main2.js` and `pfra-calculator.js` remain authoritative for all scoring and event handling.
+- Added foundation variant styles for all five registered variants.
+- Added browser regression coverage: strength card variant applied, PFRA score visible in PFRA mode, exemption sets score to EXEMPT, event switch updates score text, score header mirrors total, theme switch preserves event/value/variant and changes card presentation.
+- Updated `docs/FEATURE_PARITY_MATRIX.md`, `docs/THEME_PARITY_MATRIX.md`, `docs/UI_TEST_PLAN.md`, `docs/TODO.md`.
+- `npm test` passed: 83 cached files, 28 required offline assets, all browser regressions.
+
 ### Body Composition Card Foundation (Phase 7A)
 
 - Created `src/ui/body-composition-card.mjs` for the `bodyCompositionCard` slot.

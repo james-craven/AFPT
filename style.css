@@ -1681,6 +1681,81 @@ tr, th, td {
     font-weight: bold;
 }
 
+/* Strength card slot */
+.strength-card {
+    display: grid;
+    gap: 0;
+}
+
+.strength-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.strength-card__title {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: white;
+}
+
+.strength-card__score {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: white;
+    white-space: nowrap;
+}
+
+body:not(.pfra-mode) .strength-card__score {
+    display: none;
+}
+
+/* Variant: light-clean */
+.strength-card--light-clean {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Variant: tactical-dense */
+.strength-card--tactical-dense {
+    background: rgba(0, 0, 0, 0.2);
+    border-left: 3px solid rgba(255, 255, 255, 0.4);
+    border-radius: 2px;
+}
+
+.strength-card--tactical-dense .strength-card__title {
+    font-family: monospace;
+    letter-spacing: 0.08em;
+}
+
+/* Variant: stencil-clipped */
+.strength-card--stencil-clipped {
+    background: rgba(0, 0, 0, 0.15);
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+
+/* Variant: blues-polished */
+.strength-card--blues-polished {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+/* Variant: fitness-gradient-card */
+.strength-card--fitness-gradient-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
 /* Body composition card slot */
 .body-composition-card {
     display: grid;
