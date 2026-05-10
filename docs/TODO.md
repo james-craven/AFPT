@@ -11,9 +11,11 @@
 - [x] Phase 4: Verify service-worker cache paths after module extraction.
 - [x] Phase 5: Final docs update, verification, and checkpoint.
 - [x] Scoring verification: expand PFRA examples into a fixture-backed suite covering max, minimum, failing, and boundary values.
+- [x] UI redesign planning: create feature parity matrix, mock implementation map, redesign plan, and UI test plan.
 
 ## Later Improvements
 
+- Execute the UI redesign against `docs/FEATURE_PARITY_MATRIX.md` without changing calculator behavior.
 - Move legacy standards out of `main2.js` into versioned data.
 - Add a review-first standards import workflow for PDFs/images.
 - Add more browser regression cases for exemptions, walk scoring, plank time entry, and alternate component combinations.

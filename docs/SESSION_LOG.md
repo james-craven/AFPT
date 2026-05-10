@@ -94,3 +94,16 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added max, minimum, failing, midpoint, and immediate threshold-boundary examples across male/female and young/middle/older age groups.
 - Preserved the known current examples in the fixture with `previous-*` ids.
 - Source-table ambiguity: `standards/af-pfra-2026.json` still reports `source-mapped-incomplete`, while the generated event-table files are marked `needsReview:false`; final production confidence should include continued PDF spot checks or an independent row-by-row audit.
+
+### UI Redesign Planning
+
+- Entered planning-only mode for the Claude-inspired visual redesign.
+- Confirmed the current app remains the source of truth for behavior, scoring, standards data, PWA/offline behavior, and deployment.
+- Inspected the production app shell, legacy/PFRA bridge, PFRA UI/state helpers, browser tests, PWA docs, and uploaded mock files.
+- Added planning contract docs:
+  - `docs/UI_REDESIGN_PLAN.md`
+  - `docs/FEATURE_PARITY_MATRIX.md`
+  - `docs/MOCK_IMPLEMENTATION_MAP.md`
+  - `docs/UI_TEST_PLAN.md`
+- Documented that the uploaded mock HTML references `mocks/mock-tactical.jsx`, `mocks/mock-stencil.jsx`, `mocks/mock-blues.jsx`, `mocks/mock-light.jsx`, and `mocks/mock-fitness.jsx`, but those files were not present in Downloads.
+- Captured visual-only/demo-only mock pieces that should not be copied into production: React/CDN runtime, Babel-in-browser, design canvas, device frames, frame toggle, mock seed scoring data, and generated stub chart rows.
