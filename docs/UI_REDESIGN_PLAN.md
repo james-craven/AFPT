@@ -27,10 +27,11 @@ Uploaded mock files inspected:
 - `/Users/jamescraven/Downloads/ios-frame.jsx`
 - `/Users/jamescraven/Downloads/android-frame.jsx`
 - `/Users/jamescraven/Downloads/shared.jsx`
-
-Design-reference gap:
-
-- `AFPT Calculator Mocks.html` references `mocks/mock-tactical.jsx`, `mocks/mock-stencil.jsx`, `mocks/mock-blues.jsx`, `mocks/mock-light.jsx`, and `mocks/mock-fitness.jsx`, but those files were not present in `/Users/jamescraven/Downloads`. Implementation should either request those files before exact visual matching or proceed from the available shell, shared primitives, and legend.
+- `/Users/jamescraven/Downloads/mock-tactical.jsx`
+- `/Users/jamescraven/Downloads/mock-stencil.jsx`
+- `/Users/jamescraven/Downloads/mock-blues.jsx`
+- `/Users/jamescraven/Downloads/mock-light.jsx`
+- `/Users/jamescraven/Downloads/mock-fitness.jsx`
 
 ## Non-Negotiables
 
@@ -54,6 +55,17 @@ Design-reference gap:
 - Theme tokens expressed as CSS variables.
 - Settings entry point for development/version/offline/theme controls.
 
+## Recommended Production Direction
+
+Use the Tactical and Light mocks as the main implementation references:
+
+- Tactical has the strongest feature-fit for this app because demographics, standard, altitude, component cards, chart access, and detailed lap rows stay visible and dense.
+- Light has the cleanest production feel for repeated real use on phones.
+- Blues offers a useful score-ring idea, but a ring gauge should be optional because it consumes vertical space.
+- Stencil and Fitness are useful theme inspiration, but their stronger visual styling should come after parity, not in the first production redesign.
+
+The first implementation should ship one stable layout with themeable CSS variables, not five layout-swapping versions.
+
 ## Mock Pieces That Are Demo-Only
 
 - React runtime and ReactDOM CDN scripts.
@@ -65,6 +77,7 @@ Design-reference gap:
 - Stub chart rows generated inside `ChartDrawer`.
 - Layout switching where theme dots swap the entire app layout.
 - Remote Google Font dependency unless fonts are bundled or replaced with system fonts.
+- Mock-only settings values such as `Units`, `Notifications`, and frame toggles unless separately implemented as real app features.
 
 ## Implementation Order
 
@@ -75,7 +88,7 @@ Design-reference gap:
 5. Preserve and restyle sliders, text inputs, min ticks, exemptions, and event selectors within those cards.
 6. Replace the run/lap section with a card-based run details area that still uses real PFRA/legacy lap calculations.
 7. Replace chart modal access with a drawer that initially reuses the current chart image sources.
-8. Add theme selection after core calculator behavior passes browser tests.
+8. Add one theme selector that changes CSS variables only after core calculator behavior passes browser tests.
 9. Verify legacy mode, PFRA mode, charts, audio, install/update prompts, and offline behavior.
 10. Remove old unused UI markup and CSS only after the feature parity matrix is complete.
 
@@ -94,6 +107,5 @@ Stop and ask before implementation if:
 
 - A UI change would remove a major current feature.
 - A current feature has no clear place in the new UI.
-- The missing `mocks/mock-*.jsx` files are required for exact visual matching.
 - A framework, TypeScript, remote runtime dependency, or build-system change seems necessary.
 - A scoring behavior conflict is discovered.

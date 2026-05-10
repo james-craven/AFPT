@@ -17,8 +17,21 @@ The available mock files provide:
 - Shared demo data in `AFPT_DATA`.
 - Shared primitives for theme dots, frame toggle, demographics row, and score chart drawer.
 - iOS and Android presentation frames.
+- Five concrete layouts: Tactical HUD, Stencil Ops, AF Dress Blues, Connect Light, and Fitness Gradient.
 
-The five concrete mock layout files referenced by the HTML were not present in Downloads, so exact layout-level reproduction should wait for those files or proceed using the available legend and shared primitives.
+All referenced layout files are now available in Downloads and have been reviewed.
+
+## Layout Takeaways
+
+| Mock | Useful Production Ideas | Cautions |
+|---|---|---|
+| Tactical HUD | Dense score header, always-visible sex/age/standard controls, component tabs, visible altitude control, full 8-row lap plan with pace bars | Strong tactical styling may be too intense as the only default |
+| Stencil Ops | Clear status threshold bar, strong chart button placement, compact settings drawer, lap bar chart | Heavy stencil styling and clip-path cards should be theme-only |
+| AF Dress Blues | Score ring/dial, polished component cards, stepper controls, visible altitude, clean lap table | Ring and stepper controls may add complexity before parity |
+| Connect Light | Most production-friendly card style, readable score card, clean active editor, simple lap rows | Settings drawer should not hide controls that need to stay visible |
+| Fitness Gradient | Strong score ring and compact lap tiles | Gradient/glass styling is more expressive than utilitarian and should be optional |
+
+Primary implementation recommendation: start with a Tactical/Connect hybrid. Keep the Tactical information density and visible controls, but use the quieter Connect Light card language as the default visual finish.
 
 ## Production Mapping
 
@@ -34,7 +47,7 @@ The five concrete mock layout files referenced by the HTML were not present in D
 | Run timing/lap display | `#run-lap-times` legacy 6-lap and PFRA 8-lap renderers | Place in cardio card details area |
 | Score chart drawer | Current chart modal and mock `ChartDrawer` | Build a vanilla drawer; initially reuse existing chart image assets |
 | Settings button | Mock header gear | Open a vanilla settings drawer/modal for install, audio, updates, dev build, and future theme |
-| Theme selector | Mock `ThemeSwitcher` | Optional first-class setting after parity; use CSS variables, not React |
+| Theme selector | Mock `ThemeSwitcher` | Optional first-class setting after parity; use CSS variables only and keep the same layout |
 | Legacy/PFRA switching | Current standards selector | Keep as production mode control, not a theme |
 | PWA/offline support | Current service worker and manifest | Leave runtime behavior unchanged; restyle prompts only after tests pass |
 
@@ -87,6 +100,7 @@ Cards should be functional containers, not decorative wrappers around disconnect
 - iOS/Android device frames and frame toggle.
 - The chart row generator inside mock `ChartDrawer`.
 - Theme dots that swap entire layouts. Production theme dots should change appearance only.
+- Mock settings rows that are placeholders rather than real app behavior.
 
 ## Suggested Production DOM Strategy
 
@@ -105,4 +119,5 @@ Prefer one of these low-risk approaches:
 - Theme dots: optional production feature after parity.
 - Visible demographics row: planned production feature.
 - Score chart drawer: planned production feature.
-- Five theme palettes: optional source for future themes; start with one default production theme.
+- Five theme palettes: optional source for future themes; start with one default production layout.
+- Default layout direction: Tactical/Connect hybrid.

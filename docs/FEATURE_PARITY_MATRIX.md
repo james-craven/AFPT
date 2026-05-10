@@ -52,9 +52,11 @@ Status values during planning:
 | Real PFRA scoring data | `standards/af-pfra-2026.json`, `standards/extracted/tables/*.json` | Data layer unchanged | Planned | `tools/validate-pfra-tables.mjs` |
 | Browser regression suite | `tools/browser-regression.mjs` | Updated selectors as UI changes | Planned | `npm test` |
 | Theme selector | Mock `ThemeSwitcher`, `THEMES` | Settings/footer theme row | Optional | Browser test after implementation |
+| Themeable single layout | Full mock layout set | Tactical/Connect hybrid default | Planned | Visual/browser checks after each phase |
 | Settings button | Mock header settings concept | Header settings drawer | Planned | Browser test opens/closes settings |
 | Donation/support link | Not currently implemented | Settings/about section | Optional | Manual link check if added |
 | iOS/Android frame toggle | Mock `FrameToggle`, device frames | None in production | Mock-only | Not Applicable |
 | Design canvas/artboards | `design-canvas.jsx` | None in production | Mock-only | Not Applicable |
 | Mock seed data | `AFPT_DATA` | None in production | Mock-only | Not Applicable |
 | React/Babel/CDN runtime | Mock HTML scripts | None in production | Mock-only | Not Applicable |
+| Layout-per-theme switching | Mock `UnifiedArtboard`, `ThemeSwitcher` | None in production | Mock-only | Not Applicable |

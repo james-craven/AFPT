@@ -107,3 +107,16 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
   - `docs/UI_TEST_PLAN.md`
 - Documented that the uploaded mock HTML references `mocks/mock-tactical.jsx`, `mocks/mock-stencil.jsx`, `mocks/mock-blues.jsx`, `mocks/mock-light.jsx`, and `mocks/mock-fitness.jsx`, but those files were not present in Downloads.
 - Captured visual-only/demo-only mock pieces that should not be copied into production: React/CDN runtime, Babel-in-browser, design canvas, device frames, frame toggle, mock seed scoring data, and generated stub chart rows.
+
+### UI Redesign Mock Completion
+
+- Reviewed the newly provided concrete mock layouts:
+  - `/Users/jamescraven/Downloads/mock-tactical.jsx`
+  - `/Users/jamescraven/Downloads/mock-stencil.jsx`
+  - `/Users/jamescraven/Downloads/mock-blues.jsx`
+  - `/Users/jamescraven/Downloads/mock-light.jsx`
+  - `/Users/jamescraven/Downloads/mock-fitness.jsx`
+- Removed the planning caveat about missing `mocks/mock-*.jsx` files.
+- Updated the mock implementation map with per-layout takeaways.
+- Recommended a Tactical/Connect hybrid for the production redesign: Tactical information density with the quieter Connect Light visual finish.
+- Reaffirmed that production theme switching should change CSS variables only, not swap entire layouts.
