@@ -708,7 +708,6 @@ section {
 /* Shared app-column layout contract — all primary card/section elements
    match the score header's max-width and centering so the page reads as
    a single column on desktop rather than a mix of narrow and full-width sections. */
-#strength-card,
 .situp-txt,
 .sit-sel-chart,
 .sit-slide,
@@ -829,6 +828,35 @@ body:not(.pfra-mode) .component-summary-card__score {
 }
 
 .component-editor[hidden] {
+    display: none;
+}
+
+.component-editor__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0 0 0.5rem 0;
+    border-bottom: 1px solid var(--afpt-border);
+    margin-bottom: 0.5rem;
+}
+
+.component-editor__title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--afpt-ink-dim);
+}
+
+.component-editor__pfra-score {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--afpt-accent-2);
+    white-space: nowrap;
+}
+
+body:not(.pfra-mode) .component-editor__pfra-score {
     display: none;
 }
 
@@ -1907,33 +1935,34 @@ body:not(.pfra-mode) .strength-card__score {
     overflow: hidden;
 }
 
-/* Token-scoped overrides for legacy inner sections inside strength-card */
-#strength-card .strength-txt {
+/* Token-scoped overrides for legacy inner sections inside strength-editor */
+#strength-editor .strength-txt {
     border-top: 1px solid var(--afpt-border);
+    margin-top: 0.25rem;
 }
 
-#strength-card .strength-txt-p,
-#strength-card .sit-txt-p {
+#strength-editor .strength-txt-p,
+#strength-editor .sit-txt-p {
     color: var(--afpt-ink);
 }
 
-#strength-card .push-slide {
+#strength-editor .push-slide {
     border-bottom: 1px solid var(--afpt-border);
 }
 
-#strength-card .pushsit-see-chart-btn a {
+#strength-editor .pushsit-see-chart-btn a {
     color: var(--afpt-accent);
 }
 
-#strength-card .pushsit-see-chart-btn button,
-#strength-card #push-btn {
+#strength-editor .pushsit-see-chart-btn button,
+#strength-editor #push-btn {
     background: transparent;
     border: 1px solid var(--afpt-accent);
     color: var(--afpt-accent);
 }
 
-#strength-card .pushsit-see-chart-btn button:hover,
-#strength-card #push-btn:hover {
+#strength-editor .pushsit-see-chart-btn button:hover,
+#strength-editor #push-btn:hover {
     background: var(--afpt-accent);
     color: var(--afpt-bg);
 }

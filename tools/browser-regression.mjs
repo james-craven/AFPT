@@ -459,13 +459,12 @@ async function assertComponentSummaryStrip(page) {
 
 async function strengthCardState(page) {
   return page.evaluate(() => {
-    const card = document.getElementById('strength-card');
+    const editor = document.getElementById('strength-editor');
     const pushSel = document.getElementById('push-sel');
     const pushTxt = document.getElementById('push-txt');
     const strengthScore = document.getElementById('pfra-strength-score');
     return {
-      cardVariant: card?.dataset.cardVariant,
-      className: card?.className,
+      editorPresent: !!editor,
       pushEvent: pushSel?.value,
       pushValue: pushTxt?.value,
       strengthScoreText: strengthScore?.textContent.trim(),
@@ -489,17 +488,17 @@ async function bodyCompositionCardState(page) {
 }
 
 async function assertStrengthCard(page) {
-  await page.waitForFunction(() => document.getElementById('strength-card'));
+  await page.waitForFunction(() => document.getElementById('strength-editor'));
 
   const state = await strengthCardState(page);
-  assert.ok(state.cardVariant, 'strength-card has a variant applied');
+  assert.ok(state.editorPresent, 'strength-editor is in the DOM');
 
   // strength score visible in PFRA mode
   const scoreVisible = await page.evaluate(() => {
-    const score = document.querySelector('.strength-card__score');
+    const score = document.querySelector('.component-editor__pfra-score');
     return score ? getComputedStyle(score).display !== 'none' : false;
   });
-  assert.equal(scoreVisible, true, 'strength card score visible in PFRA mode');
+  assert.equal(scoreVisible, true, 'strength editor pfra score visible in PFRA mode');
 
   // exemption: select Exempt, verify score shows EXEMPT
   await page.locator('#push-sel').selectOption('Exempt');
@@ -686,12 +685,6 @@ async function assertThemeFoundation(page, nextPreset) {
   assert.notEqual(bodyCardAfter.className, bodyCardBefore.className, 'theme switch changes body composition card presentation');
   assert.equal(strengthAfter.pushEvent, strengthBefore.pushEvent, 'theme switch preserves strength event');
   assert.equal(strengthAfter.pushValue, strengthBefore.pushValue, 'theme switch preserves strength input value');
-  const expectedStrengthVariant = await page.evaluate(
-    (presetId) => window.afptTheme.resolveThemePreset(presetId).variants.strengthCard,
-    nextPreset,
-  );
-  assert.equal(strengthAfter.cardVariant, expectedStrengthVariant, 'theme switch applies preset strength card variant');
-  assert.notEqual(strengthAfter.className, strengthBefore.className, 'theme switch changes strength card presentation');
   const stripAfter = await componentEditorState(page);
   const expectedStripVariant = await page.evaluate(
     (presetId) => window.afptTheme.resolveThemePreset(presetId).variants.componentSummaryStrip,
@@ -734,16 +727,16 @@ async function assertDesktopCardAlignment(page) {
     const rect = (sel) => document.querySelector(sel)?.getBoundingClientRect().width ?? null;
     return {
       scoreHeader: rect('#score-header'),
-      strengthCard: rect('#strength-card'),
+      componentEditor: rect('#active-component-editor'),
       topBar: rect('.info-section'),
     };
   });
-  const { scoreHeader, strengthCard, topBar } = widths;
+  const { scoreHeader, componentEditor, topBar } = widths;
   assert.ok(scoreHeader !== null, 'score header is in the DOM');
-  assert.ok(strengthCard !== null, 'strength card is in the DOM');
+  assert.ok(componentEditor !== null, 'active component editor is in the DOM');
   assert.ok(
-    Math.abs(scoreHeader - strengthCard) < 40,
-    `desktop card widths are aligned: score-header=${scoreHeader?.toFixed(0)}px strength-card=${strengthCard?.toFixed(0)}px (delta must be <40px)`,
+    Math.abs(scoreHeader - componentEditor) < 40,
+    `desktop card widths are aligned: score-header=${scoreHeader?.toFixed(0)}px component-editor=${componentEditor?.toFixed(0)}px (delta must be <40px)`,
   );
   if (topBar !== null) {
     assert.ok(

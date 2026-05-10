@@ -25,7 +25,7 @@
 - [x] Settings hub placement fix: identified CSS containing-block bug (`transform` on `.info-section` made it the containing block for the fixed panel); fixed with `right: 0`.
 - [x] Component editor Phase A: `#component-summary-strip` with PUSH/CORE/RUN buttons, selection state, `src/ui/component-editor.mjs`, variant system wiring.
 - [x] Component editor Phase B: `#active-component-editor` container with three empty editor panels (`#strength-editor`, `#core-editor`, `#cardio-editor`); panel switching via `selectComponent()`.
-- [ ] Component editor Phase C: move strength controls (`#push-sel`, `#push-txt`, `#push-slider`, `#push-tick`, `#push-btn`) into `#strength-editor`; remove `#strength-card` wrapper.
+- [x] Component editor Phase C: move strength controls (`#push-sel`, `#push-txt`, `#push-slider`, `#push-tick`, `#push-btn`) into `#strength-editor`; remove `#strength-card` wrapper.
 - [ ] Component editor Phase D: move core controls into `#core-editor`.
 - [ ] Component editor Phase E: move cardio controls into `#cardio-editor`.
 - [ ] Component editor Phase F: component switching hides non-selected editors (already wired; verify values survive switching).

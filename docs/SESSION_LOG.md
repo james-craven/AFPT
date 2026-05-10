@@ -262,3 +262,16 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added foundation styling hooks for `light-chart-drawer`, `tactical-drawer`, `stencil-drawer`, `blues-chart-drawer`, and `fitness-glass-chart`.
 - Kept chart data as the existing image assets; no chart images were converted to structured tables.
 - Updated browser regression coverage for run altitude, walk/shuttle altitude, shuttle score, strength, core, and cardio chart shortcuts plus close-by-button, close-by-Escape, and close-by-scrim behavior.
+
+## Component Editor Phase C — Strength controls into #strength-editor
+
+- Moved all real strength controls (`.strength-txt`, `.push-sel-chart`, `.push-slide` with `#push-sel`, `#push-txt`, `#push-slider`, `#push-tick`, `#push-btn`, `#push-txt-p`, `.hrpush-txt`) out of the old `#strength-card` wrapper and into `#strength-editor`.
+- Added a `.component-editor__header` header row inside `#strength-editor` with `component-editor__title` ("PUSH") and `component-editor__pfra-score` (`#pfra-strength-score`).
+- Removed the entire `#strength-card` div from `index.html`.
+- Removed the `strength-card.mjs` script tag from `index.html` (file retained on disk for service-worker cache count stability).
+- Removed `#strength-card` from the shared app-column sizing rule in `style.css` (`.active-component-editor` already carries app-column sizing from Phase B).
+- Added `.component-editor__header`, `.component-editor__title`, `.component-editor__pfra-score` CSS with token-based values.
+- Added `body:not(.pfra-mode) .component-editor__pfra-score { display: none }` to preserve PFRA-mode-only score display.
+- Updated token-scoped overrides from `#strength-card .strength-txt` etc. to `#strength-editor .strength-txt` etc.; kept `.strength-card` variant CSS in style.css (slot still registered).
+- Updated `browser-regression.mjs`: `strengthCardState()` now reads from `#strength-editor`; `assertStrengthCard()` targets `#strength-editor` and `.component-editor__pfra-score`; `assertThemeFoundation()` removes strength card variant assertions; `assertDesktopCardAlignment()` uses `#active-component-editor`.
+- All tests pass: 98 PFRA fixtures, SW build (84 files), PWA cache (28 required assets), browser regressions.
