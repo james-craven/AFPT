@@ -14,6 +14,7 @@ const requiredAssets = [
   'src/pfra/standards.mjs',
   'src/pfra/ui.mjs',
   'src/ui/layout-variants.mjs',
+  'src/ui/settings-hub.mjs',
   'src/ui/theme-controller.mjs',
   'pwa.js',
   'manifest.webmanifest',

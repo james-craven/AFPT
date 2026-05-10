@@ -12,7 +12,7 @@
                        is also available. Based on dafman 36-2905 this AF Fitness Calculator is the one stop shop to calculate AF PT Test scores."/>
         <link rel="apple-touch-icon" href="./icon-144x144.png">
         <link rel="icon" href="./icon-144x144.png">
-        <link rel="stylesheet" type="text/css" href="./style.css?v=20260509-offline-pwa">
+        <link rel="stylesheet" type="text/css" href="./style.css?v=20260510-settings-hub">
         <link rel="manifest" href="./manifest.webmanifest">
       </head>
 <body data-theme="tactical" data-theme-preset="tactical">
@@ -59,30 +59,51 @@
         <div class="info-section-wrapper">
             <section class="info-section">
                 <div class="logo">AFPTCalc</div>
-                <input id="menu-toggle" type="checkbox" />
-                <label class="menu-btn-container" for="menu-toggle" aria-label="Toggle menu">
-                    <span class="menu-button"></span>
-                </label>
-                <ul class="menu" id="menu">
-                    <li id="run-adjust-chart">See Run Altitude Adjustment Chart</li>
-                    <li id="walk-adjust-chart">See Walk/Shuttle Altitude Adjustment Chart</li>
-                    <li id="shuttle-score-card">See Shuttle Score Card</li>
-                    <li id="shuttle-audio-menu">Show Shuttle Audio</li>
-                    <li id="shuttle-audio-player" style="visibility:hidden"> <audio crossorigin="anonymous" preload="metadata" src="./shuttle.mp3" controls="controls" id="shuttle-audio-control">
-                        Your browser does not support the audio element.
-                        </audio>
-                    </li>
-                    <li class="theme-menu-item">
-                        <label for="theme-preset-select">Theme Preset</label>
-                        <select id="theme-preset-select" aria-label="Theme preset">
-                            <option value="tactical">Tactical HUD</option>
-                            <option value="stencil">Stencil Ops</option>
-                            <option value="blues">AF Dress Blues</option>
-                            <option value="light">Connect Light</option>
-                            <option value="fitness">Fitness Gradient</option>
-                        </select>
-                    </li>
-                </ul>
+                <div class="settings-hub" data-settings-hub>
+                    <button id="settings-hub-toggle" class="settings-hub-toggle" type="button" aria-label="Open controls" aria-expanded="false" aria-controls="settings-hub-panel">
+                        <span class="settings-hub-icon" aria-hidden="true">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </button>
+                    <button id="settings-hub-scrim" class="settings-hub-scrim" type="button" aria-label="Close controls" hidden></button>
+                    <aside id="settings-hub-panel" class="settings-hub-panel" role="dialog" aria-labelledby="settings-hub-title" hidden>
+                        <div class="settings-hub-header">
+                            <h2 id="settings-hub-title">Controls</h2>
+                            <button id="settings-hub-close" class="settings-hub-close" type="button">Close</button>
+                        </div>
+                        <section class="settings-hub-section">
+                            <h3>Appearance</h3>
+                            <label class="theme-menu-item" for="theme-preset-select">
+                                <span>Theme Preset</span>
+                                <select id="theme-preset-select" aria-label="Theme preset">
+                                    <option value="tactical">Tactical HUD</option>
+                                    <option value="stencil">Stencil Ops</option>
+                                    <option value="blues">AF Dress Blues</option>
+                                    <option value="light">Connect Light</option>
+                                    <option value="fitness">Fitness Gradient</option>
+                                </select>
+                            </label>
+                        </section>
+                        <section class="settings-hub-section">
+                            <h3>References</h3>
+                            <ul class="menu settings-menu" id="menu" aria-label="Reference and offline controls">
+                                <li id="install-app-menu" role="button" tabindex="0">Install App For Offline Use</li>
+                                <li id="pwa-update-check" role="button" tabindex="0">Check Offline Update</li>
+                                <li id="dev-version-menu" role="button" tabindex="0">Show Build Info</li>
+                                <li id="run-adjust-chart" role="button" tabindex="0">Run Altitude Adjustment</li>
+                                <li id="walk-adjust-chart" role="button" tabindex="0">Walk/Shuttle Altitude Adjustment</li>
+                                <li id="shuttle-score-card" role="button" tabindex="0">Shuttle Score Card</li>
+                                <li id="shuttle-audio-menu" role="button" tabindex="0">Show Shuttle Audio</li>
+                                <li id="shuttle-audio-player" class="settings-audio-player" style="visibility:hidden"> <audio crossorigin="anonymous" preload="metadata" src="./shuttle.mp3" controls="controls" id="shuttle-audio-control">
+                                    Your browser does not support the audio element.
+                                    </audio>
+                                </li>
+                            </ul>
+                        </section>
+                    </aside>
+                </div>
             </section>
         </div>
         <p id="score-txt">Total Score: 60.0<br>
@@ -347,9 +368,10 @@
 
     <button onclick="alert(`Is Bright!`)">The Future</button> -->
 
-    <script src="./main2.js?v=20260509-offline-pwa"></script>
+    <script src="./main2.js?v=20260510-settings-hub"></script>
     <script src="./pfra-calculator.js?v=20260509-offline-pwa"></script>
+    <script type="module" src="./src/ui/settings-hub.mjs?v=20260510-settings-hub"></script>
     <script type="module" src="./src/ui/theme-controller.mjs?v=20260510-theme-foundation"></script>
-    <script src="./pwa.js?v=20260509-offline-pwa"></script>
+    <script src="./pwa.js?v=20260510-settings-hub"></script>
 </body>
 </html>

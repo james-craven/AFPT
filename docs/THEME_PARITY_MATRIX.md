@@ -31,6 +31,8 @@ Every theme preset must expose the same calculator capabilities, even when the p
 | AF Dress Blues | Planned | Add after score-ring accessibility is tested |
 | Fitness Gradient | Planned | Add after contrast/readability checks |
 
+Settings foundation status: the shared `settingsPanel` foundation is implemented through `src/ui/settings-hub.mjs` and is currently shared across all presets. Theme-specific settings panel variants are still planned.
+
 ## Required Cross-Theme Tests
 
 - Switching themes does not change selected sex, age, standard, events, performance values, exemptions, or score results.

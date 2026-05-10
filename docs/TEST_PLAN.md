@@ -21,6 +21,9 @@ node -c src/pfra/scoring.mjs
 node -c src/pfra/standards.mjs
 node -c src/pfra/state.mjs
 node -c src/pfra/ui.mjs
+node -c src/ui/layout-variants.mjs
+node -c src/ui/settings-hub.mjs
+node -c src/ui/theme-controller.mjs
 node -c tools/browser-regression.mjs
 ```
 
@@ -41,7 +44,7 @@ node -c tools/browser-regression.mjs
   - Checks legacy default scoring text.
   - Checks PFRA mode labels, slider ranges, text entry, age changes, and cardio switching.
   - Checks minimum tick click behavior.
-  - Checks hamburger menu hit area.
+  - Checks settings/control hub touch target, open/close behavior, and preserved reference controls.
   - Checks offline reload with the service worker.
 
 ## Manual Smoke Checks

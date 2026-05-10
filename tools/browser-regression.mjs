@@ -182,35 +182,77 @@ async function assertNoBrowserFailures(failures, label) {
   assert.deepEqual(failures, [], `${label} browser errors`);
 }
 
-async function assertHamburgerHitArea(page) {
-  const buttonBox = await page.locator('.menu-btn-container').boundingBox();
-  assert.ok(buttonBox, 'hamburger button has a click target');
+async function openSettingsHub(page) {
+  const panel = page.locator('#settings-hub-panel');
+  if (await panel.isHidden()) {
+    await page.locator('#settings-hub-toggle').click();
+  }
+  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+}
 
+async function closeSettingsHub(page) {
+  const panel = page.locator('#settings-hub-panel');
+  if (await panel.isVisible()) {
+    await page.locator('#settings-hub-close').click();
+  }
+  await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
+}
+
+async function assertSettingsHubParity(page) {
+  const buttonBox = await page.locator('#settings-hub-toggle').boundingBox();
+  assert.ok(buttonBox, 'settings hub button has a click target');
+  assert.ok(buttonBox.width >= 44, 'settings hub button is at least 44px wide');
+  assert.ok(buttonBox.height >= 44, 'settings hub button is at least 44px tall');
+
+  const scoreBefore = await text(page, '#run-txt-p');
+  const sliderBefore = await inputValue(page, '#run-slider');
   const x = buttonBox.x + (buttonBox.width / 2);
   const y = buttonBox.y + buttonBox.height - 4;
-  await page.mouse.click(x, y);
-  assert.equal(await page.locator('#menu-toggle').isChecked(), true, 'hamburger lower hit area opens the menu');
 
   await page.mouse.click(x, y);
-  assert.equal(await page.locator('#menu-toggle').isChecked(), false, 'hamburger lower hit area closes the menu');
+  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+  assert.equal(await page.locator('#settings-hub-toggle').getAttribute('aria-expanded'), 'true');
+  assert.equal(await text(page, '#run-txt-p'), scoreBefore, 'opening settings preserves score text');
+  assert.equal(await inputValue(page, '#run-slider'), sliderBefore, 'opening settings preserves slider value');
+
+  await page.locator('#run-adjust-chart').click();
+  await page.waitForFunction(() => {
+    const modal = document.getElementById('modal');
+    const image = document.getElementById('modal-img');
+    return modal && !modal.hasAttribute('hidden') && image?.src.includes('runAltitudeAdjust.webp');
+  });
+  await page.locator('#close-btn').click();
+
+  await openSettingsHub(page);
+  await page.locator('#shuttle-audio-menu').click();
+  await page.waitForFunction(() => getComputedStyle(document.getElementById('shuttle-audio-player')).display !== 'none');
+  assert.match(
+    await page.locator('#shuttle-audio-control').getAttribute('src'),
+    /shuttle\.mp3$/,
+    'shuttle audio remains reachable from settings',
+  );
+
+  assert.equal(await page.locator('#install-app-menu').count(), 1, 'install control is present');
+  assert.equal(await page.locator('#pwa-update-check').count(), 1, 'PWA update check is present');
+  assert.equal(await page.evaluate(() => typeof window.afptPwa?.checkForUpdates), 'function', 'PWA update API is exposed');
+  assert.equal(await page.locator('#dev-version-menu').count(), 1, 'build info control is present');
+
+  await closeSettingsHub(page);
+  assert.equal(await page.locator('#settings-hub-toggle').getAttribute('aria-expanded'), 'false');
+  assert.equal(await text(page, '#run-txt-p'), scoreBefore, 'closing settings preserves score text');
+  assert.equal(await inputValue(page, '#run-slider'), sliderBefore, 'closing settings preserves slider value');
 }
 
 async function setThemePreset(page, preset) {
   await page.waitForFunction(() => window.afptTheme && document.getElementById('theme-preset-select'));
-
-  if (!(await page.locator('#menu-toggle').isChecked())) {
-    await page.locator('.menu-btn-container').click();
-  }
+  await openSettingsHub(page);
 
   await page.locator('#theme-preset-select').selectOption(preset);
   await page.waitForFunction(
     (expectedPreset) => document.documentElement.dataset.themePreset === expectedPreset,
     preset,
   );
-
-  if (await page.locator('#menu-toggle').isChecked()) {
-    await page.locator('.menu-btn-container').click();
-  }
+  await closeSettingsHub(page);
 }
 
 async function assertThemeFoundation(page, nextPreset) {
@@ -259,7 +301,7 @@ async function assertThemeFoundation(page, nextPreset) {
 async function runLegacyRegression(browser, baseUrl, label, contextOptions = {}) {
   const { context, failures, page } = await newPage(browser, baseUrl, `?no-sw=1&qa=legacy-regression-${label}`, contextOptions);
 
-  await assertHamburgerHitArea(page);
+  await assertSettingsHubParity(page);
 
   assert.equal(await inputValue(page, '#run-slider'), '1136');
   assert.equal(await text(page, '#run-txt-p'), 'Run Score: 35 | Min: 18:56 | Max: 10:23');

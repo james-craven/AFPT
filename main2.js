@@ -4882,8 +4882,11 @@ const isIos = () => {
 }
 
 const menu = document.getElementById('menu');
-const li = document.createElement('li');
+const li = document.getElementById('install-app-menu') || document.createElement('li');
+li.id = 'install-app-menu';
 li.innerText = "Install App For Offline Use";
+li.setAttribute('role', 'button');
+li.setAttribute('tabindex', '0');
 li.addEventListener('click', installApp);
 
 function installApp() {
@@ -4923,6 +4926,14 @@ function addInstallMenuItem() {
     menu.insertBefore(li, menu.firstElementChild);
   }
 }
+
+document.getElementById('pwa-update-check')?.addEventListener('click', () => {
+  Promise.resolve(window.afptPwa?.checkForUpdates?.()).catch(() => {});
+});
+
+document.getElementById('dev-version-menu')?.addEventListener('click', () => {
+  showDevVersionModal();
+});
 
 window.addEventListener("beforeinstallprompt", e => {
   console.log("beforeinstallprompt fired");

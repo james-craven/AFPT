@@ -26,7 +26,8 @@ This currently validates:
 
 Existing browser tests in `tools/browser-regression.mjs` must continue to cover:
 
-- Hamburger/settings hit area.
+- Settings/control hub hit area, open/close behavior, and score-state invariance.
+- Settings/control hub reference controls for run altitude chart, shuttle audio, install, PWA update, and build info access.
 - Theme foundation loads the default preset and resolves every registered preset with slot-compatible variants.
 - Theme switching preserves current score text and slider value.
 - Legacy default run score.

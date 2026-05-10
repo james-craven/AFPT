@@ -64,7 +64,7 @@ Themes are presets. Variants are renderers for slots. User customization later o
 | Slider + field controls | Existing range and text inputs | Render through input-control variants; preserve synchronization and min tick behavior |
 | Run timing/lap display | `#run-lap-times` legacy 6-lap and PFRA 8-lap renderers | Render same normalized lap data through selected `lapDisplay` variant |
 | Score chart drawer | Current chart modal and mock `ChartDrawer` | Render through `chartDisplay`; initially reuse existing chart image assets |
-| Settings button | Mock header gear | Render selected `settingsPanel`; include real install/audio/update/dev controls |
+| Settings button | Mock header gear | Shared settings hub now preserves real install/audio/update/dev controls; theme-specific `settingsPanel` variants come later |
 | Legacy/PFRA switching | Current standards selector | Keep as production mode control, not a visual theme |
 | PWA/offline support | Current service worker and manifest | Leave runtime behavior unchanged; restyle prompts only after tests pass |
 

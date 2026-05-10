@@ -59,6 +59,8 @@ Create one production shell that:
 
 Done when the shell loads and existing browser regressions still pass.
 
+Settings/control hub foundation status: the old hamburger checkbox pattern has been replaced by a shared settings drawer while preserving current reference, install, update, build-info, audio, and theme controls. Theme-specific settings panel variants still come later.
+
 ## Phase 4: First Presets
 
 Implement the Tactical and Connect Light presets first:

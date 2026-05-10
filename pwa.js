@@ -7,6 +7,7 @@
   const disableServiceWorker = params.get('no-sw') === '1';
   let refreshing = false;
   let reloadOnControllerChange = false;
+  let activeRegistration = null;
   let updateRegistration = null;
 
   function shouldEnableServiceWorker() {
@@ -77,6 +78,7 @@
     }
 
     const registration = await navigator.serviceWorker.register(swPath);
+    activeRegistration = registration;
     watchForWaitingWorker(registration);
 
     if (navigator.onLine) {
@@ -93,6 +95,19 @@
       }
     });
   }
+
+  async function checkForUpdates() {
+    if (!activeRegistration || !navigator.onLine) {
+      return { checked: false };
+    }
+
+    await activeRegistration.update();
+    return { checked: true };
+  }
+
+  window.afptPwa = Object.freeze({
+    checkForUpdates,
+  });
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('controllerchange', () => {

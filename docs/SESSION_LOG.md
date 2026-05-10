@@ -138,3 +138,12 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added CSS token definitions for the five presets while keeping the current layout and calculator controls intact.
 - Updated Workbox and PWA cache validation so the new UI modules are available offline.
 - Updated browser regression coverage to verify default theme load, preset registry validity, slot-compatible variants, preset persistence, and score/slider invariance after theme switching.
+
+### Settings Hub Foundation
+
+- Replaced the visible hamburger checkbox pattern with a shared settings/control hub in the fixed header.
+- Preserved existing menu function IDs for run altitude, walk/shuttle altitude, shuttle score card, shuttle audio, and install behavior so current `main2.js` handlers remain authoritative.
+- Moved the Phase 1 theme preset selector into the settings hub.
+- Added settings access for build info and a manual PWA update check without changing service-worker update modal behavior.
+- Added `src/ui/settings-hub.mjs` for open/close, overlay, Escape key, keyboard activation, and action-close behavior.
+- Updated browser regression coverage for settings touch target size, open/close behavior, score/slider invariance, run altitude chart access, shuttle audio access, install control, PWA update control/API, and build-info control.

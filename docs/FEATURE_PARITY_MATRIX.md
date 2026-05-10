@@ -21,14 +21,14 @@ Status values during planning:
 | Standard selector | `#standards-mode` | Header demographic controls | Planned | Browser test validates option text and behavior |
 | Score total | `#score-txt`, `updateScoreMinMaxText`, `renderPfraMainScore` | Score-first header | Planned | Browser test validates legacy and PFRA totals |
 | Status text/badge | `#score-txt`, category logic | Header badge near score | Planned | Browser test checks Excellent/Satisfactory/Unsatisfactory |
-| Development build timestamp modal | `#dev-version-modal`, `main2.js` | Settings/debug panel | Planned | Manual or browser test with local/dev flag |
-| PWA update modal | `#pwa-update-modal`, `pwa.js` | Settings/update prompt or modal | Planned | Browser/PWA update smoke test |
-| Install prompt modal | `#install-modal`, `beforeinstallprompt`, `installApp` | Settings/install affordance | Planned | Manual install prompt check |
-| Hamburger/menu access | `#menu-toggle`, `.menu`, `main2.js` | Settings button/drawer | Planned | Browser test for click target and menu controls |
-| Run altitude adjustment chart | `#run-adjust-chart`, chart image modal | Score chart drawer/settings chart link | Planned | Browser test opens drawer/image |
-| Walk/shuttle altitude adjustment chart | `#walk-adjust-chart`, chart image modal | Score chart drawer/settings chart link | Planned | Browser test opens drawer/image |
-| Shuttle score card | `#shuttle-score-card`, chart image modal | Score chart drawer/settings chart link | Planned | Browser test opens drawer/image |
-| Shuttle audio player | `#shuttle-audio-menu`, `#shuttle-audio-control`, `shuttle.mp3` | Settings/audio drawer section | Planned | Browser test verifies audio element exists and asset is cached |
+| Development build timestamp modal | `#dev-version-modal`, `main2.js` | Settings/debug panel | Implemented | Browser test verifies control exists; local/dev modal still loads |
+| PWA update modal | `#pwa-update-modal`, `pwa.js`, `window.afptPwa` | Settings update check plus existing modal | Implemented | Browser test verifies update control/API; offline regression still passes |
+| Install prompt modal | `#install-modal`, `beforeinstallprompt`, `installApp` | Settings install affordance | Implemented | Browser test verifies install control exists; manual install prompt check |
+| Hamburger/menu access | `#settings-hub-toggle`, `#settings-hub-panel`, `.settings-menu`, `main2.js` | Settings button/drawer | Implemented | Browser test for touch target, open/close, and menu controls |
+| Run altitude adjustment chart | `#run-adjust-chart`, chart image modal | Settings reference link, later score chart drawer | Implemented | Browser test opens modal/image |
+| Walk/shuttle altitude adjustment chart | `#walk-adjust-chart`, chart image modal | Settings reference link, later score chart drawer | Implemented | Existing DOM handler preserved; expand browser coverage later |
+| Shuttle score card | `#shuttle-score-card`, chart image modal | Settings reference link, later score chart drawer | Implemented | Existing DOM handler preserved; expand browser coverage later |
+| Shuttle audio player | `#shuttle-audio-menu`, `#shuttle-audio-control`, `shuttle.mp3` | Settings/audio section | Implemented | Browser test verifies audio element exists and asset is cached |
 | Component chart modal | `#modal`, `#modal-img`, `#push-btn`, `#sit-btn`, `#run-btn` | Component score chart drawer | Planned | Browser test opens chart for strength/core/cardio |
 | Strength event selection | `#push-sel`, `#pfra-strength-event` | Strength component card | Planned | Browser test switches Push-up/Hand-release/Exempt |
 | Strength input | `#push-txt`, `#push-slider`, min tick | Strength component card controls | Planned | Browser test for text, slider, min tick, score updates |
@@ -57,11 +57,11 @@ Status values during planning:
 | Layout slot registry | `src/ui/layout-variants.mjs` | `appShell`, `scoreHeader`, cards, lap, chart, settings slots | Implemented | Registry validation and browser tests |
 | Variant registry | `src/ui/layout-variants.mjs` | Slot-scoped renderer registry | Implemented | Registered variants resolve for all presets |
 | Theme preset registry | `src/ui/layout-variants.mjs` | Presets choose slot variants | Implemented | Switching presets preserves score/state |
-| Theme selector | `src/ui/theme-controller.mjs`, `#theme-preset-select` | Current menu preset selector | Implemented | Browser test after implementation |
+| Theme selector | `src/ui/theme-controller.mjs`, `#theme-preset-select` | Settings/control hub preset selector | Implemented | Browser test after implementation |
 | Theme presets expose required features | Full mock layout set | Tactical, Stencil, Blues, Light, Fitness presets | Planned | `docs/THEME_PARITY_MATRIX.md` plus browser tests |
 | Variant behavior parity | New variant system | All variants for a slot | Planned | Variant swap does not alter scoring or hide required controls |
 | User layout overrides | Future customization | Settings customization panel | Later | Dev variant picker first, then persistence tests |
-| Settings button | Mock header settings concept | Header settings drawer | Planned | Browser test opens/closes settings |
+| Settings button | `src/ui/settings-hub.mjs`, mock header settings concept | Header settings drawer | Implemented | Browser test opens/closes settings |
 | Donation/support link | Not currently implemented | Settings/about section | Optional | Manual link check if added |
 | iOS/Android frame toggle | Mock `FrameToggle`, device frames | None in production | Mock-only | Not Applicable |
 | Design canvas/artboards | `design-canvas.jsx` | None in production | Mock-only | Not Applicable |
