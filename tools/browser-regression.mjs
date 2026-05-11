@@ -589,6 +589,53 @@ async function assertCardioEditor(page) {
   await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
 }
 
+async function assertAltitudeAdjustment(page) {
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('cardio'));
+  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  await setControlValue(page, '#alt-select', 'Altitude Adjust', 'change');
+  await page.locator('#cardio-sel').selectOption('1.5 Mile');
+  await setControlValue(page, '#run-slider', 1523, 'input');
+  await page.waitForTimeout(100);
+
+  const runTextSeaLevel = await text(page, '#run-txt-p');
+  assert.match(runTextSeaLevel, /Cardio Score: 35/, 'run score is 35 at slider max before altitude');
+
+  const bodyTextBefore = await text(page, '#pfra-body-score');
+  const strengthTextBefore = await text(page, '#push-txt-p');
+
+  // Group 4 corrects 1523s by 62s → 1461s, which must score higher than 35
+  await setControlValue(page, '#alt-select', 'Group 4 (>6600ft)', 'change');
+  await page.waitForTimeout(100);
+  const runTextGroup4 = await text(page, '#run-txt-p');
+  assert.notEqual(runTextGroup4, runTextSeaLevel, 'altitude Group 4 changes run score');
+  assert.match(runTextGroup4, /Cardio Score:/, 'run score text valid after altitude Group 4');
+  assert.equal(await text(page, '#pfra-body-score'), bodyTextBefore, 'body score unaffected by altitude');
+  assert.equal(await text(page, '#push-txt-p'), strengthTextBefore, 'strength score unaffected by altitude');
+
+  await setControlValue(page, '#alt-select', 'Altitude Adjust', 'change');
+  await page.waitForTimeout(100);
+  assert.equal(await text(page, '#run-txt-p'), runTextSeaLevel, 'restoring sea level reverts run score');
+
+  await page.locator('#cardio-sel').selectOption('Shuttle Run');
+  await page.waitForTimeout(100);
+  await setControlValue(page, '#alt-select', 'Group 4 (>6600ft)', 'change');
+  await page.waitForTimeout(100);
+  assert.match(await text(page, '#run-txt-p'), /Cardio Score:/, 'HAMR score text valid at altitude Group 4');
+  await setControlValue(page, '#alt-select', 'Altitude Adjust', 'change');
+  await page.waitForTimeout(100);
+
+  await page.locator('#cardio-sel').selectOption('Walk');
+  await page.waitForTimeout(100);
+  await setControlValue(page, '#alt-select', 'Group 1 (5250-5499ft)', 'change');
+  await page.waitForTimeout(100);
+  assert.match(await text(page, '#run-txt-p'), /Cardio Score:/, 'walk score text valid at altitude Group 1');
+
+  await setControlValue(page, '#alt-select', 'Altitude Adjust', 'change');
+  await page.locator('#cardio-sel').selectOption('1.5 Mile');
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('strength'));
+  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+}
+
 async function assertBodyCompositionCard(page) {
   await page.waitForFunction(() => document.getElementById('body-composition-card'));
 
@@ -940,6 +987,7 @@ async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
   await assertStrengthCard(page);
   await assertCoreEditor(page);
   await assertCardioEditor(page);
+  await assertAltitudeAdjustment(page);
 
   await page.locator('#push-txt').fill('50');
   await page.locator('#push-tick').click();

@@ -82,7 +82,9 @@ All scoring events are already implemented with extracted tables and fixture tes
 **Altitude adjustment (confirmed required):** DAFMAN 36-2905 Attachment 3 mandates time/shuttle
 adjustments for assessments performed above 5,250 ft. Applies to 2-mile run, 2-km walk, and
 20-meter HAMR. Four altitude bands: 5,250–5,499 ft, 5,500–5,999 ft, 6,000–6,599 ft, ≥6,600 ft.
-This is **not yet implemented** in `src/pfra/scoring.mjs`. See Phase A below.
+**Implemented** — pure functions in `src/pfra/scoring.mjs` (33 fixture tests) and UI wiring in
+`pfra-calculator.js` reads `#alt-select` and applies altitude adjustment to cardio performance
+before scoring. See Phase A (complete) below.
 
 ---
 
@@ -154,7 +156,7 @@ block Phase A or Phase 1. Proceed to Phase A.
 ---
 
 ### Phase A — Implement Altitude Adjustment in PFRA Scoring
-**Status: Not started. Required before Phase 1 removes the legacy altitude path.**
+**Status: COMPLETE (2026-05-11).**
 
 Altitude adjustment is mandated by DAFMAN 36-2905, Attachment 3. It must be implemented in
 the PFRA scoring engine before legacy altitude code (`calculateAltitudeDiff()` in `main2.js`)

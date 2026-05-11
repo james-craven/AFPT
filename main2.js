@@ -4294,8 +4294,10 @@ function calculateAltitudeDiff() {
 }
 altitudeSel.addEventListener('change', () => {
   calculateAltitudeDiff();
-  updateScoreMinMaxText();
-  runSelChange();
+  if (!isPfraModeActive()) {
+    updateScoreMinMaxText();
+    runSelChange();
+  }
 });
 
 function bindSingleTickClick(tick, handler) {

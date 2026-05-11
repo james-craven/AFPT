@@ -39,7 +39,7 @@ Status values during planning:
 | HAMR shuttle input | `#shuttle-txt`, `#run-sectxt`, `#run-slider` | Cardio component card controls | Planned | Browser test for shuttle scoring and min tick |
 | Walk input | `#walk-txt`, `#run-mintxt`, `#run-sectxt` | Cardio component card controls | Planned | Browser test for walk pass/fail |
 | Exemptions | Existing `Exempt` options, legacy total normalization, PFRA exemptions | Component card event menus | Planned | Browser tests for strength/core/cardio exemption totals |
-| Altitude adjustment selector | `#alt-select`, altitude helpers in `main2.js` | Cardio details/settings row | Planned | Browser test for legacy altitude score changes |
+| Altitude adjustment selector | `#alt-select`, `pfra-calculator.js`, altitude tables in `standards/extracted/tables/` | Cardio details/settings row | Implemented | Browser test: Group 4 changes run score, body/strength unaffected, score reverts on restore |
 | Slider pass/fail color | `slider-green`, `slider-red`, PFRA UI helpers | Component card slider state | Planned | Browser test or visual assertion for class changes |
 | Minimum threshold ticks | `#push-tick`, `#sit-tick`, `#run-tick` | Component card slider threshold marker | Planned | Existing browser tick-click tests |
 | PFRA WHtR input | `#pfra-whtr`, `scoreWhtr` | Body composition card | Implemented | Browser test: WHtR visible in PFRA, changes update body/total score, hidden in legacy |

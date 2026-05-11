@@ -19,6 +19,7 @@
   } = pfraState;
   const {
     ageSelect,
+    altitudeSelect,
     body,
     bodyScoreText,
     cardioEvent,
@@ -60,6 +61,7 @@
   } = domModule.getPfraDom();
   let pfraStandards = null;
   let pfraTables = {};
+  let altitudeTables = {};
   let lastStandardsMode = standardsMode?.value || 'legacy';
   let pfraCardioTracksStartingValue = false;
 
@@ -125,6 +127,50 @@
 
   function currentSex() {
     return legacySexToPfraSex(sexSelect.value);
+  }
+
+  function currentAltitudeGroup() {
+    const value = altitudeSelect?.value || '';
+    if (value.startsWith('Group 1')) return 1;
+    if (value.startsWith('Group 2')) return 2;
+    if (value.startsWith('Group 3')) return 3;
+    if (value.startsWith('Group 4')) return 4;
+    return 0;
+  }
+
+  function altitudeAdjustedCardioPerformance(cardioEventValue, rawPerformance, altGroup) {
+    if (!altGroup || altGroup <= 0 || !rawPerformance) return rawPerformance;
+
+    if (cardioEventValue === 'two-mile-run') {
+      if (!altitudeTables.run) return rawPerformance;
+      const perfSec = toSeconds(rawPerformance);
+      if (!Number.isFinite(perfSec)) return rawPerformance;
+      const adjSec = pfraScoring.applyRunAltitudeAdjustment(perfSec, altGroup, altitudeTables.run);
+      return secondsToTimeString(adjSec);
+    }
+
+    if (cardioEventValue === 'hamr-20-meter') {
+      const adjShuttles = pfraScoring.applyHamrAltitudeAdjustment(Number(rawPerformance), altGroup);
+      return String(Math.round(adjShuttles));
+    }
+
+    if (cardioEventValue === 'two-kilometer-walk') {
+      const ageGroup = currentAgeGroup();
+      const sex = currentSex();
+      const walkAgeGroup = pfraScoring.pfraAgeToWalkAgeGroup(ageGroup);
+      const walkTable = sex === 'male' ? altitudeTables.walkMale : altitudeTables.walkFemale;
+      if (!walkTable) return rawPerformance;
+      const altMaxTime = pfraScoring.applyWalkAltitudeAdjustment(walkTable, walkAgeGroup, altGroup);
+      const seaLevelMaxTime = walkMaximumTime(ageGroup, sex);
+      if (!altMaxTime || !seaLevelMaxTime) return rawPerformance;
+      const bonus = toSeconds(altMaxTime) - toSeconds(seaLevelMaxTime);
+      if (!Number.isFinite(bonus) || bonus <= 0) return rawPerformance;
+      const perfSec = toSeconds(rawPerformance);
+      if (!Number.isFinite(perfSec)) return rawPerformance;
+      return secondsToTimeString(Math.max(0, perfSec - bonus));
+    }
+
+    return rawPerformance;
   }
 
   function defaultPerformanceForEvent(eventId) {
@@ -555,6 +601,11 @@
       return;
     }
 
+    const altGroup = currentAltitudeGroup();
+    const adjustedCardioPerformance = !exemptions.cardio
+      ? altitudeAdjustedCardioPerformance(cardioEvent.value, cardioPerformance.value.trim(), altGroup)
+      : cardioPerformance.value.trim();
+
     const result = pfraScoring.scorePfraAssessment({
       ageGroup,
       sex,
@@ -566,7 +617,7 @@
       coreEvent: coreEvent.value,
       corePerformance: corePerformance.value.trim(),
       cardioEvent: cardioEvent.value,
-      cardioPerformance: cardioPerformance.value.trim(),
+      cardioPerformance: adjustedCardioPerformance,
       exemptions,
     });
     const { body: bodyScore, strength: strengthScore, core: coreScore, cardio: cardioScore } = result.scores;
@@ -591,15 +642,21 @@
     if (!pfraStatus) return;
 
     try {
-      const loaded = await loadPfraStandards({
-        cacheBust: true,
-        onProgress: ({ loaded: loadedCount, total }) => {
-          pfraStatus.innerText = `Loading standards... ${loadedCount}/${total}`;
-        },
-      });
+      const [loaded, runTable, walkMaleTable, walkFemaleTable] = await Promise.all([
+        loadPfraStandards({
+          cacheBust: true,
+          onProgress: ({ loaded: loadedCount, total }) => {
+            pfraStatus.innerText = `Loading standards... ${loadedCount}/${total}`;
+          },
+        }),
+        fetch('./standards/extracted/tables/altitude-run-2-mile.json').then((r) => r.json()),
+        fetch('./standards/extracted/tables/altitude-walk-2km-male.json').then((r) => r.json()),
+        fetch('./standards/extracted/tables/altitude-walk-2km-female.json').then((r) => r.json()),
+      ]);
 
       pfraStandards = loaded.standards;
       pfraTables = loaded.tables;
+      altitudeTables = { run: runTable, walkMale: walkMaleTable, walkFemale: walkFemaleTable };
       pfraStatus.innerText = 'Standards loaded from PFRA 2026 tables.';
       syncFromLegacyCalculator();
     } catch (error) {
@@ -619,6 +676,7 @@
     });
 
     standardsMode?.addEventListener('change', standardsModeChange);
+    altitudeSelect?.addEventListener('change', updatePfraCalculator);
 
     [
       legacyPushSelect,

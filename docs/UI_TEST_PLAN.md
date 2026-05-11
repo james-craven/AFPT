@@ -46,6 +46,7 @@ Existing browser tests in `tools/browser-regression.mjs` must continue to cover:
 - PFRA run text entry and slider sync.
 - PFRA age changes preserving edited run values.
 - PFRA -> legacy mode switching.
+- PFRA altitude adjustment: Group 4 changes run score at slider max, body/strength unchanged; score reverts on restore; HAMR score valid at altitude; walk score valid at altitude.
 - Offline reload with standards loaded.
 
 ## Tests To Add During Redesign

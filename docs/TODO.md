@@ -27,6 +27,8 @@
 - [x] Component editor Phase B: `#active-component-editor` container with three empty editor panels (`#strength-editor`, `#core-editor`, `#cardio-editor`); panel switching via `selectComponent()`.
 - [x] Component editor Phase C: move strength controls (`#push-sel`, `#push-txt`, `#push-slider`, `#push-tick`, `#push-btn`) into `#strength-editor`; remove `#strength-card` wrapper.
 - [x] Component editor Phase D: move core controls (`.situp-txt`, `.sit-sel-chart`, `.sit-slide`, `#sit-sel`, `#sit-btn`, `#sit-txt`, `#plankmintxt`, `#sit-slider`, `#sit-tick`) into `#core-editor`; add `component-editor__header` with `#pfra-core-score`; remove old stacked core sections.
+- [x] Altitude adjustment Phase A (pure functions): `getAltitudeGroup`, `applyRunAltitudeAdjustment`, `applyWalkAltitudeAdjustment`, `applyHamrAltitudeAdjustment` in `src/pfra/scoring.mjs`; 33 altitude fixture tests; altitude JSON tables extracted.
+- [x] Altitude adjustment Phase A (UI wiring): `pfra-calculator.js` reads `#alt-select`, loads altitude tables, applies correction to cardio performance before scoring; browser regression tests; legacy `altitudeSel` PFRA-mode guard in `main2.js`.
 - [ ] Component editor Phase E: move cardio controls into `#cardio-editor`.
 - [ ] Component editor Phase F: component switching hides non-selected editors (already wired; verify values survive switching).
 - [ ] Component editor Phase G: live value mirroring in summary cards; add `#pfra-core-score` and `#pfra-cardio-score`.

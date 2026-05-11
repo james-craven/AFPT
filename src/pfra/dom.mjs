@@ -4,6 +4,7 @@ export function getPfraDom(root = document) {
 
   return {
     ageSelect: byId('age-sel'),
+    altitudeSelect: byId('alt-select'),
     body: root.body,
     bodyScoreText: byId('pfra-body-score'),
     cardioEvent: byId('pfra-cardio-event'),

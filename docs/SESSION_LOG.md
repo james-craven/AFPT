@@ -2,6 +2,18 @@
 
 ## 2026-05-11
 
+### Altitude Adjustment Phase A (UI Wiring): Wire #alt-select into PFRA Scoring
+
+- Added `altitudeSelect: byId('alt-select')` to `getPfraDom()` in `src/pfra/dom.mjs`.
+- Added `altitudeTables = {}` module variable, `currentAltitudeGroup()` function, and `altitudeAdjustedCardioPerformance()` function to `pfra-calculator.js`. Adjustment logic: run subtracts correction seconds (lookup from altitude-run-2-mile.json), HAMR adds group shuttles, walk subtracts bonus seconds (sea-level-to-altitude max time delta) before passing to `scoreWalk`.
+- Updated `updatePfraCalculator()` to compute `adjustedCardioPerformance` via altitude adjustment before calling `scorePfraAssessment`. Non-cardio components unaffected.
+- Updated `loadTables()` in `pfra-calculator.js` to fetch altitude tables in parallel with PFRA standards: `altitude-run-2-mile.json`, `altitude-walk-2km-male.json`, `altitude-walk-2km-female.json`.
+- Added `altitudeSelect?.addEventListener('change', updatePfraCalculator)` for instant PFRA recalc on altitude change.
+- Fixed pre-existing bug: `main2.js` `altitudeSel.addEventListener('change', ...)` called `updateScoreMinMaxText()` unconditionally — crashes in PFRA+Walk mode because `scoreArrays.cardio.max` is undefined (legacy run array used, no `.max` property). Added `isPfraModeActive()` guard: legacy score UI update and `runSelChange` now skip in PFRA mode (PFRA handler covers it).
+- Added `assertAltitudeAdjustment(page)` to `tools/browser-regression.mjs`: verifies Group 4 changes run score (1523s - 62s guaranteed improvement), body/strength unaffected, score reverts on restore, HAMR score valid at Group 4, walk score valid at Group 1.
+- `npm test` passed: 131 scoring fixtures, 88 cached files, 28 required offline assets, all browser regressions.
+- Committed and pushed.
+
 ### Component Editor Phase D: Move Core Controls into #core-editor
 
 - Moved `.situp-txt` (containing `#sit-txt-p`), `#sit-sel-chart-section` (containing `#sit-sel`, `#sit-btn`, `#sit-txt`, `.plank-colon`, `#plankmintxt`), and `.sit-slide` (containing `#sit-slider`, `#sit-tick`) from stacked page flow into `#core-editor` in `index.html`.
