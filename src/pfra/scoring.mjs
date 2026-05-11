@@ -144,6 +144,26 @@ export function applyWalkAltitudeAdjustment(altitudeWalkTable, walkAgeGroup, alt
   return altitudeWalkTable?.maximumTimes?.[walkAgeGroup]?.[altitudeGroup ?? 0] ?? null;
 }
 
+export function applyRunAltitudeAdjustment(performanceSeconds, altitudeGroup, runAltitudeTable) {
+  if (!altitudeGroup || altitudeGroup <= 0) return performanceSeconds;
+  if (!runAltitudeTable?.rows?.length) return performanceSeconds;
+
+  const groupKey = `group${altitudeGroup}`;
+  const rows = runAltitudeTable.rows;
+
+  let correctionRow = rows[rows.length - 1];
+  for (const row of rows) {
+    if (performanceSeconds <= toSeconds(row.runTime)) {
+      correctionRow = row;
+      break;
+    }
+  }
+
+  const correctionSec = toSeconds(correctionRow[groupKey]);
+  if (!Number.isFinite(correctionSec) || correctionSec <= 0) return performanceSeconds;
+  return Math.max(0, performanceSeconds - correctionSec);
+}
+
 export function scorePfraAssessment({
   ageGroup,
   cardioEvent,

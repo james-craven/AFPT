@@ -1095,6 +1095,70 @@
       "walkAgeGroup": "60-and-over",
       "altitudeGroup": 4,
       "expectedMaxTime": "19:08"
+    },
+    {
+      "id": "alt-run-group-0-no-adjustment",
+      "type": "applyRunAltitudeAdjustment",
+      "performanceSeconds": 900,
+      "altitudeGroup": 0,
+      "expectedSeconds": 900,
+      "note": "Group 0 (below 5250 ft) — no correction applied"
+    },
+    {
+      "id": "alt-run-top-row-group1",
+      "type": "applyRunAltitudeAdjustment",
+      "performanceSeconds": 780,
+      "altitudeGroup": 1,
+      "expectedSeconds": 778,
+      "note": "13:00 <= 13:25 first row; group1 correction = 0:02 (2s); 780-2=778"
+    },
+    {
+      "id": "alt-run-top-row-group2",
+      "type": "applyRunAltitudeAdjustment",
+      "performanceSeconds": 780,
+      "altitudeGroup": 2,
+      "expectedSeconds": 774,
+      "note": "13:00 <= 13:25 first row; group2 correction = 0:06 (6s); 780-6=774"
+    },
+    {
+      "id": "alt-run-top-row-group3",
+      "type": "applyRunAltitudeAdjustment",
+      "performanceSeconds": 780,
+      "altitudeGroup": 3,
+      "expectedSeconds": 769,
+      "note": "13:00 <= 13:25 first row; group3 correction = 0:11 (11s); 780-11=769"
+    },
+    {
+      "id": "alt-run-top-row-group4",
+      "type": "applyRunAltitudeAdjustment",
+      "performanceSeconds": 780,
+      "altitudeGroup": 4,
+      "expectedSeconds": 762,
+      "note": "13:00 <= 13:25 first row; group4 correction = 0:18 (18s); 780-18=762"
+    },
+    {
+      "id": "alt-run-mid-table-18-39-group3",
+      "type": "applyRunAltitudeAdjustment",
+      "performanceSeconds": 1119,
+      "altitudeGroup": 3,
+      "expectedSeconds": 1102,
+      "note": "18:39 (1119s) matches row runTime=18:39 exactly; group3=0:17 (17s); 1119-17=1102"
+    },
+    {
+      "id": "alt-run-last-row-25-00-group4",
+      "type": "applyRunAltitudeAdjustment",
+      "performanceSeconds": 1500,
+      "altitudeGroup": 4,
+      "expectedSeconds": 1438,
+      "note": "25:00 (1500s) matches last row exactly; group4=1:02 (62s); 1500-62=1438"
+    },
+    {
+      "id": "alt-run-above-table-fallback-group2",
+      "type": "applyRunAltitudeAdjustment",
+      "performanceSeconds": 1530,
+      "altitudeGroup": 2,
+      "expectedSeconds": 1508,
+      "note": "25:30 (1530s) exceeds last row 25:00; falls back to last row; group2=0:22 (22s); 1530-22=1508"
     }
   ]
 }

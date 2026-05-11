@@ -131,5 +131,8 @@ unambiguous and confirmed.
 
 - [x] Manual extraction complete
 - [x] JSON table created: `standards/extracted/tables/altitude-run-2-mile.json`
-- [ ] Scoring function `applyRunAltitudeAdjustment()` — pending (Phase A continuation)
-- [ ] Modified `scoreRun()` to accept `altitudeGroup` — pending
+- [x] Scoring function `applyRunAltitudeAdjustment(performanceSeconds, altitudeGroup, runAltitudeTable)` — `src/pfra/scoring.mjs`
+- [x] Re-exported from `tools/pfra-score.mjs`
+- [x] 8 fixture test cases added to `tools/fixtures/pfra-scoring-examples.json` (group 0 no-op, first-row all 4 groups, mid-table, last-row exact, above-table fallback)
+- [x] 131 total scoring examples pass
+- [ ] Modified `scoreRun()` / `scorePfraAssessment()` to accept `altitudeGroup` — deferred (UI wiring phase)

@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {
   applyHamrAltitudeAdjustment,
+  applyRunAltitudeAdjustment,
   applyWalkAltitudeAdjustment,
   getAltitudeGroup,
   loadTable,
@@ -105,6 +106,9 @@ const altWalkMaleTable = JSON.parse(
 const altWalkFemaleTable = JSON.parse(
   fs.readFileSync(path.join(process.cwd(), 'standards/extracted/tables/altitude-walk-2km-female.json'), 'utf8'),
 );
+const altRunTable = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), 'standards/extracted/tables/altitude-run-2-mile.json'), 'utf8'),
+);
 
 for (const testCase of fixture.altitudeCases) {
   const label = `${testCase.id}`;
@@ -121,6 +125,12 @@ for (const testCase of fixture.altitudeCases) {
     assert.equal(
       applyWalkAltitudeAdjustment(table, testCase.walkAgeGroup, testCase.altitudeGroup),
       testCase.expectedMaxTime,
+      label,
+    );
+  } else if (testCase.type === 'applyRunAltitudeAdjustment') {
+    assert.equal(
+      applyRunAltitudeAdjustment(testCase.performanceSeconds, testCase.altitudeGroup, altRunTable),
+      testCase.expectedSeconds,
       label,
     );
   } else {
