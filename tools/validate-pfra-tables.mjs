@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import path from 'node:path';
 import {
+  applyHamrAltitudeAdjustment,
+  applyWalkAltitudeAdjustment,
+  getAltitudeGroup,
   loadTable,
   scoreFromTable,
   scorePfraAssessment,
@@ -26,6 +30,7 @@ function fixtureCaseIds() {
     ...fixture.whtrCases,
     ...fixture.walkCases,
     ...fixture.assessmentCases,
+    ...fixture.altitudeCases,
   ].map((testCase) => testCase.id);
 }
 
@@ -94,15 +99,46 @@ for (const testCase of fixture.assessmentCases) {
   assert.equal(result.category, testCase.expectedCategory, `${testCase.id}: category`);
 }
 
+const altWalkMaleTable = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), 'standards/extracted/tables/altitude-walk-2km-male.json'), 'utf8'),
+);
+const altWalkFemaleTable = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), 'standards/extracted/tables/altitude-walk-2km-female.json'), 'utf8'),
+);
+
+for (const testCase of fixture.altitudeCases) {
+  const label = `${testCase.id}`;
+  if (testCase.type === 'getAltitudeGroup') {
+    assert.equal(getAltitudeGroup(testCase.altitudeFt), testCase.expectedGroup, label);
+  } else if (testCase.type === 'applyHamrAltitudeAdjustment') {
+    assert.equal(
+      applyHamrAltitudeAdjustment(testCase.performance, testCase.altitudeGroup),
+      testCase.expectedPerformance,
+      label,
+    );
+  } else if (testCase.type === 'applyWalkAltitudeAdjustment') {
+    const table = testCase.sex === 'male' ? altWalkMaleTable : altWalkFemaleTable;
+    assert.equal(
+      applyWalkAltitudeAdjustment(table, testCase.walkAgeGroup, testCase.altitudeGroup),
+      testCase.expectedMaxTime,
+      label,
+    );
+  } else {
+    throw new Error(`Unknown altitude case type: ${testCase.type}`);
+  }
+}
+
 const totalExamples = fixture.tableCases.length
   + fixture.whtrCases.length
   + fixture.walkCases.length
-  + fixture.assessmentCases.length;
+  + fixture.assessmentCases.length
+  + fixture.altitudeCases.length;
 
 console.log(
   `Validated ${totalExamples} PFRA scoring examples `
   + `(${fixture.tableCases.length} table, `
   + `${fixture.whtrCases.length} WHtR, `
   + `${fixture.walkCases.length} walk, `
-  + `${fixture.assessmentCases.length} assessment)`,
+  + `${fixture.assessmentCases.length} assessment, `
+  + `${fixture.altitudeCases.length} altitude)`,
 );

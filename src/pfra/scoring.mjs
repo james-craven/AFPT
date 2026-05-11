@@ -127,6 +127,23 @@ export function scoreWalk(standards, { ageGroup, sex, performance }) {
   return performanceValue <= maxValue ? 50 : 0;
 }
 
+export function getAltitudeGroup(altitudeFt) {
+  if (altitudeFt >= 6600) return 4;
+  if (altitudeFt >= 6000) return 3;
+  if (altitudeFt >= 5500) return 2;
+  if (altitudeFt >= 5250) return 1;
+  return 0;
+}
+
+export function applyHamrAltitudeAdjustment(performance, altitudeGroup) {
+  if (!altitudeGroup || altitudeGroup <= 0) return performance;
+  return Number(performance) + altitudeGroup;
+}
+
+export function applyWalkAltitudeAdjustment(altitudeWalkTable, walkAgeGroup, altitudeGroup) {
+  return altitudeWalkTable?.maximumTimes?.[walkAgeGroup]?.[altitudeGroup ?? 0] ?? null;
+}
+
 export function scorePfraAssessment({
   ageGroup,
   cardioEvent,

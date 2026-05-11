@@ -1,11 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 export {
+  applyHamrAltitudeAdjustment,
+  applyWalkAltitudeAdjustment,
   categoryForTotal,
   comparePerformance,
   firstScoringCellValue,
   formatPerformance,
   formatScore,
+  getAltitudeGroup,
   scoreFromTable,
   scorePfraAssessment,
   scoreWalk,

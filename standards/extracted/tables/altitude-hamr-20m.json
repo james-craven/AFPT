@@ -1,0 +1,14 @@
+{
+  "id": "altitude-hamr-20m",
+  "source": "DAFMAN 36-2905, 24 March 2026, Attachment 3, Table A3.4",
+  "sourceFile": "standards/sources/extracted-text/dafman-36-2905-2.txt",
+  "sourceLines": "129-139",
+  "ocrConfidence": "high",
+  "note": "Each altitude group adds the listed number of shuttles to the HAMR performance before scoring. Applies above 5,250 ft.",
+  "altitudeGroups": [
+    { "group": 1, "minFt": 5250, "maxFt": 5499, "addShuttles": 1 },
+    { "group": 2, "minFt": 5500, "maxFt": 5999, "addShuttles": 2 },
+    { "group": 3, "minFt": 6000, "maxFt": 6599, "addShuttles": 3 },
+    { "group": 4, "minFt": 6600, "addShuttles": 4 }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "altitude-walk-2km-male",
+  "source": "DAFMAN 36-2905, 24 March 2026, Attachment 3, Table A3.2",
+  "sourceFile": "standards/sources/extracted-text/dafman-36-2905-2.txt",
+  "sourceLines": "102-114",
+  "sex": "male",
+  "unit": "min:sec",
+  "ocrConfidence": "high",
+  "note": "Index 0 is the base maximum walk time (below 5,250 ft); matches af-pfra-2026.json maximumTimes.male values exactly. Indices 1-4 are adjusted maximums for altitude groups 1-4.",
+  "maximumTimes": {
+    "under-30":    ["16:16", "16:18", "16:22", "16:25", "16:31"],
+    "30-39":       ["16:18", "16:20", "16:24", "16:27", "16:33"],
+    "40-49":       ["16:23", "16:25", "16:28", "16:31", "16:37"],
+    "50-59":       ["16:40", "16:42", "16:45", "16:48", "16:53"],
+    "60-and-over": ["16:58", "16:59", "17:02", "17:05", "17:10"]
+  }
+}

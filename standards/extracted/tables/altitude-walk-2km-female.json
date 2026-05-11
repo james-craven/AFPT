@@ -1,0 +1,40 @@
+{
+  "id": "altitude-walk-2km-female",
+  "source": "DAFMAN 36-2905, 24 March 2026, Attachment 3, Table A3.3",
+  "sourceFile": "standards/sources/extracted-text/dafman-36-2905-2.txt",
+  "sourceLines": "115-127",
+  "sex": "female",
+  "unit": "min:sec",
+  "ocrConfidence": "medium",
+  "ocrCorrections": [
+    {
+      "walkAgeGroup": "50-59",
+      "group": 0,
+      "raw": "18:1",
+      "corrected": "18:11",
+      "basis": "cross-reference with af-pfra-2026.json maximumTimes.female['50-59'] = '18:11'"
+    },
+    {
+      "walkAgeGroup": "60-and-over",
+      "group": 2,
+      "raw": "[8:58",
+      "corrected": "18:58",
+      "basis": "leading '1' dropped by OCR; 18:58 consistent with +4s increment from Gr1 (18:54) and +4s pattern"
+    },
+    {
+      "walkAgeGroup": "60-and-over",
+      "group": 3,
+      "raw": "[9:02",
+      "corrected": "19:02",
+      "basis": "leading '1' dropped by OCR; 19:02 consistent with +8s from Gr1 (18:54); matches Gr4 gap of +6s to 19:08"
+    }
+  ],
+  "note": "Index 0 is the base maximum walk time (below 5,250 ft); matches af-pfra-2026.json maximumTimes.female values. Indices 1-4 are adjusted maximums for altitude groups 1-4. Three OCR artifacts corrected (see ocrCorrections).",
+  "maximumTimes": {
+    "under-30":    ["17:22", "17:25", "17:30", "17:34", "17:42"],
+    "30-39":       ["17:28", "17:30", "17:35", "17:40", "17:47"],
+    "40-49":       ["17:49", "17:52", "17:56", "18:00", "18:07"],
+    "50-59":       ["18:11", "18:13", "18:17", "18:21", "18:28"],
+    "60-and-over": ["18:53", "18:54", "18:58", "19:02", "19:08"]
+  }
+}

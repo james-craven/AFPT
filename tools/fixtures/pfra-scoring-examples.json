@@ -917,5 +917,184 @@
       "expectedTotal": 0,
       "expectedCategory": "Unsatisfactory"
     }
+  ],
+  "altitudeCases": [
+    {
+      "id": "alt-group-sea-level",
+      "type": "getAltitudeGroup",
+      "altitudeFt": 0,
+      "expectedGroup": 0
+    },
+    {
+      "id": "alt-group-below-threshold",
+      "type": "getAltitudeGroup",
+      "altitudeFt": 5249,
+      "expectedGroup": 0
+    },
+    {
+      "id": "alt-group-1-min",
+      "type": "getAltitudeGroup",
+      "altitudeFt": 5250,
+      "expectedGroup": 1
+    },
+    {
+      "id": "alt-group-1-max",
+      "type": "getAltitudeGroup",
+      "altitudeFt": 5499,
+      "expectedGroup": 1
+    },
+    {
+      "id": "alt-group-2-min",
+      "type": "getAltitudeGroup",
+      "altitudeFt": 5500,
+      "expectedGroup": 2
+    },
+    {
+      "id": "alt-group-2-max",
+      "type": "getAltitudeGroup",
+      "altitudeFt": 5999,
+      "expectedGroup": 2
+    },
+    {
+      "id": "alt-group-3-min",
+      "type": "getAltitudeGroup",
+      "altitudeFt": 6000,
+      "expectedGroup": 3
+    },
+    {
+      "id": "alt-group-3-max",
+      "type": "getAltitudeGroup",
+      "altitudeFt": 6599,
+      "expectedGroup": 3
+    },
+    {
+      "id": "alt-group-4-min",
+      "type": "getAltitudeGroup",
+      "altitudeFt": 6600,
+      "expectedGroup": 4
+    },
+    {
+      "id": "alt-group-4-high",
+      "type": "getAltitudeGroup",
+      "altitudeFt": 8000,
+      "expectedGroup": 4
+    },
+    {
+      "id": "alt-hamr-group-0-no-change",
+      "type": "applyHamrAltitudeAdjustment",
+      "performance": 45,
+      "altitudeGroup": 0,
+      "expectedPerformance": 45
+    },
+    {
+      "id": "alt-hamr-group-1-add-1",
+      "type": "applyHamrAltitudeAdjustment",
+      "performance": 45,
+      "altitudeGroup": 1,
+      "expectedPerformance": 46
+    },
+    {
+      "id": "alt-hamr-group-2-add-2",
+      "type": "applyHamrAltitudeAdjustment",
+      "performance": 45,
+      "altitudeGroup": 2,
+      "expectedPerformance": 47
+    },
+    {
+      "id": "alt-hamr-group-3-add-3",
+      "type": "applyHamrAltitudeAdjustment",
+      "performance": 45,
+      "altitudeGroup": 3,
+      "expectedPerformance": 48
+    },
+    {
+      "id": "alt-hamr-group-4-add-4",
+      "type": "applyHamrAltitudeAdjustment",
+      "performance": 45,
+      "altitudeGroup": 4,
+      "expectedPerformance": 49
+    },
+    {
+      "id": "alt-hamr-group-4-high-count",
+      "type": "applyHamrAltitudeAdjustment",
+      "performance": 80,
+      "altitudeGroup": 4,
+      "expectedPerformance": 84
+    },
+    {
+      "id": "alt-walk-male-under30-base",
+      "type": "applyWalkAltitudeAdjustment",
+      "sex": "male",
+      "walkAgeGroup": "under-30",
+      "altitudeGroup": 0,
+      "expectedMaxTime": "16:16"
+    },
+    {
+      "id": "alt-walk-male-under30-gr1",
+      "type": "applyWalkAltitudeAdjustment",
+      "sex": "male",
+      "walkAgeGroup": "under-30",
+      "altitudeGroup": 1,
+      "expectedMaxTime": "16:18"
+    },
+    {
+      "id": "alt-walk-male-under30-gr4",
+      "type": "applyWalkAltitudeAdjustment",
+      "sex": "male",
+      "walkAgeGroup": "under-30",
+      "altitudeGroup": 4,
+      "expectedMaxTime": "16:31"
+    },
+    {
+      "id": "alt-walk-male-60over-gr4",
+      "type": "applyWalkAltitudeAdjustment",
+      "sex": "male",
+      "walkAgeGroup": "60-and-over",
+      "altitudeGroup": 4,
+      "expectedMaxTime": "17:10"
+    },
+    {
+      "id": "alt-walk-female-under30-base",
+      "type": "applyWalkAltitudeAdjustment",
+      "sex": "female",
+      "walkAgeGroup": "under-30",
+      "altitudeGroup": 0,
+      "expectedMaxTime": "17:22"
+    },
+    {
+      "id": "alt-walk-female-5059-base-ocr-corrected",
+      "type": "applyWalkAltitudeAdjustment",
+      "sex": "female",
+      "walkAgeGroup": "50-59",
+      "altitudeGroup": 0,
+      "expectedMaxTime": "18:11",
+      "note": "OCR read '18:1'; corrected to 18:11 via cross-reference with af-pfra-2026.json"
+    },
+    {
+      "id": "alt-walk-female-60over-gr2-ocr-corrected",
+      "type": "applyWalkAltitudeAdjustment",
+      "sex": "female",
+      "walkAgeGroup": "60-and-over",
+      "altitudeGroup": 2,
+      "expectedMaxTime": "18:58",
+      "note": "OCR read '[8:58'; corrected to 18:58 (leading 1 dropped by OCR)"
+    },
+    {
+      "id": "alt-walk-female-60over-gr3-ocr-corrected",
+      "type": "applyWalkAltitudeAdjustment",
+      "sex": "female",
+      "walkAgeGroup": "60-and-over",
+      "altitudeGroup": 3,
+      "expectedMaxTime": "19:02",
+      "note": "OCR read '[9:02'; corrected to 19:02 (leading 1 dropped by OCR)"
+    },
+    {
+      "id": "alt-walk-female-60over-gr4",
+      "type": "applyWalkAltitudeAdjustment",
+      "sex": "female",
+      "walkAgeGroup": "60-and-over",
+      "altitudeGroup": 4,
+      "expectedMaxTime": "19:08"
+    }
   ]
 }
