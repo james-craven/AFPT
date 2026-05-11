@@ -1,5 +1,19 @@
 # Session Log
 
+## 2026-05-11 (continued)
+
+### Clean Runtime Phase 1: src/pfra/app.mjs passive state observer
+
+- Created `src/pfra/app.mjs`: passive state observer exposing `window.afptApp = { getState, refreshStateFromDom, dispatch }`.
+  - `refreshStateFromDom()` reads all PFRA state from DOM: sex, ageGroup, whtr, altitudeGroup, strength/core/cardio event+value+exempt, selectedComponent.
+  - `dispatch(action)` updates internal state only — no DOM mutations, no rendering.
+  - `getState()` returns a shallow copy of the current state.
+  - Loaded as a passive parallel path; `main2.js` and `pfra-calculator.js` continue to run unmodified.
+- Added `<script type="module" src="./src/pfra/app.mjs?v=20260511-app-mjs">` to `index.html` after existing module scripts.
+- Added `assertAppMjsFoundation(page)` to `tools/browser-regression.mjs`: verifies `window.afptApp` API exists, initial state reads correctly from DOM (sex=female, ageGroup=under-25, altitudeGroup=0, cardio.event=two-mile-run), `refreshStateFromDom` picks up `#alt-select` DOM change, `dispatch` mutates internal state without touching DOM.
+- `npm test` passed: 131 scoring fixtures, 89 cached files, 28 required offline assets, all browser regressions.
+- Committed and pushed.
+
 ## 2026-05-11
 
 ### Altitude Adjustment Phase A (UI Wiring): Wire #alt-select into PFRA Scoring

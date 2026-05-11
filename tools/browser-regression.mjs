@@ -636,6 +636,46 @@ async function assertAltitudeAdjustment(page) {
   await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
 }
 
+async function assertAppMjsFoundation(page) {
+  const hasApp = await page.evaluate(() => typeof window.afptApp === 'object' && typeof window.afptApp.getState === 'function' && typeof window.afptApp.refreshStateFromDom === 'function' && typeof window.afptApp.dispatch === 'function');
+  assert.ok(hasApp, 'window.afptApp exposes getState, refreshStateFromDom, dispatch');
+
+  const initialState = await page.evaluate(() => {
+    window.afptApp.refreshStateFromDom();
+    return window.afptApp.getState();
+  });
+  assert.equal(initialState.sex, 'female', 'initial sex is female');
+  assert.equal(initialState.ageGroup, 'under-25', 'initial ageGroup is under-25');
+  assert.equal(initialState.altitudeGroup, 0, 'initial altitudeGroup is 0');
+  assert.equal(initialState.cardio.event, 'two-mile-run', 'initial cardio event is two-mile-run');
+  assert.equal(initialState.cardio.exempt, false, 'initial cardio exempt is false');
+
+  const stateAfterAlt = await page.evaluate(() => {
+    const el = document.getElementById('alt-select');
+    el.value = 'Group 2 (5500-5999ft)';
+    el.dispatchEvent(new Event('change'));
+    window.afptApp.refreshStateFromDom();
+    return window.afptApp.getState();
+  });
+  assert.equal(stateAfterAlt.altitudeGroup, 2, 'refreshStateFromDom reads altitudeGroup 2 after DOM change');
+
+  await page.evaluate(() => {
+    const el = document.getElementById('alt-select');
+    el.value = 'Altitude Adjust';
+    el.dispatchEvent(new Event('change'));
+  });
+  await page.waitForTimeout(50);
+
+  const sexBefore = await page.locator('#sex-sel').inputValue();
+  await page.evaluate(() => window.afptApp.dispatch({ type: 'SET_SEX', sex: 'male' }));
+  const internalSex = await page.evaluate(() => window.afptApp.getState().sex);
+  const domSex = await page.locator('#sex-sel').inputValue();
+  assert.equal(internalSex, 'male', 'dispatch SET_SEX updates internal state');
+  assert.equal(domSex, sexBefore, 'dispatch does not mutate DOM in passive phase');
+
+  await page.evaluate(() => window.afptApp.refreshStateFromDom());
+}
+
 async function assertBodyCompositionCard(page) {
   await page.waitForFunction(() => document.getElementById('body-composition-card'));
 
@@ -988,6 +1028,7 @@ async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
   await assertCoreEditor(page);
   await assertCardioEditor(page);
   await assertAltitudeAdjustment(page);
+  await assertAppMjsFoundation(page);
 
   await page.locator('#push-txt').fill('50');
   await page.locator('#push-tick').click();
