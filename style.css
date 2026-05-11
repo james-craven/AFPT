@@ -708,9 +708,6 @@ section {
 /* Shared app-column layout contract — all primary card/section elements
    match the score header's max-width and centering so the page reads as
    a single column on desktop rather than a mix of narrow and full-width sections. */
-.situp-txt,
-.sit-sel-chart,
-.sit-slide,
 .run-txt,
 .cardio-sel-chart,
 .run-slider-section,
@@ -1941,8 +1938,7 @@ body:not(.pfra-mode) .strength-card__score {
     margin-top: 0.25rem;
 }
 
-#strength-editor .strength-txt-p,
-#strength-editor .sit-txt-p {
+#strength-editor .strength-txt-p {
     color: var(--afpt-ink);
 }
 
@@ -1963,6 +1959,37 @@ body:not(.pfra-mode) .strength-card__score {
 
 #strength-editor .pushsit-see-chart-btn button:hover,
 #strength-editor #push-btn:hover {
+    background: var(--afpt-accent);
+    color: var(--afpt-bg);
+}
+
+/* Token-scoped overrides for legacy inner sections inside core-editor */
+#core-editor .situp-txt {
+    border-top: 1px solid var(--afpt-border);
+    margin-top: 0.25rem;
+}
+
+#core-editor .sit-txt-p {
+    color: var(--afpt-ink);
+}
+
+#core-editor .sit-slide {
+    border-bottom: 1px solid var(--afpt-border);
+}
+
+#core-editor .pushsit-see-chart-btn a {
+    color: var(--afpt-accent);
+}
+
+#core-editor .pushsit-see-chart-btn button,
+#core-editor #sit-btn {
+    background: transparent;
+    border: 1px solid var(--afpt-accent);
+    color: var(--afpt-accent);
+}
+
+#core-editor .pushsit-see-chart-btn button:hover,
+#core-editor #sit-btn:hover {
     background: var(--afpt-accent);
     color: var(--afpt-bg);
 }

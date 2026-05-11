@@ -208,47 +208,40 @@
             </section>
         </div>
         <div id="core-editor" class="component-editor" data-component="core" hidden>
-            <!-- Phase D will move core controls here -->
+            <div class="component-editor__header">
+                <span class="component-editor__title">CORE</span>
+                <span class="component-editor__pfra-score" id="pfra-core-score">--</span>
+            </div>
+            <section class="situp-txt">
+                <p class="sit-txt-p" id="sit-txt-p">
+                    Abs Score: 0 | Min: 15 | Max: 47
+                </p>
+            </section>
+            <section id="sit-sel-chart-section" class="sit-sel-chart">
+                <select name="" id="sit-sel" class="sit-sel">
+                    <option value="Situps">Situps</option>
+                    <option value="Reverse Crunch">Reverse Crunch</option>
+                    <option value="Plank">Plank</option>
+                    <option value="Exempt">Exempt</option>
+                </select>
+                <div id="abs-see-chart-btn" class="pushsit-see-chart-btn">
+                    <button id="sit-btn">See Chart</button>
+                </div>
+                <label for="sit-txt" class="hidden-labels">situps textbox</label>
+                <input type="tel" class="sit-txt" id="sit-txt">
+                <p class="plank-colon" hidden>:</p>
+                <input type="tel" id="plankmintxt" class="plankmin-txt">
+            </section>
+            <section class="sit-slide">
+                <label for="sit-slider" class="hidden-labels">situps slider</label>
+                <input type="range" id="sit-slider" class="sit-slider" min="0" max="100" value="0">
+                <div class="slider-tick-layer"><button type="button" id="sit-tick" class="slider-tick">15</button></div>
+            </section>
         </div>
         <div id="cardio-editor" class="component-editor" data-component="cardio" hidden>
             <!-- Phase E will move cardio controls here -->
         </div>
     </div>
-
-    <!-- Section 7 - Situps Text -->
-    <section class="situp-txt">
-        <p class="sit-txt-p" id="sit-txt-p">
-            Abs Score: 0 | Min: 15 | Max: 47
-        </p>
-    </section>
-
-    <!-- Section 8 - Situps Select & Textbox -->
-    <section id="sit-sel-chart-section" class="sit-sel-chart">
-
-            <select name="" id="sit-sel" class="sit-sel">
-                <option value="Situps">Situps</option>
-                <option value="Reverse Crunch">Reverse Crunch</option>
-                <option value="Plank">Plank</option>
-                <option value="Exempt">Exempt</option>
-            </select>
-
-        <div id="abs-see-chart-btn" class="pushsit-see-chart-btn">
-            <button id="sit-btn">See Chart</button>
-        </div>
-        <label for="sit-txt" class="hidden-labels">situps textbox</label>
-        <input type="tel" class="sit-txt" id="sit-txt">
-        <p class="plank-colon" hidden>:</p>
-        <input type="tel" id="plankmintxt" class="plankmin-txt">
-
-
-    </section>
-
-    <!-- Section 9 - Situps Slider -->
-    <section class="sit-slide">
-        <label for="sit-slider" class="hidden-labels">situps slider</label>
-        <input type="range" id="sit-slider" class="sit-slider" min="0" max="100" value="0">
-        <div class="slider-tick-layer"><button type="button" id="sit-tick" class="slider-tick">15</button></div>
-    </section>
 
     <!-- Section 10 - Run Text -->
     <section class="run-txt">

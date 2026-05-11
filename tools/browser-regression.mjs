@@ -265,8 +265,11 @@ async function assertChartDrawerShortcuts(page) {
   await openChartAndAssert(page, '#push-btn', 'Strength_Abs.webp');
   await closeChartByButton(page);
 
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('core'));
+  await page.waitForFunction(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
   await openChartAndAssert(page, '#sit-btn', 'Strength_Abs.webp');
   await closeChartByEscape(page);
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('strength'));
 
   await openChartAndAssert(page, '#run-btn', 'cardio.webp');
   await closeChartByButton(page);
@@ -519,6 +522,40 @@ async function assertStrengthCard(page) {
   // score header still mirrors total
   const header = await scoreHeaderState(page);
   assert.match(header.value, /^\d+\.\d$/, 'score header mirrors total after strength changes');
+}
+
+async function assertCoreEditor(page) {
+  // switch to core component so the panel is visible
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('core'));
+  await page.waitForFunction(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
+
+  // pfra-core-score visible in PFRA mode
+  const coreScoreVisible = await page.evaluate(() => {
+    const score = document.getElementById('pfra-core-score');
+    return score ? getComputedStyle(score).display !== 'none' : false;
+  });
+  assert.equal(coreScoreVisible, true, 'core editor pfra score visible in PFRA mode');
+
+  // exemption: select Exempt, verify score shows EXEMPT
+  await page.locator('#sit-sel').selectOption('Exempt');
+  await page.waitForTimeout(100);
+  const exemptScore = await page.evaluate(() => document.getElementById('pfra-core-score')?.textContent.trim());
+  assert.equal(exemptScore, 'EXEMPT', 'core exemption sets PFRA core score to EXEMPT');
+
+  // restore and verify event label updates
+  await page.locator('#sit-sel').selectOption('Situps');
+  await page.waitForTimeout(100);
+  await page.locator('#sit-sel').selectOption('Plank');
+  const labelAfter = await text(page, '#sit-txt-p');
+  assert.match(labelAfter, /Core Score/, 'core event switch updates score text');
+  await page.locator('#sit-sel').selectOption('Situps');
+
+  // score header still mirrors total
+  const header = await scoreHeaderState(page);
+  assert.match(header.value, /^\d+\.\d$/, 'score header mirrors total after core changes');
+
+  // restore strength as active component
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('strength'));
 }
 
 async function assertBodyCompositionCard(page) {
@@ -817,10 +854,13 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
   assert.equal(await inputValue(page, '#push-txt'), '15');
   assert.equal(await inputValue(page, '#push-slider'), '15');
 
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('core'));
+  await page.waitForFunction(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
   await page.locator('#sit-txt').fill('54');
   await page.locator('#sit-tick').click();
   assert.equal(await inputValue(page, '#sit-txt'), '35');
   assert.equal(await inputValue(page, '#sit-slider'), '35');
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('strength'));
 
   await page.locator('#cardio-sel').selectOption('Shuttle Run');
   await setControlValue(page, '#run-slider', 83);
@@ -865,16 +905,28 @@ async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
   });
   await assertBodyCompositionCard(page);
   await assertStrengthCard(page);
+  await assertCoreEditor(page);
 
   await page.locator('#push-txt').fill('50');
   await page.locator('#push-tick').click();
   assert.equal(await inputValue(page, '#push-txt'), '15');
   assert.equal(await inputValue(page, '#push-slider'), '15');
 
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('core'));
+  await page.waitForFunction(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
+  // Fire the input event on sit-txt to trigger PFRA tick update, then wait for the PFRA minimum to be applied
   await page.locator('#sit-txt').fill('54');
+  // Dispatch input on the slider to ensure PFRA tick wires to PFRA minimum
+  await page.evaluate(() => {
+    const slider = document.getElementById('sit-slider');
+    slider.value = 54;
+    slider.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await page.waitForTimeout(100);
   await page.locator('#sit-tick').click();
   assert.equal(await inputValue(page, '#sit-txt'), '29');
   assert.equal(await inputValue(page, '#sit-slider'), '29');
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('strength'));
 
   await page.locator('#cardio-sel').selectOption('Shuttle Run');
   assert.equal(await text(page, '#run-txt-p'), 'Cardio Score: 35 | Min: 21 | Max: 68');
