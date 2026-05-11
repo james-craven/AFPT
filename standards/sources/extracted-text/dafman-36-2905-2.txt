@@ -1,0 +1,140 @@
+=== PAGE 1 (page-1.png) ===
+68 AFMAN36-2905 24 MARCH 2026
+
+Attachment 3
+
+ALTITUDE TIME CORRECTION FOR 2.0 MILE RUN, 2.0 KILOMETER WALK, AND
+20-METER HAMR
+
+Table A3.1. Altitude Time Correction for 2.0 Mile Run.
+
+|
+
+Group 1 Group 2
+Test altitude Test altitude
+between between
+5350 ft - 5499 ft 500 ft - 5999 ft
+
+Group 3 Group 4
+Test altitude Test altitude
+between at or greater than
+6000 ft - 6599 ft 350 ft - 5499 ft
+
+on
+-§
+
+Altitude Altitude Altitude Altitude
+Correction Correction Correction Correction
+
+(min:sec) (sec) (sec) (sec)
+13:55 0:06
+0:07
+0:07
+0:07
+0:07
+0:08
+0:08
+0:08 0:13
+i 0:14
+
+(sec)
+0:18
+0:19
+0:20
+0:20
+0:20
+0:21
+
+0:21
+
+o
+i=]
+nN
+
+o
+o
+N
+
+Oo
+Oo
+N
+
+o|o
+
+o|o
+
+DSS)
+bd tora baal basal fod ae ore eared ore
+SIS/S/S/S4]4]4)y4ya
+BOPP] a]a
+
+0:02
+0:02
+0:02
+0:02
+0:03
+
+o
+Oo
+a
+
+Oo
+Oo
+on
+
+=A Koved vcd bread boca acd Boece booed toca boca bacal bacd nce ocd acd
+BR] R]E]] OS] ] 6] 6] [Ol]
+BOSS] a] A S/ R/O) 5] a] a
+
+D
+rs
+io
+
+B|S]o/a/o}o}o
+B/S] | A] GH] a] H
+s|o|o|o
+Sl eyo
+RIN =
+
+
+=== PAGE 2 (page-2.png) ===
+AFMAN36-2905 24 MARCH 2026 69
+Table A3.2. Altitude Time Correction for 2.0 Kilometer Walk (Male).
+Group 1 (Group 2 Group 3 Group 4
+5250 ft — 5500 ft — 16000 ft — 6600 ft
+S500 ft 6000 ft 16600 ft
+A 2.0 km 2.0 km 2.0 km 2.0 km 2.0 km
+Ge) Maximum Maximum Maximum Maximum Maximum
+|Walk Time |Walk Time |Walk Time (Walk Time Walk Time
+(min:secs) (min:secs) (min:secs) (min:secs) (min.secs)
+K 30 16:16 16:18 16:22 16:25 16:31
+30 - 39 16:18 16:20 16:24 16:27 16:33
+40 - 49 16:23 16:25 16:28 16:31 16:37
+50-59] {16:40 (16:42 16:45 (16:48 (16:53
+[60 + [16:58 [16:59 17:02 [17:05 17:10
+Table A3.3. Altitude Time Correction for 2.0 Kilometer Walk (Female).
+(Group 1 (Group 2 (Group 3 (Group 4
+S250 ft — 5500 ft — 6000 ft — 6600 ft
+S500 ft 16000 ft 6600 ft
+A 22.0 km 2.0 km 2.0 km 2.0 km 2.0 km
+or Maximum Maximum Maximum Maximum Maximum
+Walk Time Walk Time |Walk Time Walk Time Walk Time
+(min: secs) (min: secs) (min. secs) (min: secs) (min. secs)
+K 30 17:22 17:25 17:30 17:34 17:42
+30 - 39 17:28 17:30 17:35 17:40 17:47
+40 - 49 17:49 17:52 17:56 18:00 18:07
+50-59] {18:1 (18:13 [18:17 18:21 (18:28
+[60 + [18:53 [18:54 [8:58 [9:02 (19:08
+
+Table A3.4. Altitude Time Correction for HAMR.
+
+Group 1 roup 2 (Group 3 Group 4
+
+5250 ft — 5500 ft — 6000 ft — 6600 ft
+
+5500 ft 6000 ft 6600 ft
+
+[Add I Shuttle} dd 2 [Add 3 Add 4
+Shuttles Shuttles Shuttles
+
+

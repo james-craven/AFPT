@@ -1,0 +1,648 @@
+=== PAGE 1 (page-01.png) ===
+26 AFMAN36-2905 24 MARCH 2026
+
+Chapter 3
+OFFICIAL FITNESS ASSESSMENT
+
+3.1. General. In conjunction with a consistent unit Physical Conditioning Program (PCP) and
+individual fitness training, the PFRA provides commanders and supervisors with a tool to assist in
+the determination of overall fitness and readiness of their members. The Air Force assesses body
+composition, cardiorespiratory fitness, muscular strength and core endurance components.
+Members taking the PFRA must achieve a minimum score in each of the physical components
+excluding body composition and an overall composite score of > 75 to remain physically ready.
+(T-1) The Air Force body composition assessment and standards are agnostic, while the remaining
+components are based on age and sex.
+
+3.1.1. The components of the PFRA are Body Composition, Muscular Strength, Core
+Endurance, and Cardiorespiratory Fitness. Members may choose to decouple the body
+composition component at least one duty day, but no more than five duty days (no more than
+the prior UTA/RSD for ARC TR/DSG) prior to assessing the other components. Members may
+not be directed to test congruently. If an Airman’s body composition component is high risk
+(WHtR > .55) and does not meet standards on the composite PFRA, a Tier 2 BFA must be
+accomplished. Note: ARC members must complete the entire PFRA within 60 days from
+decoupling date or next drill (whichever is earliest) and if not completed within the designated
+time frame, the PFRA is considered Did Not Finish (DNF).
+
+3.1.2. The components are measured by the following assessments:
+
+3.1.2.1. Body Composition: Body composition will be assessed using WHtR
+measurements.
+
+3.1.2.1.1. Members that are identified with a WHtR > .55 and not meeting standards
+on the composite PFRA must complete a Tier 2 BFA.
+
+3.1.2.1.2. BFAs will be conducted using Bio-impedance (BIA) scales, if available.
+Equipment required for obtaining BFA is the InBody (model 770).
+
+3.1.2.1.3. If an InBody is not present, BFA will be obtained using a 2-3 site taping
+method described in Attachment 8. Note: Same sex is required when administering
+this assessment.
+
+3.1.2.2. Muscular Strength: 1-minute push-ups, or 2-minute hand release push-ups
+(HRPU).
+
+3.1.2.3. Core Endurance: 1-minute sit-ups, 2-minute cross leg reverse crunch (CLRC), or
+timed forearm plank.
+
+3.1.2.4. Cardiorespiratory Fitness: 2.0-mile run, 20-meter High Aerobic Multi-shuttle Run
+(HAMR) or the 2 kilometer walk (if not medically cleared to run).
+
+3.2. Physical Fitness Readiness Assessment (PFRA) Administration.
+
+3.2.1. Installations will develop a local plan, signed by the host and tenant wing or installation
+commander or equivalent, for commanders to schedule PRFAs as a unit if directed by Host or
+Tenant wing or installation commanders. Note: For FAC/UFAC augmentees, NAF employees
+
+=== PAGE 2 (page-02.png) ===
+AFMAN36-2905 24 MARCH 2026 27
+
+and NAF contractors, APF contractors, and ANG State employees will not be used to conduct
+fitness assessments. (T-0)
+
+3.2.2. PFRA Administrators wear the uniform of the day or physical conditioning gear when
+administering PFRAs. (T-2) Unit commanders will establish which uniform (uniform of the
+day or physical conditioning gear) that must be worn in the performance of this duty. (T-2)
+Note: Any duty uniform may be worn for the body composition component assessment.
+
+3.2.3. PFRA Administrators will never conduct a PFRA alone (includes FAC/UFAC), and
+they will ensure there is a non-assessment taking member in addition to the assessment taking
+member when conducting PFRAs. (T-1)
+
+3.2.4. Members must take the PFRA during the assigned unit assessment or myFitness
+assigned date/month. (T-2) If a member requests to take their PFRA at an alternate location, it
+must be approved by their UFPM (or supervisor for IMAs/PIRRs) and coordinated with their
+home station FIM. (T-2) If approved to take assessment at the alternate location, the home
+station FIM must give temporary UFAC access to the FAC prior to administering the PFRA to
+input the scores in myFitness. (T-2) Note: Only installation FACs may administer PFRAs for
+individuals not at their home station.
+
+3.2.5. PFRAs must be administered by PFRA Administrators assigned at Installation FACs
+and/or UFACs. (T-2) Appointed PFRA Administrators will conduct PFRAs and the designated
+FAC/UFAC will provide oversight. (T-2) PFRA scores will be updated in myFitness by the
+FAC/UFAC. (T-2) Exception: Special populations in accordance with Chapter 6.
+
+3.2.6. The Installation FAC may support PFRAs for ARC tenant units at RegAF installations
+to include UTA/RSD weekends, as requested or provided for in their host- tenant agreements.
+(T-1) Note: During these UTA/RSDs, there must be FAC Augmentation in accordance with
+the host-tenant agreement.
+
+3.2.7. PFRA Administrators will conduct official PFRAs with an Automated External
+Defibrillator (AED) present (within the building, or within 100 feet). (T-1) AEDs will remain
+onsite until all PFRA participants leave the area. (T-1)
+
+3.3. Fitness Screening Questionnaire (FSQ). Members must complete the FSQ prior to their
+PFRA. (T-1) If any item on the FSQ indicates a condition, which may limit performance of any
+component of the fitness assessment, and there is not an accompanying current AF Form 469, the
+member must provide the FSQ for a medical evaluation. (T-1) A medical provider will complete
+and sign the appropriate place on the FSQ, and complete a AF Form 469, if applicable, and the
+member will return the FSQ to the UFPM. (T-1) The member must provide their completed and
+signed AF Form 469 (working copies not permitted) for the next scheduled PFRA. (T-1) Member
+must inform PFRA Administrator if FSQ responses have changed between original submission of
+FSQ and execution of PFRA. (T-1)
+
+3.4. Bi-Annual Unit Assessment Requirement.
+
+3.4.1. If the Wing (Host and/or Tenant) Commander or equivalent directs unit testing, they
+will approve the bi-annual schedule for unit assessments to meet two assessment cycle
+requirements. (T-1) Note: It is recommended that the cycle schedule be determined based on
+local geographical conditions (e.g., winter weather, thermal stress, etc.). If the Wing
+Commander (Host and/or Tenant) does not require unit assessments, members will conduct bi-
+
+=== PAGE 3 (page-03.png) ===
+28
+
+AFMAN36-2905 24 MARCH 2026
+
+annual testing per normal testing cycle at 6-month increments. Example: if the members’ first
+test is due August 2026, their next test is due February 2027).
+
+3.4.2. ARC members will test once every 12 months.
+
+3.4.3. Body composition may be decoupled by no more than 5 duty days. Members may opt
+to assess WHR congruently, however they may not be directed to so. ARC: No Earlier Than
+(NET) RSD/UTA prior to assessing the other components. (T-2) Note: PRFA will be
+considered DNF outside of the decouple period and will require full reassessment.
+
+3.4.4. Unit commanders are only authorized to offer Diagnostic PFRAs (DPFRA) during the
+current cycle and will be assessed No Earlier Than (NET) one month prior to bi-annual
+scheduled unit assessment. ARC: Authorized DPFRA will be assessed No Earlier Than (NET)
+one month prior to annual scheduled assessment. (T-2) Note: WHtR will not be decoupled for
+this option.
+
+3.5. Extenuating Circumstances.
+
+3.5.1. If FAC/UFAC staff determine extenuating circumstances prevent completion of the
+entire PFRA in accordance with paragraph 3.15, (e.g., rapidly changing or severe weather
+conditions, emergencies, injury, disorderly conduct, etc.) then all components must be
+rescheduled and completed at the earliest opportunity. If the extenuating circumstance is not
+the fault of the members, the unit’s due month will be delayed to the following month. (T-2)
+Note: AFR members will be required to complete the indoor 20m HAMR when weather
+conditions prohibit outdoor assessments, and no indoor running track is available for the 2.0-
+mile run. (T-2) For members on AF Form 469 authorizing the 2-kilometer walk (exempting
+2.0 mile run and 20- meter HAMR), members will be required to complete a reassessment no
+later than the next UTA/RSD. (T-2) ANG members will be required to complete a
+reassessment no later than the next RSD and when official fitness assessments are being
+conducted. (T-2)
+
+3.5.2. Commanders may request exemptions via the tier waiver process (e.g. bereavement,
+incarceration, etc.) through their servicing MAJCOM. (T-2)
+
+3.6. Fitness Assessment Composite Score.
+
+3.6.1. The categories of PFRA scores when assessing all components are: Excellent (> 90),
+Satisfactory (75 - 89.9) and Unsatisfactory (<_74.9 and/or any component minimum not met).
+(T-1)
+
+3.6.2. Members assessed on the 2-kilometer walk are considered component exempt and will
+fall under frequency standards in accordance with paragraph 3.10. (T-1)
+
+3.7. Scoring.
+
+3.7.1. Members achieve a composite score from 0 to 100 based on the following maximum
+component scores with component minimums: 50 points for Cardiorespiratory, 20 points for
+Body Composition (does not have a minimum requirement), 15 points for Muscular Strength,
+and 15 points for Core Endurance.
+
+3.7.2. BFA is a pass/fail assessment. If the member meets standards, the body composition
+assessment will be scored as an exempt component. If the member does not meet BFA
+standards, the member will receive an unsatisfactory score on the PFRA.
+
+=== PAGE 4 (page-04.png) ===
+AFMAN36-2905 24 MARCH 2026 29
+
+3.7.3. The 2-kilometer walk is a pass or fail assessment for members that are medically
+prohibited from assessing the 2.0mi run or 20m HAMR. No points are awarded for successful
+completion, nor can this assessment apply to the Excellent PFRA score. If a member passes
+the assessment, the member will have a composite score calculated based on the assessed
+components in the same way the score will be calculated if the member were exempt from the
+cardiorespiratory component in accordance with paragraph 3.6.2. (T-1) Note: Members that
+assess on the 2 kilometer walk will not be placed in PRFA Hold.
+
+Table 3.1. Walk Standards (2 Kilometer).
+
+Male Standards Female Standards
+Age (yrs) Maximum Time ge (yrs) Maximum Time
+(mins:secs) (mins:secs)
+K< 30 16:16 K<30 17:22
+30-39 16:18 30-39 17:28
+40-49 16:23 40-49 17:49
+50-59 16:40 50-59 18:11
+60+ 16:58 60+ 18:53
+
+Table 3.2. Body Fat Assessment (BFA) Standards.
+
+Male Standard Female Standard
+
+< 26% < 36%
+
+3.7.4. Completing the minimum exercise repetition/duration in all fitness assessment
+component modalities does not generate enough points to earn a composite score of 75 or
+greater. Repetition/durations below the required minimum receive a component score of zero.
+
+3.7.5. Composite scores are official when entered into myFitness. Any disagreements with
+results must be appealed in accordance with paragraph 8.2. (T-1)
+
+3.8. Diagnostic PFRA.
+
+3.8.1. After completion of the PFRA and receiving the composite score from the PFRA
+Administrator, the member may elect to accept as PFRA or DPFRA. DPFRA is a non-
+attribution assessment aimed at providing feedback and helping members identify and improve
+any problem areas. ARC are eligible for DFPRAs no earlier than one month prior to annual
+scheduled assessment. (T-2)
+
+=== PAGE 5 (page-05.png) ===
+30 AFMAN36-2905 24 MARCH 2026
+
+3.8.2. A member will have no more than two (2) DPFRA logged within a 365-day period.
+(T-2) If a member has logged two (2) DPFRAs within 365 days, this option is not available,
+and they must accept the results of the PFRA. (T-2) Note: ARC will only have one (1) DPFRA
+logged within a 365-day period. (T-2)
+
+3.8.3. If a member does not accept the results as a DPFRA, it will still be entered into
+myFitness, but without the results. (T-3) Only after a member elects to count the PFRA as
+official will the results be recorded in myFitness as official. (T-3)
+
+3.9. Scoring For Members with Exemptions. Members with AF Form 469 exempting them
+from performing one or more components of the PFRA will be placed in PFRA Hold and are not
+authorized to assess. Members with an approved Assignment Limitation Code (ALC) that have
+enduring physical component and/or component modality limitations will be authorized to assess
+the components and/or component modalities that are medically approved. (T-1) Note: Members
+assessed on the 2-kilometer walk are considered component exempt and will fall under frequency
+standards in accordance with paragraph 3.10.
+
+3.10. Frequency of Physical Fitness Readiness Assessments. The required frequency of an
+official PFRA is based on the current fitness score and are assigned to a calendar month and/or a
+specific day. Units must take PFRAs within the assigned assessment cycle in accordance with
+paragraph 3.4. (T-2) Note: ARC members will test once every 12 months in accordance with
+paragraph 3.4.2.
+
+3.10.1. Excellent (> 90) (Ready). All members scoring Excellent without any component
+exemptions will be due again in 6 months. (ARC test once every 12 months.) (T-1) Note:
+Members who meet the 2 kilometer walk standard in Table 3.1, are not eligible for this
+category.
+
+3.10.2. Satisfactory (75-89.9) (Ready). All members scoring Satisfactory without any
+component exemptions will be due again in 6 months (ARC test once every 12 months) (T-1)
+Note: Members who meet the 2 kilometer walk standard in Table 3.1, are eligible for this
+category.
+
+3.10.3. Unsatisfactory (< 74.9) (Not Ready). All members scoring Unsatisfactory will be
+due again in 3 months (T-1) It is the member's responsibility to ensure they retest before the
+end of the 3rd month or will become overdue. Members require commander’s approval to test
+earlier than the 3rd calendar month. (T-3)
+
+3.10.4. Did Not Finish (Not Ready). Members that have failed to complete any component
+(e.g. stepped off track, failed to meet decoupling guidelines, etc.) results as an unsatisfactory.
+
+3.10.5. Not Ready. All members that have missed cycle assessments and/or have passed the
+3 month reassessment requirement for unsatisfactory.
+
+3.10.6. PFRA Hold (Not Ready). All members that have one or more component exemptions
+are not authorized to take a PFRA (excludes members with an ALC restriction). The next due
+month is set after the Reconditioning Period in accordance with paragraph 3.10.9. (T-1)
+
+3.10.7. Component Modality Exemption. All members that have an exemption for a
+component modality but are clear to assess on alternate component modalities. (T-1) Example:
+Member is medically restricted from assessing the 2 mi run but is cleared to assess on the 20m
+HAMR.
+
+=== PAGE 6 (page-06.png) ===
+AFMAN36-2905 24 MARCH 2026 31
+
+3.10.8. Acclimatization Period. This time period is to ensure members safely adjust to a
+change in environmental conditions. Acclimatization periods are granted when a member is
+away from their Home Station on official travel where an increase/decrease in altitude (greater
+than 5k feet) and change in climate is greater than 30 days. Calculation of the Acclimatization
+Period is determined by counting one (1) calendar month from the day after returning to
+duty/home station.
+
+3.10.9. Reconditioning Period. This time period to ensure members safely train and prepare
+for a PFRA after physical limitations have expired. Calculation of the Reconditioning period
+is determined by counting the one (1) calendar month from the day after returning to duty/from
+fitness restrictions.
+
+Table 3.3. PFRA Frequency.
+
+(Category Points INext PFRA due Paragraph
+Excellent (Ready) 90 6 months 3.10.1.
+IARC: 12 months 3.4.2.
+Satisfactory (Ready) [75-89.9 6 months 3.10.2.
+IARC: 12 months 3.4.2.
+Unsatisfactory (Not {<74.9 3 months (Total Force) 3.10.3.
+Ready)
+INot Ready Assess immediately 3.10.5
+IPFRA Hold (Not \After the expiration of 3.10.6.
+Ready) lexemption, plus
+Reconditioning Period
+Component Modality Exempt from a component 3.10.7.
+Exemption (Ready) Imodality but are clear to
+
+lassess on alternate
+component modalities.
+6 months
+
+IARC: 12 months
+
+
+=== PAGE 7 (page-07.png) ===
+32 AFMAN36-2905 24 MARCH 2026
+
+3.11. Physical Fitness Readiness (PFR). PFR is established by the members’ most recent
+PFRA. A member is ready when they fall into one of the categories below. If a member does not
+meet the criteria in the categories below, the member is not ready.
+
+3.11.1. Performed an Excellent PFRA within the last 6 months. ARC: 12 months.
+3.11.2. Performed a Satisfactory PFRA within the last 6 months. ARC: 12 months.
+3.12. Illness or Injury.
+
+3.12.1. Ifduring or after the PFRA, the member experiences unusual shortness of breath, chest
+pain, dizziness or lightheadedness, any other unusual symptoms, or injury, they should notify
+a PFRA Administrator immediately. The member has the option to be evaluated at the MTF
+(for ARC at locations without co-located medical treatment facility, members will utilize the
+nearest medical facility) whether or not the member completes the PFRA; however, the unit
+commander may only invalidate the PFRA after an evaluation from the MTF. Before departing
+the assessment location, members must notify PFRA Administrator of the presence of illness
+or injury, and the PFRA Administrator will indicate it on AF Form 4446.
+
+3.12.2. Members will inform their chain of command regarding the injury or illness
+immediately after the fitness assessment. This is to ensure communication between the unit
+commander and FAC/UFAC staff occurs prior to score entry into myFitness. (T-1) If the illness
+or injury block of the AF Form 4446 is marked, the FAC/UFAC staff will sign the form
+acknowledging that they will hold scores to allow for medical evaluation and the unit
+commander’s review. (T-1)
+
+3.12.3. FAC/UFAC staff will transmit a copy of the AF Form 4446 indicating injury/illness
+to the UFPM for the unit commander’s review within two duty days of the PFRA. (T-2)
+
+3.12.4. FAC/UFAC will enter the PFRA results in myFitness on the 6th duty day if the
+member does not seek a MTF evaluation. (T-2) If the injured/ill member has a pending MTF
+appointment, FAC/UFAC will wait to enter the PFRA results until the 6th duty day after the
+appointment.
+
+3.12.5. For Title-32 Drill Status Guardsmen and Traditional Reserve members, the FAC will
+enter scores into myFitness at the conclusion of the next unit training assembly or no more
+than 45 days if the commander does not invalidate the assessment results or if the FAC does
+not receive a response from the commander. (T-2)
+
+3.12.6. If the medical evaluation validates the illness or injury, the Unit Commander may
+invalidate the fitness assessment results by checking the “I render this assessment invalid”
+block of the AF Form 4446, signing, and returning the form to the FAC/UFAC.
+
+3.12.7. If the fitness assessment is invalidated, the member’s new due month will be the
+following calendar month from the invalidation date. (T-2) Note: ARC members must be
+rescheduled/reassessed at the next available Unit Training Assembly or Regularly Scheduled
+Drill. Full time and IMA will schedule as soon as possible. (T-2)
+
+3.13. Course Requirements for 2.0 mile Run, 2 Kilometer Walk, and 20 Meter High Aerobic
+Multi-Shuttle Run (HAMR).
+
+3.13.1. Establish standard courses of accurate distance that are as level and even as possible.
+All courses and tracks may be used at the discretion of the Installation Commander; however,
+
+=== PAGE 8 (page-08.png) ===
+AFMAN36-2905 24 MARCH 2026 33
+
+they must be certified in accordance with USA Track and Field guidelines and in conjunction
+with local CES, FSS, and Wing Safety procedures established in addition to the requirements
+in this chapter. (T-2) The installation commander (or GSU equivalent) will recertify running
+surfaces after damage, modification, or repair. (T-2) Note: Tracks/Courses remain certified
+until superseded.
+
+3.13.2. Ifa standardized 400-meter track is used for:
+3.13.2.1. The 2.0 mile timed run: Eight laps plus 61 feet.
+3.13.2.2. The 2-kilometer walk: Five laps.
+
+3.13.3. Ifnon-standardized 400-meter track or alternative route is used:
+3.13.3.1. The 2.0 mile timed run will be 3520 yards or 3219 meters.
+
+3.13.3.2. Course should have limited exposure to traffic, should not have a continuous
+incline or decline or rolling hills; and avoid slopes exceeding two degrees. Note: Indoor
+tracks with banked corners are authorized.
+
+3.13.3.3. If using a road course, where possible, start and finish should be at the same
+location. Clearly mark the start and finish lines (and half-way point for road courses).
+
+3.13.3.4. Basketball courts are not authorized for 2.0 mile run and 2 kilometer walk
+assessments. (T-2)
+
+3.13.4. 20-meter HAMR Course Requirements.
+
+3.13.4.1. Two lines measured 20 meters apart at both end points of the lines with enough
+room for the member to safely slow down. The lines may be permanently or temporarily
+marked.
+
+3.13.4.2. Surface must be flat, dry, slip resistant, and free of trip hazards. (T-1)
+
+3.13.4.3. Grass/gravel surfaces are not authorized. Indoor court surfaces are authorized
+and only need to be measured by FAC/UFAC staff.
+
+3.13.4.4. Any alternative location (e.g., Tennis court, hangar, etc.) outside of indoor courts
+or approved 2.0 miles/2 kilometer walk course/track must be approved by the Installation
+Commander in conjunction with local CES, FSS, and Wing Safety’s established
+procedures in addition to the requirements in this chapter. (T-2) Note: Turf is not an
+approved surface.
+
+3.13.4.5. Must use Air Force approved audio file. PFRA Administrator is responsible for
+ensuring the sound is sufficient for all runners to hear, and that the audio device used cannot
+be disrupted during the assessment. (T-1) Note: Pacing devices are authorized, however,
+the approved 20-meter HAMR audio file must be used. (T-1)
+
+3.13.5. Trained personnel will monitor participants, ensuring all members complete entire
+course and are continuously observed for course completion, safety, counting laps or shuttles,
+and recording results. (T-1)
+
+3.13.6. Indoor tracks may be used at the discretion of installation leadership; however, the
+track must be certified with the same standards within this chapter. (T-1)
+
+=== PAGE 9 (page-09.png) ===
+34 AFMAN36-2905 24 MARCH 2026
+
+3.14. Course and Track Safety and Environmental Conditions.
+3.14.1. Snow: No snow/ice accumulation on the running surface.
+
+3.14.2. Water (surface): No standing water that a large group cannot easily avoid on the
+running surface.
+
+3.14.3. Mud: No mud on the running surface that cannot be easily avoided.
+
+3.14.4. Light: Reflective belts or vests are required if running near traffic from one hour before
+sunset to one hour after sunrise.
+
+3.14.5. Intersections: Crossing guards with reflective safety vests and/or lights must be
+positioned at all active intersections. (T-2)
+
+3.14.6. Medical: An Automated External Defibrillator (AED) present (within the building, or
+within 100 feet). (T-2) AEDs will remain onsite until all PFRA participants leave the area.
+(T- 1). Note: Installation, Wing, or equivalent commanders will direct AED acquisition.
+
+3.14.7. Each installation will establish and ensure all sites conducting PFRAs have the ability
+to contact emergency services or call 911.
+
+3.14.8. Consult with base environmental engineering, base weather, or civilian agencies to
+determine the following environmental conditions before beginning any component
+assessment outdoors. Note: Devices used to measure wet or dry bulb globe temperature must
+be certified by bio environmental or civilian agencies. (T-2)
+
+3.14.8.1. Rain: No significant rain. Significant rain is defined as measurable 0.10 of inch
+per hour or more.
+
+3.14.8.2. Lightning: No lightning within five nautical miles and wait at least 30 minutes
+after the last observed lightning.
+
+3.14.8.3. Hail: No hail forecasted or reported within 25 miles.
+
+3.14.8.4. Wind Speed: Max wind allowed < 15 mph sustained, or < 20 mph gusting.
+3.14.8.5. Cold Stress: Air temperatures must be > 34 degrees Fahrenheit, including wind
+chill. (T-1) Heat Stress: Wet bulb globe temperature must be used at the start of the fitness
+assessment, but even more importantly during the aerobic component (should be < 86
+
+degrees Fahrenheit). Dry bulb globe temperature must be used for geographical locations
+where relative humidity is < 40% (should be < 90 degrees Fahrenheit). (T-1)
+
+3.14.8.6. Visibility: Must be greater than % mile if near vehicular traffic. (T-1)
+3.15. Official Physical Fitness Readiness Assessment Procedures.
+
+3.15.1. Prior to all PFRAs an FSQ must be completed and reviewed by UFPM. (T-1) The
+PFRA Administrator will not assess anyone without required FSQ documentation. (T-1)
+Member must inform PFRA Administrator if FSQ responses have changed between original
+submission of FSQ and execution of PFRA. If a member is an out of cycle assessment, the
+FAC/UFAC Staff reviews FSQs completed the day of the assessment and notifies the UFPM
+of any member with high-risk responses for referral to a health care provider. (T-2)
+
+3.15.2. Height and weight will be obtained in accordance with DoDI 1308.03. (T-0)
+
+=== PAGE 10 (page-10.png) ===
+AFMAN36-2905 24 MARCH 2026 35
+
+3.15.2.1. Height will be measured with the FAC/UFAC at an approved designated location
+on a calibrated stadiometer or wall mounted measuring device. (T-1)
+
+3.15.2.2. Members will remove shoes and stand on a flat surface with the head held
+horizontal looking directly forward, and the chin parallel with the floor. (T-2) The body
+should be straight, but not rigid, similar to the body position when at attention.
+
+3.15.2.3. Member’s height measurement will be recorded to the nearest % inch. (T-1).
+
+3.15.3. Weight will be measured with the FAC/UFAC at an approved designated location on
+a scale calibrated in accordance with Section 3 of Technical Order 33K-1-100- 1, Calibration
+Procedure for Maintenance Data Collection Codes and Calibration Measurement Summaries
+and recorded to the nearest pound with the following guidance: (T-1) Members will remove
+shoes to stand on the scale. Two pounds will be subtracted for clothing. (T-1)
+
+3.15.4. Official assessment component order: Body Composition, Muscular Strength, Core
+Endurance, and last is Cardiorespiratory. (T-3) PFRA Administrators will read verbal
+instructions in Attachment 2 and demonstrate proper exercises prior to administering the
+PFRA unless an instructional video is shown, if available. (T-2)
+
+3.15.4.1. Body Composition Component. Body composition must be the first scored
+component assessed in the PFRA. Members may elect to take this component of the test
+separate from the remaining components of the PFRA by no more than five duty days (no
+more than the prior UTA/RSD for ARC) before assessing the remaining components of the
+PFRA. Member may take the body composition concurrently with all components but may
+not be directed to do so. (T-1) Decoupled body composition results will be entered into
+myFitness by the FAC/UFAC, and the remaining components will be entered when
+complete. Note: If the remaining components are not complete within 5 duty days (next
+scheduled UTA/RSD for ARC) the composite assessment will be scored as Did Not Finish
+(DNF). (T-1)
+
+3.15.4.2. Body Composition will be assessed using WHtR measurements. (T-1) WHtR is
+an age agnostic assessment and is calculated by dividing Waist Circumference
+Measurement (WCM) by height. WHtR results are truncated (not rounded) to the first two
+decimal points. Example: If a member’s height is 72 inches, and their waist is 39.5 inches.
+The formula would be 39.5/72= 0.5486. The members’ truncated ratio would be 0.54.
+
+3.15.4.3. The PFRA Administrator will read or provide written instructions from
+Attachment 2 to the member being assessed and will conduct the WCM by using a tape
+made of non-stretch material that measures inches. Waist measurements will only be taken
+by a PFRA administrator of the same sex as the Airman being measured or must find a
+same sex chaperone. (T-1)
+
+3.15.4.4. Members will stand on a flat surface with feet no more than shoulder width apart,
+with their head held horizontal looking directly forward. (T-1) The body will be straight,
+but not rigid, similar to the position of attention. (T-1) The member may assist the
+administrator by adjusting clothing, so it does not fall over the waist during the
+measurement, and by holding the tape in place when the midpoint has been identified and
+the tape is around the waist. The member must let go of the tape and relax the arms to the
+side, standing at the position of attention before a measurement is recorded. (T-1) The
+
+=== PAGE 11 (page-11.png) ===
+36
+
+AFMAN36-2905 24 MARCH 2026
+
+members are not allowed to hold their breath or suck in their waist during the assessment.
+The administrator will record the measurement at the end of a normal exhale. (T-1)
+
+3.15.4.5. The WCM is taken at the midpoint between the member’s lowest rib and the top
+of their hip bone (iliac crest). The measurement will be taken three times and will be
+rounded down to the nearest 1/2 inch. (T-1) If any of the measurements differ by more than
+one inch, an additional measurement must be taken. (T-1) The three closest measurements
+will be added together, divided by three, and rounded down to the nearest half inch. (T-1)
+
+3.15.4.6. PFRA Administrator will take the measurement on bare skin, from the right side
+of the waist, at the midpoint between the lowest rib and the top of the hip bone (iliac crest).
+(T-1) The tape measure must be flat on the bare skin and should not compress the skin.
+(T-1)
+
+3.15.4.7. A secondary BFA must be accomplished for members identified with a WHtR >
+.55 and not meeting PFRA standards using an InBody Bio-Impedance (BIA) scale. If an
+InBody is not available, the BFA will be conducted using the 2-3 site tape method as
+described in Attachment 8. Note: Same sex is required when administering this
+assessment.
+
+3.15.5. Timing Devices. PFRA Administrator is responsible for operating two timing devices
+(one primary, one back-up—cell phones not authorized). The PFRA Administrator will start
+the timing device when the member is instructed to begin and observe the component. PFRA
+Administrators may notify the member how much time is remaining or has elapsed at
+appropriate intervals. Note: All other timing devices (e.g. race chips) are authorized if there
+are both a primary and backup timing device being used synchronously. A stopwatch must be
+used as the primary and secondary timing device.
+
+3.15.6. Counting and Monitoring. PFRA Administrators will never conduct PFRAs alone, and
+they will ensure there is a non-assessment taking member in addition to the assessment taking
+member when conducting PFRAs. (T-1)
+
+3.15.6.1. PFRA Administrators will supervise members conducting all components of the
+PFRA at a ratio of no more than 12 members for every one PFRA Administrator. (T-2)
+When multiple members are performing assessments, the PFRA Administrator may pair
+them off and use them as PFRA Monitors. PFRA Administrator will oversee and spot-
+check technique to ensure accurate and safe assessment. (T-2)
+
+3.15.6.2. PFRA Monitors will count the number of successful repetitions out loud. If the
+member breaks the correct form, the PFRA Monitors repeat the last correct number (e.g.,
+one, two, three, three, four), as well as gives instructions on what was done incorrectly.
+(T-1)
+
+3.15.6.3. At the conclusion of each component exercise, the PFRA Administrator will
+inform the member of the number of repetitions or time accomplished for the component.
+If the member would like to dispute the result, they must inform the PFRA Administrator
+prior to proceeding to the subsequent component. (T-3) If no resolution is made, member
+should indicate they dispute the result on AF Form 4446. Disputing of one component will
+not stop additional components from being assessed.
+
+=== PAGE 12 (page-12.png) ===
+AFMAN36-2905 24 MARCH 2026 37
+
+3.15.7. Completion and Recording. Upon completion of the assessment, the PFRA
+Administrator will record the total number of correct repetitions performed or time completed.
+(1-1)
+
+3.15.8. Members will complete one option from all three remaining components
+(Cardiorespiratory Fitness, Muscular Strength, and Core Endurance), unless medically exempt
+on a current AF Form 469. (T-1)
+
+3.15.9. All PFRA physical components (Cardiorespiratory Fitness, Muscular Strength, and
+Core Endurance) must be completed within a 3-hour window from start of first component
+until final component completion. (T-1)
+
+3.15.10. A minimum five (5) minute rest period is required between components. (T-2)
+
+3.15.11. Muscular Strength Component. Muscular Strength is measured with a one-minute
+timed push-up or two-minute hand release push-ups.
+
+3.15.12. Core Endurance Component. Core Endurance is measured with a one-minute timed
+sit-up, two-minute cross leg reverse crunch or timed forearm plank.
+
+3.15.12.1. Cardiorespiratory Component. Cardiorespiratory fitness is measured with 2.0
+mile run or 20-meter HAMR on a certified track or course which has been established in
+accordance with paragraph 3.13. (T-1) The 2-kilometer walk is only authorized if
+medically indicated on a AF Form 469. (T-1) Note: Members assessed on the 2-kilometer
+walk are considered component exempt and will fall under frequency standards in
+accordance with paragraph 3.7.3.
+
+3.15.12.2. Members should warm up prior to beginning the assessment.
+
+3.15.12.3. When performed at elevation levels > 5,250 feet, refer to the altitude adjustment
+chart at Attachment 3. ARC members who commute from a lower altitude to perform duty
+at their assigned/attached unit at a location where the altitude > 5,250 feet, member may
+perform their fitness assessment with a local AF unit in accordance with the procedures
+outlined in paragraph 3.2.4.
+
+3.15.12.4. Pacers are permitted during the Cardiorespiratory Components if they are
+requested by the member and there is no physical contact with the member or hindrance to
+other runners.
+
+3.15.13. Members have one opportunity to complete each of the PFRA components per fitness
+assessment. (T-1) If a member refuses to complete their PFRA due to failing to meet the
+minimum in one or more components, their incomplete PFRA will be recorded as a “Did Not
+Finish” PFRA. (T-1)
+
+3.15.14. Ifduring or after the assessment, the member experiences unusual shortness of breath,
+chest pain, dizziness or lightheadedness, or any other unusual symptoms, notify PFRA
+Administrator immediately.
+
+3.15.15. After completion of the PFRA, the PFRA Administrator must document and sign
+fitness assessment results on the AF Form 4446 and obtain the member’s signature to ensure
+it is recorded as an official assessment. (T-2) PFRA Administrator provides a copy of the
+results to the member for their personal records. (T-2) If the member disputes the recorded
+results, they should mark the “Dispute results” section, but that does not stop the PFRA results
+
+=== PAGE 13 (page-13.png) ===
+38
+
+AFMAN36-2905 24 MARCH 2026
+
+from being entered into myFitness. Members may appeal results in accordance with
+paragraph 8.2. Note: Use of the AF Form 4446 is mandatory. Locally produced scorecards
+cannot be used. (T-1)
+
