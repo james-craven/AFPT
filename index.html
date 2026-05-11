@@ -239,48 +239,43 @@
             </section>
         </div>
         <div id="cardio-editor" class="component-editor" data-component="cardio" hidden>
-            <!-- Phase E will move cardio controls here -->
+            <div class="component-editor__header">
+                <span class="component-editor__title">RUN</span>
+                <span class="component-editor__pfra-score" id="pfra-cardio-score">--</span>
+            </div>
+            <section class="run-txt">
+                <p class="run-txt-p" id="run-txt-p">
+                </p>
+            </section>
+            <section class="cardio-sel-chart" id="cardio-sel-chart">
+                <div class="cardio-sel-div">
+                    <select name="" id="cardio-sel" class="cardio-sel">
+                        <option value="1.5 Mile">1.5 Mile</option>
+                        <option value="Shuttle Run">Shuttle Run</option>
+                        <option value="Walk">Walk</option>
+                        <option value="Exempt">Exempt</option>
+                    </select>
+                </div>
+                <div id="cardio-see-chart-btn" class="cardio-see-chart-btn">
+                    <button id="run-btn">See Chart</button>
+                </div>
+                <label for="run-mintxt" class="hidden-labels">run minutes textbox</label>
+                <input type="tel" class="run-mintxt" id="run-mintxt">
+                <p id="colon" class="colon">:</p>
+                <label for="run-sectxt" class="hidden-labels">run seconds textbox</label>
+                <input type="tel" class="run-sectxt" id="run-sectxt">
+                <label for="shuttle-txt" class="hidden-labels">shuttles textbox</label>
+                <input type="tel" class="shuttle-txt" id="shuttle-txt">
+                <label for="walk-txt" class="hidden-labels">walk textbox</label>
+                <input type="tel" class="walk-txt" id="walk-txt">
+            </section>
+            <section class="run-slider-section">
+                <label for="run-slider" class="hidden-labels">run slider</label>
+                <input type="range" id="run-slider" class="run-slider" min="0" max="1136" value="1136">
+                <div class="slider-tick-layer"><button type="button" id="run-tick" class="slider-tick">15</button></div>
+            </section>
         </div>
     </div>
-
-    <!-- Section 10 - Run Text -->
-    <section class="run-txt">
-        <p class="run-txt-p" id="run-txt-p">
-        </p>
-    </section>
-
-    <!-- Section 11 - Run Select -->
-    <section class="cardio-sel-chart" id="cardio-sel-chart">
-        <div class="cardio-sel-div">
-            <select name="" id="cardio-sel" class="cardio-sel">
-                <option value="1.5 Mile">1.5 Mile</option>
-                <option value="Shuttle Run">Shuttle Run</option>
-                <option value="Walk">Walk</option>
-                <option value="Exempt">Exempt</option>
-            </select>
-        </div>
-        <div id="cardio-see-chart-btn" class="cardio-see-chart-btn">
-            <button id="run-btn">See Chart</button>
-        </div>
-        <label for="run-mintxt" class="hidden-labels">run minutes textbox</label>
-            <input type="tel" class="run-mintxt" id="run-mintxt">
-            <p id="colon" class="colon">:</p>
-            <label for="run-sectxt" class="hidden-labels">run seconds textbox</label>
-            <input type="tel" class="run-sectxt" id="run-sectxt">
-            <label for="shuttle-txt" class="hidden-labels">shuttles textbox</label>
-            <input type="tel" class="shuttle-txt" id="shuttle-txt">
-            <label for="walk-txt" class="hidden-labels">walk textbox</label>
-            <input type="tel" class="walk-txt" id="walk-txt">
-    </section>
-        
-
-
-    <!-- Run Slider -->
-    <section class="run-slider-section">
-        <label for="run-slider" class="hidden-labels">run slider</label>
-        <input type="range" id="run-slider" class="run-slider" min="0" max="1136" value="1136">
-        <div class="slider-tick-layer"><button type="button" id="run-tick" class="slider-tick">15</button></div>
-    </section>
 
     <!-- Run Lap Times -->
     <section class="runlaps-row">

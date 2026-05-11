@@ -708,9 +708,6 @@ section {
 /* Shared app-column layout contract — all primary card/section elements
    match the score header's max-width and centering so the page reads as
    a single column on desktop rather than a mix of narrow and full-width sections. */
-.run-txt,
-.cardio-sel-chart,
-.run-slider-section,
 .runlaps-row,
 .pfra-panel {
     max-width: var(--afpt-card-max-width);
@@ -1990,6 +1987,33 @@ body:not(.pfra-mode) .strength-card__score {
 
 #core-editor .pushsit-see-chart-btn button:hover,
 #core-editor #sit-btn:hover {
+    background: var(--afpt-accent);
+    color: var(--afpt-bg);
+}
+
+/* Token-scoped overrides for legacy inner sections inside cardio-editor */
+#cardio-editor .run-txt {
+    border-top: 1px solid var(--afpt-border);
+    margin-top: 0.25rem;
+}
+
+#cardio-editor .run-txt-p {
+    color: var(--afpt-ink);
+}
+
+#cardio-editor .run-slider-section {
+    border-bottom: 1px solid var(--afpt-border);
+}
+
+#cardio-editor .cardio-see-chart-btn button,
+#cardio-editor #run-btn {
+    background: transparent;
+    border: 1px solid var(--afpt-accent);
+    color: var(--afpt-accent);
+}
+
+#cardio-editor .cardio-see-chart-btn button:hover,
+#cardio-editor #run-btn:hover {
     background: var(--afpt-accent);
     color: var(--afpt-bg);
 }

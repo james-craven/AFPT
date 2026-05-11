@@ -271,8 +271,12 @@ async function assertChartDrawerShortcuts(page) {
   await closeChartByEscape(page);
   await page.evaluate(() => window.afptComponentEditor.selectComponent('strength'));
 
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('cardio'));
+  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
   await openChartAndAssert(page, '#run-btn', 'cardio.webp');
   await closeChartByButton(page);
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('strength'));
+  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
 }
 
 async function assertSettingsHubParity(page) {
@@ -281,7 +285,7 @@ async function assertSettingsHubParity(page) {
   assert.ok(buttonBox.width >= 44, 'settings hub button is at least 44px wide');
   assert.ok(buttonBox.height >= 44, 'settings hub button is at least 44px tall');
 
-  const scoreBefore = await text(page, '#run-txt-p');
+  const scoreBefore = await text(page, '#push-txt-p');
   const sliderBefore = await inputValue(page, '#run-slider');
   const x = buttonBox.x + (buttonBox.width / 2);
   const y = buttonBox.y + buttonBox.height - 4;
@@ -289,7 +293,7 @@ async function assertSettingsHubParity(page) {
   await page.mouse.click(x, y);
   await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
   assert.equal(await page.locator('#settings-hub-toggle').getAttribute('aria-expanded'), 'true');
-  assert.equal(await text(page, '#run-txt-p'), scoreBefore, 'opening settings preserves score text');
+  assert.equal(await text(page, '#push-txt-p'), scoreBefore, 'opening settings preserves score text');
   assert.equal(await inputValue(page, '#run-slider'), sliderBefore, 'opening settings preserves slider value');
 
   await openChartAndAssert(page, '#run-adjust-chart', 'runAltitudeAdjust.webp');
@@ -311,7 +315,7 @@ async function assertSettingsHubParity(page) {
 
   await closeSettingsHub(page);
   assert.equal(await page.locator('#settings-hub-toggle').getAttribute('aria-expanded'), 'false');
-  assert.equal(await text(page, '#run-txt-p'), scoreBefore, 'closing settings preserves score text');
+  assert.equal(await text(page, '#push-txt-p'), scoreBefore, 'closing settings preserves score text');
   assert.equal(await inputValue(page, '#run-slider'), sliderBefore, 'closing settings preserves slider value');
 }
 
@@ -556,6 +560,33 @@ async function assertCoreEditor(page) {
 
   // restore strength as active component
   await page.evaluate(() => window.afptComponentEditor.selectComponent('strength'));
+}
+
+async function assertCardioEditor(page) {
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('cardio'));
+  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+
+  const cardioScoreVisible = await page.evaluate(() => {
+    const score = document.getElementById('pfra-cardio-score');
+    return score ? getComputedStyle(score).display !== 'none' : false;
+  });
+  assert.equal(cardioScoreVisible, true, 'cardio editor pfra score visible in PFRA mode');
+
+  await page.locator('#cardio-sel').selectOption('Exempt');
+  await page.waitForTimeout(100);
+  const exemptScore = await page.evaluate(() => document.getElementById('pfra-cardio-score')?.textContent.trim());
+  assert.equal(exemptScore, 'EXEMPT', 'cardio exemption sets PFRA cardio score to EXEMPT');
+
+  await page.locator('#cardio-sel').selectOption('1.5 Mile');
+  await page.waitForTimeout(100);
+  const labelAfter = await text(page, '#run-txt-p');
+  assert.match(labelAfter, /Cardio Score/, 'cardio event switch updates score text');
+
+  const header = await scoreHeaderState(page);
+  assert.match(header.value, /^\d+\.\d$/, 'score header mirrors total after cardio changes');
+
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('strength'));
+  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
 }
 
 async function assertBodyCompositionCard(page) {
@@ -862,6 +893,8 @@ async function runLegacyRegression(browser, baseUrl, label, contextOptions = {})
   assert.equal(await inputValue(page, '#sit-slider'), '35');
   await page.evaluate(() => window.afptComponentEditor.selectComponent('strength'));
 
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('cardio'));
+  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
   await page.locator('#cardio-sel').selectOption('Shuttle Run');
   await setControlValue(page, '#run-slider', 83);
   await page.locator('#run-tick').click();
@@ -906,6 +939,7 @@ async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
   await assertBodyCompositionCard(page);
   await assertStrengthCard(page);
   await assertCoreEditor(page);
+  await assertCardioEditor(page);
 
   await page.locator('#push-txt').fill('50');
   await page.locator('#push-tick').click();
@@ -928,6 +962,8 @@ async function runPfraRegression(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(await inputValue(page, '#sit-slider'), '29');
   await page.evaluate(() => window.afptComponentEditor.selectComponent('strength'));
 
+  await page.evaluate(() => window.afptComponentEditor.selectComponent('cardio'));
+  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
   await page.locator('#cardio-sel').selectOption('Shuttle Run');
   assert.equal(await text(page, '#run-txt-p'), 'Cardio Score: 35 | Min: 21 | Max: 68');
   assert.equal(await inputValue(page, '#run-slider'), '21');
