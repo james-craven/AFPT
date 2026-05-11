@@ -637,9 +637,14 @@ async function assertAltitudeAdjustment(page) {
 }
 
 async function assertAppMjsFoundation(page) {
-  const hasApp = await page.evaluate(() => typeof window.afptApp === 'object' && typeof window.afptApp.getState === 'function' && typeof window.afptApp.refreshStateFromDom === 'function' && typeof window.afptApp.dispatch === 'function');
-  assert.ok(hasApp, 'window.afptApp exposes getState, refreshStateFromDom, dispatch');
+  // --- Phase 1: API surface ---
+  const hasApi = await page.evaluate(() =>
+    ['getState', 'refreshStateFromDom', 'dispatch', 'getScoreResult', 'refreshScoreFromDom', 'isReady', 'getLoadError']
+      .every((fn) => typeof window.afptApp?.[fn] === 'function'),
+  );
+  assert.ok(hasApi, 'window.afptApp exposes all required methods');
 
+  // Phase 1: state read
   const initialState = await page.evaluate(() => {
     window.afptApp.refreshStateFromDom();
     return window.afptApp.getState();
@@ -650,6 +655,7 @@ async function assertAppMjsFoundation(page) {
   assert.equal(initialState.cardio.event, 'two-mile-run', 'initial cardio event is two-mile-run');
   assert.equal(initialState.cardio.exempt, false, 'initial cardio exempt is false');
 
+  // Phase 1: refreshStateFromDom picks up DOM altitude change
   const stateAfterAlt = await page.evaluate(() => {
     const el = document.getElementById('alt-select');
     el.value = 'Group 2 (5500-5999ft)';
@@ -658,7 +664,6 @@ async function assertAppMjsFoundation(page) {
     return window.afptApp.getState();
   });
   assert.equal(stateAfterAlt.altitudeGroup, 2, 'refreshStateFromDom reads altitudeGroup 2 after DOM change');
-
   await page.evaluate(() => {
     const el = document.getElementById('alt-select');
     el.value = 'Altitude Adjust';
@@ -666,12 +671,75 @@ async function assertAppMjsFoundation(page) {
   });
   await page.waitForTimeout(50);
 
+  // Phase 1: dispatch is passive — internal state changes, DOM is untouched
   const sexBefore = await page.locator('#sex-sel').inputValue();
   await page.evaluate(() => window.afptApp.dispatch({ type: 'SET_SEX', sex: 'male' }));
-  const internalSex = await page.evaluate(() => window.afptApp.getState().sex);
-  const domSex = await page.locator('#sex-sel').inputValue();
-  assert.equal(internalSex, 'male', 'dispatch SET_SEX updates internal state');
-  assert.equal(domSex, sexBefore, 'dispatch does not mutate DOM in passive phase');
+  assert.equal(await page.evaluate(() => window.afptApp.getState().sex), 'male', 'dispatch SET_SEX updates internal state');
+  assert.equal(await page.locator('#sex-sel').inputValue(), sexBefore, 'dispatch does not mutate #sex-sel');
+  await page.evaluate(() => window.afptApp.refreshStateFromDom());
+
+  // --- Phase 2A: shadow scoring ---
+
+  // Standards must load before scoring works
+  await page.waitForFunction(() => window.afptApp.isReady() === true, { timeout: 10000 });
+  assert.equal(await page.evaluate(() => window.afptApp.getLoadError()), null, 'no standards load error');
+
+  // Shadow total matches the currently visible PFRA total
+  const { shadowTotal, visibleTotal } = await page.evaluate(() => {
+    const result = window.afptApp.refreshScoreFromDom();
+    const text = document.getElementById('pfra-result')?.innerText || '';
+    const match = text.match(/PFRA Total: ([\d.]+)/);
+    return { shadowTotal: result?.total ?? null, visibleTotal: match ? Number(match[1]) : null };
+  });
+  assert.ok(shadowTotal !== null, 'refreshScoreFromDom returns a score result');
+  assert.ok(visibleTotal !== null, 'visible PFRA total is present in #pfra-result');
+  assert.ok(Math.abs(shadowTotal - visibleTotal) < 0.1, `shadow total ${shadowTotal?.toFixed(1)} matches visible total ${visibleTotal}`);
+
+  // WHtR change in DOM updates shadow body score
+  const bodyBefore = await page.evaluate(() => window.afptApp.refreshScoreFromDom().scores.body);
+  await page.evaluate(() => {
+    document.getElementById('pfra-whtr').value = '0.65';
+    document.getElementById('pfra-whtr').dispatchEvent(new Event('input'));
+  });
+  await page.waitForTimeout(50);
+  const bodyAfterWhtr = await page.evaluate(() => window.afptApp.refreshScoreFromDom().scores.body);
+  assert.notEqual(bodyAfterWhtr, bodyBefore, 'refreshScoreFromDom reflects WHtR change in shadow body score');
+  await page.evaluate(() => {
+    document.getElementById('pfra-whtr').value = '0.49';
+    document.getElementById('pfra-whtr').dispatchEvent(new Event('input'));
+  });
+  await page.waitForTimeout(50);
+
+  // Altitude via dispatch changes shadow cardio score (uses known 25:23 run time)
+  const { cardioSeaLevel, cardioAlt4 } = await page.evaluate(() => {
+    window.afptApp.refreshStateFromDom();
+    window.afptApp.dispatch({ type: 'SET_CARDIO_EVENT', event: 'two-mile-run' });
+    window.afptApp.dispatch({ type: 'SET_CARDIO_VALUE', value: '25:23' });
+    window.afptApp.dispatch({ type: 'SET_ALTITUDE_GROUP', group: 0 });
+    const seaLevel = window.afptApp.getScoreResult().scores.cardio;
+    window.afptApp.dispatch({ type: 'SET_ALTITUDE_GROUP', group: 4 });
+    const alt4 = window.afptApp.getScoreResult().scores.cardio;
+    window.afptApp.refreshStateFromDom();
+    return { cardioSeaLevel: seaLevel, cardioAlt4: alt4 };
+  });
+  assert.notEqual(cardioAlt4, cardioSeaLevel, 'altitude Group 4 changes shadow cardio score for two-mile-run');
+
+  // dispatch + getScoreResult without touching DOM
+  await page.evaluate(() => window.afptApp.refreshStateFromDom());
+  const bodyBeforeDispatch = await page.evaluate(() => window.afptApp.getScoreResult().scores.body);
+  await page.evaluate(() => window.afptApp.dispatch({ type: 'SET_WHTR', value: '0.65' }));
+  const bodyAfterDispatch = await page.evaluate(() => window.afptApp.getScoreResult().scores.body);
+  assert.notEqual(bodyAfterDispatch, bodyBeforeDispatch, 'dispatch SET_WHTR changes shadow body score in getScoreResult');
+  assert.notEqual(await page.evaluate(() => document.getElementById('pfra-whtr').value), '0.65', 'dispatch SET_WHTR does not mutate #pfra-whtr');
+
+  // Visible score is unchanged by all shadow operations
+  const visibleAfter = await page.evaluate(() => {
+    const text = document.getElementById('pfra-result')?.innerText || '';
+    const match = text.match(/PFRA Total: ([\d.]+)/);
+    return match ? Number(match[1]) : null;
+  });
+  assert.ok(visibleAfter !== null, 'visible PFRA total still present after shadow operations');
+  assert.ok(Math.abs(visibleAfter - visibleTotal) < 0.1, `visible score unchanged: was ${visibleTotal}, now ${visibleAfter}`);
 
   await page.evaluate(() => window.afptApp.refreshStateFromDom());
 }

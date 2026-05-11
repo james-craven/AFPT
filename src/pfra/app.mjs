@@ -1,4 +1,16 @@
 import { legacyAgeToPfraAgeGroup, legacySexToPfraSex } from './state.mjs';
+import { loadPfraStandards, walkMaximumTime } from './standards.mjs';
+import {
+  applyHamrAltitudeAdjustment,
+  applyRunAltitudeAdjustment,
+  applyWalkAltitudeAdjustment,
+  pfraAgeToWalkAgeGroup,
+  scorePfraAssessment,
+  secondsToTimeString,
+  toSeconds,
+} from './scoring.mjs';
+
+// --- State ---
 
 const defaultState = {
   sex: 'female',
@@ -13,6 +25,16 @@ const defaultState = {
 
 let state = { ...defaultState, strength: { ...defaultState.strength }, core: { ...defaultState.core }, cardio: { ...defaultState.cardio } };
 
+// --- Standards/tables (loaded async) ---
+
+let standards = null;
+let tables = {};
+let altitudeTables = {};
+let loadError = null;
+let ready = false;
+
+// --- Helpers ---
+
 function readAltitudeGroup(val) {
   if (!val || val === 'Altitude Adjust') return 0;
   if (val.startsWith('Group 1')) return 1;
@@ -22,24 +44,11 @@ function readAltitudeGroup(val) {
   return 0;
 }
 
-function readStrengthEvent(pfraVal) {
-  const map = { 'push-up': 'push-up', 'hand-release-push-up': 'hand-release-push-up' };
-  return map[pfraVal] || 'push-up';
-}
-
-function readCoreEvent(pfraVal) {
-  const map = { 'sit-up': 'sit-up', 'cross-leg-reverse-crunch': 'cross-leg-reverse-crunch', 'forearm-plank': 'forearm-plank' };
-  return map[pfraVal] || 'sit-up';
-}
-
-function readCardioEvent(pfraVal) {
-  const map = { 'two-mile-run': 'two-mile-run', 'hamr-20-meter': 'hamr-20-meter', 'two-kilometer-walk': 'two-kilometer-walk' };
-  return map[pfraVal] || 'two-mile-run';
-}
-
 function byId(id) {
   return document.getElementById(id);
 }
+
+// --- State readers ---
 
 function refreshStateFromDom() {
   const sexEl = byId('sex-sel');
@@ -62,17 +71,17 @@ function refreshStateFromDom() {
     whtr: whtrEl?.value || '0.49',
     altitudeGroup: readAltitudeGroup(altEl?.value),
     strength: {
-      event: readStrengthEvent(strengthEventEl?.value),
+      event: strengthEventEl?.value || 'push-up',
       value: strengthPerfEl?.value || '67',
       exempt: pushSel?.value === 'Exempt',
     },
     core: {
-      event: readCoreEvent(coreEventEl?.value),
+      event: coreEventEl?.value || 'sit-up',
       value: corePerfEl?.value || '58',
       exempt: sitSel?.value === 'Exempt',
     },
     cardio: {
-      event: readCardioEvent(cardioEventEl?.value),
+      event: cardioEventEl?.value || 'two-mile-run',
       value: cardioPerfEl?.value || '13:25',
       exempt: cardioSel?.value === 'Exempt',
     },
@@ -88,6 +97,8 @@ function getState() {
     cardio: { ...state.cardio },
   };
 }
+
+// --- Dispatch (internal state only, no DOM) ---
 
 function dispatch(action) {
   switch (action.type) {
@@ -138,6 +149,114 @@ function dispatch(action) {
   }
 }
 
-refreshStateFromDom();
+// --- Shadow scoring ---
 
-window.afptApp = { getState, refreshStateFromDom, dispatch };
+function altitudeAdjustedCardio(cardioEvent, rawPerformance, altGroup, sex, ageGroup) {
+  if (!altGroup || altGroup <= 0 || !rawPerformance) return rawPerformance;
+
+  if (cardioEvent === 'two-mile-run') {
+    if (!altitudeTables.run) return rawPerformance;
+    const perfSec = toSeconds(rawPerformance);
+    if (!Number.isFinite(perfSec)) return rawPerformance;
+    return secondsToTimeString(applyRunAltitudeAdjustment(perfSec, altGroup, altitudeTables.run));
+  }
+
+  if (cardioEvent === 'hamr-20-meter') {
+    return String(Math.round(applyHamrAltitudeAdjustment(Number(rawPerformance), altGroup)));
+  }
+
+  if (cardioEvent === 'two-kilometer-walk') {
+    const walkAgeGroup = pfraAgeToWalkAgeGroup(ageGroup);
+    const walkTable = sex === 'male' ? altitudeTables.walkMale : altitudeTables.walkFemale;
+    if (!walkTable) return rawPerformance;
+    const altMaxTime = applyWalkAltitudeAdjustment(walkTable, walkAgeGroup, altGroup);
+    const seaLevelMaxTime = walkMaximumTime(standards, ageGroup, sex);
+    if (!altMaxTime || !seaLevelMaxTime) return rawPerformance;
+    const bonus = toSeconds(altMaxTime) - toSeconds(seaLevelMaxTime);
+    if (!Number.isFinite(bonus) || bonus <= 0) return rawPerformance;
+    const perfSec = toSeconds(rawPerformance);
+    if (!Number.isFinite(perfSec)) return rawPerformance;
+    return secondsToTimeString(Math.max(0, perfSec - bonus));
+  }
+
+  return rawPerformance;
+}
+
+function computeScoreFromState(s) {
+  if (!standards || !Object.keys(tables).length) return null;
+
+  const adjustedCardio = s.cardio.exempt
+    ? s.cardio.value
+    : altitudeAdjustedCardio(s.cardio.event, s.cardio.value.trim(), s.altitudeGroup, s.sex, s.ageGroup);
+
+  return scorePfraAssessment({
+    ageGroup: s.ageGroup,
+    sex: s.sex,
+    standards,
+    tables,
+    whtr: s.whtr,
+    strengthEvent: s.strength.event,
+    strengthPerformance: s.strength.value.trim(),
+    coreEvent: s.core.event,
+    corePerformance: s.core.value.trim(),
+    cardioEvent: s.cardio.event,
+    cardioPerformance: adjustedCardio,
+    exemptions: {
+      strength: s.strength.exempt,
+      core: s.core.exempt,
+      cardio: s.cardio.exempt,
+    },
+  });
+}
+
+function getScoreResult() {
+  return computeScoreFromState(state);
+}
+
+function refreshScoreFromDom() {
+  refreshStateFromDom();
+  return computeScoreFromState(state);
+}
+
+function isReady() {
+  return ready;
+}
+
+function getLoadError() {
+  return loadError;
+}
+
+// --- Standards loading ---
+
+async function loadData() {
+  try {
+    const [loaded, runTable, walkMaleTable, walkFemaleTable] = await Promise.all([
+      loadPfraStandards(),
+      fetch('./standards/extracted/tables/altitude-run-2-mile.json').then((r) => r.json()),
+      fetch('./standards/extracted/tables/altitude-walk-2km-male.json').then((r) => r.json()),
+      fetch('./standards/extracted/tables/altitude-walk-2km-female.json').then((r) => r.json()),
+    ]);
+
+    standards = loaded.standards;
+    tables = loaded.tables;
+    altitudeTables = { run: runTable, walkMale: walkMaleTable, walkFemale: walkFemaleTable };
+    ready = true;
+  } catch (err) {
+    loadError = err.message;
+  }
+}
+
+// --- Init ---
+
+refreshStateFromDom();
+loadData();
+
+window.afptApp = {
+  getState,
+  refreshStateFromDom,
+  dispatch,
+  getScoreResult,
+  refreshScoreFromDom,
+  isReady,
+  getLoadError,
+};

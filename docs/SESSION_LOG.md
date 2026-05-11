@@ -2,6 +2,16 @@
 
 ## 2026-05-11 (continued)
 
+### Clean Runtime Phase 2A: src/pfra/app.mjs shadow scoring
+
+- Added standards loading (`loadPfraStandards`, three altitude tables) to `src/pfra/app.mjs` on init.
+- Added `computeScoreFromState(state)` pure function: calls `scorePfraAssessment` with altitude-adjusted cardio (run/HAMR/walk), identical logic to `pfra-calculator.js` but owned by `app.mjs`.
+- Added `getScoreResult()` (score from current internal state), `refreshScoreFromDom()` (refresh state + score), `isReady()`, `getLoadError()`.
+- Exposed all through `window.afptApp` — no DOM rendering, `main2.js` and `pfra-calculator.js` untouched.
+- Updated `assertAppMjsFoundation(page)` with Phase 2A checks: `isReady()` becomes true; shadow total matches visible PFRA total; WHtR DOM change updates shadow body score; altitude Group 4 (via dispatch) changes shadow run score; dispatch+getScoreResult changes body score without touching DOM; visible score unchanged throughout.
+- `npm test` passed: 131 scoring fixtures, 89 cached files, 28 required offline assets, all browser regressions.
+- Committed and pushed.
+
 ### Clean Runtime Phase 1: src/pfra/app.mjs passive state observer
 
 - Created `src/pfra/app.mjs`: passive state observer exposing `window.afptApp = { getState, refreshStateFromDom, dispatch }`.

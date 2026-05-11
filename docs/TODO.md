@@ -30,6 +30,7 @@
 - [x] Altitude adjustment Phase A (pure functions): `getAltitudeGroup`, `applyRunAltitudeAdjustment`, `applyWalkAltitudeAdjustment`, `applyHamrAltitudeAdjustment` in `src/pfra/scoring.mjs`; 33 altitude fixture tests; altitude JSON tables extracted.
 - [x] Altitude adjustment Phase A (UI wiring): `pfra-calculator.js` reads `#alt-select`, loads altitude tables, applies correction to cardio performance before scoring; browser regression tests; legacy `altitudeSel` PFRA-mode guard in `main2.js`.
 - [x] Clean runtime Phase 1: `src/pfra/app.mjs` passive state observer — `getState`, `refreshStateFromDom`, `dispatch` (internal only); exposed as `window.afptApp`; browser regression added.
+- [x] Clean runtime Phase 2A: shadow scoring — `computeScoreFromState`, `getScoreResult`, `refreshScoreFromDom`, `isReady`, `getLoadError`; altitude-aware; no DOM rendering; shadow total verified to match visible PFRA total.
 - [ ] Component editor Phase E: move cardio controls into `#cardio-editor`.
 - [ ] Component editor Phase F: component switching hides non-selected editors (already wired; verify values survive switching).
 - [ ] Component editor Phase G: live value mirroring in summary cards; add `#pfra-core-score` and `#pfra-cardio-score`.
