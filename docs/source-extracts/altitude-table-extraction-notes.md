@@ -8,13 +8,20 @@
 
 ## A3.1 — Altitude Time Correction for 2.0 Mile Run
 
-**Status: UNRESOLVED**
+**Status: RESOLVED — manual extraction complete, high confidence**
 
-The OCR output for page 1 is completely garbled. The table headers are misread (e.g., "5350 ft - 5499 ft" where "5350" should be "5250"; "500 ft - 5999 ft" where the leading "5" was dropped). The correction values appear as disconnected fragments of numbers (`0:06`, `0:07`, `0:08`, ..., `0:13`, `0:18`, `0:19`, ...) with no reliable row associations. OCR rendering character sequences like `SIS/S/S/S4]4]4)y4ya` confirm the table structure was too complex for this OCR pass.
+OCR was completely garbled for this table (complex multi-column structure). Resolved by manual
+visual inspection of 300 DPI PNG crops. See full extraction notes and verification log:
+`docs/source-extracts/altitude-run-a3-1-manual-extraction.md`
 
-**Decision:** Do not create `altitude-run-2-mile.json`. Do not implement `applyRunAltitudeAdjustment()`. The run altitude correction requires manual inspection of the PDF image. This is documented as a pending subtask for Phase A.
+The source PDF itself contains two header errors (not OCR artifacts):
+- Group 1 lower bound printed as "5350 ft" — should be **5250 ft** (corrected by cross-reference with A3.2–A3.4)
+- Group 4 boundary printed as "5350 ft – 5499 ft" — should be **≥ 6600 ft** (source document error; value is logically identical to Group 1 which is impossible)
 
-**Impact:** `scoreRun()` (via `scoreFromTable()`) will not apply altitude adjustment until A3.1 is resolved. Walk and HAMR altitude adjustment proceed on schedule.
+All 35 rows × 4 correction columns extracted with no uncertain cells.
+
+Stored in: `standards/extracted/tables/altitude-run-2-mile.json`
+Reference crops: `standards/sources/a31-crops/`
 
 ---
 

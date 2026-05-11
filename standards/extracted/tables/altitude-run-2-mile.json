@@ -1,0 +1,69 @@
+{
+  "id": "altitude-run-2-mile",
+  "source": "DAFMAN 36-2905, 24 March 2026, Attachment 3, Table A3.1",
+  "sourceFile": "standards/sources/Pages from DAFMAN 36-2905-2.pdf",
+  "sourcePage": 1,
+  "referenceImages": "standards/sources/a31-crops/",
+  "extractionMethod": "manual visual inspection of 300 DPI PNG crops",
+  "ocrConfidence": "high",
+  "headerErrors": [
+    {
+      "column": "Group 1 lower bound",
+      "printed": "5350 ft",
+      "corrected": "5250 ft",
+      "basis": "Consistent with Group 1 in Tables A3.2, A3.3, A3.4 throughout same document"
+    },
+    {
+      "column": "Group 4 boundary",
+      "printed": "5350 ft - 5499 ft",
+      "corrected": "at or greater than 6600 ft",
+      "basis": "Group 4 is 'at or greater than 6600 ft' in all other tables; printed value is identical to Group 1 which is logically impossible"
+    }
+  ],
+  "altitudeGroups": [
+    { "group": 0, "description": "Below 5,250 ft — no correction" },
+    { "group": 1, "minFt": 5250, "maxFt": 5499 },
+    { "group": 2, "minFt": 5500, "maxFt": 5999 },
+    { "group": 3, "minFt": 6000, "maxFt": 6599 },
+    { "group": 4, "minFt": 6600, "description": "at or greater than 6,600 ft" }
+  ],
+  "unit": "min:sec",
+  "note": "The run time column defines performance band upper bounds. A runner's correction is from the row where their actual time <= the listed runTime. Corrections are subtracted from actual run time to produce an adjusted sea-level-equivalent time for scoring. The last three runTime values were displayed as '24:00:00', '24:48:00', '25:00:00' (h:mm:ss) in the source PDF — a PDF formatting error; stored here as 'min:sec'.",
+  "rows": [
+    { "runTime": "13:25", "atOrFaster": true, "group1": "0:02", "group2": "0:06", "group3": "0:11", "group4": "0:18" },
+    { "runTime": "13:55", "group1": "0:02", "group2": "0:06", "group3": "0:11", "group4": "0:19" },
+    { "runTime": "14:12", "group1": "0:02", "group2": "0:07", "group3": "0:12", "group4": "0:20" },
+    { "runTime": "14:27", "group1": "0:02", "group2": "0:07", "group3": "0:12", "group4": "0:20" },
+    { "runTime": "14:41", "group1": "0:02", "group2": "0:07", "group3": "0:12", "group4": "0:20" },
+    { "runTime": "15:05", "group1": "0:02", "group2": "0:07", "group3": "0:12", "group4": "0:21" },
+    { "runTime": "15:17", "group1": "0:02", "group2": "0:07", "group3": "0:12", "group4": "0:21" },
+    { "runTime": "15:28", "group1": "0:02", "group2": "0:08", "group3": "0:13", "group4": "0:22" },
+    { "runTime": "15:38", "group1": "0:02", "group2": "0:08", "group3": "0:13", "group4": "0:22" },
+    { "runTime": "16:09", "group1": "0:02", "group2": "0:08", "group3": "0:13", "group4": "0:22" },
+    { "runTime": "16:29", "group1": "0:03", "group2": "0:08", "group3": "0:14", "group4": "0:23" },
+    { "runTime": "16:49", "group1": "0:03", "group2": "0:09", "group3": "0:15", "group4": "0:24" },
+    { "runTime": "17:08", "group1": "0:03", "group2": "0:09", "group3": "0:15", "group4": "0:25" },
+    { "runTime": "17:18", "group1": "0:03", "group2": "0:09", "group3": "0:15", "group4": "0:26" },
+    { "runTime": "17:37", "group1": "0:03", "group2": "0:09", "group3": "0:16", "group4": "0:26" },
+    { "runTime": "17:55", "group1": "0:03", "group2": "0:09", "group3": "0:16", "group4": "0:27" },
+    { "runTime": "18:23", "group1": "0:03", "group2": "0:10", "group3": "0:16", "group4": "0:28" },
+    { "runTime": "18:39", "group1": "0:03", "group2": "0:10", "group3": "0:17", "group4": "0:28" },
+    { "runTime": "19:07", "group1": "0:03", "group2": "0:10", "group3": "0:17", "group4": "0:29" },
+    { "runTime": "19:36", "group1": "0:03", "group2": "0:11", "group3": "0:18", "group4": "0:31" },
+    { "runTime": "19:45", "group1": "0:03", "group2": "0:11", "group3": "0:18", "group4": "0:31" },
+    { "runTime": "20:06", "group1": "0:04", "group2": "0:11", "group3": "0:19", "group4": "0:32" },
+    { "runTime": "20:44", "group1": "0:04", "group2": "0:12", "group3": "0:20", "group4": "0:34" },
+    { "runTime": "21:09", "group1": "0:05", "group2": "0:13", "group3": "0:21", "group4": "0:36" },
+    { "runTime": "22:04", "group1": "0:05", "group2": "0:13", "group3": "0:22", "group4": "0:37" },
+    { "runTime": "22:28", "group1": "0:05", "group2": "0:14", "group3": "0:23", "group4": "0:38" },
+    { "runTime": "22:45", "group1": "0:05", "group2": "0:14", "group3": "0:24", "group4": "0:40" },
+    { "runTime": "22:50", "group1": "0:05", "group2": "0:15", "group3": "0:25", "group4": "0:42" },
+    { "runTime": "22:58", "group1": "0:05", "group2": "0:15", "group3": "0:26", "group4": "0:43" },
+    { "runTime": "23:15", "group1": "0:06", "group2": "0:17", "group3": "0:28", "group4": "0:46" },
+    { "runTime": "23:30", "group1": "0:06", "group2": "0:18", "group3": "0:29", "group4": "0:49" },
+    { "runTime": "23:36", "group1": "0:06", "group2": "0:18", "group3": "0:31", "group4": "0:51" },
+    { "runTime": "24:00", "group1": "0:06", "group2": "0:19", "group3": "0:32", "group4": "0:54", "note": "PDF displayed as '24:00:00'" },
+    { "runTime": "24:48", "group1": "0:07", "group2": "0:20", "group3": "0:34", "group4": "0:57", "note": "PDF displayed as '24:48:00'" },
+    { "runTime": "25:00", "group1": "0:08", "group2": "0:22", "group3": "0:37", "group4": "1:02", "note": "PDF displayed as '25:00:00'" }
+  ]
+}
