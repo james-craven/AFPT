@@ -84,14 +84,15 @@ PFRA 2026 already scores all components:
 These features exist in `main2.js` with **no current equivalent in `src/pfra/`**. They block
 deletion of legacy code until resolved.
 
-### Gap 1: Altitude adjustment (blocking)
+### Gap 1: Altitude adjustment — RESOLVED (2026-05-11)
 - **What it does:** Adjusts run/walk times by altitude group (5250–5499ft through >6600ft).
   `calculateAltitudeDiff()` returns per-event time adjustments based on age/sex.
 - **Currently:** `#alt-select` drives `main2.js` score recalculation. PFRA has no altitude logic.
-- **Decision required:** Does PFRA 2026 include altitude adjustments in the official standard?
-  If yes, implement in `src/pfra/scoring.mjs` + add fixture tests.
-  If no (PFRA does not use altitude), remove the `#alt-select` element and note this as a
-  deliberate product decision (PFRA-only, no altitude correction).
+- **Decision:** CONFIRMED REQUIRED. DAFMAN 36-2905 (24 March 2026) Attachment 3 mandates altitude
+  adjustment for 2-mile run, 2-km walk, and 20-meter HAMR at elevations > 5,250 ft.
+  See `docs/source-extracts/fitness-guidance-source-audit.md` and
+  `docs/CURRENT_STANDARDS_MIGRATION_PLAN.md` Phase A for the implementation plan.
+- **Do NOT remove** `#alt-select` or altitude chart assets until Phase A is complete.
 
 ### Gap 2: Lap display format (minor, manageable)
 - **What it does:** Legacy displays 6 laps for 1.5-mile run. PFRA displays 8 laps for 2-mile run.
@@ -149,9 +150,9 @@ component editor migration and gives PFRA full control over all three component 
    true; remove the false branch of every `if (isPfra)` block).
 3. Remove `restoreLegacyMainScore()` and the `ageSexChange()` call on legacy exit.
 4. Remove `window.syncPfraFromLegacy` bridge (no longer needed if only one mode exists).
-5. Remove altitude selector (`#alt-select`) **if** the product decision is PFRA-only with no
-   altitude adjustment (see Gap 1). If altitude must be supported, defer this to after Gap 1 is
-   resolved.
+5. Do NOT remove altitude selector (`#alt-select`). Altitude adjustment is required by DAFMAN
+   36-2905 (Gap 1 resolved). Removal is deferred until Phase A (altitude implementation) is
+   complete. See `docs/CURRENT_STANDARDS_MIGRATION_PLAN.md`.
 6. Update `runLegacyRegression` in browser regression tests → delete it or mark as skipped.
 
 **What still works after Phase 1:**
@@ -261,10 +262,11 @@ Use the existing fixture suite as the oracle.
 
 ## 6. Risks and Rollback
 
-### Risk 1: Altitude adjustment user impact (medium)
-If the product decision is PFRA-only with no altitude adjustment, users at altitude lose a feature.
-**Mitigation:** Note explicitly in a visible UI change log or settings panel. The PFRA 2026
-standard itself may not include altitude adjustment (confirm against source PDF).
+### Risk 1: Altitude adjustment — RESOLVED (2026-05-11)
+Altitude adjustment is a confirmed current-standard requirement (DAFMAN 36-2905, Attachment 3).
+The original framing of this risk ("if the product decision is PFRA-only with no altitude") was
+premature. Altitude must be implemented in `src/pfra/scoring.mjs` (Phase A of the current plan)
+before legacy altitude code can be removed. See `docs/CURRENT_STANDARDS_MIGRATION_PLAN.md`.
 
 ### Risk 2: Scoring regression during handler transfer (high)
 Moving event ownership one component at a time risks subtle differences if the new handler

@@ -15,6 +15,9 @@ using the current official Air Force guidance documents as the source of truth.
 
 **Source of truth:** `docs/SOURCE_OF_TRUTH_MANIFEST.md` — every scoring rule must be listed there.
 
+**Source audit completed:** 2026-05-11 — DAFMAN 36-2905 (24 March 2026) OCR'd and audited.
+See `docs/source-extracts/fitness-guidance-source-audit.md` for full findings.
+
 **Restore point:** tag `pre-pfra-only-migration` (commit `9ac80e4`, 2026-05-11).
 
 ---
@@ -65,46 +68,51 @@ Legacy mode must go.
 
 ## 2. What the Current Standard Covers
 
-The PFRA Scoring Charts (effective 1 Mar 2026, verified locally) specify:
+Sources: PFRA Scoring Charts (effective 1 Mar 2026) + DAFMAN 36-2905 (24 March 2026).
 
-| Component | Events | Max points |
-|-----------|--------|------------|
-| Body composition | WHtR | 20 |
-| Muscular strength | Push-up, Hand-release push-up | 15 |
-| Core endurance | Sit-up, Cross-leg reverse crunch, Forearm plank | 15 |
-| Cardiorespiratory | 2-mile run, 20-meter HAMR, 2km walk (pass/fail) | 50 |
+| Component | Events | Max points | Notes |
+|-----------|--------|------------|-------|
+| Body composition | WHtR | 20 | WHtR truncated to 2 decimal places; age-agnostic |
+| Muscular strength | Push-up, Hand-release push-up | 15 | Component minimum required |
+| Core endurance | Sit-up, Cross-leg reverse crunch, Forearm plank | 15 | Component minimum required |
+| Cardiorespiratory | 2-mile run, 20-meter HAMR, 2km walk (pass/fail) | 50 | Component minimum required |
 
-All of these are already implemented with extracted tables and fixture tests.
+All scoring events are already implemented with extracted tables and fixture tests.
+
+**Altitude adjustment (confirmed required):** DAFMAN 36-2905 Attachment 3 mandates time/shuttle
+adjustments for assessments performed above 5,250 ft. Applies to 2-mile run, 2-km walk, and
+20-meter HAMR. Four altitude bands: 5,250–5,499 ft, 5,500–5,999 ft, 6,000–6,599 ft, ≥6,600 ft.
+This is **not yet implemented** in `src/pfra/scoring.mjs`. See Phase A below.
 
 ---
 
-## 3. Open Source Verification Items
+## 3. Source Verification Status
 
-These items require a human to manually review official PDFs before implementation decisions
-are made. See `docs/SOURCE_OF_TRUTH_MANIFEST.md` for the full audit.
+See `docs/source-extracts/fitness-guidance-source-audit.md` for full OCR audit findings.
 
-### Item A: Altitude adjustment (blocking for #alt-select removal)
-- **Status:** Not present in PFRA Scoring Charts. DAFMAN 36-2905 not yet reviewed.
-- **Action:** Do not remove `#alt-select`, `runAltitudeAdjust.webp`, or `walkAltitudeAdjust.webp`
-  until DAFMAN 36-2905 has been manually downloaded and searched for altitude guidance.
-- **If altitude is in current guidance:** Implement in `src/pfra/scoring.mjs` with fixture tests.
-- **If altitude is absent from current guidance:** Remove legacy altitude behavior and document
-  the removal in `SOURCE_OF_TRUTH_MANIFEST.md`.
+### Item A: Altitude adjustment — RESOLVED (2026-05-11)
+- **Status:** CONFIRMED REQUIRED. Present in DAFMAN 36-2905, 24 March 2026, Attachment 3.
+- **Finding:** Altitude time/shuttle corrections apply above 5,250 ft for 2-mile run, 2-km walk
+  (male and female tables are separate), and 20-meter HAMR.
+- **Action:** Implement in `src/pfra/scoring.mjs` with source-backed fixture tests. See Phase A.
+- **Do not remove:** `#alt-select`, `runAltitudeAdjust.webp`, or `walkAltitudeAdjust.webp` until
+  the PFRA implementation covers this. Then replace them with the new PFRA altitude UI.
 
 ### Item B: Exemption rules (needed before Phase 3)
-- **Status:** Not verified against DAFMAN 36-2905.
+- **Status:** Partially verified. DAFMAN 36-2905 §3.9 confirms exemption scoring for AF Form 469.
+  Walk-only members are component exempt for cardiorespiratory. Further implementation detail
+  (medical, deployment, pregnancy categories) not fully captured in the 13-page excerpt.
 - **Current behavior:** The app shows Exempt options in each component selector. PFRA exemptions
-  zero-out the component; the exempt player's other components are scored normally.
-- **Action:** Verify exemption rules (medical, deployment, pregnancy) against DAFMAN 36-2905
-  before implementing a PFRA-only exemption controller.
+  zero-out the component; the exempt member's other components are scored normally.
+- **Action:** Current exemption behavior is directionally correct per §3.9. Full audit of all
+  exemption categories should be completed before Phase 3 if behavior changes are needed.
 
-### Item C: DAFMAN 36-2905 and DTM download
-- **Status:** AFPC blocks automated PDF downloads.
-- **Action required (human):**
-  1. Open `https://www.afpc.af.mil/Portals/70/documents/FITNESS/afman36-2905.pdf` in a browser.
-  2. Save to `standards/sources/dafman36-2905.pdf`.
-  3. Search for altitude, elevation, 5250, 5500, 6000, 6600, adjustment.
-  4. Update `SOURCE_OF_TRUTH_MANIFEST.md` with the finding.
+### Item C: DAFMAN 36-2905 source PDFs — RESOLVED (2026-05-11)
+- **Status:** DONE. Pages from DAFMAN 36-2905 (13 pages, Chapter 3) and Attachment 3 (2 pages)
+  downloaded and saved to `standards/sources/`. OCR extracted to
+  `standards/sources/extracted-text/`. Full audit in `docs/source-extracts/fitness-guidance-source-audit.md`.
+- **No further action required** for Items A and C. Audit may be extended if deeper policy
+  coverage is needed for exemptions (Item B).
 
 ---
 
@@ -119,8 +127,12 @@ are made. See `docs/SOURCE_OF_TRUTH_MANIFEST.md` for the full audit.
 | `window.afptLegacy` export | Phase 5 |
 | `window.syncPfraFromLegacy` bridge | Phase 1 |
 | `pfra-calculator.js` entirely | Phase 4 |
-| Altitude charts and `#alt-select` | After Item A verified absent from current docs |
 | `main2.js` | Phase 5, after all handlers migrated |
+
+**Do NOT remove:** Altitude charts (`runAltitudeAdjust.webp`, `walkAltitudeAdjust.webp`),
+`#alt-select`, or any altitude-related assets. Altitude adjustment is a confirmed current-standard
+requirement (Item A resolved). These assets are replaced by PFRA altitude implementation in
+Phase A — they are not removed until that implementation is complete and tested.
 
 ---
 
@@ -135,10 +147,85 @@ legacy sections remain below `#active-component-editor`.
 
 ---
 
-### Source verification checkpoint (between Phase E and Phase 1)
-Complete Items A, B, and C above before proceeding. Record findings in
-`SOURCE_OF_TRUTH_MANIFEST.md`. This takes a human with browser access to the AFPC PDFs —
-it cannot be automated.
+### Source verification checkpoint — COMPLETE (2026-05-11)
+Items A and C are resolved. Item B (exemption categories) is directionally verified and does not
+block Phase A or Phase 1. Proceed to Phase A.
+
+---
+
+### Phase A — Implement Altitude Adjustment in PFRA Scoring
+**Status: Not started. Required before Phase 1 removes the legacy altitude path.**
+
+Altitude adjustment is mandated by DAFMAN 36-2905, Attachment 3. It must be implemented in
+the PFRA scoring engine before legacy altitude code (`calculateAltitudeDiff()` in `main2.js`)
+can be removed.
+
+**Source:** `docs/source-extracts/fitness-guidance-source-audit.md`, confirmed from
+`standards/sources/Pages from DAFMAN 36-2905-2.pdf` (Attachment 3).
+
+**Altitude bands:**
+
+| Group | Range |
+|-------|-------|
+| 0 (no adjustment) | < 5,250 ft |
+| 1 | 5,250 – 5,499 ft |
+| 2 | 5,500 – 5,999 ft |
+| 3 | 6,000 – 6,599 ft |
+| 4 | ≥ 6,600 ft |
+
+**Events covered:**
+- 2.0-mile run: time added in seconds per group (Table A3.1)
+- 2.0-km walk, male: adjusted maximum walk time per group × age bracket (Table A3.2)
+- 2.0-km walk, female: adjusted maximum walk time per group × age bracket (Table A3.3)
+- 20-meter HAMR: shuttles added per group (+1 / +2 / +3 / +4) (Table A3.4)
+
+**Events not covered by altitude:** Body composition, muscular strength, core endurance.
+
+**Implementation steps:**
+
+1. **Extract altitude tables to JSON**
+   - Create `standards/extracted/tables/altitude-run.json` — per-group time adjustment for each
+     performance time row in the 2-mile run table (Table A3.1). Source: OCR text + manual
+     verification against the PDF.
+   - Create `standards/extracted/tables/altitude-walk-male.json` and
+     `altitude-walk-female.json` — maximum walk times by age bracket × group (Tables A3.2–A3.3).
+   - Create `standards/extracted/tables/altitude-hamr.json` — shuttles to add per group (Table A3.4).
+   - Note: OCR of Table A3.1 (run correction seconds) was partially garbled. Manually verify
+     values against the PDF before writing the JSON. The walk and HAMR tables OCR'd cleanly.
+
+2. **Add source-backed fixture tests**
+   - Add altitude adjustment examples to `tools/fixtures/pfra-scoring-examples.json` (or a
+     dedicated `altitude-adjustment-examples.json`).
+   - Each fixture must specify: event, altitude group, input performance, expected adjusted value,
+     and source document + table reference.
+   - At minimum: one example per event per altitude group (≥ 16 examples total).
+
+3. **Implement in `src/pfra/scoring.mjs`**
+   - Add `getAltitudeGroup(altitudeFt)` — returns group 0–4.
+   - Add `applyRunAltitudeAdjustment(timeSec, altGroup)` — adds seconds from altitude-run table.
+   - Add `applyWalkAltitudeAdjustment(maxTimeSec, sex, ageGroup, altGroup)` — returns adjusted
+     max walk time; used in `scoreWalk()` to shift the pass/fail threshold.
+   - Add `applyHamrAltitudeAdjustment(shuttles, altGroup)` — adds shuttles from altitude-hamr table.
+   - Modify `scoreRun()`, `scoreWalk()`, `scoreHamr()` to accept an optional `altitudeGroup`
+     parameter (default 0 = no adjustment). This keeps the function signatures backwards-compatible
+     with existing fixture tests.
+   - All adjustment logic must have 100% coverage from the fixture suite before merging.
+
+4. **Wire altitude into the UI (cardio editor)**
+   - `#alt-select` already exists in the DOM. After Phase E moves cardio controls into
+     `#cardio-editor`, move `#alt-select` into `#cardio-editor` as well (or into a dedicated
+     altitude sub-section of the cardio editor).
+   - `src/pfra/app.mjs` (Phase 2) will read `#alt-select` and pass `altitudeGroup` to scoring.
+   - For Phase A specifically: the goal is the scoring engine and test coverage. UI wiring can be
+     deferred to Phase 3 (input ownership transfer), provided legacy altitude UI is not removed
+     before Phase 3 is complete.
+
+**Exit criteria:**
+- Altitude JSON tables exist in `standards/extracted/tables/`.
+- Fixture tests for altitude pass.
+- `scoreRun()`, `scoreWalk()`, `scoreHamr()` accept altitude group and return correct adjusted values.
+- `npm test` passes (all 98 existing + new altitude fixtures).
+- No change to the UI or DOM in this phase.
 
 ---
 
@@ -246,11 +333,14 @@ Use existing fixture suite as oracle.
 
 ## 6. Risks and Rollback
 
-### Risk 1: Altitude/exemption policy not verified before code removal (high)
-Removing `#alt-select` or exemption behavior before DAFMAN 36-2905 is reviewed may remove a
-requirement from the current standard.
-**Mitigation:** The interim rule in `SOURCE_OF_TRUTH_MANIFEST.md` blocks this. Items A and B
-are gates before Phase 1 touches altitude or exemptions.
+### Risk 1: Altitude removed before PFRA implementation is complete (high)
+Altitude adjustment is a **confirmed requirement** of DAFMAN 36-2905 (Item A resolved). Removing
+`#alt-select`, altitude chart assets, or `calculateAltitudeDiff()` in `main2.js` before Phase A
+is complete would silently drop a mandatory feature.
+**Mitigation:** Phase A is a hard gate before Phase 1 touches the altitude path. The "Do NOT
+remove" note in Section 4 makes this explicit. Never remove altitude-related assets or code
+without first verifying that the PFRA altitude implementation in `src/pfra/scoring.mjs` is
+tested and wired to the UI.
 
 ### Risk 2: Scoring regression during handler transfer (high)
 Moving event ownership component by component risks subtle normalization differences.
