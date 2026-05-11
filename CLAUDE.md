@@ -80,6 +80,7 @@ Legacy scoring boundary: `window.afptLegacy` exposes `ageSexChange`, `bindSlider
 - **Component Editor Phase A** — `#component-summary-strip` with PUSH/CORE/RUN summary buttons; `src/ui/component-editor.mjs` with `selectedComponent` state and variant wiring.
 - **Component Editor Phase B** — `#active-component-editor` container with three empty panels (`#strength-editor`, `#core-editor`, `#cardio-editor`); panel switching via `selectComponent()`.
 - **Component Editor Phase C** — Real strength controls moved into `#strength-editor` (`.strength-txt`, `.push-sel-chart`, `.push-slide` with all IDs preserved). Old `#strength-card` removed. `strength-card.mjs` script tag removed (file kept on disk).
+- **Component Editor Phase D** — Real core controls (`.situp-txt`, `#sit-sel-chart-section`, `.sit-slide` with all IDs preserved) moved into `#core-editor`. Old stacked core sections removed. `#pfra-core-score` added (already wired in `pfra-calculator.js`). CSS app-column rule updated; `#core-editor` scoped overrides added.
 
 ## Layout Slots (from `docs/LAYOUT_VARIANT_SYSTEM.md`)
 
@@ -107,30 +108,42 @@ git status
 
 Push normally to `master` only if tests pass. Never force push.
 
-## Current State (as of Phase C completion)
+## Current State (as of Phase D completion)
 
 - `#strength-editor` contains the real strength controls. `#strength-card` is gone.
-- `#core-editor` and `#cardio-editor` exist in the DOM but are empty — the real Core and Cardio controls are still in their old stacked sections below.
-- Do not visually polish component editors yet. Do not move Cardio before Core.
+- `#core-editor` contains the real core controls. Old stacked core sections are gone. `#pfra-core-score` exists and is wired.
+- `#cardio-editor` exists in the DOM but is empty — real Cardio controls are still in their old stacked section below.
+- Do not visually polish component editors yet.
 
 ## Current Next Phase
 
-**Component Editor Phase D — Move Core controls into `#core-editor`**
+**Component Editor Phase E — Move Cardio controls into `#cardio-editor`**
 
-Move these existing elements into `#core-editor`:
-- `.situp-txt` containing `#sit-txt-p`
-- `.sit-sel-chart` (id `#sit-sel-chart-section`) containing `#sit-sel`, `#sit-btn`, `#sit-txt`, `.plank-colon`, `#plankmintxt`
-- `.sit-slide` containing `#sit-slider` and `#sit-tick`
-- Add `component-editor__header` with title "CORE" and `#pfra-core-score` span (PFRA-mode only, same pattern as `#pfra-strength-score`)
+Move these existing elements into `#cardio-editor` (keep all IDs and event bindings):
+- `.run-txt` section containing `#run-txt-p`
+- `.run-sel-chart` section containing `#run-sel`, `#run-btn`, `#run-txt`
+- `.run-slide` section containing `#run-slider` and `#run-tick`
+
+Also add inside `#cardio-editor`:
+- A `component-editor__header` div with:
+  - `component-editor__title` span: "RUN"
+  - `component-editor__pfra-score` span with id `pfra-cardio-score` (hidden outside PFRA mode, same CSS rule as `#pfra-strength-score` and `#pfra-core-score`)
+
+After moving:
+- Remove the old stacked cardio section elements from the DOM.
+- Remove `.run-txt,`, `.run-sel-chart,`, `.run-slide,` from the shared app-column CSS rule (if present).
+- Add `#cardio-editor` scoped overrides mirroring the pattern used for `#strength-editor` and `#core-editor`.
+- Check `pfra-calculator.js` / `dom.mjs` for any `#pfra-cardio-score` references — wire it up if the ID already exists there.
+- Update browser regression tests:
+  - Chart shortcut test for `#run-btn` needs to switch to cardio first.
+  - Legacy/PFRA run interactions need to switch to cardio first.
+  - Add `assertCardioEditor(page)`: switch to cardio, verify `#pfra-cardio-score` visible in PFRA mode, exercise run input, check score header mirrors total.
 
 Rules:
 - Preserve all IDs and event bindings.
 - Do not duplicate controls.
 - Do not change scoring logic.
-- Do not move Cardio yet.
-- Remove old stacked core sections from the DOM after moving.
-- Update CSS scoped overrides from old selectors to `#core-editor`.
-- Update browser regression tests to match new DOM location.
+- Do not visually polish editors.
 - Run `npm test`, `git diff --check`, commit and push.
 
 ## Key Docs

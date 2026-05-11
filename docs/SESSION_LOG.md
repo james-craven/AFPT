@@ -1,5 +1,22 @@
 # Session Log
 
+## 2026-05-11
+
+### Component Editor Phase D: Move Core Controls into #core-editor
+
+- Moved `.situp-txt` (containing `#sit-txt-p`), `#sit-sel-chart-section` (containing `#sit-sel`, `#sit-btn`, `#sit-txt`, `.plank-colon`, `#plankmintxt`), and `.sit-slide` (containing `#sit-slider`, `#sit-tick`) from stacked page flow into `#core-editor` in `index.html`.
+- Added `component-editor__header` with `component-editor__title` "CORE" and `component-editor__pfra-score` span with `id="pfra-core-score"`. `#pfra-core-score` was already expected by `pfra-calculator.js` via `dom.mjs` — just needed to exist in the DOM.
+- Removed old stacked core sections from the main page flow.
+- Removed `.situp-txt,`, `.sit-sel-chart,`, `.sit-slide,` from the shared app-column CSS rule in `style.css`. Added `#core-editor` scoped overrides (border, color, button styles).
+- Fixed Phase C artifact: removed erroneous `.sit-txt-p` from `#strength-editor .strength-txt-p, #strength-editor .sit-txt-p` rule (`.sit-txt-p` belongs in core).
+- Updated `tools/browser-regression.mjs`:
+  - Added `assertCoreEditor(page)`: switches to core, verifies `#pfra-core-score` visible, exercises Exempt → Situps → Plank → Situps sequence, checks score header mirrors total.
+  - Chart shortcut test now switches to core before clicking `#sit-btn` (element is inside hidden panel until then).
+  - Legacy sit interaction wrapped in `selectComponent('core')` + `waitForFunction` guard.
+  - PFRA sit interaction wrapped similarly; after `fill('#sit-txt', '54')` explicitly dispatches `input` on the slider to reliably rebind the PFRA threshold tick (29 vs legacy 35) before clicking `#sit-tick`.
+- `npm test` passed: 98 scoring fixtures, 84 cached files, 28 required offline assets, all browser regressions.
+- Committed and pushed: `9128339`.
+
 ## 2026-05-10 (continued)
 
 ### Component Editor Architecture Phase B: activeComponentEditor Container
