@@ -373,15 +373,19 @@ function formatPacePlan(totalSeconds, lapCount, lapSec) {
 function renderPacePlan() {
   const lapDisplay = byId('run-lap-times');
   if (!lapDisplay) return;
+  const section = lapDisplay.closest('.pace-plan-section');
   if (state.cardio.exempt || state.cardio.event !== 'two-mile-run') {
-    lapDisplay.innerHTML = '<p class="pace-plan-empty">Select 2-mile run to view lap pace plan.</p>';
+    lapDisplay.innerHTML = '';
+    if (section) section.hidden = true;
     return;
   }
   const curSec = toSeconds(state.cardio.value);
   if (!Number.isFinite(curSec) || curSec <= 0) {
-    lapDisplay.innerHTML = '<p class="pace-plan-empty">Enter a run time to see lap splits.</p>';
+    lapDisplay.innerHTML = '';
+    if (section) section.hidden = true;
     return;
   }
+  if (section) section.hidden = false;
   lapDisplay.innerHTML = formatPacePlan(curSec, 8, Math.round(curSec / 8));
 }
 

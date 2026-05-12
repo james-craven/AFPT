@@ -606,7 +606,7 @@ html, body {
 
 /* ─── Editors container ────────────────────────────────────────── */
 .editors-container {
-  flex: 1;
+  /* no flex: 1 — editors take only the space they need */
 }
 
 .editor-panel {
