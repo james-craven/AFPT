@@ -211,6 +211,16 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.locator('#summary-strength').click();
   await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
 
+  // 6b. Pace plan section is always present in DOM (not hidden when switching editors)
+  const pacePlanSection = await page.evaluate(() => !!document.querySelector('.pace-plan-section'));
+  assert.equal(pacePlanSection, true, 'pace-plan-section exists in DOM');
+  const lapDisplayExists = await page.evaluate(() => !!document.getElementById('run-lap-times'));
+  assert.equal(lapDisplayExists, true, 'run-lap-times exists outside editors-container');
+  const lapDisplayInsideEditors = await page.evaluate(
+    () => !!document.querySelector('.editors-container #run-lap-times'),
+  );
+  assert.equal(lapDisplayInsideEditors, false, 'run-lap-times is NOT inside editors-container');
+
   // 7. Altitude via dispatch changes cardio score
   const { cardioSeaLevel, cardioAlt4 } = await page.evaluate(() => {
     window.afptApp.dispatch({ type: 'SET_CARDIO_EVENT', event: 'two-mile-run' });

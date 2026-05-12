@@ -1083,7 +1083,7 @@ html, body {
 .chart-drawer__panel {
   position: absolute;
   top: 0;
-  right: 0;
+  right: max(0px, calc((100vw - var(--afpt-app-max-width)) / 2));
   bottom: 0;
   width: min(460px, 88vw);
   background: var(--afpt-panel);
@@ -2017,25 +2017,25 @@ html, body {
 .lap-fitness__title {
   font-size: 13px;
   font-weight: 700;
-  color: #fff;
+  color: var(--afpt-ink);
   white-space: nowrap;
 }
 
 .lap-fitness__sub {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--afpt-ink-dim);
   white-space: nowrap;
 }
 
 .lap-fitness__pace {
-  color: #fff;
+  color: var(--afpt-ink);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
 .lap-fitness__cue {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--afpt-ink-dim);
   margin: 0 0 4px;
   padding: 0 4px;
 }
@@ -2043,4 +2043,104 @@ html, body {
 .lap-fitness__svg-wrap {
   display: flex;
   justify-content: center;
+}
+
+/* ─── Pace plan section wrapper ────────────────────────────────── */
+/* PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme. */
+.pace-plan-section {
+  padding: 12px 0 0;
+}
+
+.pace-plan-empty {
+  font-size: 12px;
+  color: var(--afpt-ink-dim);
+  text-align: center;
+  padding: 12px 0;
+  margin: 0;
+}
+
+/* ─── Pace plan SVG CSS tokens (theme-agnostic base) ───────────── */
+/* PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme. */
+.pace-track-ring {
+  stroke: var(--afpt-border-strong);
+}
+
+.pace-track-dash {
+  stroke: var(--afpt-border);
+}
+
+.pace-goal-text {
+  fill: var(--afpt-ink-dim);
+  font-family: inherit;
+}
+
+.pace-time-text {
+  fill: var(--afpt-ink);
+  font-family: inherit;
+}
+
+.pace-dot {
+  fill: var(--afpt-accent);
+}
+
+.pace-label {
+  fill: var(--afpt-ink-dim);
+  font-family: inherit;
+}
+
+.pace-split {
+  fill: var(--afpt-ink);
+  font-family: inherit;
+}
+
+.pace-fin-label {
+  fill: var(--afpt-warn);
+  font-family: inherit;
+}
+
+.pace-fin-split {
+  fill: var(--afpt-ink);
+  font-family: inherit;
+}
+
+.pace-fin-text {
+  fill: #1a0a2a;
+  font-family: inherit;
+}
+
+/* Fitness theme overrides — keep all white on the dark gradient */
+:root[data-theme="fitness"] .pace-track-ring {
+  stroke: rgba(255, 255, 255, 0.25);
+}
+
+:root[data-theme="fitness"] .pace-track-dash {
+  stroke: rgba(255, 255, 255, 0.4);
+}
+
+:root[data-theme="fitness"] .pace-goal-text {
+  fill: rgba(255, 255, 255, 0.55);
+}
+
+:root[data-theme="fitness"] .pace-time-text {
+  fill: #fff;
+}
+
+:root[data-theme="fitness"] .pace-dot {
+  fill: #ff5dab;
+}
+
+:root[data-theme="fitness"] .pace-label {
+  fill: rgba(255, 255, 255, 0.6);
+}
+
+:root[data-theme="fitness"] .pace-split {
+  fill: #fff;
+}
+
+:root[data-theme="fitness"] .pace-fin-label {
+  fill: #ffb547;
+}
+
+:root[data-theme="fitness"] .pace-fin-split {
+  fill: #fff;
 }

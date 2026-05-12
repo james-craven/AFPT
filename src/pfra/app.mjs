@@ -267,6 +267,7 @@ function closeChart() {
   delete modal.dataset.chartOpen;
 }
 
+// PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme.
 // --- Stadium point — exact translation of mock-fitness.jsx stadiumPoint ---
 // t in [0,1): 0 = top-center, clockwise. expand pushes outward along local normal.
 function stadiumPoint(t, x, y, w, h, r, expand) {
@@ -292,22 +293,10 @@ function stadiumPoint(t, x, y, w, h, r, expand) {
   return { x: x + r + s, y: y - expand };
 }
 
-// --- Lap display variants ---
-
-function formatLapTimesTactical(lapCount, lapSec) {
-  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
-  const lapTimeStr = secondsToTimeString(lapSec);
-  const barPct = Math.min(95, Math.max(30, ((480 - lapSec) / 200) * 80 + 30)).toFixed(1);
-  let rows = '';
-  for (let i = 1; i <= lapCount; i++) {
-    rows += `<div class="lap-hud-row"><span class="lap-hud-n">${i}</span><span class="lap-hud-pace">${lapTimeStr}</span><span class="lap-hud-split">${secondsToTimeString(lapSec * i)}</span><div class="lap-hud-bar"><div class="lap-hud-bar-fill" style="width:${barPct}%"></div></div></div>`;
-  }
-  return `<div class="lap-hud"><div class="lap-hud-header"><span class="lap-hud-title">PACE PLAN</span><span class="lap-hud-sub">${lapLabel} &middot; ${lapTimeStr}/lap</span></div><div class="lap-hud-rows">${rows}</div></div>`;
-}
-
-// formatLapTimesFitness — direct translation of mock-fitness.jsx lap plan section.
-// SVG params exactly match the mock: viewBox 0 0 340 190, rect x=70 y=50 w=200 h=90 rx=45.
-function formatLapTimesFitness(totalSeconds, lapCount, lapSec) {
+// PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme.
+// Canonical pace plan — used on all themes. SVG uses CSS classes for token-based theming.
+// viewBox 0 0 340 190, rect x=70 y=50 w=200 h=90 rx=45 (exact mock-fitness.jsx params).
+function formatPacePlan(totalSeconds, lapCount, lapSec) {
   const totalStr = secondsToTimeString(totalSeconds);
   const lapTimeStr = secondsToTimeString(lapSec);
   let markers = '';
@@ -322,19 +311,21 @@ function formatLapTimesFitness(totalSeconds, lapCount, lapSec) {
     const dx = anchor === 'start' ? 4 : anchor === 'end' ? -4 : 0;
     const splitStr = secondsToTimeString(lapSec * n);
     const labelText = isFinish ? 'FINISH' : `L${n}`;
-    const labelFill = isFinish ? '#ffb547' : 'rgba(255,255,255,0.55)';
     const splitWeight = isFinish ? 800 : 600;
     const dotR = isFinish ? 7 : 4.5;
-    const dotFill = isFinish ? 'url(#finGrad)' : '#fff';
-    const dotStroke = isFinish ? ' stroke="rgba(255,255,255,0.4)" stroke-width="1.5"' : '';
+    // Finish dot uses hardcoded gold→pink gradient (always distinctive on any theme).
+    // Non-finish dots use .pace-dot CSS class so the theme token applies.
+    const dotAttrs = isFinish
+      ? `fill="url(#pacePlanFinGrad)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"`
+      : `class="pace-dot"`;
     const finText = isFinish
-      ? `<text x="${p.x.toFixed(1)}" y="${(p.y + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="6" font-weight="800" fill="#2b1456" letter-spacing="0.5">FIN</text>`
+      ? `<text x="${p.x.toFixed(1)}" y="${(p.y + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" class="pace-fin-text" font-size="6" font-weight="800" letter-spacing="0.5">FIN</text>`
       : '';
     markers += `<g>
-      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${dotR}" fill="${dotFill}"${dotStroke}/>
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${dotR}" ${dotAttrs}/>
       ${finText}
-      <text x="${(lp.x + dx).toFixed(1)}" y="${(lp.y - 4).toFixed(1)}" text-anchor="${anchor}" font-size="8" fill="${labelFill}" letter-spacing="1" font-weight="600">${labelText}</text>
-      <text x="${(lp.x + dx).toFixed(1)}" y="${(lp.y + 7).toFixed(1)}" text-anchor="${anchor}" font-size="11" fill="#fff" font-weight="${splitWeight}" font-variant-numeric="tabular-nums">${splitStr}</text>
+      <text x="${(lp.x + dx).toFixed(1)}" y="${(lp.y - 4).toFixed(1)}" text-anchor="${anchor}" class="${isFinish ? 'pace-fin-label' : 'pace-label'}" font-size="8" letter-spacing="1" font-weight="600">${labelText}</text>
+      <text x="${(lp.x + dx).toFixed(1)}" y="${(lp.y + 7).toFixed(1)}" text-anchor="${anchor}" class="${isFinish ? 'pace-fin-split' : 'pace-split'}" font-size="11" font-weight="${splitWeight}" font-variant-numeric="tabular-nums">${splitStr}</text>
     </g>`;
   }
 
@@ -347,65 +338,35 @@ function formatLapTimesFitness(totalSeconds, lapCount, lapSec) {
     <div class="lap-fitness__svg-wrap">
       <svg width="100%" viewBox="0 0 340 190" style="max-width:340px;display:block;margin:0 auto">
         <defs>
-          <linearGradient id="finGrad" x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id="pacePlanFinGrad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0" stop-color="#ffb547"/>
             <stop offset="1" stop-color="#ff5dab"/>
           </linearGradient>
         </defs>
-        <rect x="70" y="50" width="200" height="90" rx="45" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="14"/>
-        <rect x="70" y="50" width="200" height="90" rx="45" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="2 6"/>
-        <text x="170" y="87" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="9" letter-spacing="2">GOAL</text>
-        <text x="170" y="113" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" letter-spacing="-0.5" font-variant-numeric="tabular-nums">${totalStr}</text>
+        <rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-ring" stroke-width="14"/>
+        <rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-dash" stroke-width="1" stroke-dasharray="2 6"/>
+        <text x="170" y="87" text-anchor="middle" class="pace-goal-text" font-size="9" letter-spacing="2">GOAL</text>
+        <text x="170" y="113" text-anchor="middle" class="pace-time-text" font-size="26" font-weight="800" letter-spacing="-0.5" font-variant-numeric="tabular-nums">${totalStr}</text>
         ${markers}
       </svg>
     </div>
   </div>`;
 }
 
-function formatLapTimesBlues(totalSeconds, lapCount, lapSec) {
-  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
-  const lapTimeStr = secondsToTimeString(lapSec);
-  let rows = '';
-  for (let i = 1; i <= lapCount; i++) {
-    const alt = i % 2 === 0 ? ' class="lap-table-row--alt"' : '';
-    rows += `<tr${alt}><td>${i}</td><td>${lapTimeStr}</td><td>${secondsToTimeString(lapSec * i)}</td></tr>`;
+// PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme.
+function renderPacePlan() {
+  const lapDisplay = byId('run-lap-times');
+  if (!lapDisplay) return;
+  if (state.cardio.exempt || state.cardio.event !== 'two-mile-run') {
+    lapDisplay.innerHTML = '<p class="pace-plan-empty">Select 2-mile run to view lap pace plan.</p>';
+    return;
   }
-  return `<div class="lap-table-wrap"><div class="lap-table-header">Lap targets <span>${lapLabel} &rarr; ${secondsToTimeString(totalSeconds)}</span></div><table class="lap-table"><thead><tr><th>LAP</th><th>PACE</th><th>SPLIT</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-
-function formatLapTimesStencil(totalSeconds, lapCount, lapSec) {
-  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
-  const lapTimeStr = secondsToTimeString(lapSec);
-  const barPct = Math.min(90, Math.max(20, ((600 - lapSec) / 300) * 70 + 20)).toFixed(1);
-  let bars = '';
-  for (let i = 1; i <= lapCount; i++) {
-    bars += `<div class="lap-bar-col"><span class="lap-bar-pace">${lapTimeStr}</span><div class="lap-bar-track"><div class="lap-bar-fill" style="height:${barPct}%"></div></div><span class="lap-bar-index">L${i}</span></div>`;
+  const curSec = toSeconds(state.cardio.value);
+  if (!Number.isFinite(curSec) || curSec <= 0) {
+    lapDisplay.innerHTML = '<p class="pace-plan-empty">Enter a run time to see lap splits.</p>';
+    return;
   }
-  const splits = Array.from({ length: lapCount }, (_, i) => `<span>L${i + 1}: ${secondsToTimeString(lapSec * (i + 1))}</span>`).join('');
-  return `<div class="lap-bars"><div class="lap-bars-header">PACE PLAN &middot; ${lapLabel} &middot; ${lapTimeStr}/lap</div><div class="lap-bars-chart">${bars}</div><div class="lap-bars-splits">${splits}</div></div>`;
-}
-
-function formatLapTimesLight(totalSeconds, lapCount, lapSec) {
-  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
-  const lapTimeStr = secondsToTimeString(lapSec);
-  const barPct = Math.min(92, Math.max(25, ((480 - lapSec) / 240) * 67 + 25)).toFixed(1);
-  let rows = '';
-  for (let i = 1; i <= lapCount; i++) {
-    const sep = i < lapCount ? ' lap-row--sep' : '';
-    rows += `<div class="lap-row${sep}"><span class="lap-row-n">${i}</span><span class="lap-row-pace">${lapTimeStr}</span><div class="lap-row-bar"><div class="lap-row-bar-fill" style="width:${barPct}%"></div></div><span class="lap-row-split">${secondsToTimeString(lapSec * i)}</span></div>`;
-  }
-  return `<div class="lap-rows-wrap"><div class="lap-rows-header">Lap targets <span>${lapLabel} &rarr; ${secondsToTimeString(totalSeconds)}</span></div>${rows}</div>`;
-}
-
-function formatLapTimes(totalSeconds, lapCount) {
-  if (!totalSeconds || !lapCount) return '';
-  const lapSec = Math.round(totalSeconds / lapCount);
-  const theme = document.documentElement.dataset.theme || 'tactical';
-  if (theme === 'fitness') return formatLapTimesFitness(totalSeconds, lapCount, lapSec);
-  if (theme === 'blues') return formatLapTimesBlues(totalSeconds, lapCount, lapSec);
-  if (theme === 'stencil') return formatLapTimesStencil(totalSeconds, lapCount, lapSec);
-  if (theme === 'light') return formatLapTimesLight(totalSeconds, lapCount, lapSec);
-  return formatLapTimesTactical(lapCount, lapSec);
+  lapDisplay.innerHTML = formatPacePlan(curSec, 8, Math.round(curSec / 8));
 }
 
 // --- Tick positioning ---
@@ -595,11 +556,9 @@ function renderCoreEditor(scores) {
 
 function renderCardioEditor(scores) {
   const runTxtP = byId('run-txt-p');
-  const lapDisplay = byId('run-lap-times');
 
   if (state.cardio.exempt) {
     if (runTxtP) runTxtP.textContent = 'Cardio Score: EXEMPT';
-    if (lapDisplay) lapDisplay.innerHTML = '';
     const tick = byId('run-tick');
     if (tick) tick.style.display = 'none';
     return;
@@ -608,7 +567,6 @@ function renderCardioEditor(scores) {
   if (state.cardio.event === 'two-kilometer-walk') {
     const maxTime = walkMaximumTime(standards, state.ageGroup, state.sex);
     if (runTxtP) runTxtP.textContent = `Cardio Score: ${scores.cardio} | Max Time: ${maxTime ?? '--'}`;
-    if (lapDisplay) lapDisplay.innerHTML = '';
     const tick = byId('run-tick');
     if (tick) tick.style.display = 'none';
     if (maxTime) {
@@ -635,7 +593,6 @@ function renderCardioEditor(scores) {
     if (runTxtP) {
       runTxtP.textContent = `Cardio Score: ${scores.cardio} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
     }
-    if (lapDisplay) lapDisplay.innerHTML = '';
 
     const slider = byId('run-slider');
     if (slider && Number.isFinite(minNum) && Number.isFinite(maxNum) && maxNum > 0) {
@@ -675,11 +632,6 @@ function renderCardioEditor(scores) {
     }
 
     setTickPct('run-tick', 100, minSec);
-  }
-
-  if (lapDisplay) {
-    const curSec = toSeconds(state.cardio.value);
-    lapDisplay.innerHTML = Number.isFinite(curSec) ? formatLapTimes(curSec, 8) : '';
   }
 }
 
@@ -742,6 +694,7 @@ function render() {
   renderCoreEditor(result.scores);
   renderCardioEditor(result.scores);
   renderEditorVisibility();
+  renderPacePlan();
 }
 
 // --- Component selection ---
