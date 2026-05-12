@@ -749,6 +749,8 @@ html, body {
 .slider-row .slider-container {
   flex: 1;
   min-width: 0;
+  margin-bottom: -20px; /* cancel padding-bottom from flex centering so track aligns with buttons */
+  overflow: visible;
 }
 .slider-step-btn {
   flex-shrink: 0;
