@@ -16,6 +16,7 @@
   --afpt-warn: #ffb547;
   --afpt-bad: #ff4d6d;
   --afpt-app-max-width: 480px;
+  --slider-thumb-half: 11; /* unitless px, half of base 22px thumb — read by JS for tick positioning */
 }
 
 :root[data-theme="tactical"] {
@@ -23,6 +24,7 @@
   --afpt-panel: #08141d;
   --afpt-panel-2: #0d1c27;
   --afpt-border: rgba(29, 233, 255, 0.22);
+  --slider-thumb-half: 10; /* tactical thumb is 20px */
   --afpt-border-strong: rgba(29, 233, 255, 0.55);
   --afpt-ink: #dff7ff;
   --afpt-ink-dim: #7ba9b8;
@@ -40,6 +42,7 @@
   --afpt-border-strong: rgba(213, 196, 128, 0.6);
   --afpt-ink: #e9e1c2;
   --afpt-ink-dim: #a59c75;
+  --slider-thumb-half: 6; /* stencil thumb is 12px */
   --afpt-accent: #d5c480;
   --afpt-accent-2: #b8c46a;
   --afpt-warn: #e6a740;
@@ -82,6 +85,7 @@
   --afpt-border-strong: rgba(255, 255, 255, 0.22);
   --afpt-ink: #ffffff;
   --afpt-ink-dim: rgba(255, 255, 255, 0.65);
+  --slider-thumb-half: 12; /* fitness thumb is 24px */
   --afpt-accent: #ff5dab;
   --afpt-accent-2: #ffb547;
   --afpt-warn: #ffb547;

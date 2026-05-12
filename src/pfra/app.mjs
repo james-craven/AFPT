@@ -395,7 +395,8 @@ function setTickPct(tickId, pct, minValue) {
   if (!Number.isFinite(pct)) { tick.style.display = 'none'; return; }
   const clamped = Math.max(0, Math.min(100, pct));
   tick.style.display = 'block';
-  tick.style.left = `calc(10px + ${(clamped / 100).toFixed(4)} * (100% - 20px))`;
+  const halfThumb = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--slider-thumb-half')) || 11;
+  tick.style.left = `calc(${halfThumb}px + ${(clamped / 100).toFixed(4)} * (100% - ${halfThumb * 2}px))`;
   if (minValue !== undefined) tick.dataset.minValue = String(minValue);
 }
 
