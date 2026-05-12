@@ -849,7 +849,7 @@ html, body {
 /* Tick marker — minimum passing threshold (upward triangle) */
 .slider-tick {
   position: absolute;
-  bottom: 2px;
+  bottom: 8px;
   width: 0;
   height: 0;
   border-left: 7px solid transparent;
