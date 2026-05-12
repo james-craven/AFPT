@@ -238,6 +238,16 @@
         <div class="editor-header">
           <span class="editor-title">BODY</span>
         </div>
+        <!-- Toggle buttons (tactical + fitness) -->
+        <div id="body-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Body mode">
+          <button class="fit-seg-btn fit-seg-btn--active" type="button" data-seg-target="body-mode-sel" data-seg-value="whtr">WHtR</button>
+          <button class="fit-seg-btn" type="button" data-seg-target="body-mode-sel" data-seg-value="exempt">Exempt</button>
+        </div>
+        <select id="body-mode-sel" hidden aria-label="Body mode">
+          <option value="whtr">WHtR</option>
+          <option value="exempt">Exempt</option>
+        </select>
+        <div id="body-whtr-controls">
         <div class="editor-event-row">
           <span class="body-event-label">WHtR (Waist ÷ Height)</span>
         </div>
@@ -252,6 +262,7 @@
           </div>
           <button class="slider-step-btn" type="button" data-step="1" data-target="whtr-slider" aria-label="Increase WHtR">+</button>
         </div>
+        </div><!-- /#body-whtr-controls -->
         <p id="body-txt-p" class="score-label-text">Body Score: -- | Pass ≤ 0.55</p>
         <!-- Fitness theme: pass/fail badge -->
         <div class="fit-body-header">

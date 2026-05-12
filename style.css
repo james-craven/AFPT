@@ -2248,7 +2248,8 @@ html, body {
   gap: 2px;
 }
 
-:root[data-theme="fitness"] .fit-seg-ctrl {
+:root[data-theme="fitness"] .fit-seg-ctrl,
+:root[data-theme="tactical"] .fit-seg-ctrl {
   display: flex;
 }
 
@@ -2270,6 +2271,20 @@ html, body {
 .fit-seg-btn.fit-seg-btn--active {
   background: #fff;
   color: #3a0f4d;
+}
+
+/* Tactical: override seg button colors for HUD feel */
+:root[data-theme="tactical"] .fit-seg-ctrl {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--afpt-border);
+}
+:root[data-theme="tactical"] .fit-seg-btn {
+  color: var(--afpt-ink-dim);
+  letter-spacing: 0.5px;
+}
+:root[data-theme="tactical"] .fit-seg-btn.fit-seg-btn--active {
+  background: var(--afpt-accent);
+  color: var(--afpt-bg);
 }
 
 /* ─── Fitness slider — white thumb, subtle track ───────────────── */

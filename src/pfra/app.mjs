@@ -21,6 +21,7 @@ let state = {
   sex: 'female',
   ageGroup: 'under-25',
   whtr: '0.49',
+  bodyExempt: false,
   altitudeGroup: 0,
   strength: { event: 'push-up', value: '0', exempt: false },
   core: { event: 'sit-up', value: '0', exempt: false },
@@ -88,10 +89,12 @@ function refreshStateFromDom() {
     coreValue = val('sit-txt') || state.core.value;
   }
 
+  const bodyModeSel = byId('body-mode-sel');
   state = {
     sex: byId('sex-sel')?.value || 'female',
     ageGroup: byId('age-sel')?.value || 'under-25',
     whtr: val('pfra-whtr') || '0.49',
+    bodyExempt: bodyModeSel?.value === 'exempt',
     altitudeGroup: readAltitudeGroup(val('alt-select')),
     strength: {
       event: pushSel?.value === 'exempt' ? (state.strength.event || 'push-up') : (pushSel?.value || 'push-up'),
@@ -117,6 +120,7 @@ function dispatch(action) {
     case 'SET_SEX': state = { ...state, sex: action.sex }; break;
     case 'SET_AGE_GROUP': state = { ...state, ageGroup: action.ageGroup }; break;
     case 'SET_WHTR': state = { ...state, whtr: action.value }; break;
+    case 'SET_BODY_EXEMPT': state = { ...state, bodyExempt: action.exempt }; break;
     case 'SET_ALTITUDE_GROUP': state = { ...state, altitudeGroup: action.group }; break;
     case 'SET_STRENGTH_EVENT': state = { ...state, strength: { ...state.strength, event: action.event } }; break;
     case 'SET_STRENGTH_VALUE': state = { ...state, strength: { ...state.strength, value: action.value } }; break;
@@ -187,7 +191,7 @@ function computeScoreFromState(s) {
     sex: s.sex,
     standards,
     tables,
-    whtr: s.whtr,
+    whtr: s.bodyExempt ? '0.00' : s.whtr,
     strengthEvent: s.strength.event,
     strengthPerformance: s.strength.value.trim(),
     coreEvent: s.core.event,
@@ -479,6 +483,15 @@ function renderChipValues() {
 
 function renderBodyEditor(scores) {
   const bodyTxtP = byId('body-txt-p');
+  const whtrControls = byId('body-whtr-controls');
+
+  if (state.bodyExempt) {
+    if (whtrControls) whtrControls.hidden = true;
+    if (bodyTxtP) bodyTxtP.textContent = 'Body Score: EXEMPT';
+    return;
+  }
+
+  if (whtrControls) whtrControls.hidden = false;
   if (bodyTxtP) bodyTxtP.textContent = `Body Score: ${scores.body} | Pass ≤ 0.55`;
 
   const whtrNum = parseFloat(state.whtr);
@@ -703,6 +716,7 @@ function renderEditorVisibility() {
   });
 
   // Fitness: sync segmented control active state to current event selection
+  syncFitSeg('body-seg-ctrl', 'whtr', state.bodyExempt);
   syncFitSeg('push-seg-ctrl', state.strength.event, state.strength.exempt);
   syncFitSeg('sit-seg-ctrl', state.core.event, state.core.exempt);
   syncFitSeg('run-seg-ctrl', state.cardio.event, state.cardio.exempt);
@@ -753,6 +767,11 @@ function bindEvents() {
 
   byId('age-sel')?.addEventListener('change', () => {
     dispatch({ type: 'SET_AGE_GROUP', ageGroup: byId('age-sel').value });
+    render();
+  });
+
+  byId('body-mode-sel')?.addEventListener('change', () => {
+    dispatch({ type: 'SET_BODY_EXEMPT', exempt: byId('body-mode-sel').value === 'exempt' });
     render();
   });
 
