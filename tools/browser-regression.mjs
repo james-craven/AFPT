@@ -241,12 +241,14 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.locator('#settings-hub-close').click();
   await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
 
-  // 9. Chart drawer opens and closes
+  // 9. Chart drawer opens with generated table and closes
   const pushBtn = page.locator('#push-btn');
   await pushBtn.click();
   await page.waitForFunction(() => !document.getElementById('modal')?.hasAttribute('hidden'));
   const chartOpen = await page.evaluate(() => document.getElementById('modal')?.dataset.chartOpen);
   assert.equal(chartOpen, 'true', 'chart drawer opens on push-btn click');
+  const hasChartTable = await page.evaluate(() => !!document.querySelector('#chart-content .chart-table'));
+  assert.equal(hasChartTable, true, 'chart drawer contains generated score table');
   await page.locator('#close-btn').click();
   await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
   const chartClosed = await page.evaluate(() => document.getElementById('modal')?.hasAttribute('hidden'));

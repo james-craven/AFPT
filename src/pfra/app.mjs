@@ -200,40 +200,61 @@ function refreshScoreFromDom() {
 function isReady() { return ready; }
 function getLoadError() { return loadError; }
 
-// --- Chart helpers ---
+// --- Chart generation ---
 
-const ageChartKeys = {
-  'under-25': 'lessthan25',
-  '25-29': '25-29',
-  '30-34': '30-34',
-  '35-39': '35-39',
-  '40-44': '40-44',
-  '45-49': '45-49',
-  '50-54': '50-54',
-  '55-59': '55-59',
-  '60-and-over': 'over60',
-};
+function generateScoreChart(component) {
+  if (!ready) return '<p class="chart-empty">Standards not yet loaded.</p>';
 
-function chartSrc() {
-  // Chart images not bundled in this build — return null
-  return null;
+  const componentState = state[component];
+  if (!componentState) return '<p class="chart-empty">Unknown component.</p>';
+  if (componentState.exempt) return '<p class="chart-empty">Component is exempt — no scoring table applies.</p>';
+
+  const event = componentState.event;
+
+  if (event === 'two-kilometer-walk') {
+    const maxTime = walkMaximumTime(standards, state.ageGroup, state.sex);
+    return `<p class="chart-empty">Walk is pass/fail. Max time for your group: <strong>${maxTime ?? '--'}</strong></p>`;
+  }
+
+  const table = tables[event];
+  if (!table) return `<p class="chart-empty">No chart available for ${event}.</p>`;
+
+  const { ageGroup, sex } = state;
+  const result = computeScoreFromState(state);
+  const currentPoints = result?.scores?.[component] ?? -1;
+  const isTime = table.unit === 'min:sec';
+  const colHeader = isTime ? 'Time' : 'Reps';
+
+  let rows = '';
+  for (const row of table.rows) {
+    const cell = row.values?.[ageGroup]?.[sex];
+    if (!cell) continue;
+    const pts = row.points;
+    const rawVal = cell.value;
+    const displayVal = isTime
+      ? secondsToTimeString(Number(rawVal))
+      : (cell.atLeast ? `&ge;&nbsp;${rawVal}` : `&le;&nbsp;${rawVal}`);
+    const tier = pts >= 15 ? 'MAX' : pts >= 10 ? 'EXC' : pts >= 5 ? 'SAT' : 'MIN';
+    const tierCls = pts >= 15 ? 'tier--max' : pts >= 10 ? 'tier--exc' : pts >= 5 ? 'tier--sat' : 'tier--min';
+    const isYou = pts === currentPoints;
+    const youTag = isYou ? ' <span class="chart-you">&#9664; YOU</span>' : '';
+    rows += `<tr class="${isYou ? 'chart-row--you' : ''}"><td class="chart-cell chart-cell--perf">${displayVal}${youTag}</td><td class="chart-cell chart-cell--score">${pts}</td><td class="chart-cell chart-cell--tier ${tierCls}">${tier}</td></tr>`;
+  }
+
+  const ageFmt = ageGroup.replace('under-', '< ').replace('-and-over', '+').replace('-', '–');
+  return `<p class="chart-meta">${sex === 'male' ? 'Male' : 'Female'} &middot; Age ${ageFmt}</p><table class="chart-table"><thead><tr><th class="chart-th">${colHeader}</th><th class="chart-th">Pts</th><th class="chart-th">Tier</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
-function openChart(src, alt, title) {
+function openChart(component, title) {
   const modal = byId('modal');
   if (!modal) return;
-  const img = byId('modal-img');
   const titleEl = byId('chart-drawer-title');
   if (titleEl) titleEl.textContent = title || 'Score Chart';
-  if (img) {
-    if (src) {
-      img.src = src;
-      img.alt = alt || 'Score chart';
-      img.hidden = false;
-    } else {
-      img.removeAttribute('src');
-      img.hidden = true;
-    }
+  const contentEl = byId('chart-content');
+  if (contentEl) {
+    contentEl.innerHTML = component
+      ? generateScoreChart(component)
+      : '<p class="chart-empty">Reference charts are not available in this build.</p>';
   }
   modal.removeAttribute('hidden');
   modal.dataset.chartOpen = 'true';
@@ -246,19 +267,108 @@ function closeChart() {
   delete modal.dataset.chartOpen;
 }
 
-// --- Lap times ---
+// --- Stadium point (for fitness oval lap display) ---
+
+function stadiumPoint(t, x, y, w, h, r, expand) {
+  const cx = x + w / 2;
+  const cy = y + h / 2;
+  const sw = w - 2 * r;
+  const arcLen = Math.PI * r;
+  const total = 2 * sw + 2 * arcLen;
+  let pos = (((t % 1) + 1) % 1) * total;
+  let px, py;
+
+  if (pos < sw) {
+    px = x + r + pos; py = y;
+  } else if ((pos -= sw) < arcLen) {
+    const a = -Math.PI / 2 + Math.PI * (pos / arcLen);
+    px = x + w - r + r * Math.cos(a); py = cy + r * Math.sin(a);
+  } else if ((pos -= arcLen) < sw) {
+    px = x + w - r - pos; py = y + h;
+  } else {
+    pos -= sw;
+    const a = Math.PI / 2 + Math.PI * (pos / arcLen);
+    px = x + r + r * Math.cos(a); py = cy + r * Math.sin(a);
+  }
+
+  if (expand) {
+    const dx = px - cx, dy = py - cy;
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
+    px += (dx / len) * expand; py += (dy / len) * expand;
+  }
+  return [px, py];
+}
+
+// --- Lap display variants ---
+
+function formatLapTimesTactical(lapCount, lapSec) {
+  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
+  const lapTimeStr = secondsToTimeString(lapSec);
+  const barPct = Math.min(95, Math.max(30, ((480 - lapSec) / 200) * 80 + 30)).toFixed(1);
+  let rows = '';
+  for (let i = 1; i <= lapCount; i++) {
+    rows += `<div class="lap-hud-row"><span class="lap-hud-n">${i}</span><span class="lap-hud-pace">${lapTimeStr}</span><span class="lap-hud-split">${secondsToTimeString(lapSec * i)}</span><div class="lap-hud-bar"><div class="lap-hud-bar-fill" style="width:${barPct}%"></div></div></div>`;
+  }
+  return `<div class="lap-hud"><div class="lap-hud-header"><span class="lap-hud-title">PACE PLAN</span><span class="lap-hud-sub">${lapLabel} &middot; ${lapTimeStr}/lap</span></div><div class="lap-hud-rows">${rows}</div></div>`;
+}
+
+function formatLapTimesFitness(totalSeconds, lapCount, lapSec) {
+  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
+  const lapTimeStr = secondsToTimeString(lapSec);
+  const vx = 30, vy = 20, vw = 200, vh = 90, vr = 45, expand = 18;
+  let markers = '';
+  for (let i = 0; i < lapCount; i++) {
+    const t = ((i + 1) / lapCount) % 1;
+    const [px, py] = stadiumPoint(t, vx, vy, vw, vh, vr, expand);
+    markers += `<circle class="lap-track-dot" cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="10"/><text class="lap-track-num" x="${px.toFixed(1)}" y="${py.toFixed(1)}">${i + 1}</text>`;
+  }
+  return `<div class="lap-track-wrap"><div class="lap-track-header"><span class="lap-track-title">PACE PLAN</span> &middot; ${lapLabel} &middot; ${lapTimeStr}/lap</div><svg class="lap-track-svg" viewBox="0 0 260 130" aria-hidden="true"><rect class="lap-track-oval" x="${vx}" y="${vy}" width="${vw}" height="${vh}" rx="${vr}"/>${markers}</svg><p class="lap-track-note">Target &le; ${secondsToTimeString(totalSeconds)} total &middot; ${lapTimeStr}/lap avg</p></div>`;
+}
+
+function formatLapTimesBlues(totalSeconds, lapCount, lapSec) {
+  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
+  const lapTimeStr = secondsToTimeString(lapSec);
+  let rows = '';
+  for (let i = 1; i <= lapCount; i++) {
+    const alt = i % 2 === 0 ? ' class="lap-table-row--alt"' : '';
+    rows += `<tr${alt}><td>${i}</td><td>${lapTimeStr}</td><td>${secondsToTimeString(lapSec * i)}</td></tr>`;
+  }
+  return `<div class="lap-table-wrap"><div class="lap-table-header">Lap targets <span>${lapLabel} &rarr; ${secondsToTimeString(totalSeconds)}</span></div><table class="lap-table"><thead><tr><th>LAP</th><th>PACE</th><th>SPLIT</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function formatLapTimesStencil(totalSeconds, lapCount, lapSec) {
+  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
+  const lapTimeStr = secondsToTimeString(lapSec);
+  const barPct = Math.min(90, Math.max(20, ((600 - lapSec) / 300) * 70 + 20)).toFixed(1);
+  let bars = '';
+  for (let i = 1; i <= lapCount; i++) {
+    bars += `<div class="lap-bar-col"><span class="lap-bar-pace">${lapTimeStr}</span><div class="lap-bar-track"><div class="lap-bar-fill" style="height:${barPct}%"></div></div><span class="lap-bar-index">L${i}</span></div>`;
+  }
+  const splits = Array.from({ length: lapCount }, (_, i) => `<span>L${i + 1}: ${secondsToTimeString(lapSec * (i + 1))}</span>`).join('');
+  return `<div class="lap-bars"><div class="lap-bars-header">PACE PLAN &middot; ${lapLabel} &middot; ${lapTimeStr}/lap</div><div class="lap-bars-chart">${bars}</div><div class="lap-bars-splits">${splits}</div></div>`;
+}
+
+function formatLapTimesLight(totalSeconds, lapCount, lapSec) {
+  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
+  const lapTimeStr = secondsToTimeString(lapSec);
+  const barPct = Math.min(92, Math.max(25, ((480 - lapSec) / 240) * 67 + 25)).toFixed(1);
+  let rows = '';
+  for (let i = 1; i <= lapCount; i++) {
+    const sep = i < lapCount ? ' lap-row--sep' : '';
+    rows += `<div class="lap-row${sep}"><span class="lap-row-n">${i}</span><span class="lap-row-pace">${lapTimeStr}</span><div class="lap-row-bar"><div class="lap-row-bar-fill" style="width:${barPct}%"></div></div><span class="lap-row-split">${secondsToTimeString(lapSec * i)}</span></div>`;
+  }
+  return `<div class="lap-rows-wrap"><div class="lap-rows-header">Lap targets <span>${lapLabel} &rarr; ${secondsToTimeString(totalSeconds)}</span></div>${rows}</div>`;
+}
 
 function formatLapTimes(totalSeconds, lapCount) {
   if (!totalSeconds || !lapCount) return '';
   const lapSec = Math.round(totalSeconds / lapCount);
-  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
-  const lapTimeStr = secondsToTimeString(lapSec);
-  let tiles = '';
-  for (let i = 1; i <= lapCount; i++) {
-    const cls = i === lapCount ? ' lap-tile--final' : '';
-    tiles += `<div class="lap-tile${cls}"><span class="lap-tile-num">${i}</span><span class="lap-tile-time">&#8804;&nbsp;${secondsToTimeString(lapSec * i)}</span></div>`;
-  }
-  return `<div class="lap-plan"><div class="lap-plan-header"><span class="lap-plan-title">PACE PLAN</span><span class="lap-plan-sub">${lapLabel} &middot; ${lapTimeStr}/lap</span></div><div class="lap-plan-grid">${tiles}</div></div>`;
+  const theme = document.documentElement.dataset.theme || 'tactical';
+  if (theme === 'fitness') return formatLapTimesFitness(totalSeconds, lapCount, lapSec);
+  if (theme === 'blues') return formatLapTimesBlues(totalSeconds, lapCount, lapSec);
+  if (theme === 'stencil') return formatLapTimesStencil(totalSeconds, lapCount, lapSec);
+  if (theme === 'light') return formatLapTimesLight(totalSeconds, lapCount, lapSec);
+  return formatLapTimesTactical(lapCount, lapSec);
 }
 
 // --- Tick positioning ---
@@ -292,6 +402,24 @@ function renderScore(result) {
 
   const barFill = byId('score-bar-fill');
   if (barFill) barFill.style.width = `${Math.max(0, 100 - Math.min(100, total))}%`;
+
+  // SVG ring (fitness + blues themes)
+  const ringArc = byId('score-ring-arc');
+  if (ringArc) {
+    const C = 2 * Math.PI * 70; // circumference for r=70
+    const filled = (Math.min(100, Math.max(0, total)) / 100) * C;
+    ringArc.setAttribute('stroke-dasharray', `${filled.toFixed(1)} ${C.toFixed(1)}`);
+  }
+  const ringNum = byId('score-ring-num');
+  if (ringNum) ringNum.textContent = Number.isInteger(total) ? String(total) : total.toFixed(1);
+  const ringCat = byId('score-ring-cat');
+  if (ringCat) {
+    ringCat.textContent = category === 'Excellent' ? 'EXC' : category === 'Satisfactory' ? 'SAT' : 'FAIL';
+  }
+
+  // Stencil threshold marker
+  const stencilMarker = byId('score-stencil-marker');
+  if (stencilMarker) stencilMarker.style.left = `${Math.min(100, Math.max(0, total))}%`;
 
   const bodyScore = byId('pfra-body-score');
   if (bodyScore) bodyScore.textContent = String(scores.body);
@@ -517,6 +645,13 @@ function renderEditorVisibility() {
     const panel = byId(`${name}-editor`);
     if (panel) panel.hidden = name !== state.selectedComponent;
   });
+
+  // Drive run slider direction: time events flip slider via CSS
+  const cardioEditor = byId('cardio-editor');
+  if (cardioEditor) {
+    const isTimeEvent = state.cardio.event === 'two-mile-run' || state.cardio.event === 'two-kilometer-walk';
+    cardioEditor.dataset.eventKind = isTimeEvent ? 'time' : 'count';
+  }
 
   document.querySelectorAll('.component-chip').forEach((chip) => {
     const active = chip.dataset.component === state.selectedComponent;
@@ -813,16 +948,20 @@ function bindEvents() {
     chip.addEventListener('click', () => selectComponent(chip.dataset.component));
   });
 
+  // --- Theme change: re-render lap display and ring ---
+
+  document.addEventListener('afpt:themechange', () => { render(); });
+
   // --- Chart buttons ---
 
   byId('push-btn')?.addEventListener('click', () => {
-    openChart(chartSrc('strength'), 'Strength score chart', 'Strength Score Chart');
+    openChart('strength', 'Strength Score Chart');
   });
   byId('sit-btn')?.addEventListener('click', () => {
-    openChart(chartSrc('core'), 'Core score chart', 'Core Score Chart');
+    openChart('core', 'Core Score Chart');
   });
   byId('run-btn')?.addEventListener('click', () => {
-    openChart(chartSrc('cardio'), 'Cardio score chart', 'Cardio Score Chart');
+    openChart('cardio', 'Cardio Score Chart');
   });
 
   // --- Chart close ---
@@ -836,13 +975,13 @@ function bindEvents() {
   // --- Settings menu items ---
 
   bindMenuClick('run-adjust-chart', () => {
-    openChart(null, 'Run Altitude Adjustment chart', 'Run Altitude Adjustment');
+    openChart(null, 'Run Altitude Adjustment');
   });
   bindMenuClick('walk-adjust-chart', () => {
-    openChart(null, 'Walk Altitude Adjustment chart', 'Walk Altitude Adjustment');
+    openChart(null, 'Walk Altitude Adjustment');
   });
   bindMenuClick('shuttle-score-card', () => {
-    openChart(null, 'Shuttle Score Card', 'Shuttle Score Card');
+    openChart(null, 'Shuttle Score Card');
   });
   bindMenuClick('shuttle-audio-menu', () => {
     const player = byId('shuttle-audio-player');

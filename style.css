@@ -1149,3 +1149,538 @@ html, body {
   display: block;
   border-radius: 4px;
 }
+
+/* ─── Chart content (generated HTML tables) ───────────────────── */
+.chart-content {
+  padding: 14px;
+  width: 100%;
+}
+
+.chart-meta {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--afpt-ink-dim);
+  margin: 0 0 12px 0;
+}
+
+.chart-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.chart-th {
+  text-align: left;
+  padding: 6px 8px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--afpt-ink-dim);
+  border-bottom: 1px solid var(--afpt-border);
+}
+
+.chart-cell {
+  padding: 7px 8px;
+  color: var(--afpt-ink);
+  border-bottom: 1px solid var(--afpt-border);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-cell--score {
+  color: var(--afpt-accent-2);
+  font-weight: 700;
+}
+
+.chart-cell--tier {
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.chart-row--you .chart-cell {
+  background: color-mix(in oklab, var(--afpt-accent) 10%, transparent);
+  color: var(--afpt-accent);
+}
+
+.chart-you {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--afpt-accent);
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
+.chart-empty {
+  font-size: 13px;
+  color: var(--afpt-ink-dim);
+  text-align: center;
+  padding: 24px 16px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.chart-empty strong {
+  color: var(--afpt-accent);
+}
+
+.tier--max { color: var(--afpt-accent-2); font-weight: 700; }
+.tier--exc { color: var(--afpt-accent); }
+.tier--sat { color: var(--afpt-warn); }
+.tier--min { color: var(--afpt-ink-dim); }
+
+/* ─── Score ring (fitness + blues themes) ─────────────────────── */
+.score-ring-wrap {
+  display: none;
+  justify-content: center;
+  padding: 12px 0 4px;
+}
+
+:root[data-theme="fitness"] .score-ring-wrap,
+:root[data-theme="blues"] .score-ring-wrap {
+  display: flex;
+}
+
+:root[data-theme="fitness"] .score-bar-wrap,
+:root[data-theme="fitness"] .score-bar-labels,
+:root[data-theme="blues"] .score-bar-wrap,
+:root[data-theme="blues"] .score-bar-labels {
+  display: none;
+}
+
+:root[data-theme="fitness"] .score-ring-svg { width: 170px; height: 170px; }
+:root[data-theme="blues"] .score-ring-svg { width: 140px; height: 140px; }
+
+.score-ring-track {
+  stroke: var(--afpt-panel-2);
+}
+
+.score-ring-arc {
+  stroke: var(--afpt-accent);
+  transition: stroke-dasharray 0.3s ease;
+}
+
+:root[data-theme="fitness"] .score-ring-arc { stroke: url(#fitness-ring-grad); }
+:root[data-theme="blues"] .score-ring-arc { stroke: var(--afpt-accent-2); }
+
+.score-ring-num {
+  font-family: inherit;
+  font-weight: 700;
+  fill: var(--afpt-ink);
+  font-size: 40px;
+  letter-spacing: -1px;
+}
+
+.score-ring-cat {
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 2px;
+  fill: var(--afpt-ink-dim);
+}
+
+/* ─── Score stencil bar ────────────────────────────────────────── */
+.score-stencil-bar {
+  display: none;
+  position: relative;
+  margin: 2px 0 20px;
+}
+
+:root[data-theme="stencil"] .score-stencil-bar { display: block; }
+:root[data-theme="stencil"] .score-bar-wrap,
+:root[data-theme="stencil"] .score-bar-labels { display: none; }
+
+.score-stencil-segments {
+  display: flex;
+  height: 10px;
+  border-radius: 3px;
+  overflow: hidden;
+  gap: 1px;
+}
+
+.score-stencil-seg--unsat { background: var(--afpt-bad); opacity: 0.7; }
+.score-stencil-seg--sat   { background: var(--afpt-warn); opacity: 0.8; }
+.score-stencil-seg--exc   { background: var(--afpt-accent-2); }
+
+.score-stencil-marker {
+  position: absolute;
+  bottom: -18px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: var(--afpt-accent);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.score-stencil-marker::before {
+  content: '▲';
+  display: block;
+  text-align: center;
+  font-size: 8px;
+  line-height: 1;
+  margin-bottom: 1px;
+}
+
+/* ─── Run slider direction flip (time events: right = better) ──── */
+#cardio-editor[data-event-kind="time"] .slider-container {
+  transform: scaleX(-1);
+}
+
+/* ─── Per-theme slider thumb shapes ───────────────────────────── */
+
+/* Tactical: diamond */
+:root[data-theme="tactical"] .value-slider::-webkit-slider-thumb {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  border-radius: 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  box-shadow: 0 0 6px var(--afpt-accent), 0 0 12px rgba(29, 233, 255, 0.3);
+}
+
+:root[data-theme="tactical"] .value-slider::-moz-range-thumb {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  border-radius: 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  box-shadow: 0 0 6px var(--afpt-accent);
+}
+
+/* Stencil: rectangular block */
+:root[data-theme="stencil"] .value-slider::-webkit-slider-thumb {
+  border-radius: 2px;
+  width: 12px;
+  height: 26px;
+  margin-top: -10px;
+}
+
+:root[data-theme="stencil"] .value-slider::-moz-range-thumb {
+  border-radius: 2px;
+  width: 12px;
+  height: 26px;
+}
+
+/* Blues: circle with brass/gold accent border */
+:root[data-theme="blues"] .value-slider::-webkit-slider-thumb {
+  background: var(--afpt-ink);
+  border: 3px solid var(--afpt-accent-2);
+}
+
+:root[data-theme="blues"] .value-slider::-moz-range-thumb {
+  background: var(--afpt-ink);
+  border: 3px solid var(--afpt-accent-2);
+}
+
+/* Fitness: larger circle with glow */
+:root[data-theme="fitness"] .value-slider::-webkit-slider-thumb {
+  width: 24px;
+  height: 24px;
+  margin-top: -9px;
+  background: var(--afpt-accent);
+  border: none;
+  box-shadow: 0 0 8px var(--afpt-accent), 0 0 20px rgba(255, 93, 171, 0.4);
+}
+
+:root[data-theme="fitness"] .value-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: var(--afpt-accent);
+  border: none;
+  box-shadow: 0 0 8px var(--afpt-accent);
+}
+
+/* ─── Lap display variants ─────────────────────────────────────── */
+
+/* Tactical HUD */
+.lap-hud {
+  padding: 10px;
+  background: var(--afpt-panel-2);
+  border: 1px solid var(--afpt-border);
+  border-radius: 6px;
+  margin-top: 6px;
+}
+
+.lap-hud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.lap-hud-title {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--afpt-accent);
+  font-weight: 700;
+}
+
+.lap-hud-sub {
+  font-size: 11px;
+  color: var(--afpt-ink-dim);
+}
+
+.lap-hud-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lap-hud-row {
+  display: grid;
+  grid-template-columns: 20px 70px 70px 1fr;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lap-hud-n { color: var(--afpt-ink-dim); font-size: 11px; }
+.lap-hud-pace { color: var(--afpt-ink); }
+.lap-hud-split { color: var(--afpt-ink-dim); }
+
+.lap-hud-bar {
+  height: 4px;
+  background: var(--afpt-panel);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.lap-hud-bar-fill {
+  height: 100%;
+  background: var(--afpt-accent);
+  border-radius: 2px;
+  box-shadow: 0 0 4px var(--afpt-accent);
+}
+
+/* Fitness SVG oval track */
+.lap-track-wrap {
+  margin-top: 8px;
+  padding: 10px 0;
+}
+
+.lap-track-header {
+  font-size: 11px;
+  color: var(--afpt-ink-dim);
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.lap-track-title {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--afpt-accent);
+  font-weight: 700;
+}
+
+.lap-track-svg {
+  width: 100%;
+  max-width: 280px;
+  display: block;
+  margin: 0 auto;
+}
+
+.lap-track-oval {
+  fill: none;
+  stroke: var(--afpt-accent);
+  stroke-width: 6;
+  opacity: 0.4;
+}
+
+.lap-track-dot {
+  fill: var(--afpt-accent);
+}
+
+.lap-track-num {
+  fill: var(--afpt-bg);
+  font-size: 8px;
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-family: inherit;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.lap-track-note {
+  font-size: 11px;
+  color: var(--afpt-ink-dim);
+  text-align: center;
+  margin: 6px 0 0;
+}
+
+/* Blues clean table */
+.lap-table-wrap {
+  margin-top: 8px;
+}
+
+.lap-table-header {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--afpt-ink);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.lap-table-header span {
+  font-size: 11px;
+  color: var(--afpt-ink-dim);
+  font-weight: 400;
+}
+
+.lap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lap-table th {
+  text-align: left;
+  padding: 6px 8px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--afpt-ink-dim);
+  border-bottom: 1px solid var(--afpt-border);
+}
+
+.lap-table td {
+  padding: 8px 8px;
+  color: var(--afpt-ink);
+  border-bottom: 1px solid var(--afpt-border);
+}
+
+.lap-table-row--alt td {
+  background: var(--afpt-panel-2);
+}
+
+/* Stencil bar chart */
+.lap-bars {
+  margin-top: 8px;
+}
+
+.lap-bars-header {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--afpt-accent);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.lap-bars-chart {
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  height: 72px;
+  margin-bottom: 6px;
+}
+
+.lap-bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+  gap: 2px;
+}
+
+.lap-bar-pace {
+  font-size: 8px;
+  color: var(--afpt-ink-dim);
+  letter-spacing: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.lap-bar-track {
+  flex: 1;
+  width: 100%;
+  background: var(--afpt-panel-2);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.lap-bar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--afpt-accent);
+  transition: height 0.2s;
+}
+
+.lap-bar-index {
+  font-size: 9px;
+  color: var(--afpt-ink-dim);
+  letter-spacing: 0.5px;
+}
+
+.lap-bars-splits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  font-size: 11px;
+  color: var(--afpt-ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Light card rows */
+.lap-rows-wrap {
+  margin-top: 8px;
+}
+
+.lap-rows-header {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--afpt-ink);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.lap-rows-header span {
+  font-size: 11px;
+  color: var(--afpt-ink-dim);
+  font-weight: 400;
+}
+
+.lap-row {
+  display: grid;
+  grid-template-columns: 20px 64px 1fr 64px;
+  gap: 10px;
+  padding: 8px 0;
+  align-items: center;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lap-row--sep {
+  border-bottom: 1px solid var(--afpt-border);
+}
+
+.lap-row-n   { color: var(--afpt-ink-dim); font-weight: 600; }
+.lap-row-pace  { color: var(--afpt-ink); font-weight: 600; }
+.lap-row-split { color: var(--afpt-ink-dim); text-align: right; }
+
+.lap-row-bar {
+  height: 5px;
+  background: var(--afpt-panel-2);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.lap-row-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--afpt-accent);
+  border-radius: 3px;
+}

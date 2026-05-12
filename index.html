@@ -53,7 +53,7 @@
         <button id="close-btn" class="close-btn" type="button">Close ✕</button>
       </header>
       <div class="chart-drawer__image-frame">
-        <img id="modal-img" alt="Score chart">
+        <div id="chart-content" class="chart-content"></div>
       </div>
     </section>
   </div>
@@ -167,6 +167,33 @@
         <span style="left:75%">SAT 75</span>
         <span style="left:90%">EXC 90</span>
         <span style="left:100%">MAX</span>
+      </div>
+      <!-- Stencil theme: segmented threshold bar with YOU marker -->
+      <div class="score-stencil-bar" aria-hidden="true">
+        <div class="score-stencil-segments">
+          <div class="score-stencil-seg score-stencil-seg--unsat" style="flex:75"></div>
+          <div class="score-stencil-seg score-stencil-seg--sat" style="flex:15"></div>
+          <div class="score-stencil-seg score-stencil-seg--exc" style="flex:10"></div>
+        </div>
+        <div id="score-stencil-marker" class="score-stencil-marker" style="left:50%">YOU</div>
+      </div>
+      <!-- Fitness/Blues themes: SVG ring -->
+      <div class="score-ring-wrap" aria-hidden="true">
+        <svg id="score-ring-svg" class="score-ring-svg" viewBox="0 0 160 160" fill="none">
+          <defs>
+            <linearGradient id="fitness-ring-grad" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#ffb547"/>
+              <stop offset="50%" stop-color="#ff5dab"/>
+              <stop offset="100%" stop-color="#ff5d7c"/>
+            </linearGradient>
+          </defs>
+          <circle class="score-ring-track" cx="80" cy="80" r="70" stroke-width="12"/>
+          <circle id="score-ring-arc" class="score-ring-arc" cx="80" cy="80" r="70"
+            stroke-width="12" stroke-linecap="round"
+            transform="rotate(-90 80 80)" stroke-dasharray="0 440"/>
+          <text id="score-ring-num" class="score-ring-num" x="80" y="72" text-anchor="middle" dominant-baseline="middle">--</text>
+          <text id="score-ring-cat" class="score-ring-cat" x="80" y="100" text-anchor="middle" dominant-baseline="middle">--</text>
+        </svg>
       </div>
       <div id="pfra-result" hidden></div>
     </section>
