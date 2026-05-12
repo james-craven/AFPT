@@ -15,7 +15,7 @@ import { eventDefaults } from './state.mjs';
 
 // --- State ---
 
-const defaultCardioValue = '20:00';
+const defaultCardioValue = '20:00'; // fallback before tables load
 
 let state = {
   sex: 'female',
@@ -130,6 +130,18 @@ function dispatch(action) {
     case 'SET_SELECTED_COMPONENT': state = { ...state, selectedComponent: action.component }; break;
     default: break;
   }
+}
+
+// Returns the lowest valid scoring value for a cardio event given current sex/age.
+// Used at init and on event change so sliders never start out of range.
+function lowestCardioDefault(event, ageGroup, sex) {
+  if (event === 'two-kilometer-walk') return eventDefaults['two-kilometer-walk'] || defaultCardioValue;
+  const t = tables[event];
+  if (t) {
+    const v = firstScoringCellValue(t, ageGroup, sex);
+    if (v !== undefined) return String(v);
+  }
+  return event === 'hamr-20-meter' ? '40' : defaultCardioValue;
 }
 
 // --- Scoring ---
@@ -884,17 +896,17 @@ function bindEvents() {
     } else {
       dispatch({ type: 'SET_CARDIO_EXEMPT', exempt: false });
       dispatch({ type: 'SET_CARDIO_EVENT', event: sv });
-      const def = eventDefaults[sv] || defaultCardioValue;
+      const def = lowestCardioDefault(sv, state.ageGroup, state.sex);
       dispatch({ type: 'SET_CARDIO_VALUE', value: def });
       if (sv === 'hamr-20-meter') {
         const shuttleTxt = byId('run-shuttle-txt');
         if (shuttleTxt) shuttleTxt.value = def;
-      } else {
+      } else if (sv !== 'two-kilometer-walk') {
         const parts = def.split(':');
         const minEl = byId('run-mintxt');
         const secEl = byId('run-sectxt');
-        if (minEl) minEl.value = parts[0] || '20';
-        if (secEl) secEl.value = parts[1] || '00';
+        if (minEl) minEl.value = parts[0] || '0';
+        if (secEl) secEl.value = (parts[1] || '00').padStart(2, '0');
       }
     }
     render();
@@ -981,6 +993,27 @@ function bindEvents() {
         sel.dispatchEvent(new Event('change', { bubbles: true }));
       }
     });
+  });
+
+  // --- Slider step buttons (−/+ flanking each slider) ---
+  // Single delegated handler. Inverts step for visually-flipped time sliders.
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.slider-step-btn');
+    if (!btn) return;
+    const sliderId = btn.dataset.target;
+    let dir = Number(btn.dataset.step);
+    if (!sliderId || !Number.isFinite(dir)) return;
+    const slider = byId(sliderId);
+    if (!slider) return;
+    if (slider.closest('[data-event-kind="time"]')) dir = -dir;
+    const cur = Number(slider.value);
+    const lo = Number(slider.min);
+    const hi = Number(slider.max);
+    const next = Math.min(hi, Math.max(lo, cur + dir));
+    if (next === cur) return;
+    slider.value = String(next);
+    slider.dispatchEvent(new Event('input', { bubbles: true }));
   });
 
   // --- Theme change: re-render lap display and ring ---
@@ -1085,7 +1118,22 @@ async function loadData() {
 function init() {
   refreshStateFromDom();
   bindEvents();
-  loadData().then(render);
+  loadData().then(() => {
+    // After tables load, set cardio to lowest valid scoring default for initial sex/age
+    const def = lowestCardioDefault(state.cardio.event, state.ageGroup, state.sex);
+    dispatch({ type: 'SET_CARDIO_VALUE', value: def });
+    if (state.cardio.event === 'hamr-20-meter') {
+      const shuttleTxt = byId('run-shuttle-txt');
+      if (shuttleTxt) shuttleTxt.value = def;
+    } else if (state.cardio.event !== 'two-kilometer-walk') {
+      const parts = def.split(':');
+      const minEl = byId('run-mintxt');
+      const secEl = byId('run-sectxt');
+      if (minEl) minEl.value = parts[0] || '0';
+      if (secEl) secEl.value = (parts[1] || '00').padStart(2, '0');
+    }
+    render();
+  });
 }
 
 init();
