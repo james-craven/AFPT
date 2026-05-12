@@ -464,6 +464,9 @@ function renderScore(result) {
 }
 
 function renderChipValues() {
+  const chipBody = byId('chip-body-value');
+  if (chipBody) chipBody.textContent = state.whtr || '--';
+
   const chipStr = byId('chip-strength-value');
   if (chipStr) chipStr.textContent = state.strength.exempt ? 'EX' : (state.strength.value || '--');
 
@@ -472,6 +475,17 @@ function renderChipValues() {
 
   const chipCardio = byId('chip-cardio-value');
   if (chipCardio) chipCardio.textContent = state.cardio.exempt ? 'EX' : (state.cardio.value || '--');
+}
+
+function renderBodyEditor(scores) {
+  const bodyTxtP = byId('body-txt-p');
+  if (bodyTxtP) bodyTxtP.textContent = `Body Score: ${scores.body} | Pass ≤ 0.55`;
+
+  const whtrNum = parseFloat(state.whtr);
+  const slider = byId('whtr-slider');
+  if (slider && Number.isFinite(whtrNum)) {
+    slider.value = String(Math.round(whtrNum * 100));
+  }
 }
 
 function renderStrengthEditor(scores) {
@@ -669,7 +683,7 @@ function renderEditorVisibility() {
   if (runTimeRow) runTimeRow.hidden = isHamr;
   if (runShuttleRow) runShuttleRow.hidden = !isHamr;
 
-  const editors = ['strength', 'core', 'cardio'];
+  const editors = ['body', 'strength', 'core', 'cardio'];
   editors.forEach((name) => {
     const panel = byId(`${name}-editor`);
     if (panel) panel.hidden = name !== state.selectedComponent;
@@ -702,6 +716,7 @@ function render() {
 
   renderScore(result);
   renderChipValues();
+  renderBodyEditor(result.scores);
   renderStrengthEditor(result.scores);
   renderCoreEditor(result.scores);
   renderCardioEditor(result.scores);
@@ -742,7 +757,21 @@ function bindEvents() {
   });
 
   byId('pfra-whtr')?.addEventListener('input', () => {
-    dispatch({ type: 'SET_WHTR', value: val('pfra-whtr') });
+    const v = val('pfra-whtr');
+    dispatch({ type: 'SET_WHTR', value: v });
+    const slider = byId('whtr-slider');
+    if (slider) {
+      const num = parseFloat(v);
+      if (Number.isFinite(num)) slider.value = String(Math.round(num * 100));
+    }
+    render();
+  });
+
+  byId('whtr-slider')?.addEventListener('input', () => {
+    const whtrStr = (Number(val('whtr-slider')) / 100).toFixed(2);
+    dispatch({ type: 'SET_WHTR', value: whtrStr });
+    const txt = byId('pfra-whtr');
+    if (txt) txt.value = whtrStr;
     render();
   });
 

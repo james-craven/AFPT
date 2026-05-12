@@ -205,22 +205,14 @@
       <div id="pfra-result" hidden></div>
     </section>
 
-    <!-- Body composition -->
-    <section class="body-comp-row" id="body-composition-card" aria-label="Body composition">
-      <!-- Fitness theme: glass header row with pass/fail badge -->
-      <div class="fit-body-header">
-        <span class="fit-body-title">BODY COMPOSITION</span>
-        <span id="fit-body-badge" class="fit-body-badge" data-pass="true">PASS</span>
-      </div>
-      <span class="bc-label">BODY</span>
-      <label class="bc-input-label" for="pfra-whtr">WHtR</label>
-      <input id="pfra-whtr" type="text" inputmode="decimal" value="0.49" class="bc-input" aria-label="Waist-to-height ratio">
-      <span class="bc-score-label">Score</span>
-      <span id="pfra-body-score" class="bc-score">--</span>
-    </section>
 
     <!-- Component summary strip -->
     <div class="component-strip" role="tablist" aria-label="Component selector">
+      <button id="summary-body" class="component-chip" role="tab" aria-selected="false" data-component="body">
+        <span class="chip-name">BODY</span>
+        <span id="chip-body-value" class="chip-value">--</span>
+        <span id="pfra-body-score" class="chip-score">--</span>
+      </button>
       <button id="summary-strength" class="component-chip chip--active" role="tab" aria-selected="true" data-component="strength">
         <span class="chip-name">PUSH</span>
         <span id="chip-strength-value" class="chip-value">--</span>
@@ -240,6 +232,33 @@
 
     <!-- Editor panels -->
     <div class="editors-container">
+
+      <!-- Body editor -->
+      <section id="body-editor" class="editor-panel" role="tabpanel" aria-label="Body composition" hidden>
+        <div class="editor-header">
+          <span class="editor-title">BODY</span>
+        </div>
+        <div class="editor-event-row">
+          <span class="body-event-label">WHtR (Waist ÷ Height)</span>
+        </div>
+        <div class="editor-value-row">
+          <input id="pfra-whtr" type="text" inputmode="decimal" class="value-input" value="0.49" aria-label="Waist-to-height ratio">
+          <span class="value-unit">WHtR</span>
+        </div>
+        <div class="slider-row">
+          <button class="slider-step-btn" type="button" data-step="-1" data-target="whtr-slider" aria-label="Decrease WHtR">−</button>
+          <div class="slider-container">
+            <input id="whtr-slider" type="range" class="value-slider" min="35" max="70" value="49" aria-label="WHtR slider">
+          </div>
+          <button class="slider-step-btn" type="button" data-step="1" data-target="whtr-slider" aria-label="Increase WHtR">+</button>
+        </div>
+        <p id="body-txt-p" class="score-label-text">Body Score: -- | Pass ≤ 0.55</p>
+        <!-- Fitness theme: pass/fail badge -->
+        <div class="fit-body-header">
+          <span class="fit-body-title">BODY COMPOSITION</span>
+          <span id="fit-body-badge" class="fit-body-badge" data-pass="true">PASS</span>
+        </div>
+      </section>
 
       <!-- Strength editor -->
       <section id="strength-editor" class="editor-panel" role="tabpanel" aria-label="Strength">

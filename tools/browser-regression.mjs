@@ -196,6 +196,18 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const strengthVisible = await page.evaluate(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
   assert.equal(strengthVisible, true, 'strength editor visible by default');
 
+  // 6a-body. BODY chip opens body editor
+  await page.locator('#summary-body').click();
+  await page.waitForFunction(() => !document.getElementById('body-editor')?.hasAttribute('hidden'));
+  const bodyVisible = await page.evaluate(() => !document.getElementById('body-editor')?.hasAttribute('hidden'));
+  assert.equal(bodyVisible, true, 'body editor visible after clicking BODY chip');
+  const strHiddenAfterBody = await page.evaluate(() => document.getElementById('strength-editor')?.hasAttribute('hidden'));
+  assert.equal(strHiddenAfterBody, true, 'strength editor hidden after switching to body');
+  const whtrSliderExists = await page.evaluate(() => !!document.getElementById('whtr-slider'));
+  assert.equal(whtrSliderExists, true, 'whtr-slider exists in body editor');
+  await page.locator('#summary-strength').click();
+  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+
   await page.locator('#summary-core').click();
   await page.waitForFunction(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
   const coreVisible = await page.evaluate(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
