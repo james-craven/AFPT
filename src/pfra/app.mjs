@@ -143,16 +143,74 @@ function dispatch(action) {
   }
 }
 
+function lowestScoringDefault(event, ageGroup, sex) {
+  const t = tables[event];
+  if (!t) return String(eventDefaults[event] ?? '0');
+
+  const v = firstScoringCellValue(t, ageGroup, sex);
+  return v !== undefined ? String(v) : String(eventDefaults[event] ?? '0');
+}
+
 // Returns the lowest valid scoring value for a cardio event given current sex/age.
 // Used at init and on event change so sliders never start out of range.
 function lowestCardioDefault(event, ageGroup, sex) {
-  if (event === 'two-kilometer-walk') return eventDefaults['two-kilometer-walk'] || defaultCardioValue;
-  const t = tables[event];
-  if (t) {
-    const v = firstScoringCellValue(t, ageGroup, sex);
-    if (v !== undefined) return String(v);
+  if (event === 'two-kilometer-walk') {
+    return walkMaximumTime(standards, ageGroup, sex)
+      || eventDefaults['two-kilometer-walk']
+      || defaultCardioValue;
   }
-  return event === 'hamr-20-meter' ? '40' : defaultCardioValue;
+
+  return lowestScoringDefault(event, ageGroup, sex)
+    || (event === 'hamr-20-meter' ? '40' : defaultCardioValue);
+}
+
+function clearSavedEventValues() {
+  Object.keys(savedEventValues.strength).forEach((key) => delete savedEventValues.strength[key]);
+  Object.keys(savedEventValues.core).forEach((key) => delete savedEventValues.core[key]);
+  Object.keys(savedEventValues.cardio).forEach((key) => delete savedEventValues.cardio[key]);
+}
+
+function syncCurrentInputsFromState() {
+  const pushTxt = byId('push-txt');
+  if (pushTxt) pushTxt.value = state.strength.value;
+
+  if (state.core.event === 'forearm-plank') {
+    const parts = String(state.core.value).split(':');
+    const minEl = byId('sit-txt-plank');
+    const secEl = byId('plankmintxt');
+    if (minEl) minEl.value = parts[0] || '0';
+    if (secEl) secEl.value = (parts[1] || '00').padStart(2, '0');
+  } else {
+    const sitTxt = byId('sit-txt');
+    if (sitTxt) sitTxt.value = state.core.value;
+  }
+
+  if (state.cardio.event === 'hamr-20-meter') {
+    const shuttleTxt = byId('run-shuttle-txt');
+    if (shuttleTxt) shuttleTxt.value = state.cardio.value;
+  } else if (state.cardio.event !== 'two-kilometer-walk') {
+    const parts = String(state.cardio.value).split(':');
+    const minEl = byId('run-mintxt');
+    const secEl = byId('run-sectxt');
+    if (minEl) minEl.value = parts[0] || '0';
+    if (secEl) secEl.value = (parts[1] || '00').padStart(2, '0');
+  }
+}
+
+function resetCurrentEventDefaults() {
+  const strengthDef = lowestScoringDefault(state.strength.event, state.ageGroup, state.sex);
+  dispatch({ type: 'SET_STRENGTH_VALUE', value: strengthDef });
+  savedEventValues.strength[state.strength.event] = strengthDef;
+
+  const coreDef = lowestScoringDefault(state.core.event, state.ageGroup, state.sex);
+  dispatch({ type: 'SET_CORE_VALUE', value: coreDef });
+  savedEventValues.core[state.core.event] = coreDef;
+
+  const cardioDef = lowestCardioDefault(state.cardio.event, state.ageGroup, state.sex);
+  dispatch({ type: 'SET_CARDIO_VALUE', value: cardioDef });
+  savedEventValues.cardio[state.cardio.event] = cardioDef;
+
+  syncCurrentInputsFromState();
 }
 
 // --- Scoring ---
@@ -774,11 +832,15 @@ function bindEvents() {
   // Demographics
   byId('sex-sel')?.addEventListener('change', () => {
     dispatch({ type: 'SET_SEX', sex: byId('sex-sel').value });
+    clearSavedEventValues();
+    resetCurrentEventDefaults();
     render();
   });
 
   byId('age-sel')?.addEventListener('change', () => {
     dispatch({ type: 'SET_AGE_GROUP', ageGroup: byId('age-sel').value });
+    clearSavedEventValues();
+    resetCurrentEventDefaults();
     render();
   });
 
@@ -823,7 +885,10 @@ function bindEvents() {
       dispatch({ type: 'SET_STRENGTH_EXEMPT', exempt: false });
       dispatch({ type: 'SET_STRENGTH_EVENT', event: sv });
       const saved = savedEventValues.strength[sv];
-      const def = saved !== undefined ? saved : (eventDefaults[sv] || '0');
+      const def = saved !== undefined
+        ? saved
+        : lowestScoringDefault(sv, state.ageGroup, state.sex);
+      savedEventValues.strength[sv] = def;
       const pushTxt = byId('push-txt');
       if (pushTxt) pushTxt.value = def;
       dispatch({ type: 'SET_STRENGTH_VALUE', value: def });
@@ -834,6 +899,7 @@ function bindEvents() {
   byId('push-txt')?.addEventListener('input', () => {
     const v = val('push-txt');
     dispatch({ type: 'SET_STRENGTH_VALUE', value: v });
+    if (!state.strength.exempt) savedEventValues.strength[state.strength.event] = v;
     const slider = byId('push-slider');
     if (slider) slider.value = v;
     render();
@@ -842,6 +908,7 @@ function bindEvents() {
   byId('push-slider')?.addEventListener('input', () => {
     const v = val('push-slider');
     dispatch({ type: 'SET_STRENGTH_VALUE', value: v });
+    if (!state.strength.exempt) savedEventValues.strength[state.strength.event] = v;
     const txt = byId('push-txt');
     if (txt) txt.value = v;
     render();
@@ -852,6 +919,7 @@ function bindEvents() {
     const minVal = tick?.dataset.minValue;
     if (minVal !== undefined) {
       dispatch({ type: 'SET_STRENGTH_VALUE', value: minVal });
+      if (!state.strength.exempt) savedEventValues.strength[state.strength.event] = minVal;
       const txt = byId('push-txt');
       if (txt) txt.value = minVal;
       const slider = byId('push-slider');
@@ -872,7 +940,10 @@ function bindEvents() {
       dispatch({ type: 'SET_CORE_EXEMPT', exempt: false });
       dispatch({ type: 'SET_CORE_EVENT', event: sv });
       const saved = savedEventValues.core[sv];
-      const def = saved !== undefined ? saved : (eventDefaults[sv] || '0');
+      const def = saved !== undefined
+        ? saved
+        : lowestScoringDefault(sv, state.ageGroup, state.sex);
+      savedEventValues.core[sv] = def;
       dispatch({ type: 'SET_CORE_VALUE', value: def });
       if (sv === 'forearm-plank') {
         const parts = def.split(':');
@@ -891,6 +962,7 @@ function bindEvents() {
   byId('sit-txt')?.addEventListener('input', () => {
     const v = val('sit-txt');
     dispatch({ type: 'SET_CORE_VALUE', value: v });
+    if (!state.core.exempt) savedEventValues.core[state.core.event] = v;
     const slider = byId('sit-slider');
     if (slider) slider.value = v;
     render();
@@ -901,6 +973,7 @@ function bindEvents() {
     if (state.core.event === 'forearm-plank') {
       const timeStr = secondsToTimeString(Number(v));
       dispatch({ type: 'SET_CORE_VALUE', value: timeStr });
+      if (!state.core.exempt) savedEventValues.core[state.core.event] = timeStr;
       const parts = timeStr.split(':');
       const minEl = byId('sit-txt-plank');
       const secEl = byId('plankmintxt');
@@ -908,6 +981,7 @@ function bindEvents() {
       if (secEl) secEl.value = parts[1];
     } else {
       dispatch({ type: 'SET_CORE_VALUE', value: v });
+      if (!state.core.exempt) savedEventValues.core[state.core.event] = v;
       const txt = byId('sit-txt');
       if (txt) txt.value = v;
     }
@@ -919,6 +993,7 @@ function bindEvents() {
     const s = val('plankmintxt') || '00';
     const timeStr = `${m}:${s.padStart(2, '0')}`;
     dispatch({ type: 'SET_CORE_VALUE', value: timeStr });
+    if (!state.core.exempt) savedEventValues.core[state.core.event] = timeStr;
     const slider = byId('sit-slider');
     const sec = toSeconds(timeStr);
     if (slider && Number.isFinite(sec)) slider.value = String(sec);
@@ -935,6 +1010,7 @@ function bindEvents() {
       if (state.core.event === 'forearm-plank') {
         const timeStr = secondsToTimeString(Number(minVal));
         dispatch({ type: 'SET_CORE_VALUE', value: timeStr });
+        if (!state.core.exempt) savedEventValues.core[state.core.event] = timeStr;
         const parts = timeStr.split(':');
         const minEl = byId('sit-txt-plank');
         const secEl = byId('plankmintxt');
@@ -944,6 +1020,7 @@ function bindEvents() {
         if (slider) slider.value = minVal;
       } else {
         dispatch({ type: 'SET_CORE_VALUE', value: minVal });
+        if (!state.core.exempt) savedEventValues.core[state.core.event] = minVal;
         const txt = byId('sit-txt');
         if (txt) txt.value = minVal;
         const slider = byId('sit-slider');
@@ -966,6 +1043,7 @@ function bindEvents() {
       dispatch({ type: 'SET_CARDIO_EVENT', event: sv });
       const saved = savedEventValues.cardio[sv];
       const def = saved !== undefined ? saved : lowestCardioDefault(sv, state.ageGroup, state.sex);
+      savedEventValues.cardio[sv] = def;
       dispatch({ type: 'SET_CARDIO_VALUE', value: def });
       if (sv === 'hamr-20-meter') {
         const shuttleTxt = byId('run-shuttle-txt');
@@ -986,6 +1064,7 @@ function bindEvents() {
     const s = val('run-sectxt') || '00';
     const timeStr = `${m}:${s.padStart(2, '0')}`;
     dispatch({ type: 'SET_CARDIO_VALUE', value: timeStr });
+    if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = timeStr;
     const slider = byId('run-slider');
     const sec = toSeconds(timeStr);
     if (slider && Number.isFinite(sec)) slider.value = String(sec);
@@ -998,6 +1077,7 @@ function bindEvents() {
   byId('run-shuttle-txt')?.addEventListener('input', () => {
     const v = val('run-shuttle-txt');
     dispatch({ type: 'SET_CARDIO_VALUE', value: v });
+    if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = v;
     const slider = byId('run-slider');
     if (slider) slider.value = v;
     render();
@@ -1007,11 +1087,13 @@ function bindEvents() {
     const v = val('run-slider');
     if (state.cardio.event === 'hamr-20-meter') {
       dispatch({ type: 'SET_CARDIO_VALUE', value: v });
+      if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = v;
       const txt = byId('run-shuttle-txt');
       if (txt) txt.value = v;
     } else {
       const timeStr = secondsToTimeString(Number(v));
       dispatch({ type: 'SET_CARDIO_VALUE', value: timeStr });
+      if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = timeStr;
       const parts = timeStr.split(':');
       const minEl = byId('run-mintxt');
       const secEl = byId('run-sectxt');
@@ -1027,6 +1109,7 @@ function bindEvents() {
     if (minVal !== undefined) {
       if (state.cardio.event === 'hamr-20-meter') {
         dispatch({ type: 'SET_CARDIO_VALUE', value: minVal });
+        if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = minVal;
         const txt = byId('run-shuttle-txt');
         if (txt) txt.value = minVal;
         const slider = byId('run-slider');
@@ -1034,6 +1117,7 @@ function bindEvents() {
       } else {
         const timeStr = secondsToTimeString(Number(minVal));
         dispatch({ type: 'SET_CARDIO_VALUE', value: timeStr });
+        if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = timeStr;
         const parts = timeStr.split(':');
         const minEl = byId('run-mintxt');
         const secEl = byId('run-sectxt');
@@ -1188,19 +1272,9 @@ function init() {
   refreshStateFromDom();
   bindEvents();
   loadData().then(() => {
-    // After tables load, set cardio to lowest valid scoring default for initial sex/age
-    const def = lowestCardioDefault(state.cardio.event, state.ageGroup, state.sex);
-    dispatch({ type: 'SET_CARDIO_VALUE', value: def });
-    if (state.cardio.event === 'hamr-20-meter') {
-      const shuttleTxt = byId('run-shuttle-txt');
-      if (shuttleTxt) shuttleTxt.value = def;
-    } else if (state.cardio.event !== 'two-kilometer-walk') {
-      const parts = def.split(':');
-      const minEl = byId('run-mintxt');
-      const secEl = byId('run-sectxt');
-      if (minEl) minEl.value = parts[0] || '0';
-      if (secEl) secEl.value = (parts[1] || '00').padStart(2, '0');
-    }
+    // After tables load, set initial defaults to the lowest valid scoring values
+    // for the selected sex/age. eventDefaults are fallback-only.
+    resetCurrentEventDefaults();
     render();
   });
 }
