@@ -1,427 +1,308 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="tactical" data-theme-preset="tactical">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <meta name="theme-color" content="#025981">
-        <link rel="canonical" href="https://afptcalc.com/" />
-        <title> Air Force AF PT Calculator - Exemptions Walk Altitude Adjustments & Alternate Components</title>
-        <meta name="description" 
-              content="This Air Force PT Calculator contains all the alt alternate components with exemptions!
-                       This AF PT Calc even includes the score charts and sliders for easy real-time test score calculations! Shuttle run audio
-                       is also available. Based on dafman 36-2905 this AF Fitness Calculator is the one stop shop to calculate AF PT Test scores."/>
-        <link rel="apple-touch-icon" href="./icon-144x144.png">
-        <link rel="icon" href="./icon-144x144.png">
-        <link rel="stylesheet" type="text/css" href="./style.css?v=20260510-chart-drawer">
-        <link rel="manifest" href="./manifest.webmanifest">
-      </head>
-<body data-theme="tactical" data-theme-preset="tactical">
-    <div id="dev-version-modal" class="dev-version-modal" hidden>
-        <div class="dev-version-panel">
-            <h2>Development Build</h2>
-            <p id="dev-version-text">Loading build info...</p>
-            <button id="dev-version-close" type="button">Close</button>
-        </div>
-    </div>
-    <div id="pwa-update-modal" class="pwa-update-modal" hidden role="dialog" aria-labelledby="pwa-update-title">
-        <div class="pwa-update-panel">
-            <h2 id="pwa-update-title">Update Ready</h2>
-            <p>A new offline version is available.</p>
-            <div class="pwa-update-actions">
-                <button id="pwa-update-now" type="button">Update Now</button>
-                <button id="pwa-update-later" type="button">Later</button>
-            </div>
-        </div>
-    </div>
-    <div id="modal" class="chart-drawer chart-drawer--light-chart-drawer" data-chart-variant="light-chart-drawer" hidden role="dialog" aria-modal="true" aria-labelledby="chart-drawer-title">
-        <button id="chart-drawer-scrim" class="chart-drawer__scrim" type="button" aria-label="Close chart"></button>
-        <section class="chart-drawer__panel">
-            <header class="chart-drawer__header">
-                <h2 id="chart-drawer-title">Score Chart</h2>
-                <button class="close-btn chart-drawer__close" id="close-btn" type="button">Close</button>
-            </header>
-            <div class="chart-drawer__image-frame">
-                <img id="modal-img" alt="Score chart">
-            </div>
-        </section>
-    </div>
-    <div class="install-modal" id="install-modal">
-        <article class="modal__article">
-          <h4 class="modal-title">Did You Know?</h4>
-          <p class="modal-msg">You can install this app for offline use of score charts and
-              shuttle audio. iPhone users can tap the
-              <img id="apple-arrow" alt="apple share icon" src="arrow.png"> icon and choose Add to Home Screen.
-          </p>
-        </article>
-        
-        <footer>
-          <button id="install-close" class="button button-full button-close">close</button>
-        </footer>
-    </div>
-    <!-- Section 1 - Info Button -->
-    
+<html lang="en" data-theme="tactical">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#040b12">
+  <link rel="canonical" href="https://afptcalc.com/">
+  <title>AF PT Calculator — PFRA 2026</title>
+  <meta name="description" content="Air Force PFRA fitness test calculator with altitude adjustments, alternate components, and exemptions. Based on DAFMAN 36-2905.">
+  <link rel="apple-touch-icon" href="./icon-144x144.png">
+  <link rel="icon" href="./icon-144x144.png">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="manifest" href="./manifest.webmanifest">
+</head>
+<body data-theme="tactical">
 
+  <!-- Dev version modal -->
+  <div id="dev-version-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <h2>Build Info</h2>
+      <p id="dev-version-text">Loading…</p>
+      <button id="dev-version-close" type="button">Close</button>
+    </div>
+  </div>
 
-    <!-- Section 2 - Score Text -->
-    <section class="score-txt">
-        <div class="info-section-wrapper">
-            <section class="info-section">
-                <div class="logo">AFPTCalc</div>
-                <div class="settings-hub" data-settings-hub>
-                    <button id="settings-hub-toggle" class="settings-hub-toggle" type="button" aria-label="Open controls" aria-expanded="false" aria-controls="settings-hub-panel">
-                        <span class="settings-hub-icon" aria-hidden="true">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </span>
-                    </button>
-                    <button id="settings-hub-scrim" class="settings-hub-scrim" type="button" aria-label="Close controls" hidden></button>
-                    <aside id="settings-hub-panel" class="settings-hub-panel" role="dialog" aria-labelledby="settings-hub-title" hidden>
-                        <div class="settings-hub-header">
-                            <h2 id="settings-hub-title">Controls</h2>
-                            <button id="settings-hub-close" class="settings-hub-close" type="button">Close</button>
-                        </div>
-                        <section class="settings-hub-section">
-                            <h3>Appearance</h3>
-                            <label class="theme-menu-item" for="theme-preset-select">
-                                <span>Theme Preset</span>
-                                <select id="theme-preset-select" aria-label="Theme preset">
-                                    <option value="tactical">Tactical HUD</option>
-                                    <option value="stencil">Stencil Ops</option>
-                                    <option value="blues">AF Dress Blues</option>
-                                    <option value="light">Connect Light</option>
-                                    <option value="fitness">Fitness Gradient</option>
-                                </select>
-                            </label>
-                        </section>
-                        <section class="settings-hub-section">
-                            <h3>References</h3>
-                            <ul class="menu settings-menu" id="menu" aria-label="Reference and offline controls">
-                                <li id="install-app-menu" role="button" tabindex="0">Install App For Offline Use</li>
-                                <li id="pwa-update-check" role="button" tabindex="0">Check Offline Update</li>
-                                <li id="dev-version-menu" role="button" tabindex="0">Show Build Info</li>
-                                <li id="run-adjust-chart" role="button" tabindex="0">Run Altitude Adjustment</li>
-                                <li id="walk-adjust-chart" role="button" tabindex="0">Walk/Shuttle Altitude Adjustment</li>
-                                <li id="shuttle-score-card" role="button" tabindex="0">Shuttle Score Card</li>
-                                <li id="shuttle-audio-menu" role="button" tabindex="0">Show Shuttle Audio</li>
-                                <li id="shuttle-audio-player" class="settings-audio-player" style="visibility:hidden"> <audio crossorigin="anonymous" preload="metadata" src="./shuttle.mp3" controls="controls" id="shuttle-audio-control">
-                                    Your browser does not support the audio element.
-                                    </audio>
-                                </li>
-                            </ul>
-                        </section>
-                    </aside>
-                </div>
-            </section>
-        </div>
-        <article id="score-header" class="score-header score-header--light-card" data-score-variant="light-card" aria-live="polite">
-            <div class="score-header__meta">
-                <span id="score-header-mode" class="score-header__mode">Legacy</span>
-                <span id="score-header-status" class="score-header__status">Minimum Not Met</span>
-            </div>
-            <div class="score-header__main">
-                <span class="score-header__label">Total Score</span>
-                <span id="score-header-value" class="score-header__value">60.0</span>
-            </div>
-        </article>
-        <div class="sex-age-sel-section header-controls" aria-label="Demographic and standards controls">
-            <div class="header-control">
-                <label for="sex-sel" class="sex-sel-label">SEX</label>
-                <select name="sex" id="sex-sel" class="sex-sel">
-                    <option value="Female">Female</option>
-                    <option value="Male">Male</option>
-                </select>
-            </div>
-            <div class="header-control">
-                <label for="age-sel" class="age-sel-label">AGE</label>
-                <select name="age" id="age-sel" class="age-sel">
-                    <option value="&lt; 25">&lt; 25</option>
-                    <option value="25-29">25-29</option>
-                    <option value="30-34">30-34</option>
-                    <option value="35-39">35-39</option>
-                    <option value="40-44">40-44</option>
-                    <option value="45-49">45-49</option>
-                    <option value="50-54">50-54</option>
-                    <option value="55-59">55-59</option>
-                    <option value="60+">60+</option>
-                </select>
-            </div>
-            <div class="header-control">
-                <label for="standards-mode" class="standards-mode-label">STANDARD</label>
-                <select name="standards" id="standards-mode" class="standards-mode-sel">
-                    <option value="legacy">Legacy</option>
-                    <option value="pfra">PFRA 2026</option>
-                </select>
-            </div>
-        </div>
-        <p id="score-txt" class="score-source-text" aria-hidden="true">Total Score: 60.0<br>
-        Fail! Minimum Not Met!</p>
+  <!-- PWA update modal -->
+  <div id="pwa-update-modal" class="modal-overlay" hidden role="dialog" aria-labelledby="pwa-update-title">
+    <div class="modal-panel">
+      <h2 id="pwa-update-title">Update Ready</h2>
+      <p>A new offline version is available.</p>
+      <div class="modal-actions">
+        <button id="pwa-update-now" type="button">Update Now</button>
+        <button id="pwa-update-later" type="button">Later</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Install prompt modal -->
+  <div id="install-modal" class="modal-overlay" hidden>
+    <div class="modal-panel">
+      <h4>Install for Offline Use</h4>
+      <p>iPhone: tap the share icon and choose <strong>Add to Home Screen</strong>.</p>
+      <button id="install-close" type="button">Close</button>
+    </div>
+  </div>
+
+  <!-- Chart drawer -->
+  <div id="modal" class="chart-drawer" hidden role="dialog" aria-modal="true" aria-labelledby="chart-drawer-title">
+    <button id="chart-drawer-scrim" class="chart-drawer__scrim" type="button" aria-label="Close chart"></button>
+    <section class="chart-drawer__panel">
+      <header class="chart-drawer__header">
+        <h2 id="chart-drawer-title">Score Chart</h2>
+        <button id="close-btn" class="close-btn" type="button">Close ✕</button>
+      </header>
+      <div class="chart-drawer__image-frame">
+        <img id="modal-img" alt="Score chart">
+      </div>
     </section>
+  </div>
 
-    <div id="component-summary-strip" class="component-summary-strip" data-strip-variant="">
-        <button id="summary-strength" class="component-summary-card" data-component="strength" aria-pressed="true">
-            <span class="component-summary-card__name">PUSH</span>
-            <span class="component-summary-card__value" data-value-for="strength">--</span>
-            <span class="component-summary-card__score" data-score-for="strength"></span>
+  <!-- App shell -->
+  <div id="app-shell" class="app-shell">
+
+    <!-- Header -->
+    <header class="app-header">
+      <span class="app-title">AF-PRT</span>
+      <div class="settings-hub" data-settings-hub>
+        <button id="settings-hub-toggle" class="settings-hub-toggle" type="button"
+          aria-label="Open controls" aria-expanded="false" aria-controls="settings-hub-panel">
+          <span class="settings-hub-icon" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
         </button>
-        <button id="summary-core" class="component-summary-card" data-component="core" aria-pressed="false">
-            <span class="component-summary-card__name">CORE</span>
-            <span class="component-summary-card__value" data-value-for="core">--</span>
-            <span class="component-summary-card__score" data-score-for="core"></span>
-        </button>
-        <button id="summary-cardio" class="component-summary-card" data-component="cardio" aria-pressed="false">
-            <span class="component-summary-card__name">RUN</span>
-            <span class="component-summary-card__value" data-value-for="cardio">--</span>
-            <span class="component-summary-card__score" data-score-for="cardio"></span>
-        </button>
+        <button id="settings-hub-scrim" class="settings-hub-scrim" type="button" aria-label="Close controls" hidden></button>
+        <aside id="settings-hub-panel" class="settings-hub-panel" role="dialog" aria-labelledby="settings-hub-title" hidden>
+          <div class="settings-hub-header">
+            <h2 id="settings-hub-title">Controls</h2>
+            <button id="settings-hub-close" class="settings-hub-close" type="button">Close</button>
+          </div>
+          <section class="settings-hub-section">
+            <h3>Appearance</h3>
+            <label class="settings-item" for="theme-preset-select">
+              <span>Theme</span>
+              <select id="theme-preset-select" aria-label="Theme preset">
+                <option value="tactical">Tactical HUD</option>
+                <option value="stencil">Stencil Ops</option>
+                <option value="blues">AF Dress Blues</option>
+                <option value="light">Connect Light</option>
+                <option value="fitness">Fitness Gradient</option>
+              </select>
+            </label>
+          </section>
+          <section class="settings-hub-section">
+            <h3>References</h3>
+            <ul class="settings-menu" aria-label="Reference and offline controls">
+              <li id="run-adjust-chart" role="button" tabindex="0">Run Altitude Adjustment</li>
+              <li id="walk-adjust-chart" role="button" tabindex="0">Walk/Shuttle Altitude Adjustment</li>
+              <li id="shuttle-score-card" role="button" tabindex="0">Shuttle Score Card</li>
+            </ul>
+          </section>
+          <section class="settings-hub-section">
+            <h3>Audio</h3>
+            <ul class="settings-menu" aria-label="Audio controls">
+              <li id="shuttle-audio-menu" role="button" tabindex="0">Shuttle Run Audio</li>
+              <li id="shuttle-audio-player" class="settings-audio-player" style="visibility:hidden">
+                <audio crossorigin="anonymous" preload="metadata" src="./shuttle.mp3" controls id="shuttle-audio-control">
+                  Your browser does not support the audio element.
+                </audio>
+              </li>
+            </ul>
+          </section>
+          <section class="settings-hub-section">
+            <h3>App</h3>
+            <ul class="settings-menu" aria-label="App controls">
+              <li id="install-app-menu" role="button" tabindex="0">Install App for Offline Use</li>
+              <li id="pwa-update-check" role="button" tabindex="0">Check for Update</li>
+              <li id="dev-version-menu" role="button" tabindex="0">Build Info</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </header>
+
+    <!-- Demographics -->
+    <section class="demographics-row" aria-label="Demographic controls">
+      <div class="demo-field">
+        <label class="demo-label" for="sex-sel">SEX</label>
+        <select id="sex-sel" class="demo-select">
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+        </select>
+      </div>
+      <div class="demo-field">
+        <label class="demo-label" for="age-sel">AGE</label>
+        <select id="age-sel" class="demo-select">
+          <option value="under-25">&lt; 25</option>
+          <option value="25-29">25–29</option>
+          <option value="30-34">30–34</option>
+          <option value="35-39">35–39</option>
+          <option value="40-44">40–44</option>
+          <option value="45-49">45–49</option>
+          <option value="50-54">50–54</option>
+          <option value="55-59">55–59</option>
+          <option value="60-and-over">60+</option>
+        </select>
+      </div>
+      <div class="demo-field">
+        <label class="demo-label">STANDARD</label>
+        <span class="demo-value">PFRA 2026</span>
+      </div>
+    </section>
+
+    <!-- Score header -->
+    <section class="score-section" aria-live="polite">
+      <div class="score-main-row">
+        <span class="score-comp-label">COMP</span>
+        <span id="score-txt" class="score-number">--</span>
+        <span id="score-category-badge" class="score-badge">--</span>
+      </div>
+      <div class="score-bar-track" role="progressbar" aria-label="Score progress">
+        <div id="score-bar-fill" class="score-bar-fill" style="width:0%"></div>
+      </div>
+      <div class="score-bar-labels">
+        <span>UNSAT</span><span>SAT 75</span><span>EXC 90</span><span>MAX 100</span>
+      </div>
+      <div id="pfra-result" hidden></div>
+    </section>
+
+    <!-- Body composition -->
+    <section class="body-comp-row" id="body-composition-card" aria-label="Body composition">
+      <span class="bc-label">BODY</span>
+      <label class="bc-input-label" for="pfra-whtr">WHtR</label>
+      <input id="pfra-whtr" type="text" inputmode="decimal" value="0.49" class="bc-input" aria-label="Waist-to-height ratio">
+      <span class="bc-score-label">Score</span>
+      <span id="pfra-body-score" class="bc-score">--</span>
+    </section>
+
+    <!-- Component summary strip -->
+    <div class="component-strip" role="tablist" aria-label="Component selector">
+      <button id="summary-strength" class="component-chip chip--active" role="tab" aria-selected="true" data-component="strength">
+        <span class="chip-name">PUSH</span>
+        <span id="chip-strength-value" class="chip-value">--</span>
+        <span id="pfra-strength-score" class="chip-score">--</span>
+      </button>
+      <button id="summary-core" class="component-chip" role="tab" aria-selected="false" data-component="core">
+        <span class="chip-name">CORE</span>
+        <span id="chip-core-value" class="chip-value">--</span>
+        <span id="pfra-core-score" class="chip-score">--</span>
+      </button>
+      <button id="summary-cardio" class="component-chip" role="tab" aria-selected="false" data-component="cardio">
+        <span class="chip-name">RUN</span>
+        <span id="chip-cardio-value" class="chip-value">--</span>
+        <span id="pfra-cardio-score" class="chip-score">--</span>
+      </button>
     </div>
 
-    <div id="active-component-editor" class="active-component-editor" data-active-component="strength">
-        <div id="strength-editor" class="component-editor" data-component="strength">
-            <div class="component-editor__header">
-                <span class="component-editor__title">PUSH</span>
-                <span class="component-editor__pfra-score" id="pfra-strength-score">--</span>
-            </div>
-            <section class="strength-txt">
-                <p class="strength-txt-p" id="push-txt-p">
-                </p>
-            </section>
-            <section class="push-sel-chart">
-                <div class="strength-sel-div">
-                    <select name="" id="push-sel" class="strength-sel">
-                        <option value="Pushups">Pushups</option>
-                        <option value="Hand-Release">Hand-Release</option>
-                        <option value="Exempt">Exempt</option>
-                    </select>
-                </div>
-                <div class="pushsit-see-chart-btn">
-                    <button id="push-btn">See Chart</button>
-                </div>
-                <label for="push-txt" class="hidden-labels">pushups textbox</label>
-                <input type="tel" pattern="[0-9]+" class="push-txt" id="push-txt">
-                <input type="tel" class="hrpush-txt">
-            </section>
-            <section class="push-slide">
-                <label for="push-slider" class="hidden-labels">pushups slider</label>
-                <input type="range" id="push-slider" class="push-slider" min="0" max="100" value="0" list="steplist" step="1">
-                <div class="slider-tick-layer"><button type="button" id="push-tick" class="slider-tick">15</button></div>
-            </section>
+    <!-- Editor panels -->
+    <div class="editors-container">
+
+      <!-- Strength editor -->
+      <section id="strength-editor" class="editor-panel" role="tabpanel" aria-label="Strength">
+        <div class="editor-header">
+          <span class="editor-title">STRENGTH</span>
         </div>
-        <div id="core-editor" class="component-editor" data-component="core" hidden>
-            <div class="component-editor__header">
-                <span class="component-editor__title">CORE</span>
-                <span class="component-editor__pfra-score" id="pfra-core-score">--</span>
-            </div>
-            <section class="situp-txt">
-                <p class="sit-txt-p" id="sit-txt-p">
-                    Abs Score: 0 | Min: 15 | Max: 47
-                </p>
-            </section>
-            <section id="sit-sel-chart-section" class="sit-sel-chart">
-                <select name="" id="sit-sel" class="sit-sel">
-                    <option value="Situps">Situps</option>
-                    <option value="Reverse Crunch">Reverse Crunch</option>
-                    <option value="Plank">Plank</option>
-                    <option value="Exempt">Exempt</option>
-                </select>
-                <div id="abs-see-chart-btn" class="pushsit-see-chart-btn">
-                    <button id="sit-btn">See Chart</button>
-                </div>
-                <label for="sit-txt" class="hidden-labels">situps textbox</label>
-                <input type="tel" class="sit-txt" id="sit-txt">
-                <p class="plank-colon" hidden>:</p>
-                <input type="tel" id="plankmintxt" class="plankmin-txt">
-            </section>
-            <section class="sit-slide">
-                <label for="sit-slider" class="hidden-labels">situps slider</label>
-                <input type="range" id="sit-slider" class="sit-slider" min="0" max="100" value="0">
-                <div class="slider-tick-layer"><button type="button" id="sit-tick" class="slider-tick">15</button></div>
-            </section>
+        <div class="editor-event-row">
+          <select id="push-sel" class="event-select" aria-label="Strength event">
+            <option value="push-up">Push-Ups (1 Min)</option>
+            <option value="hand-release-push-up">Hand-Release Push-Ups</option>
+            <option value="exempt">Exempt</option>
+          </select>
+          <button id="push-btn" class="chart-btn" type="button" aria-label="View strength chart">Chart</button>
         </div>
-        <div id="cardio-editor" class="component-editor" data-component="cardio" hidden>
-            <div class="component-editor__header">
-                <span class="component-editor__title">RUN</span>
-                <span class="component-editor__pfra-score" id="pfra-cardio-score">--</span>
-            </div>
-            <section class="run-txt">
-                <p class="run-txt-p" id="run-txt-p">
-                </p>
-            </section>
-            <section class="cardio-sel-chart" id="cardio-sel-chart">
-                <div class="cardio-sel-div">
-                    <select name="" id="cardio-sel" class="cardio-sel">
-                        <option value="1.5 Mile">1.5 Mile</option>
-                        <option value="Shuttle Run">Shuttle Run</option>
-                        <option value="Walk">Walk</option>
-                        <option value="Exempt">Exempt</option>
-                    </select>
-                </div>
-                <div id="cardio-see-chart-btn" class="cardio-see-chart-btn">
-                    <button id="run-btn">See Chart</button>
-                </div>
-                <label for="run-mintxt" class="hidden-labels">run minutes textbox</label>
-                <input type="tel" class="run-mintxt" id="run-mintxt">
-                <p id="colon" class="colon">:</p>
-                <label for="run-sectxt" class="hidden-labels">run seconds textbox</label>
-                <input type="tel" class="run-sectxt" id="run-sectxt">
-                <label for="shuttle-txt" class="hidden-labels">shuttles textbox</label>
-                <input type="tel" class="shuttle-txt" id="shuttle-txt">
-                <label for="walk-txt" class="hidden-labels">walk textbox</label>
-                <input type="tel" class="walk-txt" id="walk-txt">
-            </section>
-            <section class="run-slider-section">
-                <label for="run-slider" class="hidden-labels">run slider</label>
-                <input type="range" id="run-slider" class="run-slider" min="0" max="1136" value="1136">
-                <div class="slider-tick-layer"><button type="button" id="run-tick" class="slider-tick">15</button></div>
-            </section>
+        <div id="push-reps-row" class="editor-value-row">
+          <input id="push-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Strength reps">
+          <span class="value-unit">REPS</span>
         </div>
-    </div>
-
-    <!-- Run Lap Times -->
-    <section class="runlaps-row">
-        <div id="lap-display" class="lap-display lap-display--light-rows" data-lap-variant="light-rows" aria-live="polite"></div>
-        <p class="run-lap-times lap-source-text" id="run-lap-times" aria-hidden="true"></p>
-        <div class="altitude-control">
-            <select id="alt-select">
-                <option value="Altitude Adjust">Altitude Adjust</option>
-                <option value="Group 1 (5250-5499ft)">Group 1 (5250-5499ft)</option>
-                <option value="Group 2 (5500-5999ft)">Group 2 (5500-5999ft)</option>
-                <option value="Group 3 (6000-6599ft)">Group 3 (6000-6599ft)</option>
-                <option value="Group 4 (>6600ft)">Group 4 (>6600ft)</option>
-            </select>
+        <div class="slider-container">
+          <input id="push-slider" type="range" class="value-slider" min="0" max="100" value="0" aria-label="Strength slider">
+          <div id="push-tick" class="slider-tick" role="button" tabindex="0" aria-label="Set to minimum score" style="display:none"></div>
         </div>
+        <p id="push-txt-p" class="score-label-text">Strength Score: 0 | Min: -- | Max: --</p>
+      </section>
 
-    </section>
-
-    <section class="pfra-panel" id="pfra-panel">
-        <div class="pfra-panel-header">
-            <h2>PFRA 2026 Calculator</h2>
-            <p id="pfra-status">Loading standards...</p>
+      <!-- Core editor -->
+      <section id="core-editor" class="editor-panel" role="tabpanel" aria-label="Core" hidden>
+        <div class="editor-header">
+          <span class="editor-title">CORE</span>
         </div>
-
-        <div id="body-composition-card" class="body-composition-card body-composition-card--light-clean" data-card-variant="light-clean" aria-live="polite">
-            <div class="body-composition-card__header">
-                <h3 class="body-composition-card__title">Body Composition</h3>
-                <p class="body-composition-card__score"><span id="pfra-body-score">--</span> / 20</p>
-            </div>
-            <div class="body-composition-card__field">
-                <label for="pfra-whtr" class="body-composition-card__label">Waist-to-Height Ratio</label>
-                <input type="text" id="pfra-whtr" inputmode="decimal" value="0.49" class="body-composition-card__input">
-            </div>
+        <div class="editor-event-row">
+          <select id="sit-sel" class="event-select" aria-label="Core event">
+            <option value="sit-up">Sit-Ups (1 Min)</option>
+            <option value="cross-leg-reverse-crunch">Cross-Leg Reverse Crunch</option>
+            <option value="forearm-plank">Forearm Plank</option>
+            <option value="exempt">Exempt</option>
+          </select>
+          <button id="sit-btn" class="chart-btn" type="button" aria-label="View core chart">Chart</button>
         </div>
-
-        <div class="pfra-fields">
-            <label for="pfra-strength-event" class="pfra-internal-field">STRENGTH EVENT:</label>
-            <select id="pfra-strength-event" class="pfra-internal-field">
-                <option value="push-up">Push-up</option>
-                <option value="hand-release-push-up">Hand-release push-up</option>
-            </select>
-
-            <label for="pfra-strength-performance" id="pfra-strength-label" class="pfra-internal-field">STRENGTH REPS:</label>
-            <input type="text" id="pfra-strength-performance" class="pfra-internal-field" inputmode="numeric" value="67">
-
-            <label for="pfra-core-event" class="pfra-internal-field">CORE EVENT:</label>
-            <select id="pfra-core-event" class="pfra-internal-field">
-                <option value="sit-up">Sit-up</option>
-                <option value="cross-leg-reverse-crunch">Cross-leg reverse crunch</option>
-                <option value="forearm-plank">Forearm plank</option>
-            </select>
-
-            <label for="pfra-core-performance" id="pfra-core-label" class="pfra-internal-field">CORE REPS:</label>
-            <input type="text" id="pfra-core-performance" class="pfra-internal-field" inputmode="numeric" value="58">
-
-            <label for="pfra-cardio-event" class="pfra-internal-field">CARDIO EVENT:</label>
-            <select id="pfra-cardio-event" class="pfra-internal-field">
-                <option value="two-mile-run">2-mile run</option>
-                <option value="hamr-20-meter">20-meter HAMR</option>
-                <option value="two-kilometer-walk">2 kilometer walk</option>
-            </select>
-
-            <label for="pfra-cardio-performance" id="pfra-cardio-label" class="pfra-internal-field">CARDIO TIME:</label>
-            <input type="text" id="pfra-cardio-performance" class="pfra-internal-field" inputmode="numeric" value="13:25">
+        <div id="sit-reps-row" class="editor-value-row">
+          <input id="sit-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Core reps">
+          <span class="value-unit">REPS</span>
         </div>
-
-        <div class="pfra-score-grid" aria-live="polite">
-            <p>Core: <span id="pfra-core-score">--</span> / 15</p>
-            <p>Cardio: <span id="pfra-cardio-score">--</span> / 50</p>
+        <div id="sit-plank-row" class="editor-value-row" hidden>
+          <label class="time-label" for="sit-txt-plank">MIN</label>
+          <input id="sit-txt-plank" type="text" inputmode="numeric" class="time-input" value="3" placeholder="MM" aria-label="Plank minutes">
+          <span class="time-sep">:</span>
+          <input id="plankmintxt" type="text" inputmode="numeric" class="time-input" value="40" placeholder="SS" aria-label="Plank seconds">
         </div>
-
-        <p id="pfra-result" class="pfra-total">PFRA Total: --</p>
-    </section>
-
-    <!-- Reset & Calc Score Btns -->
-    <section>
-        <audio crossorigin="anonymous" preload="auto" src="./shuttle.mp3" controls="controls" hidden id="shuttle-audio-hidden">
-            Your browser does not support the audio element.
-        </audio>
-    </section>
-
-    <!-- Article Content
-    <section class="article-content">
-        <p>In 2021, the Air Force released guidance on 
-            alternate components to the physical fitness test.
-            At the time that I made this website, few if any other
-            calculators had updated their sites to include these new
-            standards. So see a need fill a need. If you notice any errors,
-            hit up <a class="reddit" href="https://www.reddit.com/user/imasnarky">imasnarky</a> on reddit. Here's a summary of all the components
-            and how their scores are calculated:
-        </p>
-
-        <div>
-            <h3>Cardio</h3>
-            <ul>
-                <li>1.5 Mile Run</li>
-                <li>High Aerobic Multi-shuttle Run (shuttles)</li>
-            </ul>
-            <h3>Upper Body Strength</h3>
-            <ul>
-                <li>Push Ups</li>
-                <li>Hand Release Push Ups</li>
-            </ul>
-            <h3>Core Strength</h3>
-            <ul>
-                <li>Sit Ups</li>
-                <li>Cross Leg Reverse Crunch</li>
-                <li>Forearm Plank</li>
-            </ul>
+        <div class="slider-container">
+          <input id="sit-slider" type="range" class="value-slider" min="0" max="100" value="0" aria-label="Core slider">
+          <div id="sit-tick" class="slider-tick" role="button" tabindex="0" aria-label="Set to minimum score" style="display:none"></div>
         </div>
+        <p id="sit-txt-p" class="score-label-text">Core Score: 0 | Min: -- | Max: --</p>
+      </section>
 
-        <table class="table table-bordered table-striped">
-            <caption class="caption">Minimum number of points needed for each Air Force PT test fitness category:</caption>
-            <thead>
-            <tr>
-            <th>Points</th>
-            <th>Category</th>
-            </tr>
-            </thead>
-            <tbody><tr>
-            <td>≥ 90.0</td>
-            <td>Excellent</td>
-            </tr>
-            <tr>
-            <td>75.0 – 89.9</td>
-            <td>Satisfactory</td>
-            </tr>
-            <tr>
-            <td>&lt; 75.0</td>
-            <td>Unsatisfactory</td>
-            </tr>
-            </tbody></table>
+      <!-- Cardio editor -->
+      <section id="cardio-editor" class="editor-panel" role="tabpanel" aria-label="Cardio" hidden>
+        <div class="editor-header">
+          <span class="editor-title">RUN</span>
+        </div>
+        <div class="editor-event-row">
+          <select id="cardio-sel" class="event-select" aria-label="Cardio event">
+            <option value="two-mile-run">2 Mile Run</option>
+            <option value="hamr-20-meter">20m HAMR</option>
+            <option value="two-kilometer-walk">2 km Walk</option>
+            <option value="exempt">Exempt</option>
+          </select>
+          <button id="run-btn" class="chart-btn" type="button" aria-label="View cardio chart">Chart</button>
+        </div>
+        <div id="run-time-row" class="editor-value-row">
+          <label class="time-label" for="run-mintxt">MIN</label>
+          <input id="run-mintxt" type="text" inputmode="numeric" class="time-input" value="25" placeholder="MM" aria-label="Cardio minutes">
+          <span class="time-sep">:</span>
+          <input id="run-sectxt" type="text" inputmode="numeric" class="time-input" value="23" placeholder="SS" aria-label="Cardio seconds">
+        </div>
+        <div id="run-shuttle-row" class="editor-value-row" hidden>
+          <input id="run-shuttle-txt" type="text" inputmode="numeric" class="value-input" value="58" aria-label="HAMR shuttles">
+          <span class="value-unit">SHUTTLES</span>
+        </div>
+        <div class="slider-container">
+          <input id="run-slider" type="range" class="value-slider" min="0" max="1523" value="1523" aria-label="Cardio slider">
+          <div id="run-tick" class="slider-tick" role="button" tabindex="0" aria-label="Set to minimum score" style="display:none"></div>
+        </div>
+        <p id="run-txt-p" class="score-label-text">Cardio Score: -- | Min: -- | Max: --</p>
+        <div class="altitude-row">
+          <label class="altitude-label" for="alt-select">⛰ ALT</label>
+          <select id="alt-select" class="altitude-select" aria-label="Altitude adjustment group">
+            <option value="Altitude Adjust">Sea Level</option>
+            <option value="Group 1 (5250-5499ft)">Group 1 (5250–5499 ft)</option>
+            <option value="Group 2 (5500-5999ft)">Group 2 (5500–5999 ft)</option>
+            <option value="Group 3 (6000-6599ft)">Group 3 (6000–6599 ft)</option>
+            <option value="Group 4 (>6600ft)">Group 4 (&gt;6600 ft)</option>
+          </select>
+        </div>
+        <div id="run-lap-times" class="lap-display" aria-label="Lap split times"></div>
+      </section>
 
-    </section>
+    </div><!-- editors-container -->
 
-    <button onclick="alert(`Is Bright!`)">The Future</button> -->
+    <div id="pfra-status" class="pfra-status" aria-live="polite">Loading standards…</div>
 
-    <script src="./main2.js?v=20260510-score-header"></script>
-    <script src="./pfra-calculator.js?v=20260509-offline-pwa"></script>
-    <script type="module" src="./src/ui/settings-hub.mjs?v=20260510-settings-hub"></script>
-    <script type="module" src="./src/ui/theme-controller.mjs?v=20260510-theme-foundation"></script>
-    <script type="module" src="./src/ui/score-header.mjs?v=20260510-score-header"></script>
-    <script type="module" src="./src/ui/lap-display.mjs?v=20260510-lap-display"></script>
-    <script type="module" src="./src/ui/chart-drawer.mjs?v=20260510-chart-drawer"></script>
-    <script type="module" src="./src/ui/body-composition-card.mjs?v=20260510-body-comp"></script>
-    <script type="module" src="./src/ui/component-editor.mjs?v=20260510-component-editor"></script>
-    <script type="module" src="./src/pfra/app.mjs?v=20260511-app-mjs"></script>
-    <script src="./pwa.js?v=20260510-settings-hub"></script>
+  </div><!-- app-shell -->
+
+  <script type="module" src="./src/ui/theme-controller.mjs"></script>
+  <script type="module" src="./src/ui/settings-hub.mjs"></script>
+  <script type="module" src="./src/pfra/app.mjs"></script>
+  <script src="./pwa.js"></script>
 </body>
 </html>

@@ -3,8 +3,6 @@ module.exports = {
 	globPatterns: [
 		'index.html',
 		'style.css',
-		'main2.js',
-		'pfra-calculator.js',
 		'src/pfra/*.mjs',
 		'src/ui/*.mjs',
 		'pwa.js',
