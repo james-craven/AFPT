@@ -1769,6 +1769,21 @@ html, body {
   color: var(--afpt-accent);
 }
 
+/* Score row: 3-column grid — label | number | badge, all centered */
+:root[data-theme="tactical"] .score-main-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  justify-items: center;
+  margin-bottom: 10px;
+}
+:root[data-theme="tactical"] .score-comp-label {
+  justify-self: start;
+}
+:root[data-theme="tactical"] .score-badge {
+  justify-self: end;
+}
+
 /* TOTAL SCORE label: more prominent */
 :root[data-theme="tactical"] .score-comp-label {
   font-size: 12px;
