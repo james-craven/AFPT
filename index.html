@@ -63,6 +63,7 @@
 
     <!-- Header -->
     <header class="app-header">
+      <span id="fit-avatar" class="fit-avatar" aria-hidden="true">F</span>
       <span class="app-title">AF-PRT</span>
       <div class="settings-hub" data-settings-hub>
         <button id="settings-hub-toggle" class="settings-hub-toggle" type="button"
@@ -179,7 +180,7 @@
       </div>
       <!-- Fitness/Blues themes: SVG ring -->
       <div class="score-ring-wrap" aria-hidden="true">
-        <svg id="score-ring-svg" class="score-ring-svg" viewBox="0 0 160 160" fill="none">
+        <svg id="score-ring-svg" class="score-ring-svg" viewBox="0 0 200 200" fill="none">
           <defs>
             <linearGradient id="fitness-ring-grad" x1="0" y1="1" x2="1" y2="0">
               <stop offset="0%" stop-color="#ffb547"/>
@@ -187,19 +188,30 @@
               <stop offset="100%" stop-color="#ff5d7c"/>
             </linearGradient>
           </defs>
-          <circle class="score-ring-track" cx="80" cy="80" r="70" stroke-width="12"/>
-          <circle id="score-ring-arc" class="score-ring-arc" cx="80" cy="80" r="70"
-            stroke-width="12" stroke-linecap="round"
-            transform="rotate(-90 80 80)" stroke-dasharray="0 440"/>
-          <text id="score-ring-num" class="score-ring-num" x="80" y="72" text-anchor="middle" dominant-baseline="middle">--</text>
-          <text id="score-ring-cat" class="score-ring-cat" x="80" y="100" text-anchor="middle" dominant-baseline="middle">--</text>
+          <circle class="score-ring-track" cx="100" cy="100" r="70" stroke-width="10"/>
+          <circle id="score-ring-arc" class="score-ring-arc" cx="100" cy="100" r="70"
+            stroke-width="10" stroke-linecap="round"
+            transform="rotate(-90 100 100)" stroke-dasharray="0 440"/>
+          <text id="score-ring-num" class="score-ring-num" x="100" y="98" text-anchor="middle">--</text>
+          <text id="score-ring-cat" class="score-ring-cat" x="100" y="124" text-anchor="middle">--</text>
         </svg>
+      </div>
+      <!-- Fitness: score deltas below ring -->
+      <div id="score-ring-deltas" class="score-ring-deltas" aria-hidden="true">
+        <span id="score-delta-pass">+-- above pass</span>
+        <span>·</span>
+        <span id="score-delta-max">+-- to max</span>
       </div>
       <div id="pfra-result" hidden></div>
     </section>
 
     <!-- Body composition -->
     <section class="body-comp-row" id="body-composition-card" aria-label="Body composition">
+      <!-- Fitness theme: glass header row with pass/fail badge -->
+      <div class="fit-body-header">
+        <span class="fit-body-title">BODY COMPOSITION</span>
+        <span id="fit-body-badge" class="fit-body-badge" data-pass="true">PASS</span>
+      </div>
       <span class="bc-label">BODY</span>
       <label class="bc-input-label" for="pfra-whtr">WHtR</label>
       <input id="pfra-whtr" type="text" inputmode="decimal" value="0.49" class="bc-input" aria-label="Waist-to-height ratio">
@@ -234,6 +246,12 @@
         <div class="editor-header">
           <span class="editor-title">STRENGTH</span>
         </div>
+        <!-- Fitness theme: segmented event selector -->
+        <div id="push-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Strength event">
+          <button class="fit-seg-btn fit-seg-btn--active" type="button" data-seg-target="push-sel" data-seg-value="push-up">Push-ups</button>
+          <button class="fit-seg-btn" type="button" data-seg-target="push-sel" data-seg-value="hand-release-push-up">HRPU</button>
+          <button class="fit-seg-btn" type="button" data-seg-target="push-sel" data-seg-value="exempt">Exempt</button>
+        </div>
         <div class="editor-event-row">
           <select id="push-sel" class="event-select" aria-label="Strength event">
             <option value="push-up">Push-Ups (1 Min)</option>
@@ -257,6 +275,12 @@
       <section id="core-editor" class="editor-panel" role="tabpanel" aria-label="Core" hidden>
         <div class="editor-header">
           <span class="editor-title">CORE</span>
+        </div>
+        <!-- Fitness theme: segmented event selector -->
+        <div id="sit-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Core event">
+          <button class="fit-seg-btn fit-seg-btn--active" type="button" data-seg-target="sit-sel" data-seg-value="sit-up">Sit-ups</button>
+          <button class="fit-seg-btn" type="button" data-seg-target="sit-sel" data-seg-value="forearm-plank">Plank</button>
+          <button class="fit-seg-btn" type="button" data-seg-target="sit-sel" data-seg-value="exempt">Exempt</button>
         </div>
         <div class="editor-event-row">
           <select id="sit-sel" class="event-select" aria-label="Core event">
@@ -288,6 +312,12 @@
       <section id="cardio-editor" class="editor-panel" role="tabpanel" aria-label="Cardio" hidden>
         <div class="editor-header">
           <span class="editor-title">RUN</span>
+        </div>
+        <!-- Fitness theme: segmented event selector -->
+        <div id="run-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Cardio event">
+          <button class="fit-seg-btn fit-seg-btn--active" type="button" data-seg-target="cardio-sel" data-seg-value="two-mile-run">2-mile</button>
+          <button class="fit-seg-btn" type="button" data-seg-target="cardio-sel" data-seg-value="hamr-20-meter">HAMR</button>
+          <button class="fit-seg-btn" type="button" data-seg-target="cardio-sel" data-seg-value="exempt">Exempt</button>
         </div>
         <div class="editor-event-row">
           <select id="cardio-sel" class="event-select" aria-label="Cardio event">

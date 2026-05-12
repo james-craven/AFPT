@@ -1247,7 +1247,7 @@ html, body {
   display: none;
 }
 
-:root[data-theme="fitness"] .score-ring-svg { width: 170px; height: 170px; }
+:root[data-theme="fitness"] .score-ring-svg { width: 200px; height: 200px; }
 :root[data-theme="blues"] .score-ring-svg { width: 140px; height: 140px; }
 
 .score-ring-track {
@@ -1683,4 +1683,364 @@ html, body {
   bottom: 0;
   background: var(--afpt-accent);
   border-radius: 3px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FITNESS THEME — direct port of mock-fitness.jsx
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Gradient background ──────────────────────────────────────── */
+:root[data-theme="fitness"] body {
+  background: linear-gradient(160deg, #2b1456 0%, #6b1a5e 45%, #c92a7c 100%);
+  background-attachment: fixed;
+}
+
+/* ─── Header ───────────────────────────────────────────────────── */
+:root[data-theme="fitness"] .app-header {
+  background: transparent;
+  border-bottom: none;
+}
+
+.fit-avatar {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 14px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+:root[data-theme="fitness"] .fit-avatar {
+  display: flex;
+}
+
+:root[data-theme="fitness"] .app-title {
+  display: none;
+}
+
+/* ─── Demographics row ─────────────────────────────────────────── */
+:root[data-theme="fitness"] .demographics-row {
+  background: transparent;
+  border-bottom: none;
+}
+
+:root[data-theme="fitness"] .demo-select {
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ─── Score section ────────────────────────────────────────────── */
+:root[data-theme="fitness"] .score-section {
+  background: transparent;
+  border-bottom: none;
+  padding: 8px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+:root[data-theme="fitness"] .score-main-row {
+  display: none;
+}
+
+/* Fix fitness ring size to 200×200 (mock exact) */
+:root[data-theme="fitness"] .score-ring-svg {
+  width: 200px;
+  height: 200px;
+}
+
+/* Score number: large white bold per mock */
+:root[data-theme="fitness"] .score-ring-num {
+  font-size: 56px;
+  font-weight: 700;
+  fill: #fff;
+  letter-spacing: -1px;
+}
+
+/* Category label: lighter, lettered per mock */
+:root[data-theme="fitness"] .score-ring-cat {
+  font-size: 11px;
+  letter-spacing: 3px;
+  fill: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+/* ─── Score ring deltas ────────────────────────────────────────── */
+.score-ring-deltas {
+  display: none;
+  justify-content: center;
+  gap: 10px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: -4px;
+  font-variant-numeric: tabular-nums;
+}
+
+:root[data-theme="fitness"] .score-ring-deltas {
+  display: flex;
+}
+
+/* ─── Body composition — glass card ───────────────────────────── */
+:root[data-theme="fitness"] .body-comp-row {
+  margin: 0 16px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+:root[data-theme="fitness"] .bc-label {
+  display: none;
+}
+
+.fit-body-header {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+}
+
+:root[data-theme="fitness"] .fit-body-header {
+  display: flex;
+}
+
+.fit-body-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 1px;
+}
+
+.fit-body-badge {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.fit-body-badge[data-pass="true"] {
+  background: rgba(123, 228, 168, 0.18);
+  color: #7be4a8;
+  border: 1px solid rgba(123, 228, 168, 0.4);
+}
+
+.fit-body-badge[data-pass="false"] {
+  background: rgba(255, 138, 161, 0.18);
+  color: #ff8aa1;
+  border: 1px solid rgba(255, 138, 161, 0.4);
+}
+
+/* ─── Component strip ──────────────────────────────────────────── */
+:root[data-theme="fitness"] .component-strip {
+  background: transparent;
+  border-bottom: none;
+  padding: 0 16px 14px;
+  gap: 8px;
+}
+
+:root[data-theme="fitness"] .component-chip {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 12px 10px;
+  color: #fff;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+:root[data-theme="fitness"] .component-chip:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+:root[data-theme="fitness"] .component-chip.chip--active {
+  background: #fff;
+  color: #3a0f4d;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+:root[data-theme="fitness"] .component-chip.chip--active .chip-score {
+  color: rgba(58, 15, 77, 0.7);
+}
+
+:root[data-theme="fitness"] .chip-name {
+  color: inherit;
+}
+
+:root[data-theme="fitness"] .chip-score {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ─── Editor panels — glass card ──────────────────────────────── */
+:root[data-theme="fitness"] .editor-panel {
+  margin: 0 16px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 16px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  gap: 12px;
+}
+
+:root[data-theme="fitness"] .editor-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 8px;
+}
+
+:root[data-theme="fitness"] .editor-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 1px;
+  text-transform: none;
+}
+
+:root[data-theme="fitness"] .event-select {
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+}
+
+/* ─── Fitness segmented controls ──────────────────────────────── */
+.fit-seg-ctrl {
+  display: none;
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+}
+
+:root[data-theme="fitness"] .fit-seg-ctrl {
+  display: flex;
+}
+
+.fit-seg-btn {
+  flex: 1;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.fit-seg-btn.fit-seg-btn--active {
+  background: #fff;
+  color: #3a0f4d;
+}
+
+/* ─── Fitness slider — white thumb, subtle track ───────────────── */
+:root[data-theme="fitness"] .value-slider {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: transparent;
+}
+
+:root[data-theme="fitness"] .value-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+:root[data-theme="fitness"] .value-slider::-moz-range-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+:root[data-theme="fitness"] .value-slider::-webkit-slider-thumb {
+  width: 22px;
+  height: 22px;
+  margin-top: -9px;
+  background: #fff;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+:root[data-theme="fitness"] .value-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* ─── Fitness lap plan — glass card wrapper ────────────────────── */
+:root[data-theme="fitness"] .lap-display {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  padding: 14px 10px;
+  border-top: none;
+  margin-top: 4px;
+}
+
+:root[data-theme="fitness"] .lap-display:empty {
+  display: none;
+}
+
+/* ─── Fitness lap fitness inner elements ──────────────────────── */
+.lap-fitness {
+  padding: 0;
+}
+
+.lap-fitness__hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2px;
+  padding: 0 4px;
+}
+
+.lap-fitness__title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.lap-fitness__sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.lap-fitness__pace {
+  color: #fff;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.lap-fitness__cue {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 4px;
+  padding: 0 4px;
+}
+
+.lap-fitness__svg-wrap {
+  display: flex;
+  justify-content: center;
 }

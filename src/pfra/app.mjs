@@ -267,36 +267,29 @@ function closeChart() {
   delete modal.dataset.chartOpen;
 }
 
-// --- Stadium point (for fitness oval lap display) ---
-
+// --- Stadium point — exact translation of mock-fitness.jsx stadiumPoint ---
+// t in [0,1): 0 = top-center, clockwise. expand pushes outward along local normal.
 function stadiumPoint(t, x, y, w, h, r, expand) {
-  const cx = x + w / 2;
-  const cy = y + h / 2;
-  const sw = w - 2 * r;
-  const arcLen = Math.PI * r;
-  const total = 2 * sw + 2 * arcLen;
-  let pos = (((t % 1) + 1) % 1) * total;
-  let px, py;
-
-  if (pos < sw) {
-    px = x + r + pos; py = y;
-  } else if ((pos -= sw) < arcLen) {
-    const a = -Math.PI / 2 + Math.PI * (pos / arcLen);
-    px = x + w - r + r * Math.cos(a); py = cy + r * Math.sin(a);
-  } else if ((pos -= arcLen) < sw) {
-    px = x + w - r - pos; py = y + h;
-  } else {
-    pos -= sw;
-    const a = Math.PI / 2 + Math.PI * (pos / arcLen);
-    px = x + r + r * Math.cos(a); py = cy + r * Math.sin(a);
+  if (expand === undefined) expand = 0;
+  const P = 2 * (w - 2 * r) + 2 * Math.PI * r;
+  let s = (((t % 1) + 1) % 1) * P;
+  const sh = w / 2 - r;
+  const semi = Math.PI * r;
+  if (s < sh) return { x: x + w / 2 + s, y: y - expand };
+  s -= sh;
+  if (s < semi) {
+    const a = -Math.PI / 2 + (s / semi) * Math.PI;
+    return { x: x + w - r + (r + expand) * Math.cos(a), y: y + r + (r + expand) * Math.sin(a) };
   }
-
-  if (expand) {
-    const dx = px - cx, dy = py - cy;
-    const len = Math.sqrt(dx * dx + dy * dy) || 1;
-    px += (dx / len) * expand; py += (dy / len) * expand;
+  s -= semi;
+  if (s < w - 2 * r) return { x: x + w - r - s, y: y + h + expand };
+  s -= w - 2 * r;
+  if (s < semi) {
+    const a = Math.PI / 2 + (s / semi) * Math.PI;
+    return { x: x + r + (r + expand) * Math.cos(a), y: y + r + (r + expand) * Math.sin(a) };
   }
-  return [px, py];
+  s -= semi;
+  return { x: x + r + s, y: y - expand };
 }
 
 // --- Lap display variants ---
@@ -312,17 +305,61 @@ function formatLapTimesTactical(lapCount, lapSec) {
   return `<div class="lap-hud"><div class="lap-hud-header"><span class="lap-hud-title">PACE PLAN</span><span class="lap-hud-sub">${lapLabel} &middot; ${lapTimeStr}/lap</span></div><div class="lap-hud-rows">${rows}</div></div>`;
 }
 
+// formatLapTimesFitness — direct translation of mock-fitness.jsx lap plan section.
+// SVG params exactly match the mock: viewBox 0 0 340 190, rect x=70 y=50 w=200 h=90 rx=45.
 function formatLapTimesFitness(totalSeconds, lapCount, lapSec) {
-  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
+  const totalStr = secondsToTimeString(totalSeconds);
   const lapTimeStr = secondsToTimeString(lapSec);
-  const vx = 30, vy = 20, vw = 200, vh = 90, vr = 45, expand = 18;
   let markers = '';
+
   for (let i = 0; i < lapCount; i++) {
-    const t = ((i + 1) / lapCount) % 1;
-    const [px, py] = stadiumPoint(t, vx, vy, vw, vh, vr, expand);
-    markers += `<circle class="lap-track-dot" cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="10"/><text class="lap-track-num" x="${px.toFixed(1)}" y="${py.toFixed(1)}">${i + 1}</text>`;
+    const n = i + 1;
+    const t = (n / lapCount) % 1; // lap n=lapCount → t=0 → top-center = FINISH
+    const p = stadiumPoint(t, 70, 50, 200, 90, 45, 0);
+    const lp = stadiumPoint(t, 70, 50, 200, 90, 45, 22);
+    const isFinish = i === lapCount - 1;
+    const anchor = (t > 0.05 && t < 0.45) ? 'start' : (t > 0.55 && t < 0.95) ? 'end' : 'middle';
+    const dx = anchor === 'start' ? 4 : anchor === 'end' ? -4 : 0;
+    const splitStr = secondsToTimeString(lapSec * n);
+    const labelText = isFinish ? 'FINISH' : `L${n}`;
+    const labelFill = isFinish ? '#ffb547' : 'rgba(255,255,255,0.55)';
+    const splitWeight = isFinish ? 800 : 600;
+    const dotR = isFinish ? 7 : 4.5;
+    const dotFill = isFinish ? 'url(#finGrad)' : '#fff';
+    const dotStroke = isFinish ? ' stroke="rgba(255,255,255,0.4)" stroke-width="1.5"' : '';
+    const finText = isFinish
+      ? `<text x="${p.x.toFixed(1)}" y="${(p.y + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="6" font-weight="800" fill="#2b1456" letter-spacing="0.5">FIN</text>`
+      : '';
+    markers += `<g>
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${dotR}" fill="${dotFill}"${dotStroke}/>
+      ${finText}
+      <text x="${(lp.x + dx).toFixed(1)}" y="${(lp.y - 4).toFixed(1)}" text-anchor="${anchor}" font-size="8" fill="${labelFill}" letter-spacing="1" font-weight="600">${labelText}</text>
+      <text x="${(lp.x + dx).toFixed(1)}" y="${(lp.y + 7).toFixed(1)}" text-anchor="${anchor}" font-size="11" fill="#fff" font-weight="${splitWeight}" font-variant-numeric="tabular-nums">${splitStr}</text>
+    </g>`;
   }
-  return `<div class="lap-track-wrap"><div class="lap-track-header"><span class="lap-track-title">PACE PLAN</span> &middot; ${lapLabel} &middot; ${lapTimeStr}/lap</div><svg class="lap-track-svg" viewBox="0 0 260 130" aria-hidden="true"><rect class="lap-track-oval" x="${vx}" y="${vy}" width="${vw}" height="${vh}" rx="${vr}"/>${markers}</svg><p class="lap-track-note">Target &le; ${secondsToTimeString(totalSeconds)} total &middot; ${lapTimeStr}/lap avg</p></div>`;
+
+  return `<div class="lap-fitness">
+    <div class="lap-fitness__hdr">
+      <span class="lap-fitness__title">Pace plan</span>
+      <span class="lap-fitness__sub">each lap &middot; <span class="lap-fitness__pace">${lapTimeStr}</span></span>
+    </div>
+    <p class="lap-fitness__cue">Glance at your watch crossing the line.</p>
+    <div class="lap-fitness__svg-wrap">
+      <svg width="100%" viewBox="0 0 340 190" style="max-width:340px;display:block;margin:0 auto">
+        <defs>
+          <linearGradient id="finGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ffb547"/>
+            <stop offset="1" stop-color="#ff5dab"/>
+          </linearGradient>
+        </defs>
+        <rect x="70" y="50" width="200" height="90" rx="45" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="14"/>
+        <rect x="70" y="50" width="200" height="90" rx="45" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="2 6"/>
+        <text x="170" y="87" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="9" letter-spacing="2">GOAL</text>
+        <text x="170" y="113" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" letter-spacing="-0.5" font-variant-numeric="tabular-nums">${totalStr}</text>
+        ${markers}
+      </svg>
+    </div>
+  </div>`;
 }
 
 function formatLapTimesBlues(totalSeconds, lapCount, lapSec) {
@@ -414,7 +451,26 @@ function renderScore(result) {
   if (ringNum) ringNum.textContent = Number.isInteger(total) ? String(total) : total.toFixed(1);
   const ringCat = byId('score-ring-cat');
   if (ringCat) {
-    ringCat.textContent = category === 'Excellent' ? 'EXC' : category === 'Satisfactory' ? 'SAT' : 'FAIL';
+    ringCat.textContent = category === 'Excellent' ? 'EXCELLENT' : category === 'Satisfactory' ? 'SAT' : 'FAIL';
+  }
+
+  // Fitness: avatar sex letter
+  const fitAvatar = byId('fit-avatar');
+  if (fitAvatar) fitAvatar.textContent = state.sex === 'male' ? 'M' : 'F';
+
+  // Fitness: score deltas (above pass=75, to max=100)
+  const passEl = byId('score-delta-pass');
+  const maxEl = byId('score-delta-max');
+  if (passEl) passEl.textContent = `+${Math.max(0, total - 75).toFixed(0)} above pass`;
+  if (maxEl) maxEl.textContent = `+${Math.max(0, 100 - total).toFixed(0)} to max`;
+
+  // Fitness: body comp pass/fail badge (WHtR ≤ 0.55 = PASS)
+  const fitBodyBadge = byId('fit-body-badge');
+  if (fitBodyBadge) {
+    const whtrNum = parseFloat(state.whtr);
+    const pass = !Number.isNaN(whtrNum) && whtrNum <= 0.55;
+    fitBodyBadge.textContent = pass ? 'PASS' : 'FAIL';
+    fitBodyBadge.dataset.pass = String(pass);
   }
 
   // Stencil threshold marker
@@ -627,6 +683,15 @@ function renderCardioEditor(scores) {
   }
 }
 
+function syncFitSeg(ctrlId, currentEvent, isExempt) {
+  const ctrl = byId(ctrlId);
+  if (!ctrl) return;
+  ctrl.querySelectorAll('.fit-seg-btn').forEach((btn) => {
+    const active = isExempt ? btn.dataset.segValue === 'exempt' : btn.dataset.segValue === currentEvent;
+    btn.classList.toggle('fit-seg-btn--active', active);
+  });
+}
+
 function renderEditorVisibility() {
   const isPlank = state.core.event === 'forearm-plank';
   const sitRepsRow = byId('sit-reps-row');
@@ -658,6 +723,11 @@ function renderEditorVisibility() {
     chip.classList.toggle('chip--active', active);
     chip.setAttribute('aria-selected', String(active));
   });
+
+  // Fitness: sync segmented control active state to current event selection
+  syncFitSeg('push-seg-ctrl', state.strength.event, state.strength.exempt);
+  syncFitSeg('sit-seg-ctrl', state.core.event, state.core.exempt);
+  syncFitSeg('run-seg-ctrl', state.cardio.event, state.cardio.exempt);
 }
 
 function render() {
@@ -946,6 +1016,18 @@ function bindEvents() {
 
   document.querySelectorAll('.component-chip').forEach((chip) => {
     chip.addEventListener('click', () => selectComponent(chip.dataset.component));
+  });
+
+  // --- Fitness segmented event selectors ---
+
+  document.querySelectorAll('.fit-seg-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const sel = byId(btn.dataset.segTarget);
+      if (sel) {
+        sel.value = btn.dataset.segValue;
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
   });
 
   // --- Theme change: re-render lap display and ring ---
