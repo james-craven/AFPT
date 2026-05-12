@@ -259,10 +259,29 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(chartOpen, 'true', 'chart drawer opens on push-btn click');
   const hasChartTable = await page.evaluate(() => !!document.querySelector('#chart-content .chart-table'));
   assert.equal(hasChartTable, true, 'chart drawer contains generated score table');
+  const chartHasNaN = await page.evaluate(
+    () => document.getElementById('chart-content')?.textContent?.includes('NaN'),
+  );
+  assert.equal(chartHasNaN, false, 'chart content does not contain NaN');
   await page.locator('#close-btn').click();
   await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
   const chartClosed = await page.evaluate(() => document.getElementById('modal')?.hasAttribute('hidden'));
   assert.equal(chartClosed, true, 'chart drawer closes on close-btn click');
+
+  // 9b. Cardio chart does not contain NaN:NaN
+  await page.locator('#summary-cardio').click();
+  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  const runBtn = page.locator('#run-btn');
+  await runBtn.click();
+  await page.waitForFunction(() => !document.getElementById('modal')?.hasAttribute('hidden'));
+  const cardioChartHasNaN = await page.evaluate(
+    () => document.getElementById('chart-content')?.textContent?.includes('NaN'),
+  );
+  assert.equal(cardioChartHasNaN, false, 'cardio chart does not contain NaN');
+  await page.locator('#close-btn').click();
+  await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
+  await page.locator('#summary-strength').click();
+  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
 
   // 10. PWA API accessible
   assert.equal(

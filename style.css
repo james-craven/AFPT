@@ -1686,6 +1686,255 @@ html, body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════
+   TACTICAL THEME — HUD / terminal character
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Scanline CRT effect on body */
+:root[data-theme="tactical"] body {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 2px,
+    rgba(29, 233, 255, 0.025) 2px,
+    rgba(29, 233, 255, 0.025) 3px
+  );
+}
+
+/* Active chip: glow indicator dot in corner */
+:root[data-theme="tactical"] .component-chip {
+  position: relative;
+}
+:root[data-theme="tactical"] .component-chip.chip--active::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--afpt-accent);
+  box-shadow: 0 0 8px var(--afpt-accent), 0 0 16px rgba(29, 233, 255, 0.5);
+}
+
+/* Score badge: glow on excellent */
+:root[data-theme="tactical"] .score-badge[data-category="excellent"] {
+  box-shadow: 0 0 8px rgba(55, 255, 139, 0.35);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   STENCIL THEME — military / block-print ops
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Dot-grid background */
+:root[data-theme="stencil"] body {
+  background-image: radial-gradient(circle at 1px 1px, rgba(213, 196, 128, 0.06) 1px, transparent 0);
+  background-size: 12px 12px;
+}
+
+/* Body font: Special Elite / Courier falls back to monospace */
+:root[data-theme="stencil"] body {
+  font-family: "Special Elite", "Courier Prime", "Courier New", monospace;
+}
+
+/* Header: thick accent bottom border for stencil stamp feel */
+:root[data-theme="stencil"] .app-header {
+  border-bottom: 2px solid var(--afpt-accent);
+}
+
+/* Title: accent color, stencil weight */
+:root[data-theme="stencil"] .app-title {
+  font-family: "Special Elite", "Courier New", monospace;
+  letter-spacing: 4px;
+}
+
+/* Score number: large accent-colored stencil display value */
+:root[data-theme="stencil"] .score-number {
+  font-size: 62px;
+  color: var(--afpt-accent);
+  letter-spacing: 3px;
+}
+
+/* Active chip: filled accent block with clip-path cut corners */
+:root[data-theme="stencil"] .component-chip.chip--active {
+  background: var(--afpt-accent);
+  color: var(--afpt-bg);
+  border-top-color: transparent;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+:root[data-theme="stencil"] .component-chip.chip--active .chip-name,
+:root[data-theme="stencil"] .component-chip.chip--active .chip-value {
+  color: var(--afpt-bg);
+}
+:root[data-theme="stencil"] .component-chip.chip--active .chip-score {
+  color: var(--afpt-bg);
+  opacity: 0.75;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   BLUES THEME — formal dress uniform
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Body font: Inter / system sans-serif */
+:root[data-theme="blues"] body {
+  font-family: "Inter Tight", "Inter", system-ui, sans-serif;
+}
+
+/* Header: gradient panel + brass bottom border */
+:root[data-theme="blues"] .app-header {
+  background: linear-gradient(180deg, var(--afpt-panel-2), var(--afpt-panel));
+  border-bottom: 1px solid var(--afpt-accent-2);
+}
+
+/* Title: wider spacing, formal weight */
+:root[data-theme="blues"] .app-title {
+  font-family: "Bebas Neue", "Oswald", "Inter Tight", system-ui, sans-serif;
+  letter-spacing: 5px;
+  font-size: 20px;
+  color: var(--afpt-ink);
+}
+
+/* Component strip: card grid with gaps */
+:root[data-theme="blues"] .component-strip {
+  background: none;
+  gap: 8px;
+  padding: 12px 12px 0;
+  border-bottom: none;
+}
+:root[data-theme="blues"] .component-chip {
+  border-radius: 8px;
+  border: 1px solid var(--afpt-border);
+  background: var(--afpt-panel);
+  padding: 10px 8px;
+}
+:root[data-theme="blues"] .component-chip:hover {
+  border-color: var(--afpt-border-strong);
+  background: var(--afpt-panel-2);
+}
+:root[data-theme="blues"] .component-chip.chip--active {
+  border: 1px solid var(--afpt-accent-2);
+  border-top: 1px solid var(--afpt-accent-2);
+  background: var(--afpt-panel-2);
+  color: var(--afpt-ink);
+  box-shadow: 0 0 0 2px rgba(226, 194, 117, 0.2);
+}
+:root[data-theme="blues"] .component-chip.chip--active .chip-score {
+  color: var(--afpt-accent-2);
+}
+
+/* Blues score section: ring + hide redundant main-row */
+:root[data-theme="blues"] .score-section {
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+}
+:root[data-theme="blues"] .score-main-row {
+  display: none;
+}
+:root[data-theme="blues"] .score-ring-num {
+  font-size: 32px;
+  font-weight: 700;
+  fill: var(--afpt-ink);
+}
+:root[data-theme="blues"] .score-ring-cat {
+  font-size: 9px;
+  letter-spacing: 2px;
+  fill: var(--afpt-accent-2);
+  font-weight: 500;
+}
+/* Badge still useful — show it floating below ring via score-badge in ring-wrap */
+:root[data-theme="blues"] .score-badge {
+  margin-top: 8px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  border-radius: 3px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LIGHT (CONNECT) THEME — clean mobile app card style
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Body font: Inter / system sans */
+:root[data-theme="light"] body {
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* Header: white card with subtle shadow */
+:root[data-theme="light"] .app-header {
+  box-shadow: 0 1px 6px rgba(20, 30, 55, 0.05);
+}
+
+/* Title: clean sans, ink */
+:root[data-theme="light"] .app-title {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 18px;
+  letter-spacing: -0.3px;
+  color: var(--afpt-ink);
+}
+
+/* Score section: rounded card with shadow */
+:root[data-theme="light"] .score-section {
+  margin: 14px 16px 0;
+  border-radius: 14px;
+  border: 1px solid var(--afpt-border);
+  box-shadow: 0 2px 8px rgba(20, 30, 55, 0.05);
+  background: var(--afpt-panel);
+  padding: 16px;
+}
+
+/* Score badge: pill shape */
+:root[data-theme="light"] .score-badge {
+  border-radius: 999px;
+  font-weight: 600;
+}
+:root[data-theme="light"] .score-badge[data-category="excellent"] {
+  background: rgba(31, 138, 91, 0.1);
+}
+:root[data-theme="light"] .score-badge[data-category="satisfactory"] {
+  background: rgba(217, 119, 6, 0.1);
+}
+
+/* Component strip: card grid with padding */
+:root[data-theme="light"] .component-strip {
+  background: none;
+  gap: 8px;
+  padding: 14px 16px;
+  border-bottom: none;
+}
+:root[data-theme="light"] .component-chip {
+  border-radius: 12px;
+  border: 1px solid var(--afpt-border);
+  background: var(--afpt-panel);
+  box-shadow: 0 1px 3px rgba(20, 30, 55, 0.05);
+  padding: 10px 8px;
+}
+:root[data-theme="light"] .component-chip:hover {
+  border-color: var(--afpt-border-strong);
+}
+:root[data-theme="light"] .component-chip.chip--active {
+  border: 2px solid var(--afpt-accent);
+  border-top: 2px solid var(--afpt-accent);
+  background: var(--afpt-panel);
+  box-shadow: 0 2px 12px rgba(42, 111, 219, 0.15);
+}
+:root[data-theme="light"] .component-chip.chip--active .chip-value {
+  color: var(--afpt-accent);
+}
+
+/* Light editor: rounded card */
+:root[data-theme="light"] .editors-container {
+  padding: 0 16px 16px;
+}
+:root[data-theme="light"] .editor-panel {
+  background: var(--afpt-panel);
+  border-radius: 14px;
+  border: 1px solid var(--afpt-border);
+  box-shadow: 0 2px 8px rgba(20, 30, 55, 0.04);
+  padding: 16px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
    FITNESS THEME — direct port of mock-fitness.jsx
    ═══════════════════════════════════════════════════════════════════ */
 

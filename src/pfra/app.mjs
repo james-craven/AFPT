@@ -232,7 +232,7 @@ function generateScoreChart(component) {
     const pts = row.points;
     const rawVal = cell.value;
     const displayVal = isTime
-      ? secondsToTimeString(Number(rawVal))
+      ? rawVal
       : (cell.atLeast ? `&ge;&nbsp;${rawVal}` : `&le;&nbsp;${rawVal}`);
     const tier = pts >= 15 ? 'MAX' : pts >= 10 ? 'EXC' : pts >= 5 ? 'SAT' : 'MIN';
     const tierCls = pts >= 15 ? 'tier--max' : pts >= 10 ? 'tier--exc' : pts >= 5 ? 'tier--sat' : 'tier--min';
