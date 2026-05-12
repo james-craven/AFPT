@@ -157,11 +157,16 @@
         <span id="score-txt" class="score-number">--</span>
         <span id="score-category-badge" class="score-badge">--</span>
       </div>
-      <div class="score-bar-track" role="progressbar" aria-label="Score progress">
-        <div id="score-bar-fill" class="score-bar-fill" style="width:0%"></div>
+      <div class="score-bar-wrap">
+        <div class="score-bar-track" role="progressbar" aria-label="Score progress">
+          <div id="score-bar-fill" class="score-bar-fill" style="width:100%"></div>
+        </div>
       </div>
       <div class="score-bar-labels">
-        <span>UNSAT</span><span>SAT 75</span><span>EXC 90</span><span>MAX 100</span>
+        <span style="left:0">FAIL</span>
+        <span style="left:75%">SAT 75</span>
+        <span style="left:90%">EXC 90</span>
+        <span style="left:100%">MAX</span>
       </div>
       <div id="pfra-result" hidden></div>
     </section>
@@ -268,9 +273,9 @@
         </div>
         <div id="run-time-row" class="editor-value-row">
           <label class="time-label" for="run-mintxt">MIN</label>
-          <input id="run-mintxt" type="text" inputmode="numeric" class="time-input" value="25" placeholder="MM" aria-label="Cardio minutes">
+          <input id="run-mintxt" type="text" inputmode="numeric" class="time-input" value="20" placeholder="MM" aria-label="Cardio minutes">
           <span class="time-sep">:</span>
-          <input id="run-sectxt" type="text" inputmode="numeric" class="time-input" value="23" placeholder="SS" aria-label="Cardio seconds">
+          <input id="run-sectxt" type="text" inputmode="numeric" class="time-input" value="00" placeholder="SS" aria-label="Cardio seconds">
         </div>
         <div id="run-shuttle-row" class="editor-value-row" hidden>
           <input id="run-shuttle-txt" type="text" inputmode="numeric" class="value-input" value="58" aria-label="HAMR shuttles">

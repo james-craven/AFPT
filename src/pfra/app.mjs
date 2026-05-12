@@ -15,7 +15,7 @@ import { eventDefaults } from './state.mjs';
 
 // --- State ---
 
-const defaultCardioValue = '25:23';
+const defaultCardioValue = '20:00';
 
 let state = {
   sex: 'female',
@@ -214,29 +214,27 @@ const ageChartKeys = {
   '60-and-over': 'over60',
 };
 
-function chartSrc(type) {
-  const ageKey = ageChartKeys[state.ageGroup] || 'lessthan25';
-  const base = './web formatted jpgs/';
-  if (type === 'run-altitude') return `${base}runAltitudeAdjust.webp`;
-  if (type === 'walk-altitude') return `${base}walkAltitudeAdjust.webp`;
-  if (type === 'shuttle-card') return `${base}shuttleScores.webp`;
-  if (type === 'cardio') {
-    if (state.cardio.event === 'two-kilometer-walk') return `${base}walkChart.webp`;
-    if (state.cardio.event === 'hamr-20-meter') return `${base}shuttleScores.webp`;
-    return `${base}${state.sex}_${ageKey}_cardio.webp`;
-  }
-  // strength or core
-  return `${base}${state.sex}_${ageKey}_Strength_Abs.webp`;
+function chartSrc() {
+  // Chart images not bundled in this build — return null
+  return null;
 }
 
 function openChart(src, alt, title) {
   const modal = byId('modal');
+  if (!modal) return;
   const img = byId('modal-img');
   const titleEl = byId('chart-drawer-title');
-  if (!modal || !img) return;
-  img.src = src;
-  img.alt = alt || 'Score chart';
   if (titleEl) titleEl.textContent = title || 'Score Chart';
+  if (img) {
+    if (src) {
+      img.src = src;
+      img.alt = alt || 'Score chart';
+      img.hidden = false;
+    } else {
+      img.removeAttribute('src');
+      img.hidden = true;
+    }
+  }
   modal.removeAttribute('hidden');
   modal.dataset.chartOpen = 'true';
 }
@@ -253,33 +251,28 @@ function closeChart() {
 function formatLapTimes(totalSeconds, lapCount) {
   if (!totalSeconds || !lapCount) return '';
   const lapSec = Math.round(totalSeconds / lapCount);
-  let result = `Req'd ${lapCount} Lap Time: ~${secondsToTimeString(lapSec)}`;
+  const lapLabel = lapCount === 8 ? '8 × 400m' : `${lapCount} laps`;
+  const lapTimeStr = secondsToTimeString(lapSec);
+  let tiles = '';
   for (let i = 1; i <= lapCount; i++) {
-    result += ` Lap ${i}: <= ${secondsToTimeString(lapSec * i)}`;
+    const cls = i === lapCount ? ' lap-tile--final' : '';
+    tiles += `<div class="lap-tile${cls}"><span class="lap-tile-num">${i}</span><span class="lap-tile-time">&#8804;&nbsp;${secondsToTimeString(lapSec * i)}</span></div>`;
   }
-  return result;
+  return `<div class="lap-plan"><div class="lap-plan-header"><span class="lap-plan-title">PACE PLAN</span><span class="lap-plan-sub">${lapLabel} &middot; ${lapTimeStr}/lap</span></div><div class="lap-plan-grid">${tiles}</div></div>`;
 }
 
 // --- Tick positioning ---
 
-function setTickReps(tickId, minVal) {
+// Places tick center to match browser thumb center at given percentage of slider range.
+// Accounts for the 10px thumb radius offset browsers apply at both ends.
+function setTickPct(tickId, pct, minValue) {
   const tick = byId(tickId);
   if (!tick) return;
-  if (minVal === undefined || minVal === null) { tick.style.display = 'none'; return; }
+  if (!Number.isFinite(pct)) { tick.style.display = 'none'; return; }
+  const clamped = Math.max(0, Math.min(100, pct));
   tick.style.display = 'block';
-  tick.style.left = '0%';
-  tick.dataset.minValue = String(minVal);
-}
-
-function setTickRunSeconds(tickId, minSec, sliderMinSec, sliderMaxSec) {
-  const tick = byId(tickId);
-  if (!tick) return;
-  const range = sliderMaxSec - sliderMinSec;
-  if (!range || !Number.isFinite(minSec)) { tick.style.display = 'none'; return; }
-  const pct = Math.max(0, Math.min(100, ((minSec - sliderMinSec) / range) * 100));
-  tick.style.display = 'block';
-  tick.style.left = `${pct}%`;
-  tick.dataset.minValue = String(minSec);
+  tick.style.left = `calc(10px + ${(clamped / 100).toFixed(4)} * (100% - 20px))`;
+  if (minValue !== undefined) tick.dataset.minValue = String(minValue);
 }
 
 // --- Rendering ---
@@ -298,7 +291,7 @@ function renderScore(result) {
   }
 
   const barFill = byId('score-bar-fill');
-  if (barFill) barFill.style.width = `${Math.min(100, Math.max(0, total))}%`;
+  if (barFill) barFill.style.width = `${Math.max(0, 100 - Math.min(100, total))}%`;
 
   const bodyScore = byId('pfra-body-score');
   if (bodyScore) bodyScore.textContent = String(scores.body);
@@ -347,14 +340,16 @@ function renderStrengthEditor(scores) {
   }
 
   const slider = byId('push-slider');
-  if (slider && Number.isFinite(minNum) && Number.isFinite(maxNum)) {
-    slider.min = String(Math.min(minNum, maxNum));
-    slider.max = String(Math.max(minNum, maxNum));
+  if (slider && Number.isFinite(minNum) && Number.isFinite(maxNum) && maxNum > 0) {
+    slider.min = '0';
+    slider.max = String(maxNum);
     const curVal = Number(state.strength.value);
-    if (Number.isFinite(curVal)) slider.value = String(curVal);
+    if (Number.isFinite(curVal)) slider.value = String(Math.max(0, Math.min(maxNum, curVal)));
+    setTickPct('push-tick', (minNum / maxNum) * 100, minNum);
+  } else {
+    const tick = byId('push-tick');
+    if (tick) tick.style.display = 'none';
   }
-
-  setTickReps('push-tick', Number.isFinite(minNum) ? minNum : undefined);
 }
 
 function renderCoreEditor(scores) {
@@ -382,14 +377,16 @@ function renderCoreEditor(scores) {
     }
 
     const slider = byId('sit-slider');
-    if (slider && Number.isFinite(minSec) && Number.isFinite(maxSec)) {
-      slider.min = String(Math.min(minSec, maxSec));
-      slider.max = String(Math.max(minSec, maxSec));
+    if (slider && Number.isFinite(minSec) && Number.isFinite(maxSec) && maxSec > 0) {
+      slider.min = '0';
+      slider.max = String(maxSec);
       const curSec = toSeconds(state.core.value);
-      if (Number.isFinite(curSec)) slider.value = String(curSec);
+      if (Number.isFinite(curSec)) slider.value = String(Math.max(0, Math.min(maxSec, curSec)));
+      setTickPct('sit-tick', (minSec / maxSec) * 100, minSec);
+    } else {
+      const tick = byId('sit-tick');
+      if (tick) tick.style.display = 'none';
     }
-
-    setTickReps('sit-tick', Number.isFinite(minSec) ? minSec : undefined);
   } else {
     const minNum = Number(minVal);
     const maxNum = Number(maxVal);
@@ -399,14 +396,16 @@ function renderCoreEditor(scores) {
     }
 
     const slider = byId('sit-slider');
-    if (slider && Number.isFinite(minNum) && Number.isFinite(maxNum)) {
-      slider.min = String(Math.min(minNum, maxNum));
-      slider.max = String(Math.max(minNum, maxNum));
+    if (slider && Number.isFinite(minNum) && Number.isFinite(maxNum) && maxNum > 0) {
+      slider.min = '0';
+      slider.max = String(maxNum);
       const curVal = Number(state.core.value);
-      if (Number.isFinite(curVal)) slider.value = String(curVal);
+      if (Number.isFinite(curVal)) slider.value = String(Math.max(0, Math.min(maxNum, curVal)));
+      setTickPct('sit-tick', (minNum / maxNum) * 100, minNum);
+    } else {
+      const tick = byId('sit-tick');
+      if (tick) tick.style.display = 'none';
     }
-
-    setTickReps('sit-tick', Number.isFinite(minNum) ? minNum : undefined);
   }
 }
 
@@ -416,7 +415,7 @@ function renderCardioEditor(scores) {
 
   if (state.cardio.exempt) {
     if (runTxtP) runTxtP.textContent = 'Cardio Score: EXEMPT';
-    if (lapDisplay) lapDisplay.textContent = '';
+    if (lapDisplay) lapDisplay.innerHTML = '';
     const tick = byId('run-tick');
     if (tick) tick.style.display = 'none';
     return;
@@ -425,7 +424,7 @@ function renderCardioEditor(scores) {
   if (state.cardio.event === 'two-kilometer-walk') {
     const maxTime = walkMaximumTime(standards, state.ageGroup, state.sex);
     if (runTxtP) runTxtP.textContent = `Cardio Score: ${scores.cardio} | Max Time: ${maxTime ?? '--'}`;
-    if (lapDisplay) lapDisplay.textContent = '';
+    if (lapDisplay) lapDisplay.innerHTML = '';
     const tick = byId('run-tick');
     if (tick) tick.style.display = 'none';
     if (maxTime) {
@@ -452,17 +451,19 @@ function renderCardioEditor(scores) {
     if (runTxtP) {
       runTxtP.textContent = `Cardio Score: ${scores.cardio} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
     }
-    if (lapDisplay) lapDisplay.textContent = '';
+    if (lapDisplay) lapDisplay.innerHTML = '';
 
     const slider = byId('run-slider');
-    if (slider && Number.isFinite(minNum) && Number.isFinite(maxNum)) {
-      slider.min = String(minNum);
+    if (slider && Number.isFinite(minNum) && Number.isFinite(maxNum) && maxNum > 0) {
+      slider.min = '0';
       slider.max = String(maxNum);
       const curVal = Number(state.cardio.value);
-      if (Number.isFinite(curVal)) slider.value = String(Math.max(minNum, Math.min(maxNum, curVal)));
+      if (Number.isFinite(curVal)) slider.value = String(Math.max(0, Math.min(maxNum, curVal)));
+      setTickPct('run-tick', (minNum / maxNum) * 100, minNum);
+    } else {
+      const tick = byId('run-tick');
+      if (tick) tick.style.display = 'none';
     }
-
-    setTickReps('run-tick', Number.isFinite(minNum) ? minNum : undefined);
     return;
   }
 
@@ -489,12 +490,12 @@ function renderCardioEditor(scores) {
       }
     }
 
-    setTickRunSeconds('run-tick', minSec, maxSec, minSec);
+    setTickPct('run-tick', 100, minSec);
   }
 
   if (lapDisplay) {
     const curSec = toSeconds(state.cardio.value);
-    lapDisplay.textContent = Number.isFinite(curSec) ? formatLapTimes(curSec, 8) : '';
+    lapDisplay.innerHTML = Number.isFinite(curSec) ? formatLapTimes(curSec, 8) : '';
   }
 }
 
@@ -734,8 +735,8 @@ function bindEvents() {
         const parts = def.split(':');
         const minEl = byId('run-mintxt');
         const secEl = byId('run-sectxt');
-        if (minEl) minEl.value = parts[0] || '25';
-        if (secEl) secEl.value = parts[1] || '23';
+        if (minEl) minEl.value = parts[0] || '20';
+        if (secEl) secEl.value = parts[1] || '00';
       }
     }
     render();
@@ -835,13 +836,13 @@ function bindEvents() {
   // --- Settings menu items ---
 
   bindMenuClick('run-adjust-chart', () => {
-    openChart('./web formatted jpgs/runAltitudeAdjust.webp', 'Run Altitude Adjustment chart', 'Run Altitude Adjustment');
+    openChart(null, 'Run Altitude Adjustment chart', 'Run Altitude Adjustment');
   });
   bindMenuClick('walk-adjust-chart', () => {
-    openChart('./web formatted jpgs/walkAltitudeAdjust.webp', 'Walk Altitude Adjustment chart', 'Walk Altitude Adjustment');
+    openChart(null, 'Walk Altitude Adjustment chart', 'Walk Altitude Adjustment');
   });
   bindMenuClick('shuttle-score-card', () => {
-    openChart('./web formatted jpgs/shuttleScores.webp', 'Shuttle Score Card', 'Shuttle Score Card');
+    openChart(null, 'Shuttle Score Card', 'Shuttle Score Card');
   });
   bindMenuClick('shuttle-audio-menu', () => {
     const player = byId('shuttle-audio-player');

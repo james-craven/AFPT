@@ -16,8 +16,7 @@ module.exports = {
 		'situps.png',
 		'shuttle.mp3',
 		'standards/af-pfra-2026.json',
-		'standards/extracted/tables/*.json',
-		'web formatted jpgs/*.webp'
+		'standards/extracted/tables/*.json'
 	],
 	globIgnores: [
 		'node_modules/**/*',

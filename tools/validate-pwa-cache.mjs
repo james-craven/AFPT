@@ -21,8 +21,6 @@ const requiredAssets = [
   'standards/extracted/tables/push-up.json',
   'standards/extracted/tables/two-mile-run.json',
   'standards/extracted/tables/hamr-20-meter.json',
-  'web formatted jpgs/shuttleScores.webp',
-  'web formatted jpgs/runAltitudeAdjust.webp',
 ];
 
 const excludedAssets = [
