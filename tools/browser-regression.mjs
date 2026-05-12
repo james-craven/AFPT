@@ -233,6 +233,57 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   );
   assert.equal(lapDisplayInsideEditors, false, 'run-lap-times is NOT inside editors-container');
 
+  // 6c. Event value preservation across toggle switches
+  // Set push-ups to 27, switch to HRPU, switch back — value must persist
+  await page.evaluate(() => {
+    window.afptApp.dispatch({ type: 'SET_STRENGTH_VALUE', value: '27' });
+    const pushTxt = document.getElementById('push-txt');
+    if (pushTxt) pushTxt.value = '27';
+  });
+  await page.evaluate(() => {
+    const sel = document.getElementById('push-sel');
+    sel.value = 'hand-release-push-up';
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForTimeout(50);
+  await page.evaluate(() => {
+    const sel = document.getElementById('push-sel');
+    sel.value = 'push-up';
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForTimeout(50);
+  const strengthAfterRoundTrip = await page.evaluate(() => window.afptApp.getState().strength.value);
+  assert.equal(strengthAfterRoundTrip, '27', 'push-up value preserved after HRPU round-trip');
+
+  // Set 2-mile run to 14:00, switch to HAMR, switch back — run time must persist
+  await page.locator('#summary-cardio').click();
+  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  await page.evaluate(() => {
+    window.afptApp.dispatch({ type: 'SET_CARDIO_VALUE', value: '14:00' });
+    const minEl = document.getElementById('run-mintxt');
+    const secEl = document.getElementById('run-sectxt');
+    if (minEl) minEl.value = '14';
+    if (secEl) secEl.value = '00';
+  });
+  await page.evaluate(() => {
+    const sel = document.getElementById('cardio-sel');
+    sel.value = 'hamr-20-meter';
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForTimeout(50);
+  const hamrFirstTime = await page.evaluate(() => window.afptApp.getState().cardio.value);
+  assert.ok(Number(hamrFirstTime) >= 1, `HAMR initializes in-range on first switch: ${hamrFirstTime}`);
+  await page.evaluate(() => {
+    const sel = document.getElementById('cardio-sel');
+    sel.value = 'two-mile-run';
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForTimeout(50);
+  const runAfterHamrRoundTrip = await page.evaluate(() => window.afptApp.getState().cardio.value);
+  assert.equal(runAfterHamrRoundTrip, '14:00', '2-mile run value preserved after HAMR round-trip');
+  await page.locator('#summary-strength').click();
+  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+
   // 7. Altitude via dispatch changes cardio score
   const { cardioSeaLevel, cardioAlt4 } = await page.evaluate(() => {
     window.afptApp.dispatch({ type: 'SET_CARDIO_EVENT', event: 'two-mile-run' });

@@ -17,6 +17,13 @@ import { eventDefaults } from './state.mjs';
 
 const defaultCardioValue = '20:00'; // fallback before tables load
 
+// Per-event value cache — preserves user input across event switches
+const savedEventValues = {
+  strength: {},
+  core: {},
+  cardio: {},
+};
+
 let state = {
   sex: 'female',
   ageGroup: 'under-25',
@@ -809,11 +816,14 @@ function bindEvents() {
   byId('push-sel')?.addEventListener('change', () => {
     const sv = byId('push-sel').value;
     if (sv === 'exempt') {
+      if (!state.strength.exempt) savedEventValues.strength[state.strength.event] = state.strength.value;
       dispatch({ type: 'SET_STRENGTH_EXEMPT', exempt: true });
     } else {
+      if (!state.strength.exempt) savedEventValues.strength[state.strength.event] = state.strength.value;
       dispatch({ type: 'SET_STRENGTH_EXEMPT', exempt: false });
       dispatch({ type: 'SET_STRENGTH_EVENT', event: sv });
-      const def = eventDefaults[sv] || '0';
+      const saved = savedEventValues.strength[sv];
+      const def = saved !== undefined ? saved : (eventDefaults[sv] || '0');
       const pushTxt = byId('push-txt');
       if (pushTxt) pushTxt.value = def;
       dispatch({ type: 'SET_STRENGTH_VALUE', value: def });
@@ -855,11 +865,14 @@ function bindEvents() {
   byId('sit-sel')?.addEventListener('change', () => {
     const sv = byId('sit-sel').value;
     if (sv === 'exempt') {
+      if (!state.core.exempt) savedEventValues.core[state.core.event] = state.core.value;
       dispatch({ type: 'SET_CORE_EXEMPT', exempt: true });
     } else {
+      if (!state.core.exempt) savedEventValues.core[state.core.event] = state.core.value;
       dispatch({ type: 'SET_CORE_EXEMPT', exempt: false });
       dispatch({ type: 'SET_CORE_EVENT', event: sv });
-      const def = eventDefaults[sv] || '0';
+      const saved = savedEventValues.core[sv];
+      const def = saved !== undefined ? saved : (eventDefaults[sv] || '0');
       dispatch({ type: 'SET_CORE_VALUE', value: def });
       if (sv === 'forearm-plank') {
         const parts = def.split(':');
@@ -945,11 +958,14 @@ function bindEvents() {
   byId('cardio-sel')?.addEventListener('change', () => {
     const sv = byId('cardio-sel').value;
     if (sv === 'exempt') {
+      if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = state.cardio.value;
       dispatch({ type: 'SET_CARDIO_EXEMPT', exempt: true });
     } else {
+      if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = state.cardio.value;
       dispatch({ type: 'SET_CARDIO_EXEMPT', exempt: false });
       dispatch({ type: 'SET_CARDIO_EVENT', event: sv });
-      const def = lowestCardioDefault(sv, state.ageGroup, state.sex);
+      const saved = savedEventValues.cardio[sv];
+      const def = saved !== undefined ? saved : lowestCardioDefault(sv, state.ageGroup, state.sex);
       dispatch({ type: 'SET_CARDIO_VALUE', value: def });
       if (sv === 'hamr-20-meter') {
         const shuttleTxt = byId('run-shuttle-txt');
