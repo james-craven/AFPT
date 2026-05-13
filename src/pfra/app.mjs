@@ -28,8 +28,11 @@ let state = {
   sex: 'female',
   ageGroup: 'under-25',
   whtr: '0.49',
-  bodyExempt: false,
-  altitudeGroup: 0,
+bodyHeightFt: '5',
+bodyHeightIn: '10',
+bodyWaist: '34',
+bodyExempt: false,
+altitudeGroup: 0,
   strength: { event: 'push-up', value: '0', exempt: false },
   core: { event: 'sit-up', value: '0', exempt: false },
   cardio: { event: 'two-mile-run', value: defaultCardioValue, exempt: false },
@@ -101,8 +104,11 @@ function refreshStateFromDom() {
     sex: byId('sex-sel')?.value || 'female',
     ageGroup: byId('age-sel')?.value || 'under-25',
     whtr: val('pfra-whtr') || '0.49',
-    bodyExempt: bodyModeSel?.value === 'exempt',
-    altitudeGroup: readAltitudeGroup(val('alt-select')),
+bodyHeightFt: val('height-ft-input') || state.bodyHeightFt || '5',
+bodyHeightIn: val('height-in-input') || state.bodyHeightIn || '10',
+bodyWaist: val('waist-input') || state.bodyWaist || '34',
+bodyExempt: bodyModeSel?.value === 'exempt',
+altitudeGroup: readAltitudeGroup(val('alt-select')),
     strength: {
       event: pushSel?.value === 'exempt' ? (state.strength.event || 'push-up') : (pushSel?.value || 'push-up'),
       value: val('push-txt') || '0',
@@ -127,7 +133,10 @@ function dispatch(action) {
     case 'SET_SEX': state = { ...state, sex: action.sex }; break;
     case 'SET_AGE_GROUP': state = { ...state, ageGroup: action.ageGroup }; break;
     case 'SET_WHTR': state = { ...state, whtr: action.value }; break;
-    case 'SET_BODY_EXEMPT': state = { ...state, bodyExempt: action.exempt }; break;
+case 'SET_BODY_HEIGHT_FT': state = { ...state, bodyHeightFt: action.value }; break;
+case 'SET_BODY_HEIGHT_IN': state = { ...state, bodyHeightIn: action.value }; break;
+case 'SET_BODY_WAIST': state = { ...state, bodyWaist: action.value }; break;
+case 'SET_BODY_EXEMPT': state = { ...state, bodyExempt: action.exempt }; break;
     case 'SET_ALTITUDE_GROUP': state = { ...state, altitudeGroup: action.group }; break;
     case 'SET_STRENGTH_EVENT': state = { ...state, strength: { ...state.strength, event: action.event } }; break;
     case 'SET_STRENGTH_VALUE': state = { ...state, strength: { ...state.strength, value: action.value } }; break;
@@ -564,11 +573,16 @@ function renderBodyEditor(scores) {
   if (whtrControls) whtrControls.hidden = false;
   if (bodyTxtP) bodyTxtP.textContent = `Body Score: ${scores.body} | Pass ≤ 0.55`;
 
-  const whtrNum = parseFloat(state.whtr);
-  const slider = byId('whtr-slider');
-  if (slider && Number.isFinite(whtrNum)) {
-    slider.value = String(Math.round(whtrNum * 100));
-  }
+  syncWhtrMeasurementInputs();
+
+const whtrInput = byId('pfra-whtr');
+if (whtrInput) whtrInput.value = state.whtr;
+
+const whtrNum = parseFloat(state.whtr);
+const slider = byId('whtr-slider');
+if (slider && Number.isFinite(whtrNum)) {
+  slider.value = String(Math.round(whtrNum * 100));
+}
 }
 
 function renderStrengthEditor(scores) {
@@ -826,6 +840,55 @@ function bindMenuClick(id, handler) {
   });
 }
 
+function calculateWhtrFromMeasurements(heightFt, heightIn, waistIn) {
+  const ft = Number(heightFt);
+  const inches = Number(heightIn);
+  const waist = Number(waistIn);
+
+  if (!Number.isFinite(ft) || !Number.isFinite(inches) || !Number.isFinite(waist)) return null;
+
+  const totalHeight = (ft * 12) + inches;
+  if (totalHeight <= 0 || waist <= 0) return null;
+
+  return (waist / totalHeight).toFixed(2);
+}
+
+function syncWhtrMeasurementInputs() {
+  const ftEl = byId('height-ft-input');
+  const inEl = byId('height-in-input');
+  const waistEl = byId('waist-input');
+
+  if (ftEl) ftEl.value = state.bodyHeightFt;
+  if (inEl) inEl.value = state.bodyHeightIn;
+  if (waistEl) waistEl.value = state.bodyWaist;
+}
+
+function updateWhtrFromMeasurements() {
+  const ft = val('height-ft-input') || state.bodyHeightFt;
+  const inches = val('height-in-input') || state.bodyHeightIn;
+  const waist = val('waist-input') || state.bodyWaist;
+
+  dispatch({ type: 'SET_BODY_HEIGHT_FT', value: ft });
+  dispatch({ type: 'SET_BODY_HEIGHT_IN', value: inches });
+  dispatch({ type: 'SET_BODY_WAIST', value: waist });
+
+  const ratio = calculateWhtrFromMeasurements(ft, inches, waist);
+  if (ratio === null) {
+    render();
+    return;
+  }
+
+  dispatch({ type: 'SET_WHTR', value: ratio });
+
+  const whtrInput = byId('pfra-whtr');
+  if (whtrInput) whtrInput.value = ratio;
+
+  const slider = byId('whtr-slider');
+  if (slider) slider.value = String(Math.round(Number(ratio) * 100));
+
+  render();
+}
+
 // --- Event bindings ---
 
 function bindEvents() {
@@ -859,6 +922,10 @@ function bindEvents() {
     }
     render();
   });
+
+    byId('height-ft-input')?.addEventListener('input', updateWhtrFromMeasurements);
+  byId('height-in-input')?.addEventListener('input', updateWhtrFromMeasurements);
+  byId('waist-input')?.addEventListener('input', updateWhtrFromMeasurements);
 
   byId('whtr-slider')?.addEventListener('input', () => {
     const whtrStr = (Number(val('whtr-slider')) / 100).toFixed(2);

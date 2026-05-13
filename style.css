@@ -103,6 +103,18 @@ html, body {
   min-height: 100vh;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ─── App shell ────────────────────────────────────────────────── */
 .app-shell {
   max-width: var(--afpt-app-max-width);
@@ -652,6 +664,106 @@ html, body {
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.body-event-row {
+  margin-bottom: 4px;
+}
+
+.body-event-label {
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--afpt-ink);
+  font-weight: 700;
+}
+
+.body-measure-row {
+  display: grid;
+  grid-template-columns: 1.1fr 1.25fr 1fr;
+  gap: 12px;
+  align-items: end;
+  margin-top: 8px;
+  margin-bottom: 10px;
+}
+
+.body-ratio-block,
+.body-measure-block {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.body-measure-label {
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--afpt-ink);
+  font-weight: 700;
+}
+
+.body-height-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.body-height-inputs label,
+.body-waist-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.body-measure-input {
+  width: 100%;
+  min-width: 0;
+  background: var(--afpt-panel-2);
+  border: 1px solid var(--afpt-border-strong);
+  color: var(--afpt-ink);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 8px 8px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.body-measure-input--short {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.body-measure-input:focus {
+  outline: none;
+  border-color: var(--afpt-accent);
+}
+
+.body-unit {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--afpt-ink);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+#body-editor .value-input {
+  width: 100%;
+}
+
+#body-editor .slider-row {
+  margin-top: 10px;
+}
+
+@media (max-width: 430px) {
+  .body-measure-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .body-height-inputs {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .event-select {
