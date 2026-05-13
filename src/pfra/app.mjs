@@ -927,6 +927,30 @@ function bindEvents() {
   byId('height-in-input')?.addEventListener('input', updateWhtrFromMeasurements);
   byId('waist-input')?.addEventListener('input', updateWhtrFromMeasurements);
 
+  document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.body-step-btn');
+  if (!btn) return;
+
+  const input = byId(btn.dataset.target);
+  if (!input) return;
+
+  const step = Number(btn.dataset.bodyStep || input.step || 1);
+  const current = Number(input.value || 0);
+  const min = input.min === '' ? -Infinity : Number(input.min);
+  const max = input.max === '' ? Infinity : Number(input.max);
+
+  if (!Number.isFinite(step) || !Number.isFinite(current)) return;
+
+  const decimals = String(step).includes('.')
+    ? String(step).split('.')[1].length
+    : 0;
+
+  const next = Math.min(max, Math.max(min, current + step));
+  input.value = decimals > 0 ? next.toFixed(decimals) : String(Math.round(next));
+
+  updateWhtrFromMeasurements();
+});
+
   byId('whtr-slider')?.addEventListener('input', () => {
     const whtrStr = (Number(val('whtr-slider')) / 100).toFixed(2);
     dispatch({ type: 'SET_WHTR', value: whtrStr });
