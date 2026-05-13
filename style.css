@@ -320,25 +320,31 @@ html, body {
 /* ─── Demographics row ─────────────────────────────────────────── */
 .demographics-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   padding: 12px 16px;
   background: var(--afpt-panel-2);
   border-bottom: 1px solid var(--afpt-border);
+  align-items: center;
 }
 
 .demo-field {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-width: 0;
 }
 
 .demo-label {
   font-size: 10px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--afpt-ink-dim);
+  color: var(--afpt-ink);
   font-weight: 700;
+  text-align: center;
 }
 
 .demo-select {
@@ -352,13 +358,16 @@ html, body {
   outline: none;
   cursor: pointer;
   width: 100%;
+  text-align: center;
+  text-align-last: center;
 }
 
 .demo-value {
   font-size: 13px;
-  color: var(--afpt-accent);
+  color: var(--afpt-ink);
   padding: 6px 0;
   letter-spacing: 0.5px;
+  text-align: center;
 }
 
 /* ─── Score section ────────────────────────────────────────────── */
@@ -564,7 +573,7 @@ html, body {
   background: var(--afpt-panel-2);
   border: none;
   cursor: pointer;
-  color: var(--afpt-ink-dim);
+  color: var(--afpt-ink);
   font-family: inherit;
   transition: background 0.12s, color 0.12s;
 }
@@ -596,7 +605,7 @@ html, body {
 
 .chip-score {
   font-size: 12px;
-  color: var(--afpt-ink-dim);
+  color: var(--afpt-ink);
   letter-spacing: 0.5px;
 }
 
@@ -623,14 +632,19 @@ html, body {
 .editor-header {
   border-bottom: 1px solid var(--afpt-border);
   padding-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .editor-title {
   font-size: 11px;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--afpt-ink-dim);
+  color: var(--afpt-ink);
   font-weight: 700;
+  text-align: center;
 }
 
 /* ─── Event row (select + chart button) ─────────────────────────── */
@@ -708,7 +722,7 @@ html, body {
   font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--afpt-ink-dim);
+  color: var(--afpt-ink);
 }
 
 /* Time input (MM:SS) */
@@ -716,7 +730,7 @@ html, body {
   font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--afpt-ink-dim);
+  color: var(--afpt-ink);
 }
 
 .time-input {
@@ -740,7 +754,7 @@ html, body {
 .time-sep {
   font-size: 26px;
   font-weight: 700;
-  color: var(--afpt-ink-dim);
+  color: var(--afpt-ink);
   line-height: 1;
 }
 
@@ -876,7 +890,7 @@ html, body {
 .score-label-text {
   margin: 0;
   font-size: 12px;
-  color: var(--afpt-ink-dim);
+  color: var(--afpt-ink);
   letter-spacing: 0.5px;
   line-height: 1.4;
 }
@@ -893,7 +907,7 @@ html, body {
 .altitude-label {
   font-size: 12px;
   letter-spacing: 1px;
-  color: var(--afpt-ink-dim);
+  color: var(--afpt-ink);
   white-space: nowrap;
 }
 
