@@ -991,9 +991,58 @@ function bindEvents() {
     render();
   });
 
-    byId('height-ft-input')?.addEventListener('input', updateWhtrFromMeasurements);
-  byId('height-in-input')?.addEventListener('input', updateWhtrFromMeasurements);
-  byId('waist-input')?.addEventListener('input', updateWhtrFromMeasurements);
+  // --- Numeric input clear/blur defaults ---
+  // Allow empty while typing; on blur default to 0
+
+  function attachNumericBlurDefault(id, defaultVal) {
+    const el = byId(id);
+    if (!el) return;
+    el.addEventListener('blur', () => {
+      if (el.value === '' || el.value === '-') {
+        el.value = defaultVal ?? '0';
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
+  }
+
+  attachNumericBlurDefault('height-ft-input', '5');
+  attachNumericBlurDefault('height-in-input', '0');
+  attachNumericBlurDefault('waist-input', '0');
+  attachNumericBlurDefault('push-txt', '0');
+  attachNumericBlurDefault('sit-txt', '0');
+  attachNumericBlurDefault('run-shuttle-txt', '0');
+  attachNumericBlurDefault('run-mintxt', '0');
+  attachNumericBlurDefault('run-sectxt', '00');
+  attachNumericBlurDefault('sit-txt-plank', '0');
+  attachNumericBlurDefault('plankmintxt', '00');
+  attachNumericBlurDefault('pfra-whtr', '0.49');
+
+  byId('height-ft-input')?.addEventListener('input', () => {
+    const ftEl = byId('height-ft-input');
+    if (ftEl && ftEl.value !== '') updateWhtrFromMeasurements();
+  });
+
+  // Height inches: rollover at 11/0 boundary
+  byId('height-in-input')?.addEventListener('input', () => {
+    const inEl = byId('height-in-input');
+    const ftEl = byId('height-ft-input');
+    if (!inEl || inEl.value === '') return;
+    const inVal = Number(inEl.value);
+    const ftVal = Number(ftEl?.value || state.bodyHeightFt || 5);
+    if (inVal > 11) {
+      inEl.value = '0';
+      if (ftEl) { ftEl.value = String(ftVal + 1); }
+    } else if (inVal < 0) {
+      inEl.value = '11';
+      if (ftEl) { ftEl.value = String(Math.max(3, ftVal - 1)); }
+    }
+    updateWhtrFromMeasurements();
+  });
+
+  byId('waist-input')?.addEventListener('input', () => {
+    const el = byId('waist-input');
+    if (el && el.value !== '') updateWhtrFromMeasurements();
+  });
 
   let _stepTimer = null;
   let _stepInterval = null;
@@ -1185,20 +1234,30 @@ function bindEvents() {
     render();
   });
 
-  const updatePlankTime = () => {
-    const m = val('sit-txt-plank') || '0';
-    const s = val('plankmintxt') || '00';
-    const timeStr = `${m}:${s.padStart(2, '0')}`;
+  const updatePlankTime = (rolloverSrc) => {
+    const minEl = byId('sit-txt-plank');
+    const secEl = byId('plankmintxt');
+    if (!minEl || !secEl) return;
+    if (minEl.value === '' || secEl.value === '') return;
+    let m = Number(minEl.value);
+    let s = Number(secEl.value);
+    if (rolloverSrc === 'sec') {
+      if (s >= 60) { m += Math.floor(s / 60); s = s % 60; }
+      else if (s < 0) { m = Math.max(0, m - 1); s = 59; }
+      minEl.value = String(m);
+      secEl.value = String(s).padStart(2, '0');
+    }
+    const timeStr = `${m}:${String(s).padStart(2, '0')}`;
     dispatch({ type: 'SET_CORE_VALUE', value: timeStr });
     if (!state.core.exempt) savedEventValues.core[state.core.event] = timeStr;
     const slider = byId('sit-slider');
-    const sec = toSeconds(timeStr);
-    if (slider && Number.isFinite(sec)) slider.value = String(sec);
+    const sec2 = toSeconds(timeStr);
+    if (slider && Number.isFinite(sec2)) slider.value = String(sec2);
     render();
   };
 
-  byId('sit-txt-plank')?.addEventListener('input', updatePlankTime);
-  byId('plankmintxt')?.addEventListener('input', updatePlankTime);
+  byId('sit-txt-plank')?.addEventListener('input', () => updatePlankTime('min'));
+  byId('plankmintxt')?.addEventListener('input', () => updatePlankTime('sec'));
 
   // --- Core MIN/MAX buttons (reps) ---
 
@@ -1280,20 +1339,32 @@ function bindEvents() {
     render();
   });
 
-  const updateRunTime = () => {
-    const m = val('run-mintxt') || '0';
-    const s = val('run-sectxt') || '00';
-    const timeStr = `${m}:${s.padStart(2, '0')}`;
+  const updateRunTime = (rolloverSrc) => {
+    const minEl = byId('run-mintxt');
+    const secEl = byId('run-sectxt');
+    if (!minEl || !secEl) return;
+    // Allow empty while typing
+    if (minEl.value === '' || secEl.value === '') return;
+    let m = Number(minEl.value);
+    let s = Number(secEl.value);
+    // SS rollover
+    if (rolloverSrc === 'sec') {
+      if (s >= 60) { m += Math.floor(s / 60); s = s % 60; }
+      else if (s < 0) { m = Math.max(0, m - 1); s = 59; }
+      minEl.value = String(m);
+      secEl.value = String(s).padStart(2, '0');
+    }
+    const timeStr = `${m}:${String(s).padStart(2, '0')}`;
     dispatch({ type: 'SET_CARDIO_VALUE', value: timeStr });
     if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = timeStr;
     const slider = byId('run-slider');
-    const sec = toSeconds(timeStr);
-    if (slider && Number.isFinite(sec)) slider.value = String(sec);
+    const sec2 = toSeconds(timeStr);
+    if (slider && Number.isFinite(sec2)) slider.value = String(sec2);
     render();
   };
 
-  byId('run-mintxt')?.addEventListener('input', updateRunTime);
-  byId('run-sectxt')?.addEventListener('input', updateRunTime);
+  byId('run-mintxt')?.addEventListener('input', () => updateRunTime('min'));
+  byId('run-sectxt')?.addEventListener('input', () => updateRunTime('sec'));
 
   byId('run-shuttle-txt')?.addEventListener('input', () => {
     const v = val('run-shuttle-txt');
