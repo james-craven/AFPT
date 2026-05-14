@@ -688,8 +688,25 @@ select {
 
 /* Value row(s) nested inside event row fill available space; chart-btn stays at far right */
 .editor-event-row .editor-value-row {
-  flex: 1;
+  flex: 1 1 0%;
   width: auto;
+  min-width: 0;
+}
+
+/* MM/SS labels are redundant in the compact row — colon + placeholders carry context */
+.editor-event-row .editor-value-row .time-label {
+  display: none;
+}
+
+/* Compact MIN/MAX and Chart to fit mobile widths */
+.editor-event-row .minmax-btn {
+  width: 50px;
+  font-size: 13px;
+  padding: 8px 4px;
+}
+
+.editor-event-row .chart-btn {
+  padding: 9px 10px;
 }
 
 .body-event-row {
