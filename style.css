@@ -101,6 +101,7 @@ html, body {
   font-family: ui-monospace, "Cascadia Code", "JetBrains Mono", monospace;
   font-size: 15px;
   min-height: 100vh;
+  touch-action: manipulation;
 }
 
 .sr-only {
@@ -857,22 +858,33 @@ html, body {
 
 @media (max-width: 430px) {
   .body-measure-row--all {
-    flex-wrap: wrap;
-    gap: 12px;
+    gap: 8px;
   }
 
-  .body-measure-row--all .body-height-block {
-    flex: 1 1 100%;
-    order: 2;
+  /* Shrink all stepper stacks in the row so everything fits on one line */
+  .body-measure-row--all .body-stepper-stack {
+    width: 20px;
+  }
+  .body-measure-row--all .body-step-btn {
+    width: 20px;
   }
 
-  .body-measure-row--all .body-ratio-block,
-  .body-measure-row--all .body-waist-block {
-    flex: 1;
+  /* Compact min-widths: ratio and waist */
+  .body-measure-row--all .body-input-stepper--ratio {
+    grid-template-columns: minmax(48px, 1fr) 20px;
+  }
+  .body-measure-row--all .body-input-stepper--waist {
+    grid-template-columns: minmax(58px, 1fr) 20px;
+  }
+
+  /* Compact min-widths: height ft / in sub-inputs */
+  .body-measure-row--all .body-height-block .body-input-stepper {
+    grid-template-columns: minmax(34px, 1fr) 20px;
   }
 
   .body-height-inputs {
     grid-template-columns: 1fr 1fr;
+    gap: 6px;
   }
 }
 
