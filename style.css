@@ -705,7 +705,7 @@ select {
 /* Row 1: same 3-column grid as Row 2 — label in col1, ratio centered in col2, col3 empty */
 .body-whtr-row1 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   align-items: center;
   margin-top: 8px;
@@ -932,6 +932,20 @@ select {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
+}
+
+/* Inputs fill the left column */
+.editor-value-row .value-input,
+.editor-value-row .time-input {
+  flex: 1;
+  width: auto;
+  min-width: 48px;
+}
+
+/* Push the MIN/MAX button pair to the right as a unified column */
+.editor-value-row .minmax-btn:nth-last-child(2) {
+  margin-left: auto;
 }
 
 .editor-value-row[hidden] {
@@ -1104,14 +1118,15 @@ select {
 
 /* MIN / MAX jump buttons next to value inputs */
 .minmax-btn {
-  background: transparent;
-  border: 1px solid var(--afpt-border);
-  color: var(--afpt-ink-dim);
+  background: var(--afpt-panel-2);
+  border: 1px solid var(--afpt-border-strong);
+  color: var(--afpt-ink);
   font-family: inherit;
-  font-size: 10px;
+  font-size: 16px;
   letter-spacing: 1px;
-  padding: 6px 8px;
-  border-radius: 5px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  width: 68px;
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
