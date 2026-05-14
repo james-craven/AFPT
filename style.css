@@ -702,22 +702,14 @@ select {
 }
 
 /* WHtR Row 1: label left, ratio stepper right */
+/* Row 1: same 3-column grid as Row 2 — label in col1, ratio centered in col2, col3 empty */
 .body-whtr-row1 {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
   margin-top: 8px;
   margin-bottom: 12px;
-}
-
-.body-whtr-row1 .body-event-label {
-  flex: 1;
-}
-
-.body-whtr-row1 .body-input-stepper--ratio {
-  flex-shrink: 0;
-  width: 120px;
 }
 
 /* WHtR Row 2: FT / IN / Waist equally spaced */
@@ -897,10 +889,6 @@ select {
 @media (max-width: 430px) {
   .body-whtr-row2 {
     gap: 6px;
-  }
-
-  .body-whtr-row1 .body-input-stepper--ratio {
-    width: 100px;
   }
 }
 
