@@ -927,41 +927,57 @@ function bindEvents() {
   byId('height-in-input')?.addEventListener('input', updateWhtrFromMeasurements);
   byId('waist-input')?.addEventListener('input', updateWhtrFromMeasurements);
 
-  let _bodyStepTimer = null;
-  let _bodyStepInterval = null;
+  let _stepTimer = null;
+  let _stepInterval = null;
 
-  function _doBodyStep(btn) {
-    const input = byId(btn.dataset.target);
-    if (!input) return;
-    const step = Number(btn.dataset.bodyStep || input.step || 1);
-    const current = Number(input.value || 0);
-    const min = input.min === '' ? -Infinity : Number(input.min);
-    const max = input.max === '' ? Infinity : Number(input.max);
-    if (!Number.isFinite(step) || !Number.isFinite(current)) return;
-    const decimals = String(step).includes('.') ? String(step).split('.')[1].length : 0;
-    const next = Math.min(max, Math.max(min, current + step));
-    input.value = decimals > 0 ? next.toFixed(decimals) : String(Math.round(next));
-    input.dispatchEvent(new Event('input', { bubbles: true }));
+  function _doStepBtn(btn) {
+    if (btn.classList.contains('body-step-btn')) {
+      const input = byId(btn.dataset.target);
+      if (!input) return;
+      const step = Number(btn.dataset.bodyStep || input.step || 1);
+      const current = Number(input.value || 0);
+      const min = input.min === '' ? -Infinity : Number(input.min);
+      const max = input.max === '' ? Infinity : Number(input.max);
+      if (!Number.isFinite(step) || !Number.isFinite(current)) return;
+      const decimals = String(step).includes('.') ? String(step).split('.')[1].length : 0;
+      const next = Math.min(max, Math.max(min, current + step));
+      input.value = decimals > 0 ? next.toFixed(decimals) : String(Math.round(next));
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    } else {
+      const sliderId = btn.dataset.target;
+      let dir = Number(btn.dataset.step);
+      if (!sliderId || !Number.isFinite(dir)) return;
+      const slider = byId(sliderId);
+      if (!slider) return;
+      if (slider.closest('[data-event-kind="time"]')) dir = -dir;
+      const cur = Number(slider.value);
+      const lo = Number(slider.min);
+      const hi = Number(slider.max);
+      const next = Math.min(hi, Math.max(lo, cur + dir));
+      if (next === cur) return;
+      slider.value = String(next);
+      slider.dispatchEvent(new Event('input', { bubbles: true }));
+    }
   }
 
-  function _stopBodyStep() {
-    clearTimeout(_bodyStepTimer);
-    clearInterval(_bodyStepInterval);
-    _bodyStepTimer = null;
-    _bodyStepInterval = null;
+  function _stopStep() {
+    clearTimeout(_stepTimer);
+    clearInterval(_stepInterval);
+    _stepTimer = null;
+    _stepInterval = null;
   }
 
   document.addEventListener('pointerdown', (e) => {
-    const btn = e.target.closest('.body-step-btn');
+    const btn = e.target.closest('.body-step-btn, .slider-step-btn');
     if (!btn) return;
-    _doBodyStep(btn);
-    _bodyStepTimer = setTimeout(() => {
-      _bodyStepInterval = setInterval(() => _doBodyStep(btn), 80);
+    _doStepBtn(btn);
+    _stepTimer = setTimeout(() => {
+      _stepInterval = setInterval(() => _doStepBtn(btn), 80);
     }, 400);
   });
 
-  document.addEventListener('pointerup', _stopBodyStep);
-  document.addEventListener('pointercancel', _stopBodyStep);
+  document.addEventListener('pointerup', _stopStep);
+  document.addEventListener('pointercancel', _stopStep);
 
   byId('whtr-slider')?.addEventListener('input', () => {
     const whtrStr = (Number(val('whtr-slider')) / 100).toFixed(2);
@@ -1252,25 +1268,7 @@ function bindEvents() {
   });
 
   // --- Slider step buttons (−/+ flanking each slider) ---
-  // Single delegated handler. Inverts step for visually-flipped time sliders.
-
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.slider-step-btn');
-    if (!btn) return;
-    const sliderId = btn.dataset.target;
-    let dir = Number(btn.dataset.step);
-    if (!sliderId || !Number.isFinite(dir)) return;
-    const slider = byId(sliderId);
-    if (!slider) return;
-    if (slider.closest('[data-event-kind="time"]')) dir = -dir;
-    const cur = Number(slider.value);
-    const lo = Number(slider.min);
-    const hi = Number(slider.max);
-    const next = Math.min(hi, Math.max(lo, cur + dir));
-    if (next === cur) return;
-    slider.value = String(next);
-    slider.dispatchEvent(new Event('input', { bubbles: true }));
-  });
+  // Handled by the unified pointerdown hold-to-repeat above.
 
   // --- Theme change: re-render lap display and ring ---
 
