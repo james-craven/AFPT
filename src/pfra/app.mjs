@@ -559,7 +559,11 @@ function renderScore(result) {
     ringArc.setAttribute('stroke-dasharray', `${filled.toFixed(1)} ${C.toFixed(1)}`);
   }
   const ringNum = byId('score-ring-num');
-  if (ringNum) ringNum.textContent = Number.isInteger(total) ? String(total) : total.toFixed(1);
+  if (ringNum) {
+    const numTxt = Number.isInteger(total) ? String(total) : total.toFixed(1);
+    ringNum.textContent = numTxt;
+    ringNum.setAttribute('data-len', numTxt.length);
+  }
   const ringCat = byId('score-ring-cat');
   if (ringCat) {
     ringCat.textContent = category === 'Excellent' ? 'EXCELLENT' : category === 'Satisfactory' ? 'SAT' : 'FAIL';

@@ -2497,6 +2497,9 @@ select {
   fill: #fff;
   letter-spacing: -1px;
 }
+/* Shrink for decimal scores (4+ chars like 75.5) to prevent ring overflow */
+:root[data-theme="fitness"] .score-ring-num[data-len="4"] { font-size: 44px; }
+:root[data-theme="fitness"] .score-ring-num[data-len="5"] { font-size: 38px; }
 
 /* Category label: lighter, lettered per mock */
 :root[data-theme="fitness"] .score-ring-cat {
