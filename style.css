@@ -2280,7 +2280,7 @@ select {
   color: var(--afpt-accent-2);
 }
 
-/* Blues score section: ring + hide redundant main-row */
+/* Blues score section: label LEFT, ring RIGHT, vertically centered */
 :root[data-theme="blues"] .score-section {
   padding: 16px;
   display: flex;
@@ -2288,7 +2288,16 @@ select {
   align-items: center;
   gap: 18px;
 }
+/* Show label + badge column on left; ring (later in DOM) is naturally on right */
 :root[data-theme="blues"] .score-main-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1;
+}
+/* Ring already shows the number; hide the redundant text number */
+:root[data-theme="blues"] .score-number {
   display: none;
 }
 :root[data-theme="blues"] .score-ring-num {
@@ -2302,12 +2311,26 @@ select {
   fill: var(--afpt-accent-2);
   font-weight: 500;
 }
-/* Badge still useful — show it floating below ring via score-badge in ring-wrap */
 :root[data-theme="blues"] .score-badge {
-  margin-top: 8px;
+  margin-top: 0;
   font-size: 11px;
   letter-spacing: 2px;
   border-radius: 3px;
+}
+
+/* ALT selector row: panel background card, vertically centered */
+:root[data-theme="blues"] .altitude-row {
+  background: var(--afpt-panel-2);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-top: 8px;
+  border-top: none;
+  align-items: center;
+}
+
+/* Pace plan: matching Fitness theme padding */
+:root[data-theme="blues"] .lap-display {
+  padding: 14px 10px;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
