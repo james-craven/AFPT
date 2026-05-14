@@ -679,34 +679,35 @@ select {
   text-align: center;
 }
 
-/* ─── Event row (value inputs + chart button on one line) ───────── */
+/* ─── Event row: single responsive grid, all items equal 1fr columns ─── */
 .editor-event-row {
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   gap: 8px;
   align-items: center;
 }
 
-/* Value row(s) nested inside event row fill available space; chart-btn stays at far right */
+/* Value rows dissolve into the parent grid — children become direct grid items */
 .editor-event-row .editor-value-row {
-  flex: 1 1 0%;
-  width: auto;
-  min-width: 0;
+  display: contents;
 }
 
-/* MM/SS labels are redundant in the compact row — colon + placeholders carry context */
+/* MM/SS time labels are redundant — colon + placeholders carry context */
 .editor-event-row .editor-value-row .time-label {
   display: none;
 }
 
-/* Compact MIN/MAX and Chart to fit mobile widths */
-.editor-event-row .minmax-btn {
-  width: 50px;
-  font-size: 13px;
-  padding: 8px 4px;
+/* Clear flex-era margin push — grid columns handle equal spacing */
+.editor-event-row .editor-value-row .minmax-btn:nth-last-child(2) {
+  margin-left: 0;
 }
 
+/* Buttons fill their 1fr cell with compact font */
+.editor-event-row .minmax-btn,
 .editor-event-row .chart-btn {
-  padding: 9px 10px;
+  width: auto;
+  font-size: 13px;
 }
 
 .body-event-row {
