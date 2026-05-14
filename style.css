@@ -122,6 +122,9 @@ html, body {
   border: 0;
 }
 
+/* ─── Collapse hidden elements (prevent phantom spacing) ──────── */
+[hidden] { display: none !important; }
+
 /* ─── Custom dropdown arrows (all selects, all themes) ────────── */
 select {
   appearance: none;

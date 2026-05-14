@@ -1585,7 +1585,7 @@ function bindEvents() {
   });
   bindMenuClick('shuttle-audio-menu', () => {
     const player = byId('shuttle-audio-player');
-    if (player) player.style.visibility = 'visible';
+    if (player) player.removeAttribute('hidden');
   });
   bindMenuClick('install-app-menu', () => {
     const modal = byId('install-modal');
