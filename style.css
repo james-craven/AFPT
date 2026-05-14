@@ -2538,18 +2538,14 @@ html, body {
   border-radius: 8px;
 }
 
-/* ─── Fitness segmented controls ──────────────────────────────── */
+/* ─── Segmented event controls (all themes) ───────────────────── */
 .fit-seg-ctrl {
-  display: none;
-  background: rgba(0, 0, 0, 0.18);
+  display: flex;
+  background: var(--afpt-panel-2);
+  border: 1px solid var(--afpt-border);
   border-radius: 999px;
   padding: 3px;
   gap: 2px;
-}
-
-:root[data-theme="fitness"] .fit-seg-ctrl,
-:root[data-theme="tactical"] .fit-seg-ctrl {
-  display: flex;
 }
 
 .fit-seg-btn {
@@ -2558,7 +2554,7 @@ html, body {
   font-size: 11px;
   font-weight: 600;
   background: transparent;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--afpt-ink-dim);
   border: none;
   border-radius: 999px;
   cursor: pointer;
@@ -2568,14 +2564,34 @@ html, body {
 }
 
 .fit-seg-btn.fit-seg-btn--active {
+  background: var(--afpt-accent);
+  color: var(--afpt-bg);
+}
+
+/* 4-button controls: tighter padding + smaller font */
+#sit-seg-ctrl .fit-seg-btn,
+#run-seg-ctrl .fit-seg-btn {
+  padding: 5px 5px;
+  font-size: 10px;
+}
+
+/* Fitness: glass background + white active pill */
+:root[data-theme="fitness"] .fit-seg-ctrl {
+  background: rgba(0, 0, 0, 0.18);
+  border-color: transparent;
+}
+:root[data-theme="fitness"] .fit-seg-btn {
+  color: rgba(255, 255, 255, 0.7);
+}
+:root[data-theme="fitness"] .fit-seg-btn.fit-seg-btn--active {
   background: #fff;
   color: #3a0f4d;
 }
 
-/* Tactical: override seg button colors for HUD feel */
+/* Tactical: HUD feel */
 :root[data-theme="tactical"] .fit-seg-ctrl {
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--afpt-border);
+  border-color: var(--afpt-border);
 }
 :root[data-theme="tactical"] .fit-seg-btn {
   color: var(--afpt-ink-dim);
