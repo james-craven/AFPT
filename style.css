@@ -1143,6 +1143,14 @@ select {
   line-height: 1.4;
 }
 
+/* HAMR level indicator */
+.hamr-level-txt {
+  color: var(--afpt-accent);
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
 /* ─── Altitude row ─────────────────────────────────────────────── */
 .altitude-row {
   display: flex;

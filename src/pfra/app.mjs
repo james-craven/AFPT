@@ -732,6 +732,14 @@ function renderCoreEditor(scores) {
   }
 }
 
+function hamrLevelText(totalShuttles) {
+  const n = Number(totalShuttles);
+  if (!Number.isFinite(n) || n < 1) return '';
+  const level = Math.floor((n - 1) / 8) + 1;
+  const shuttle = ((n - 1) % 8) + 1;
+  return `Level: ${level} | Shuttle: ${shuttle}`;
+}
+
 function renderCardioEditor(scores) {
   const runTxtP = byId('run-txt-p');
 
@@ -760,6 +768,7 @@ function renderCardioEditor(scores) {
     return;
   }
 
+  const hamrLevelEl = byId('hamr-level-display');
   if (state.cardio.event === 'hamr-20-meter') {
     const table = tables['hamr-20-meter'];
     if (!table) return;
@@ -772,19 +781,23 @@ function renderCardioEditor(scores) {
       runTxtP.textContent = `Cardio Score: ${scores.cardio} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
     }
 
+    if (hamrLevelEl) {
+      const lvlText = hamrLevelText(state.cardio.value);
+      hamrLevelEl.textContent = lvlText;
+      hamrLevelEl.hidden = !lvlText;
+    }
+
     const slider = byId('run-slider');
     if (slider && Number.isFinite(minNum) && Number.isFinite(maxNum) && maxNum > 0) {
       slider.min = '0';
       slider.max = String(maxNum);
       const curVal = Number(state.cardio.value);
       if (Number.isFinite(curVal)) slider.value = String(Math.max(0, Math.min(maxNum, curVal)));
-      setTickPct('run-tick', (minNum / maxNum) * 100, minNum);
-    } else {
-      const tick = byId('run-tick');
-      if (tick) tick.style.display = 'none';
     }
     return;
   }
+
+  if (hamrLevelEl) hamrLevelEl.hidden = true;
 
   // two-mile-run
   const table = tables['two-mile-run'];
