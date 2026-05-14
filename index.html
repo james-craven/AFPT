@@ -354,18 +354,18 @@
           <button class="fit-seg-btn" type="button" data-seg-target="push-sel" data-seg-value="exempt">Exempt</button>
         </div>
         <div class="editor-event-row">
-          <select id="push-sel" class="event-select" aria-label="Strength event">
+          <select id="push-sel" class="event-select" aria-label="Strength event" hidden>
             <option value="push-up">Push-Ups (1 Min)</option>
             <option value="hand-release-push-up">Hand-Release Push-Ups</option>
             <option value="exempt">Exempt</option>
           </select>
+          <div id="push-reps-row" class="editor-value-row">
+            <input id="push-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Strength reps">
+            <span class="value-unit">REPS</span>
+            <button class="minmax-btn" id="push-min-btn" type="button">MIN</button>
+            <button class="minmax-btn" id="push-max-btn" type="button">MAX</button>
+          </div>
           <button id="push-btn" class="chart-btn" type="button" aria-label="View strength chart">Chart</button>
-        </div>
-        <div id="push-reps-row" class="editor-value-row">
-          <input id="push-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Strength reps">
-          <span class="value-unit">REPS</span>
-          <button class="minmax-btn" id="push-min-btn" type="button">MIN</button>
-          <button class="minmax-btn" id="push-max-btn" type="button">MAX</button>
         </div>
         <div class="slider-row">
           <button class="slider-step-btn" type="button" data-step="-1" data-target="push-slider" aria-label="Decrease reps">−</button>
@@ -390,27 +390,27 @@
           <button class="fit-seg-btn" type="button" data-seg-target="sit-sel" data-seg-value="exempt">Exempt</button>
         </div>
         <div class="editor-event-row">
-          <select id="sit-sel" class="event-select" aria-label="Core event">
+          <select id="sit-sel" class="event-select" aria-label="Core event" hidden>
             <option value="sit-up">Sit-Ups (1 Min)</option>
             <option value="cross-leg-reverse-crunch">Cross-Leg Reverse Crunch</option>
             <option value="forearm-plank">Forearm Plank</option>
             <option value="exempt">Exempt</option>
           </select>
+          <div id="sit-reps-row" class="editor-value-row">
+            <input id="sit-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Core reps">
+            <span class="value-unit">REPS</span>
+            <button class="minmax-btn" id="sit-min-btn" type="button">MIN</button>
+            <button class="minmax-btn" id="sit-max-btn" type="button">MAX</button>
+          </div>
+          <div id="sit-plank-row" class="editor-value-row" hidden>
+            <label class="time-label" for="sit-txt-plank">MIN</label>
+            <input id="sit-txt-plank" type="text" inputmode="numeric" class="time-input" value="3" placeholder="MM" aria-label="Plank minutes">
+            <span class="time-sep">:</span>
+            <input id="plankmintxt" type="text" inputmode="numeric" class="time-input" value="40" placeholder="SS" aria-label="Plank seconds">
+            <button class="minmax-btn" id="sit-plank-min-btn" type="button">MIN</button>
+            <button class="minmax-btn" id="sit-plank-max-btn" type="button">MAX</button>
+          </div>
           <button id="sit-btn" class="chart-btn" type="button" aria-label="View core chart">Chart</button>
-        </div>
-        <div id="sit-reps-row" class="editor-value-row">
-          <input id="sit-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Core reps">
-          <span class="value-unit">REPS</span>
-          <button class="minmax-btn" id="sit-min-btn" type="button">MIN</button>
-          <button class="minmax-btn" id="sit-max-btn" type="button">MAX</button>
-        </div>
-        <div id="sit-plank-row" class="editor-value-row" hidden>
-          <label class="time-label" for="sit-txt-plank">MIN</label>
-          <input id="sit-txt-plank" type="text" inputmode="numeric" class="time-input" value="3" placeholder="MM" aria-label="Plank minutes">
-          <span class="time-sep">:</span>
-          <input id="plankmintxt" type="text" inputmode="numeric" class="time-input" value="40" placeholder="SS" aria-label="Plank seconds">
-          <button class="minmax-btn" id="sit-plank-min-btn" type="button">MIN</button>
-          <button class="minmax-btn" id="sit-plank-max-btn" type="button">MAX</button>
         </div>
         <div class="slider-row">
           <button class="slider-step-btn" type="button" data-step="-1" data-target="sit-slider" aria-label="Decrease reps">−</button>
@@ -435,27 +435,27 @@
           <button class="fit-seg-btn" type="button" data-seg-target="cardio-sel" data-seg-value="exempt">Exempt</button>
         </div>
         <div class="editor-event-row">
-          <select id="cardio-sel" class="event-select" aria-label="Cardio event">
+          <select id="cardio-sel" class="event-select" aria-label="Cardio event" hidden>
             <option value="two-mile-run">2 Mile Run</option>
             <option value="hamr-20-meter">20m HAMR</option>
             <option value="two-kilometer-walk">2 km Walk</option>
             <option value="exempt">Exempt</option>
           </select>
+          <div id="run-time-row" class="editor-value-row">
+            <label class="time-label" for="run-mintxt">MIN</label>
+            <input id="run-mintxt" type="text" inputmode="numeric" class="time-input" value="20" placeholder="MM" aria-label="Cardio minutes">
+            <span class="time-sep">:</span>
+            <input id="run-sectxt" type="text" inputmode="numeric" class="time-input" value="00" placeholder="SS" aria-label="Cardio seconds">
+            <button class="minmax-btn" id="run-min-btn" type="button">MIN</button>
+            <button class="minmax-btn" id="run-max-btn" type="button">MAX</button>
+          </div>
+          <div id="run-shuttle-row" class="editor-value-row" hidden>
+            <input id="run-shuttle-txt" type="text" inputmode="numeric" class="value-input" value="58" aria-label="HAMR shuttles">
+            <span class="value-unit">SHUTTLES</span>
+            <button class="minmax-btn" id="run-shuttle-min-btn" type="button">MIN</button>
+            <button class="minmax-btn" id="run-shuttle-max-btn" type="button">MAX</button>
+          </div>
           <button id="run-btn" class="chart-btn" type="button" aria-label="View cardio chart">Chart</button>
-        </div>
-        <div id="run-time-row" class="editor-value-row">
-          <label class="time-label" for="run-mintxt">MIN</label>
-          <input id="run-mintxt" type="text" inputmode="numeric" class="time-input" value="20" placeholder="MM" aria-label="Cardio minutes">
-          <span class="time-sep">:</span>
-          <input id="run-sectxt" type="text" inputmode="numeric" class="time-input" value="00" placeholder="SS" aria-label="Cardio seconds">
-          <button class="minmax-btn" id="run-min-btn" type="button">MIN</button>
-          <button class="minmax-btn" id="run-max-btn" type="button">MAX</button>
-        </div>
-        <div id="run-shuttle-row" class="editor-value-row" hidden>
-          <input id="run-shuttle-txt" type="text" inputmode="numeric" class="value-input" value="58" aria-label="HAMR shuttles">
-          <span class="value-unit">SHUTTLES</span>
-          <button class="minmax-btn" id="run-shuttle-min-btn" type="button">MIN</button>
-          <button class="minmax-btn" id="run-shuttle-max-btn" type="button">MAX</button>
         </div>
         <p id="hamr-level-display" class="score-label-text hamr-level-txt" hidden></p>
         <div class="slider-row">

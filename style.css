@@ -679,11 +679,17 @@ select {
   text-align: center;
 }
 
-/* ─── Event row (select + chart button) ─────────────────────────── */
+/* ─── Event row (value inputs + chart button on one line) ───────── */
 .editor-event-row {
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+/* Value row(s) nested inside event row fill available space; chart-btn stays at far right */
+.editor-event-row .editor-value-row {
+  flex: 1;
+  width: auto;
 }
 
 .body-event-row {
