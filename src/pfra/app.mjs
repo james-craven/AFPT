@@ -566,12 +566,12 @@ function renderBodyEditor(scores) {
 
   if (state.bodyExempt) {
     if (whtrControls) whtrControls.hidden = true;
-    if (bodyTxtP) bodyTxtP.textContent = 'Body Score: EXEMPT';
+    if (bodyTxtP) bodyTxtP.textContent = 'WHtR Score: EXEMPT';
     return;
   }
 
   if (whtrControls) whtrControls.hidden = false;
-  if (bodyTxtP) bodyTxtP.textContent = `Body Score: ${scores.body} | Pass ≤ 0.55`;
+  if (bodyTxtP) bodyTxtP.textContent = `WHtR Score: ${scores.body} | Pass ≤ 0.55`;
 
   syncWhtrMeasurementInputs();
 
@@ -927,29 +927,41 @@ function bindEvents() {
   byId('height-in-input')?.addEventListener('input', updateWhtrFromMeasurements);
   byId('waist-input')?.addEventListener('input', updateWhtrFromMeasurements);
 
-  document.addEventListener('click', (e) => {
-  const btn = e.target.closest('.body-step-btn');
-  if (!btn) return;
+  let _bodyStepTimer = null;
+  let _bodyStepInterval = null;
 
-  const input = byId(btn.dataset.target);
-  if (!input) return;
+  function _doBodyStep(btn) {
+    const input = byId(btn.dataset.target);
+    if (!input) return;
+    const step = Number(btn.dataset.bodyStep || input.step || 1);
+    const current = Number(input.value || 0);
+    const min = input.min === '' ? -Infinity : Number(input.min);
+    const max = input.max === '' ? Infinity : Number(input.max);
+    if (!Number.isFinite(step) || !Number.isFinite(current)) return;
+    const decimals = String(step).includes('.') ? String(step).split('.')[1].length : 0;
+    const next = Math.min(max, Math.max(min, current + step));
+    input.value = decimals > 0 ? next.toFixed(decimals) : String(Math.round(next));
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  }
 
-  const step = Number(btn.dataset.bodyStep || input.step || 1);
-  const current = Number(input.value || 0);
-  const min = input.min === '' ? -Infinity : Number(input.min);
-  const max = input.max === '' ? Infinity : Number(input.max);
+  function _stopBodyStep() {
+    clearTimeout(_bodyStepTimer);
+    clearInterval(_bodyStepInterval);
+    _bodyStepTimer = null;
+    _bodyStepInterval = null;
+  }
 
-  if (!Number.isFinite(step) || !Number.isFinite(current)) return;
+  document.addEventListener('pointerdown', (e) => {
+    const btn = e.target.closest('.body-step-btn');
+    if (!btn) return;
+    _doBodyStep(btn);
+    _bodyStepTimer = setTimeout(() => {
+      _bodyStepInterval = setInterval(() => _doBodyStep(btn), 80);
+    }, 400);
+  });
 
-  const decimals = String(step).includes('.')
-    ? String(step).split('.')[1].length
-    : 0;
-
-  const next = Math.min(max, Math.max(min, current + step));
-  input.value = decimals > 0 ? next.toFixed(decimals) : String(Math.round(next));
-
-  updateWhtrFromMeasurements();
-});
+  document.addEventListener('pointerup', _stopBodyStep);
+  document.addEventListener('pointercancel', _stopBodyStep);
 
   byId('whtr-slider')?.addEventListener('input', () => {
     const whtrStr = (Number(val('whtr-slider')) / 100).toFixed(2);

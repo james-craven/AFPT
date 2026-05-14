@@ -681,18 +681,26 @@ html, body {
   width: 100%;
 }
 
-.body-measure-row--ratio {
-  display: block;
+.body-measure-row--all {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  align-items: flex-end;
   margin-top: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
-.body-measure-row--measurements {
-  display: grid;
-  grid-template-columns: 1.35fr 0.85fr;
-  gap: 16px;
-  align-items: end;
-  margin-bottom: 16px;
+.body-measure-row--all .body-ratio-block {
+  flex-shrink: 0;
+}
+
+.body-measure-row--all .body-height-block {
+  flex: 1;
+  min-width: 0;
+}
+
+.body-measure-row--all .body-waist-block {
+  flex-shrink: 0;
 }
 
 .body-ratio-block,
@@ -707,6 +715,7 @@ html, body {
   font-size: 10px;
   letter-spacing: 1.8px;
   text-transform: uppercase;
+  text-align: center;
   color: var(--afpt-ink);
   font-weight: 700;
 }
@@ -739,6 +748,10 @@ html, body {
 
 .body-input-stepper--waist {
   grid-template-columns: minmax(76px, 1fr) 24px;
+}
+
+.body-input-stepper--ratio {
+  grid-template-columns: minmax(64px, 1fr) 24px;
 }
 
 .body-measure-input {
@@ -801,8 +814,8 @@ html, body {
 }
 
 .body-step-btn:hover {
-  background: var(--afpt-accent);
-  color: var(--afpt-bg);
+  background: transparent;
+  color: var(--afpt-accent);
 }
 
 .body-unit {
@@ -817,8 +830,6 @@ html, body {
 
 #body-editor .body-ratio-input {
   width: 100%;
-  max-width: 210px;
-  font-size: 34px;
 }
 
 .body-slider-row {
@@ -836,18 +847,32 @@ html, body {
   margin-bottom: -20px;
 }
 
+#body-editor {
+  padding-bottom: 14px;
+}
+
+#body-txt-p {
+  margin: 14px 0;
+}
+
 @media (max-width: 430px) {
-  .body-measure-row--measurements {
-    grid-template-columns: 1fr;
+  .body-measure-row--all {
+    flex-wrap: wrap;
     gap: 12px;
+  }
+
+  .body-measure-row--all .body-height-block {
+    flex: 1 1 100%;
+    order: 2;
+  }
+
+  .body-measure-row--all .body-ratio-block,
+  .body-measure-row--all .body-waist-block {
+    flex: 1;
   }
 
   .body-height-inputs {
     grid-template-columns: 1fr 1fr;
-  }
-
-  #body-editor .body-ratio-input {
-    max-width: none;
   }
 }
 
@@ -1589,7 +1614,7 @@ html, body {
 .body-step-btn {
   width: 24px;
   height: 24px;
-  border-radius: 50%;
+  border-radius: 3px;
   border: 1px solid var(--afpt-border-strong);
   background: var(--afpt-panel);
   color: var(--afpt-ink);
@@ -1607,6 +1632,7 @@ html, body {
 }
 
 .body-step-btn:hover {
+  background: transparent;
   border-color: var(--afpt-accent);
   color: var(--afpt-accent);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--afpt-accent) 45%, transparent);
