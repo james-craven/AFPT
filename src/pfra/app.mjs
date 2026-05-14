@@ -1033,18 +1033,28 @@ function bindEvents() {
     render();
   });
 
-  byId('push-tick')?.addEventListener('click', () => {
-    const tick = byId('push-tick');
-    const minVal = tick?.dataset.minValue;
-    if (minVal !== undefined) {
-      dispatch({ type: 'SET_STRENGTH_VALUE', value: minVal });
-      if (!state.strength.exempt) savedEventValues.strength[state.strength.event] = minVal;
-      const txt = byId('push-txt');
-      if (txt) txt.value = minVal;
-      const slider = byId('push-slider');
-      if (slider) slider.value = minVal;
-      render();
-    }
+  // --- Strength MIN/MAX buttons ---
+
+  byId('push-min-btn')?.addEventListener('click', () => {
+    const table = tables[state.strength.event];
+    if (!table) return;
+    const minVal = String(firstScoringCellValue(table, state.ageGroup, state.sex) ?? '0');
+    dispatch({ type: 'SET_STRENGTH_VALUE', value: minVal });
+    if (!state.strength.exempt) savedEventValues.strength[state.strength.event] = minVal;
+    const txt = byId('push-txt'); if (txt) txt.value = minVal;
+    const slider = byId('push-slider'); if (slider) slider.value = minVal;
+    render();
+  });
+
+  byId('push-max-btn')?.addEventListener('click', () => {
+    const table = tables[state.strength.event];
+    if (!table) return;
+    const maxVal = String(topCellValue(table, state.ageGroup, state.sex) ?? '0');
+    dispatch({ type: 'SET_STRENGTH_VALUE', value: maxVal });
+    if (!state.strength.exempt) savedEventValues.strength[state.strength.event] = maxVal;
+    const txt = byId('push-txt'); if (txt) txt.value = maxVal;
+    const slider = byId('push-slider'); if (slider) slider.value = maxVal;
+    render();
   });
 
   // --- Core ---
@@ -1122,31 +1132,55 @@ function bindEvents() {
   byId('sit-txt-plank')?.addEventListener('input', updatePlankTime);
   byId('plankmintxt')?.addEventListener('input', updatePlankTime);
 
-  byId('sit-tick')?.addEventListener('click', () => {
-    const tick = byId('sit-tick');
-    const minVal = tick?.dataset.minValue;
-    if (minVal !== undefined) {
-      if (state.core.event === 'forearm-plank') {
-        const timeStr = secondsToTimeString(Number(minVal));
-        dispatch({ type: 'SET_CORE_VALUE', value: timeStr });
-        if (!state.core.exempt) savedEventValues.core[state.core.event] = timeStr;
-        const parts = timeStr.split(':');
-        const minEl = byId('sit-txt-plank');
-        const secEl = byId('plankmintxt');
-        if (minEl) minEl.value = parts[0];
-        if (secEl) secEl.value = parts[1];
-        const slider = byId('sit-slider');
-        if (slider) slider.value = minVal;
-      } else {
-        dispatch({ type: 'SET_CORE_VALUE', value: minVal });
-        if (!state.core.exempt) savedEventValues.core[state.core.event] = minVal;
-        const txt = byId('sit-txt');
-        if (txt) txt.value = minVal;
-        const slider = byId('sit-slider');
-        if (slider) slider.value = minVal;
-      }
-      render();
-    }
+  // --- Core MIN/MAX buttons (reps) ---
+
+  byId('sit-min-btn')?.addEventListener('click', () => {
+    const table = tables[state.core.event];
+    if (!table) return;
+    const minVal = String(firstScoringCellValue(table, state.ageGroup, state.sex) ?? '0');
+    dispatch({ type: 'SET_CORE_VALUE', value: minVal });
+    if (!state.core.exempt) savedEventValues.core[state.core.event] = minVal;
+    const txt = byId('sit-txt'); if (txt) txt.value = minVal;
+    const slider = byId('sit-slider'); if (slider) slider.value = minVal;
+    render();
+  });
+
+  byId('sit-max-btn')?.addEventListener('click', () => {
+    const table = tables[state.core.event];
+    if (!table) return;
+    const maxVal = String(topCellValue(table, state.ageGroup, state.sex) ?? '0');
+    dispatch({ type: 'SET_CORE_VALUE', value: maxVal });
+    if (!state.core.exempt) savedEventValues.core[state.core.event] = maxVal;
+    const txt = byId('sit-txt'); if (txt) txt.value = maxVal;
+    const slider = byId('sit-slider'); if (slider) slider.value = maxVal;
+    render();
+  });
+
+  // --- Core MIN/MAX buttons (plank time) ---
+
+  function _setPlankValue(valStr) {
+    dispatch({ type: 'SET_CORE_VALUE', value: valStr });
+    if (!state.core.exempt) savedEventValues.core[state.core.event] = valStr;
+    const parts = valStr.split(':');
+    const minEl = byId('sit-txt-plank'); if (minEl) minEl.value = parts[0] || '0';
+    const secEl = byId('plankmintxt'); if (secEl) secEl.value = parts[1] || '00';
+    const sec = toSeconds(valStr);
+    const slider = byId('sit-slider'); if (slider && Number.isFinite(sec)) slider.value = String(sec);
+    render();
+  }
+
+  byId('sit-plank-min-btn')?.addEventListener('click', () => {
+    const table = tables['forearm-plank'];
+    if (!table) return;
+    const rawMin = firstScoringCellValue(table, state.ageGroup, state.sex);
+    if (rawMin !== undefined) _setPlankValue(String(rawMin));
+  });
+
+  byId('sit-plank-max-btn')?.addEventListener('click', () => {
+    const table = tables['forearm-plank'];
+    if (!table) return;
+    const rawMax = topCellValue(table, state.ageGroup, state.sex);
+    if (rawMax !== undefined) _setPlankValue(String(rawMax));
   });
 
   // --- Cardio ---
@@ -1222,31 +1256,61 @@ function bindEvents() {
     render();
   });
 
-  byId('run-tick')?.addEventListener('click', () => {
-    const tick = byId('run-tick');
-    const minVal = tick?.dataset.minValue;
-    if (minVal !== undefined) {
-      if (state.cardio.event === 'hamr-20-meter') {
-        dispatch({ type: 'SET_CARDIO_VALUE', value: minVal });
-        if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = minVal;
-        const txt = byId('run-shuttle-txt');
-        if (txt) txt.value = minVal;
-        const slider = byId('run-slider');
-        if (slider) slider.value = minVal;
-      } else {
-        const timeStr = secondsToTimeString(Number(minVal));
-        dispatch({ type: 'SET_CARDIO_VALUE', value: timeStr });
-        if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = timeStr;
-        const parts = timeStr.split(':');
-        const minEl = byId('run-mintxt');
-        const secEl = byId('run-sectxt');
-        if (minEl) minEl.value = parts[0];
-        if (secEl) secEl.value = parts[1];
-        const slider = byId('run-slider');
-        if (slider) slider.value = minVal;
-      }
-      render();
+  // --- Cardio MIN/MAX buttons (run time) ---
+
+  function _setRunTimeValue(valStr) {
+    dispatch({ type: 'SET_CARDIO_VALUE', value: valStr });
+    if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = valStr;
+    const parts = valStr.split(':');
+    const minEl = byId('run-mintxt'); if (minEl) minEl.value = parts[0] || '0';
+    const secEl = byId('run-sectxt'); if (secEl) secEl.value = parts[1] || '00';
+    const sec = toSeconds(valStr);
+    const slider = byId('run-slider'); if (slider && Number.isFinite(sec)) slider.value = String(sec);
+    render();
+  }
+
+  byId('run-min-btn')?.addEventListener('click', () => {
+    if (state.cardio.event === 'two-kilometer-walk') {
+      const maxTime = walkMaximumTime(standards, state.ageGroup, state.sex);
+      if (maxTime) _setRunTimeValue(maxTime);
+      return;
     }
+    const table = tables[state.cardio.event];
+    if (!table) return;
+    const minVal = firstScoringCellValue(table, state.ageGroup, state.sex);
+    if (minVal !== undefined) _setRunTimeValue(String(minVal));
+  });
+
+  byId('run-max-btn')?.addEventListener('click', () => {
+    if (state.cardio.event === 'two-kilometer-walk') return;
+    const table = tables[state.cardio.event];
+    if (!table) return;
+    const maxVal = topCellValue(table, state.ageGroup, state.sex);
+    if (maxVal !== undefined) _setRunTimeValue(String(maxVal));
+  });
+
+  // --- Cardio MIN/MAX buttons (HAMR shuttles) ---
+
+  byId('run-shuttle-min-btn')?.addEventListener('click', () => {
+    const table = tables['hamr-20-meter'];
+    if (!table) return;
+    const minVal = String(firstScoringCellValue(table, state.ageGroup, state.sex) ?? '0');
+    dispatch({ type: 'SET_CARDIO_VALUE', value: minVal });
+    if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = minVal;
+    const txt = byId('run-shuttle-txt'); if (txt) txt.value = minVal;
+    const slider = byId('run-slider'); if (slider) slider.value = minVal;
+    render();
+  });
+
+  byId('run-shuttle-max-btn')?.addEventListener('click', () => {
+    const table = tables['hamr-20-meter'];
+    if (!table) return;
+    const maxVal = String(topCellValue(table, state.ageGroup, state.sex) ?? '0');
+    dispatch({ type: 'SET_CARDIO_VALUE', value: maxVal });
+    if (!state.cardio.exempt) savedEventValues.cardio[state.cardio.event] = maxVal;
+    const txt = byId('run-shuttle-txt'); if (txt) txt.value = maxVal;
+    const slider = byId('run-slider'); if (slider) slider.value = maxVal;
+    render();
   });
 
   // --- Component tabs ---

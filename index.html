@@ -345,12 +345,13 @@
         <div id="push-reps-row" class="editor-value-row">
           <input id="push-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Strength reps">
           <span class="value-unit">REPS</span>
+          <button class="minmax-btn" id="push-min-btn" type="button">MIN</button>
+          <button class="minmax-btn" id="push-max-btn" type="button">MAX</button>
         </div>
         <div class="slider-row">
           <button class="slider-step-btn" type="button" data-step="-1" data-target="push-slider" aria-label="Decrease reps">−</button>
           <div class="slider-container">
             <input id="push-slider" type="range" class="value-slider" min="0" max="100" value="0" aria-label="Strength slider">
-            <div id="push-tick" class="slider-tick" role="button" tabindex="0" aria-label="Set to minimum score" style="display:none"></div>
           </div>
           <button class="slider-step-btn" type="button" data-step="1" data-target="push-slider" aria-label="Increase reps">+</button>
         </div>
@@ -381,18 +382,21 @@
         <div id="sit-reps-row" class="editor-value-row">
           <input id="sit-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Core reps">
           <span class="value-unit">REPS</span>
+          <button class="minmax-btn" id="sit-min-btn" type="button">MIN</button>
+          <button class="minmax-btn" id="sit-max-btn" type="button">MAX</button>
         </div>
         <div id="sit-plank-row" class="editor-value-row" hidden>
           <label class="time-label" for="sit-txt-plank">MIN</label>
           <input id="sit-txt-plank" type="text" inputmode="numeric" class="time-input" value="3" placeholder="MM" aria-label="Plank minutes">
           <span class="time-sep">:</span>
           <input id="plankmintxt" type="text" inputmode="numeric" class="time-input" value="40" placeholder="SS" aria-label="Plank seconds">
+          <button class="minmax-btn" id="sit-plank-min-btn" type="button">MIN</button>
+          <button class="minmax-btn" id="sit-plank-max-btn" type="button">MAX</button>
         </div>
         <div class="slider-row">
           <button class="slider-step-btn" type="button" data-step="-1" data-target="sit-slider" aria-label="Decrease reps">−</button>
           <div class="slider-container">
             <input id="sit-slider" type="range" class="value-slider" min="0" max="100" value="0" aria-label="Core slider">
-            <div id="sit-tick" class="slider-tick" role="button" tabindex="0" aria-label="Set to minimum score" style="display:none"></div>
           </div>
           <button class="slider-step-btn" type="button" data-step="1" data-target="sit-slider" aria-label="Increase reps">+</button>
         </div>
@@ -425,16 +429,19 @@
           <input id="run-mintxt" type="text" inputmode="numeric" class="time-input" value="20" placeholder="MM" aria-label="Cardio minutes">
           <span class="time-sep">:</span>
           <input id="run-sectxt" type="text" inputmode="numeric" class="time-input" value="00" placeholder="SS" aria-label="Cardio seconds">
+          <button class="minmax-btn" id="run-min-btn" type="button">MIN</button>
+          <button class="minmax-btn" id="run-max-btn" type="button">MAX</button>
         </div>
         <div id="run-shuttle-row" class="editor-value-row" hidden>
           <input id="run-shuttle-txt" type="text" inputmode="numeric" class="value-input" value="58" aria-label="HAMR shuttles">
           <span class="value-unit">SHUTTLES</span>
+          <button class="minmax-btn" id="run-shuttle-min-btn" type="button">MIN</button>
+          <button class="minmax-btn" id="run-shuttle-max-btn" type="button">MAX</button>
         </div>
         <div class="slider-row">
           <button class="slider-step-btn" type="button" data-step="-1" data-target="run-slider" aria-label="Decrease value">−</button>
           <div class="slider-container">
             <input id="run-slider" type="range" class="value-slider" min="0" max="1523" value="1523" aria-label="Cardio slider">
-            <div id="run-tick" class="slider-tick" role="button" tabindex="0" aria-label="Set to minimum score" style="display:none"></div>
           </div>
           <button class="slider-step-btn" type="button" data-step="1" data-target="run-slider" aria-label="Increase value">+</button>
         </div>

@@ -1098,26 +1098,24 @@ html, body {
   border-color: var(--afpt-bg);
 }
 
-/* Tick marker — minimum passing threshold (upward triangle) */
-.slider-tick {
-  position: absolute;
-  bottom: 8px;
-  width: 0;
-  height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-bottom: 12px solid var(--afpt-warn);
-  transform: translateX(-50%);
+/* MIN / MAX jump buttons next to value inputs */
+.minmax-btn {
+  background: transparent;
+  border: 1px solid var(--afpt-border);
+  color: var(--afpt-ink-dim);
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 6px 8px;
+  border-radius: 5px;
   cursor: pointer;
-  opacity: 0.9;
-  transition: opacity 0.12s, border-bottom-color 0.12s;
-  background: none;
-  border-radius: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.slider-tick:hover {
-  opacity: 1;
-  border-bottom-color: var(--afpt-accent);
+.minmax-btn:hover {
+  border-color: var(--afpt-accent);
+  color: var(--afpt-accent);
 }
 
 /* Score label below slider */
