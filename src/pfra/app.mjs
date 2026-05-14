@@ -292,26 +292,39 @@ function getLoadError() { return loadError; }
 
 // --- Chart generation ---
 
-function generateScoreChart(component) {
+// Events per category for the chart modal component dropdown
+const CHART_CATEGORY_EVENTS = {
+  strength: [
+    { value: 'push-up', label: 'Push-Ups (1 Min)' },
+    { value: 'hand-release-push-up', label: 'Hand-Release Push-Ups' },
+  ],
+  core: [
+    { value: 'sit-up', label: 'Sit-Ups (1 Min)' },
+    { value: 'cross-leg-reverse-crunch', label: 'Cross-Leg Reverse Crunch' },
+    { value: 'forearm-plank', label: 'Forearm Plank' },
+  ],
+  cardio: [
+    { value: 'two-mile-run', label: '2 Mile Run' },
+    { value: 'hamr-20-meter', label: '20m HAMR' },
+    { value: 'two-kilometer-walk', label: '2 km Walk' },
+  ],
+};
+
+// Modal-local state: separate from main app sex/age so changes don't affect scoring
+let chartModalState = { sex: 'female', ageGroup: 'under-25', category: 'strength', event: 'push-up' };
+
+function generateScoreChartFor(event, ageGroup, sex) {
   if (!ready) return '<p class="chart-empty">Standards not yet loaded.</p>';
 
-  const componentState = state[component];
-  if (!componentState) return '<p class="chart-empty">Unknown component.</p>';
-  if (componentState.exempt) return '<p class="chart-empty">Component is exempt — no scoring table applies.</p>';
-
-  const event = componentState.event;
-
   if (event === 'two-kilometer-walk') {
-    const maxTime = walkMaximumTime(standards, state.ageGroup, state.sex);
-    return `<p class="chart-empty">Walk is pass/fail. Max time for your group: <strong>${maxTime ?? '--'}</strong></p>`;
+    const fakeState = { ...state, ageGroup, sex };
+    const maxTime = walkMaximumTime(standards, ageGroup, sex);
+    return `<p class="chart-empty">Walk is pass/fail. Max time: <strong>${maxTime ?? '--'}</strong></p>`;
   }
 
   const table = tables[event];
   if (!table) return `<p class="chart-empty">No chart available for ${event}.</p>`;
 
-  const { ageGroup, sex } = state;
-  const result = computeScoreFromState(state);
-  const currentPoints = result?.scores?.[component] ?? -1;
   const isTime = table.unit === 'min:sec';
   const colHeader = isTime ? 'Time' : 'Reps';
 
@@ -326,26 +339,68 @@ function generateScoreChart(component) {
       : (cell.atLeast ? `&ge;&nbsp;${rawVal}` : `&le;&nbsp;${rawVal}`);
     const tier = pts >= 15 ? 'MAX' : pts >= 10 ? 'EXC' : pts >= 5 ? 'SAT' : 'MIN';
     const tierCls = pts >= 15 ? 'tier--max' : pts >= 10 ? 'tier--exc' : pts >= 5 ? 'tier--sat' : 'tier--min';
-    const isYou = pts === currentPoints;
-    const youTag = isYou ? ' <span class="chart-you">&#9664; YOU</span>' : '';
-    rows += `<tr class="${isYou ? 'chart-row--you' : ''}"><td class="chart-cell chart-cell--perf">${displayVal}${youTag}</td><td class="chart-cell chart-cell--score">${pts}</td><td class="chart-cell chart-cell--tier ${tierCls}">${tier}</td></tr>`;
+    rows += `<tr><td class="chart-cell chart-cell--perf">${displayVal}</td><td class="chart-cell chart-cell--score">${pts}</td><td class="chart-cell chart-cell--tier ${tierCls}">${tier}</td></tr>`;
   }
 
   const ageFmt = ageGroup.replace('under-', '< ').replace('-and-over', '+').replace('-', '–');
   return `<p class="chart-meta">${sex === 'male' ? 'Male' : 'Female'} &middot; Age ${ageFmt}</p><table class="chart-table"><thead><tr><th class="chart-th">${colHeader}</th><th class="chart-th">Pts</th><th class="chart-th">Tier</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
-function openChart(component, title) {
-  const modal = byId('modal');
-  if (!modal) return;
-  const titleEl = byId('chart-drawer-title');
-  if (titleEl) titleEl.textContent = title || 'Score Chart';
+function refreshChartContent() {
   const contentEl = byId('chart-content');
   if (contentEl) {
-    contentEl.innerHTML = component
-      ? generateScoreChart(component)
-      : '<p class="chart-empty">Reference charts are not available in this build.</p>';
+    contentEl.innerHTML = generateScoreChartFor(
+      chartModalState.event,
+      chartModalState.ageGroup,
+      chartModalState.sex,
+    );
   }
+}
+
+function populateChartComponentSel(category) {
+  const sel = byId('chart-component-sel');
+  if (!sel) return;
+  const events = CHART_CATEGORY_EVENTS[category] || [];
+  sel.innerHTML = events.map((e) => `<option value="${e.value}">${e.label}</option>`).join('');
+  sel.value = events[0]?.value ?? '';
+  chartModalState.event = sel.value;
+}
+
+function openChart(component, _title) {
+  const modal = byId('modal');
+  if (!modal) return;
+
+  // Determine category and event from component arg (fallback to strength)
+  let category = 'strength';
+  let event = 'push-up';
+  if (component === 'core') { category = 'core'; event = state.core.event; }
+  else if (component === 'cardio') { category = 'cardio'; event = state.cardio.event; }
+  else if (component === 'strength') { category = 'strength'; event = state.strength.event; }
+
+  // Clamp to known events (exempt maps to first in category)
+  const eventsInCat = CHART_CATEGORY_EVENTS[category] ?? [];
+  if (!eventsInCat.find((e) => e.value === event)) event = eventsInCat[0]?.value ?? 'push-up';
+
+  // Reset modal state to main app demographics
+  chartModalState = { sex: state.sex, ageGroup: state.ageGroup, category, event };
+
+  // Sync category selector
+  const catSel = byId('chart-category-sel');
+  if (catSel) catSel.value = category;
+
+  // Populate and sync component selector
+  populateChartComponentSel(category);
+  const compSel = byId('chart-component-sel');
+  if (compSel) compSel.value = event;
+  chartModalState.event = compSel?.value ?? event;
+
+  // Sync demographics selectors
+  const sexSel = byId('chart-sex-sel');
+  const ageSel = byId('chart-age-sel');
+  if (sexSel) sexSel.value = chartModalState.sex;
+  if (ageSel) ageSel.value = chartModalState.ageGroup;
+
+  refreshChartContent();
   modal.removeAttribute('hidden');
   modal.dataset.chartOpen = 'true';
 }
@@ -1348,6 +1403,30 @@ function bindEvents() {
   });
   byId('run-btn')?.addEventListener('click', () => {
     openChart('cardio', 'Cardio Score Chart');
+  });
+
+  // --- Chart modal controls ---
+
+  byId('chart-category-sel')?.addEventListener('change', () => {
+    chartModalState.category = byId('chart-category-sel').value;
+    populateChartComponentSel(chartModalState.category);
+    chartModalState.event = byId('chart-component-sel')?.value ?? '';
+    refreshChartContent();
+  });
+
+  byId('chart-component-sel')?.addEventListener('change', () => {
+    chartModalState.event = byId('chart-component-sel').value;
+    refreshChartContent();
+  });
+
+  byId('chart-sex-sel')?.addEventListener('change', () => {
+    chartModalState.sex = byId('chart-sex-sel').value;
+    refreshChartContent();
+  });
+
+  byId('chart-age-sel')?.addEventListener('change', () => {
+    chartModalState.ageGroup = byId('chart-age-sel').value;
+    refreshChartContent();
   });
 
   // --- Chart close ---

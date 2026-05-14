@@ -1420,6 +1420,55 @@ html, body {
   color: var(--afpt-accent);
 }
 
+/* Chart modal controls */
+.chart-ctrl-row {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px 0;
+  flex-shrink: 0;
+}
+
+.chart-ctrl-sel {
+  flex: 1;
+  background: var(--afpt-panel-2);
+  border: 1px solid var(--afpt-border-strong);
+  color: var(--afpt-ink);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+}
+
+.chart-ctrl-sel:focus {
+  border-color: var(--afpt-accent);
+}
+
+.chart-demo-row {
+  display: flex;
+  gap: 8px;
+  padding: 8px 14px 0;
+  flex-shrink: 0;
+}
+
+.chart-demo-sel {
+  flex: 1;
+  background: var(--afpt-panel-2);
+  border: 1px solid var(--afpt-border);
+  color: var(--afpt-ink);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+.chart-demo-sel:focus {
+  border-color: var(--afpt-accent);
+}
+
 .chart-drawer__image-frame {
   flex: 1;
   overflow-y: auto;

@@ -49,9 +49,35 @@
     <button id="chart-drawer-scrim" class="chart-drawer__scrim" type="button" aria-label="Close chart"></button>
     <section class="chart-drawer__panel">
       <header class="chart-drawer__header">
-        <h2 id="chart-drawer-title">Score Chart</h2>
         <button id="close-btn" class="close-btn" type="button">Close ✕</button>
       </header>
+      <!-- Chart controls row: category dropdown + component dropdown -->
+      <div class="chart-ctrl-row">
+        <select id="chart-category-sel" class="chart-ctrl-sel" aria-label="Chart category">
+          <option value="strength">Strength</option>
+          <option value="core">Core</option>
+          <option value="cardio">Cardio</option>
+        </select>
+        <select id="chart-component-sel" class="chart-ctrl-sel" aria-label="Chart component"></select>
+      </div>
+      <!-- Demographics row: sex + age (modal-local, reset on open) -->
+      <div class="chart-demo-row">
+        <select id="chart-sex-sel" class="chart-demo-sel" aria-label="Chart sex">
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+        </select>
+        <select id="chart-age-sel" class="chart-demo-sel" aria-label="Chart age group">
+          <option value="under-25">&lt; 25</option>
+          <option value="25-29">25–29</option>
+          <option value="30-34">30–34</option>
+          <option value="35-39">35–39</option>
+          <option value="40-44">40–44</option>
+          <option value="45-49">45–49</option>
+          <option value="50-54">50–54</option>
+          <option value="55-59">55–59</option>
+          <option value="60-and-over">60+</option>
+        </select>
+      </div>
       <div class="chart-drawer__image-frame">
         <div id="chart-content" class="chart-content"></div>
       </div>
