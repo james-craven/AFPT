@@ -698,26 +698,38 @@ select {
   width: 100%;
 }
 
-.body-measure-row--all {
+/* WHtR Row 1: label left, ratio stepper right */
+.body-whtr-row1 {
   display: flex;
-  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+
+.body-whtr-row1 .body-event-label {
+  flex: 1;
+}
+
+.body-whtr-row1 .body-input-stepper--ratio {
+  flex-shrink: 0;
+  width: 120px;
+}
+
+/* WHtR Row 2: FT / IN / Waist equally spaced */
+.body-whtr-row2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  align-items: flex-end;
-  margin-top: 12px;
   margin-bottom: 16px;
 }
 
-.body-measure-row--all .body-ratio-block {
-  flex-shrink: 0;
-}
-
-.body-measure-row--all .body-height-block {
-  flex: 1;
-  min-width: 0;
-}
-
-.body-measure-row--all .body-waist-block {
-  flex-shrink: 0;
+.body-whtr-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
 }
 
 .body-ratio-block,
@@ -880,34 +892,12 @@ select {
 }
 
 @media (max-width: 430px) {
-  .body-measure-row--all {
-    gap: 8px;
-  }
-
-  /* Shrink all stepper stacks in the row so everything fits on one line */
-  .body-measure-row--all .body-stepper-stack {
-    width: 20px;
-  }
-  .body-measure-row--all .body-step-btn {
-    width: 20px;
-  }
-
-  /* Compact min-widths: ratio and waist */
-  .body-measure-row--all .body-input-stepper--ratio {
-    grid-template-columns: minmax(48px, 1fr) 20px;
-  }
-  .body-measure-row--all .body-input-stepper--waist {
-    grid-template-columns: minmax(58px, 1fr) 20px;
-  }
-
-  /* Compact min-widths: height ft / in sub-inputs */
-  .body-measure-row--all .body-height-block .body-input-stepper {
-    grid-template-columns: minmax(34px, 1fr) 20px;
-  }
-
-  .body-height-inputs {
-    grid-template-columns: 1fr 1fr;
+  .body-whtr-row2 {
     gap: 6px;
+  }
+
+  .body-whtr-row1 .body-input-stepper--ratio {
+    width: 100px;
   }
 }
 

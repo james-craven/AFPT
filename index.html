@@ -276,27 +276,22 @@
   </select>
 
   <div id="body-whtr-controls">
-    <div class="editor-event-row body-event-row">
-  <span class="body-event-label">WHtR (Waist ÷ Height)</span>
-</div>
-
-<div class="body-measure-row body-measure-row--all">
-  <div class="body-ratio-block">
-    <label class="body-measure-label" for="pfra-whtr">Ratio</label>
-    <div class="body-input-stepper body-input-stepper--ratio">
-      <input id="pfra-whtr" type="number" inputmode="decimal" class="body-measure-input body-ratio-input" value="0.49" min="0.35" max="0.70" step="0.01" aria-label="Waist-to-height ratio">
-      <div class="body-stepper-stack">
-        <button class="body-step-btn" type="button" data-body-step="0.01" data-target="pfra-whtr" aria-label="Increase ratio">+</button>
-        <button class="body-step-btn" type="button" data-body-step="-0.01" data-target="pfra-whtr" aria-label="Decrease ratio">−</button>
+    <!-- Row 1: label + ratio input -->
+    <div class="body-whtr-row1">
+      <span class="body-event-label">WHtR (Waist / Height)</span>
+      <div class="body-input-stepper body-input-stepper--ratio">
+        <input id="pfra-whtr" type="number" inputmode="decimal" class="body-measure-input body-ratio-input" value="0.49" min="0.35" max="0.70" step="0.01" aria-label="Waist-to-height ratio">
+        <div class="body-stepper-stack">
+          <button class="body-step-btn" type="button" data-body-step="0.01" data-target="pfra-whtr" aria-label="Increase ratio">+</button>
+          <button class="body-step-btn" type="button" data-body-step="-0.01" data-target="pfra-whtr" aria-label="Decrease ratio">−</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="body-measure-block body-height-block">
-    <span class="body-measure-label">Height (FT &amp; IN)</span>
-    <div class="body-height-inputs">
-      <label class="body-measure-inline">
-        <span class="sr-only">Height feet</span>
+    <!-- Row 2: Height FT / Height IN / Waist evenly spaced -->
+    <div class="body-whtr-row2">
+      <div class="body-measure-block body-whtr-cell">
+        <span class="body-measure-label">FT</span>
         <div class="body-input-stepper">
           <input id="height-ft-input" type="number" inputmode="numeric" class="body-measure-input body-measure-input--short" value="5" min="3" max="8" step="1" placeholder="FT" aria-label="Height feet">
           <div class="body-stepper-stack">
@@ -304,10 +299,10 @@
             <button class="body-step-btn" type="button" data-body-step="-1" data-target="height-ft-input" aria-label="Decrease height feet">−</button>
           </div>
         </div>
-      </label>
+      </div>
 
-      <label class="body-measure-inline">
-        <span class="sr-only">Height inches</span>
+      <div class="body-measure-block body-whtr-cell">
+        <span class="body-measure-label">IN</span>
         <div class="body-input-stepper">
           <input id="height-in-input" type="number" inputmode="numeric" class="body-measure-input body-measure-input--short" value="10" min="0" max="11" step="1" placeholder="IN" aria-label="Height inches">
           <div class="body-stepper-stack">
@@ -315,21 +310,19 @@
             <button class="body-step-btn" type="button" data-body-step="-1" data-target="height-in-input" aria-label="Decrease height inches">−</button>
           </div>
         </div>
-      </label>
-    </div>
-  </div>
+      </div>
 
-  <div class="body-measure-block body-waist-block">
-    <label class="body-measure-label" for="waist-input">Waist (IN)</label>
-    <div class="body-input-stepper body-input-stepper--waist">
-      <input id="waist-input" type="number" inputmode="decimal" class="body-measure-input" value="34" min="20" max="80" step="0.1" aria-label="Waist inches">
-      <div class="body-stepper-stack">
-        <button class="body-step-btn" type="button" data-body-step="0.1" data-target="waist-input" aria-label="Increase waist">+</button>
-        <button class="body-step-btn" type="button" data-body-step="-0.1" data-target="waist-input" aria-label="Decrease waist">−</button>
+      <div class="body-measure-block body-whtr-cell">
+        <label class="body-measure-label" for="waist-input">Waist (IN)</label>
+        <div class="body-input-stepper body-input-stepper--waist">
+          <input id="waist-input" type="number" inputmode="decimal" class="body-measure-input" value="34" min="20" max="80" step="0.1" aria-label="Waist inches">
+          <div class="body-stepper-stack">
+            <button class="body-step-btn" type="button" data-body-step="0.1" data-target="waist-input" aria-label="Increase waist">+</button>
+            <button class="body-step-btn" type="button" data-body-step="-0.1" data-target="waist-input" aria-label="Decrease waist">−</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
 <div class="body-slider-row">
   <div class="slider-row">
