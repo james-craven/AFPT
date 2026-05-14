@@ -2188,6 +2188,24 @@ select {
   letter-spacing: 4px;
 }
 
+/* Score section: centered layout matching tactical grid quality */
+:root[data-theme="stencil"] .score-section {
+  text-align: center;
+}
+:root[data-theme="stencil"] .score-main-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  justify-items: center;
+  margin-bottom: 10px;
+}
+:root[data-theme="stencil"] .score-comp-label {
+  justify-self: start;
+}
+:root[data-theme="stencil"] .score-badge {
+  justify-self: end;
+}
+
 /* Score number: large accent-colored stencil display value */
 :root[data-theme="stencil"] .score-number {
   font-size: 62px;
