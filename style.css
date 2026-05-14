@@ -796,6 +796,13 @@ select {
   outline: none;
 }
 
+.body-measure-input::placeholder,
+.time-input::placeholder,
+.value-input::placeholder {
+  color: var(--afpt-ink-dim);
+  opacity: 0.5;
+}
+
 .body-input-stepper:focus-within {
   border-color: var(--afpt-accent);
   box-shadow: 0 0 0 1px var(--afpt-accent);
