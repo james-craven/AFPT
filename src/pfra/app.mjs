@@ -6,7 +6,9 @@ import {
   categoryForTotal,
   firstScoringCellValue,
   pfraAgeToWalkAgeGroup,
+  scoreFromTable,
   scorePfraAssessment,
+  scoreWalk,
   secondsToTimeString,
   toSeconds,
   topCellValue,
@@ -313,16 +315,89 @@ const CHART_CATEGORY_EVENTS = {
   ],
 };
 
+const OFFICIAL_REFERENCES = {
+  runAltitude: {
+    title: 'Run Altitude Adjustment',
+    src: './standards/sources/a31-crops/dafman-36-2905-2-page1-full.png',
+    alt: 'Official DAFMAN 36-2905 Table A3.1 altitude time correction for the 2.0 mile run',
+    caption: 'DAFMAN 36-2905, Attachment 3, Table A3.1',
+  },
+  walkAltitude: {
+    title: 'Walk/Shuttle Altitude Adjustment',
+    src: './standards/sources/a31-crops/dafman-36-2905-2-page2-full.png',
+    alt: 'Official DAFMAN 36-2905 Tables A3.2, A3.3, and A3.4 for walk and HAMR altitude adjustment',
+    caption: 'DAFMAN 36-2905, Attachment 3, Tables A3.2-A3.4',
+  },
+  shuttleScoreCard: {
+    title: 'HAMR Shuttle Score Card',
+    src: './standards/sources/ShuttleLevels.jpeg',
+    alt: 'Official 20 meter high aerobic multi-shuttle run level and shuttle score card',
+    caption: '20M High Aerobic Multi-Shuttle Run score card',
+  },
+};
+
+const HAMR_LEVEL_RANGES = [
+  { level: 1, start: 1, end: 7 },
+  { level: 2, start: 8, end: 15 },
+  { level: 3, start: 16, end: 23 },
+  { level: 4, start: 24, end: 32 },
+  { level: 5, start: 33, end: 41 },
+  { level: 6, start: 42, end: 50 },
+  { level: 7, start: 51, end: 60 },
+  { level: 8, start: 61, end: 70 },
+  { level: 9, start: 71, end: 81 },
+  { level: 10, start: 82, end: 92 },
+  { level: 11, start: 93, end: 104 },
+  { level: 12, start: 105, end: 116 },
+  { level: 13, start: 117, end: 129 },
+  { level: 14, start: 130, end: 142 },
+  { level: 15, start: 143, end: 155 },
+];
+
 // Modal-local state: separate from main app sex/age so changes don't affect scoring
 let chartModalState = { sex: 'female', ageGroup: 'under-25', category: 'strength', event: 'push-up' };
+
+function setChartDrawerTitle(titleText) {
+  const title = byId('chart-drawer-title');
+  if (title) title.textContent = titleText;
+}
+
+function setChartControlsVisible(visible) {
+  const ctrlRow = document.querySelector('.chart-ctrl-row');
+  const demoRow = document.querySelector('.chart-demo-row');
+  if (ctrlRow) ctrlRow.hidden = !visible;
+  if (demoRow) demoRow.hidden = !visible;
+}
+
+function currentPerformanceForChart(event, ageGroup, sex) {
+  if (event === state.strength.event && !state.strength.exempt) {
+    return String(state.strength.value).trim();
+  }
+
+  if (event === state.core.event && !state.core.exempt) {
+    return String(state.core.value).trim();
+  }
+
+  if (event === state.cardio.event && !state.cardio.exempt) {
+    return altitudeAdjustedCardio(event, String(state.cardio.value).trim(), state.altitudeGroup, sex, ageGroup);
+  }
+
+  return null;
+}
 
 function generateScoreChartFor(event, ageGroup, sex) {
   if (!ready) return '<p class="chart-empty">Standards not yet loaded.</p>';
 
   if (event === 'two-kilometer-walk') {
-    const fakeState = { ...state, ageGroup, sex };
     const maxTime = walkMaximumTime(standards, ageGroup, sex);
-    return `<p class="chart-empty">Walk is pass/fail. Max time: <strong>${maxTime ?? '--'}</strong></p>`;
+    const currentPerformance = currentPerformanceForChart(event, ageGroup, sex);
+    const currentScore = currentPerformance
+      ? scoreWalk(standards, { ageGroup, sex, performance: currentPerformance })
+      : null;
+    const youText = currentPerformance
+      ? `<br><strong class="chart-you chart-you--walk">&lt; YOU ${currentPerformance} · ${currentScore > 0 ? 'PASS' : 'FAIL'}</strong>`
+      : '';
+    return `<p class="chart-empty">Walk is pass/fail. Max time: <strong>${maxTime ?? '--'}</strong>${youText}</p>`;
   }
 
   const table = tables[event];
@@ -330,6 +405,10 @@ function generateScoreChartFor(event, ageGroup, sex) {
 
   const isTime = table.unit === 'min:sec';
   const colHeader = isTime ? 'Time' : 'Reps';
+  const currentPerformance = currentPerformanceForChart(event, ageGroup, sex);
+  const currentMatch = currentPerformance
+    ? scoreFromTable(table, { ageGroup, sex, performance: currentPerformance }).matchedCell
+    : null;
 
   let rows = '';
   for (const row of table.rows) {
@@ -342,7 +421,9 @@ function generateScoreChartFor(event, ageGroup, sex) {
       : (cell.atLeast ? `&ge;&nbsp;${rawVal}` : `&le;&nbsp;${rawVal}`);
     const tier = pts >= 15 ? 'MAX' : pts >= 10 ? 'EXC' : pts >= 5 ? 'SAT' : 'MIN';
     const tierCls = pts >= 15 ? 'tier--max' : pts >= 10 ? 'tier--exc' : pts >= 5 ? 'tier--sat' : 'tier--min';
-    rows += `<tr><td class="chart-cell chart-cell--perf">${displayVal}</td><td class="chart-cell chart-cell--score">${pts}</td><td class="chart-cell chart-cell--tier ${tierCls}">${tier}</td></tr>`;
+    const isCurrentRow = currentMatch === cell;
+    const youMarker = isCurrentRow ? '<span class="chart-you" aria-label="You are here">&lt; YOU</span>' : '';
+    rows += `<tr class="${isCurrentRow ? 'chart-row--you' : ''}"><td class="chart-cell chart-cell--perf">${displayVal}</td><td class="chart-cell chart-cell--score">${pts}${youMarker}</td><td class="chart-cell chart-cell--tier ${tierCls}">${tier}</td></tr>`;
   }
 
   const ageFmt = ageGroup.replace('under-', '< ').replace('-and-over', '+').replace('-', '–');
@@ -352,12 +433,30 @@ function generateScoreChartFor(event, ageGroup, sex) {
 function refreshChartContent() {
   const contentEl = byId('chart-content');
   if (contentEl) {
+    setChartDrawerTitle('Score Chart');
     contentEl.innerHTML = generateScoreChartFor(
       chartModalState.event,
       chartModalState.ageGroup,
       chartModalState.sex,
     );
+    window.requestAnimationFrame(() => {
+      contentEl.querySelector('.chart-row--you')?.scrollIntoView({ block: 'center' });
+    });
   }
+}
+
+function renderOfficialReference(referenceKey) {
+  const contentEl = byId('chart-content');
+  const reference = OFFICIAL_REFERENCES[referenceKey];
+  if (!contentEl || !reference) return;
+
+  setChartDrawerTitle(reference.title);
+  contentEl.innerHTML = `<figure class="chart-reference">
+    <div class="chart-reference__frame">
+      <img class="chart-reference__image" src="${reference.src}" alt="${reference.alt}">
+    </div>
+    <figcaption class="chart-reference__caption">${reference.caption}</figcaption>
+  </figure>`;
 }
 
 function populateChartComponentSel(category) {
@@ -372,6 +471,8 @@ function populateChartComponentSel(category) {
 function openChart(component, _title) {
   const modal = byId('modal');
   if (!modal) return;
+  modal.dataset.chartMode = 'score';
+  setChartControlsVisible(true);
 
   // Determine category and event from component arg (fallback to strength)
   let category = 'strength';
@@ -404,6 +505,16 @@ function openChart(component, _title) {
   if (ageSel) ageSel.value = chartModalState.ageGroup;
 
   refreshChartContent();
+  modal.removeAttribute('hidden');
+  modal.dataset.chartOpen = 'true';
+}
+
+function openOfficialReference(referenceKey) {
+  const modal = byId('modal');
+  if (!modal) return;
+  modal.dataset.chartMode = 'reference';
+  setChartControlsVisible(false);
+  renderOfficialReference(referenceKey);
   modal.removeAttribute('hidden');
   modal.dataset.chartOpen = 'true';
 }
@@ -746,8 +857,11 @@ function renderCoreEditor(scores) {
 function hamrLevelText(totalShuttles) {
   const n = Number(totalShuttles);
   if (!Number.isFinite(n) || n < 1) return '';
-  const level = Math.floor((n - 1) / 8) + 1;
-  const shuttle = ((n - 1) % 8) + 1;
+  const rounded = Math.round(n);
+  const range = HAMR_LEVEL_RANGES.find(({ start, end }) => rounded >= start && rounded <= end)
+    || HAMR_LEVEL_RANGES[HAMR_LEVEL_RANGES.length - 1];
+  const level = range.level;
+  const shuttle = Math.max(1, Math.min(range.end - range.start + 1, rounded - range.start + 1));
   return `Level: ${level} | Shuttle: ${shuttle}`;
 }
 
@@ -1593,13 +1707,13 @@ function bindEvents() {
   // --- Settings menu items ---
 
   bindMenuClick('run-adjust-chart', () => {
-    openChart(null, 'Run Altitude Adjustment');
+    openOfficialReference('runAltitude');
   });
   bindMenuClick('walk-adjust-chart', () => {
-    openChart(null, 'Walk Altitude Adjustment');
+    openOfficialReference('walkAltitude');
   });
   bindMenuClick('shuttle-score-card', () => {
-    openChart(null, 'Shuttle Score Card');
+    openOfficialReference('shuttleScoreCard');
   });
   bindMenuClick('shuttle-audio-menu', () => {
     const player = byId('shuttle-audio-player');

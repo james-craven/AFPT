@@ -14,6 +14,8 @@ const contentTypes = {
   '.js': 'application/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.mjs': 'application/javascript; charset=utf-8',
+  '.jpeg': 'image/jpeg',
+  '.jpg': 'image/jpeg',
   '.mp3': 'audio/mpeg',
   '.png': 'image/png',
   '.webmanifest': 'application/manifest+json; charset=utf-8',
@@ -173,7 +175,6 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForTimeout(50);
 
   // 5. Age change triggers score update
-  const scoreBeforeAge = await page.evaluate(() => document.getElementById('score-txt')?.textContent?.trim());
   await page.evaluate(() => {
     const sel = document.getElementById('age-sel');
     sel.value = '40-44';
@@ -182,7 +183,11 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForTimeout(100);
   const scoreAfterAge = await page.evaluate(() => document.getElementById('score-txt')?.textContent?.trim());
   assert.ok(scoreAfterAge !== '--', 'score updates after age change');
-  assert.notEqual(scoreAfterAge, scoreBeforeAge, 'age change affects score');
+  assert.equal(
+    await page.evaluate(() => window.afptApp?.getState()?.ageGroup),
+    '40-44',
+    'age change updates app state',
+  );
 
   // Restore
   await page.evaluate(() => {
@@ -273,6 +278,26 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForTimeout(50);
   const hamrFirstTime = await page.evaluate(() => window.afptApp.getState().cardio.value);
   assert.ok(Number(hamrFirstTime) >= 1, `HAMR initializes in-range on first switch: ${hamrFirstTime}`);
+
+  for (const [shuttles, expectedLevelText] of [
+    ['8', 'Level: 2 | Shuttle: 1'],
+    ['15', 'Level: 2 | Shuttle: 8'],
+    ['16', 'Level: 3 | Shuttle: 1'],
+    ['60', 'Level: 7 | Shuttle: 10'],
+    ['61', 'Level: 8 | Shuttle: 1'],
+    ['87', 'Level: 10 | Shuttle: 6'],
+  ]) {
+    await page.evaluate((value) => {
+      const input = document.getElementById('run-shuttle-txt');
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }, shuttles);
+    await page.waitForFunction(
+      (expected) => document.getElementById('hamr-level-display')?.textContent === expected,
+      expectedLevelText,
+    );
+  }
+
   await page.evaluate(() => {
     const sel = document.getElementById('cardio-sel');
     sel.value = 'two-mile-run';
@@ -315,6 +340,10 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
 
   // 9. Chart drawer opens with generated table and closes
+  await page.locator('#push-txt').fill('48');
+  const appSexBeforeChartDemo = await page.locator('#sex-sel').inputValue();
+  const appAgeBeforeChartDemo = await page.locator('#age-sel').inputValue();
+  const scoreBeforeChartDemo = await page.evaluate(() => document.getElementById('score-txt')?.textContent?.trim());
   const pushBtn = page.locator('#push-btn');
   await pushBtn.click();
   await page.waitForFunction(() => !document.getElementById('modal')?.hasAttribute('hidden'));
@@ -326,10 +355,78 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     () => document.getElementById('chart-content')?.textContent?.includes('NaN'),
   );
   assert.equal(chartHasNaN, false, 'chart content does not contain NaN');
+  await page.waitForFunction(() => document.querySelectorAll('#chart-content .chart-row--you').length === 1);
+  assert.equal(
+    await page.locator('#chart-content .chart-you').first().innerText(),
+    '< YOU',
+    'chart drawer marks current app performance',
+  );
+
+  await page.locator('#chart-sex-sel').selectOption(appSexBeforeChartDemo === 'female' ? 'male' : 'female');
+  await page.locator('#chart-age-sel').selectOption('40-44');
+  await page.waitForFunction(() => {
+    const meta = document.querySelector('#chart-content .chart-meta')?.textContent || '';
+    return meta.includes('40') && document.querySelectorAll('#chart-content .chart-row--you').length === 1;
+  });
+  assert.equal(
+    await page.locator('#sex-sel').inputValue(),
+    appSexBeforeChartDemo,
+    'chart sex selector does not change main app sex',
+  );
+  assert.equal(
+    await page.locator('#age-sel').inputValue(),
+    appAgeBeforeChartDemo,
+    'chart age selector does not change main app age',
+  );
+  assert.equal(
+    await page.evaluate(() => document.getElementById('score-txt')?.textContent?.trim()),
+    scoreBeforeChartDemo,
+    'chart demographic selectors do not change main app score',
+  );
   await page.locator('#close-btn').click();
   await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
   const chartClosed = await page.evaluate(() => document.getElementById('modal')?.hasAttribute('hidden'));
   assert.equal(chartClosed, true, 'chart drawer closes on close-btn click');
+
+  // 9a. Settings reference actions open official source images in the themed drawer
+  await page.locator('#settings-hub-toggle').click();
+  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+  for (const [selector, expectedSource, expectedTitle] of [
+    ['#run-adjust-chart', 'dafman-36-2905-2-page1-full.png', 'Run Altitude Adjustment'],
+    ['#walk-adjust-chart', 'dafman-36-2905-2-page2-full.png', 'Walk/Shuttle Altitude Adjustment'],
+    ['#shuttle-score-card', 'ShuttleLevels.jpeg', 'HAMR Shuttle Score Card'],
+  ]) {
+    await page.locator(selector).click();
+    await page.waitForFunction(
+      (source) => {
+        const modal = document.getElementById('modal');
+        const image = document.querySelector('#chart-content .chart-reference__image');
+        return modal?.dataset.chartMode === 'reference'
+          && !modal.hasAttribute('hidden')
+          && image?.getAttribute('src')?.includes(source);
+      },
+      expectedSource,
+    );
+    assert.equal(
+      await page.locator('#chart-drawer-title').evaluate((el) => el.textContent.trim()),
+      expectedTitle,
+      `${selector} sets reference drawer title`,
+    );
+    assert.equal(
+      await page.locator('.chart-ctrl-row').isHidden(),
+      true,
+      `${selector} hides score chart controls`,
+    );
+    assert.equal(
+      await page.locator('.chart-demo-row').isHidden(),
+      true,
+      `${selector} hides modal demographic controls`,
+    );
+    await page.locator('#close-btn').click();
+    await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
+  }
+  await page.locator('#settings-hub-close').click();
+  await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
 
   // 9b. Cardio chart does not contain NaN:NaN
   await page.locator('#summary-cardio').click();

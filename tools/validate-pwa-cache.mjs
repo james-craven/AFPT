@@ -21,13 +21,19 @@ const requiredAssets = [
   'standards/extracted/tables/push-up.json',
   'standards/extracted/tables/two-mile-run.json',
   'standards/extracted/tables/hamr-20-meter.json',
+  'standards/sources/ShuttleLevels.jpeg',
+  'standards/sources/a31-crops/dafman-36-2905-2-page1-full.png',
+  'standards/sources/a31-crops/dafman-36-2905-2-page2-full.png',
 ];
 
 const excludedAssets = [
   'node_modules/',
   'package-lock.json',
-  'standards/sources/',
   'standards/sources/PFRA-Scoring-Charts.pdf',
+  'standards/sources/Pages from DAFMAN 36-2905.pdf',
+  'standards/sources/Pages from DAFMAN 36-2905-2.pdf',
+  'standards/sources/extracted-text/',
+  'standards/sources/a31-crops/a31-rows',
   'standards/extracted/PFRA-Scoring-Charts.txt',
   'shuttle.m4a',
   'shuttle.ogg',

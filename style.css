@@ -1540,7 +1540,7 @@ select {
 
 .chart-drawer__image-frame {
   flex: 1;
-  overflow-y: auto;
+  overflow: auto;
   padding: 14px;
   display: flex;
   align-items: flex-start;
@@ -1558,6 +1558,33 @@ select {
 .chart-content {
   padding: 14px;
   width: 100%;
+}
+
+.chart-reference {
+  margin: 0;
+  width: 100%;
+}
+
+.chart-reference__frame {
+  background: #ffffff;
+  border: 1px solid var(--afpt-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.chart-reference__image {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.chart-reference__caption {
+  color: var(--afpt-ink-dim);
+  font-size: 11px;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  margin-top: 10px;
+  text-transform: uppercase;
 }
 
 .chart-meta {

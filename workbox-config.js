@@ -16,7 +16,10 @@ module.exports = {
 		'situps.png',
 		'shuttle.mp3',
 		'standards/af-pfra-2026.json',
-		'standards/extracted/tables/*.json'
+		'standards/extracted/tables/*.json',
+		'standards/sources/ShuttleLevels.jpeg',
+		'standards/sources/a31-crops/dafman-36-2905-2-page1-full.png',
+		'standards/sources/a31-crops/dafman-36-2905-2-page2-full.png'
 	],
 	globIgnores: [
 		'node_modules/**/*',
@@ -24,7 +27,9 @@ module.exports = {
 		'sw.js.map',
 		'workbox-*.js',
 		'workbox-*.js.map',
-		'standards/sources/**/*',
+		'standards/sources/*.pdf',
+		'standards/sources/extracted-text/**/*',
+		'standards/sources/a31-crops/a31-*.png',
 		'standards/extracted/PFRA-Scoring-Charts.txt',
 		'standards/extracted/PFRA-Scoring-Charts.notes.md'
 	],
