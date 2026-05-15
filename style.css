@@ -679,22 +679,38 @@ select {
   text-align: center;
 }
 
-/* ─── Event row: single responsive grid, all items equal 1fr columns ─── */
+/* ─── Event row: 4 equal cells — input group, MIN, MAX, Chart ─── */
 .editor-event-row {
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   align-items: center;
+  justify-items: center;
 }
 
-/* Value rows dissolve into the parent grid — children become direct grid items */
+/* Value rows dissolve into the parent grid — value-group + MIN + MAX become 3 of the 4 cells */
 .editor-event-row .editor-value-row {
   display: contents;
 }
 
+/* Input group lives in cell 1, flexed so inputs share that cell */
+.editor-event-row .value-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Allow inputs to shrink to fit their shared cell on narrow screens */
+.editor-event-row .value-group .value-input,
+.editor-event-row .value-group .time-input {
+  min-width: 0;
+}
+
 /* MM/SS time labels are redundant — colon + placeholders carry context */
-.editor-event-row .editor-value-row .time-label {
+.editor-event-row .value-group .time-label {
   display: none;
 }
 
@@ -703,10 +719,9 @@ select {
   margin-left: 0;
 }
 
-/* Buttons fill their 1fr cell with compact font */
+/* Buttons keep their natural fixed size; cells just center them */
 .editor-event-row .minmax-btn,
 .editor-event-row .chart-btn {
-  width: auto;
   font-size: 13px;
 }
 

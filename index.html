@@ -360,8 +360,10 @@
             <option value="exempt">Exempt</option>
           </select>
           <div id="push-reps-row" class="editor-value-row">
-            <input id="push-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Strength reps">
-            <span class="value-unit">REPS</span>
+            <div class="value-group">
+              <input id="push-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Strength reps">
+              <span class="value-unit">REPS</span>
+            </div>
             <button class="minmax-btn" id="push-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="push-max-btn" type="button">MAX</button>
           </div>
@@ -397,16 +399,20 @@
             <option value="exempt">Exempt</option>
           </select>
           <div id="sit-reps-row" class="editor-value-row">
-            <input id="sit-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Core reps">
-            <span class="value-unit">REPS</span>
+            <div class="value-group">
+              <input id="sit-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Core reps">
+              <span class="value-unit">REPS</span>
+            </div>
             <button class="minmax-btn" id="sit-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="sit-max-btn" type="button">MAX</button>
           </div>
           <div id="sit-plank-row" class="editor-value-row" hidden>
-            <label class="time-label" for="sit-txt-plank">MIN</label>
-            <input id="sit-txt-plank" type="text" inputmode="numeric" class="time-input" value="3" placeholder="MM" aria-label="Plank minutes">
-            <span class="time-sep">:</span>
-            <input id="plankmintxt" type="text" inputmode="numeric" class="time-input" value="40" placeholder="SS" aria-label="Plank seconds">
+            <div class="value-group">
+              <label class="time-label" for="sit-txt-plank">MIN</label>
+              <input id="sit-txt-plank" type="text" inputmode="numeric" class="time-input" value="3" placeholder="MM" aria-label="Plank minutes">
+              <span class="time-sep">:</span>
+              <input id="plankmintxt" type="text" inputmode="numeric" class="time-input" value="40" placeholder="SS" aria-label="Plank seconds">
+            </div>
             <button class="minmax-btn" id="sit-plank-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="sit-plank-max-btn" type="button">MAX</button>
           </div>
@@ -442,16 +448,20 @@
             <option value="exempt">Exempt</option>
           </select>
           <div id="run-time-row" class="editor-value-row">
-            <label class="time-label" for="run-mintxt">MIN</label>
-            <input id="run-mintxt" type="text" inputmode="numeric" class="time-input" value="20" placeholder="MM" aria-label="Cardio minutes">
-            <span class="time-sep">:</span>
-            <input id="run-sectxt" type="text" inputmode="numeric" class="time-input" value="00" placeholder="SS" aria-label="Cardio seconds">
+            <div class="value-group">
+              <label class="time-label" for="run-mintxt">MIN</label>
+              <input id="run-mintxt" type="text" inputmode="numeric" class="time-input" value="20" placeholder="MM" aria-label="Cardio minutes">
+              <span class="time-sep">:</span>
+              <input id="run-sectxt" type="text" inputmode="numeric" class="time-input" value="00" placeholder="SS" aria-label="Cardio seconds">
+            </div>
             <button class="minmax-btn" id="run-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="run-max-btn" type="button">MAX</button>
           </div>
           <div id="run-shuttle-row" class="editor-value-row" hidden>
-            <input id="run-shuttle-txt" type="text" inputmode="numeric" class="value-input" value="58" aria-label="HAMR shuttles">
-            <span class="value-unit">SHUTTLES</span>
+            <div class="value-group">
+              <input id="run-shuttle-txt" type="text" inputmode="numeric" class="value-input" value="58" aria-label="HAMR shuttles">
+              <span class="value-unit">SHUTTLES</span>
+            </div>
             <button class="minmax-btn" id="run-shuttle-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="run-shuttle-max-btn" type="button">MAX</button>
           </div>
