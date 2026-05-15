@@ -168,7 +168,8 @@ async function assertControlsStayInsideApp(page, label) {
       '.editor-panel:not([hidden]) .body-measure-input',
       '.component-strip',
       '.score-section',
-      '.header-theme-control',
+      '.demographics-row',
+      '#theme-preset-select',
       '.settings-hub-toggle',
     ].join(',');
     const offenders = [];
@@ -390,8 +391,9 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.ok(cardioAlt4 !== null, 'altitude cardio score computes');
   assert.notEqual(cardioAlt4, cardioSeaLevel, 'altitude Group 4 changes cardio score for two-mile-run');
 
-  // 8. Theme switch changes data-theme-preset from the header control
-  assert.equal(await page.locator('.header-theme-control').isVisible(), true, 'theme selector is visible in header');
+  // 8. Theme switch changes data-theme-preset from the demographics row control
+  assert.equal(await page.locator('label[for="theme-preset-select"]').innerText(), 'THEME', 'theme control label is THEME');
+  assert.equal(await page.locator('#theme-preset-select.demo-select').isVisible(), true, 'theme selector is visible in demographics row');
   await page.locator('#theme-preset-select').selectOption('blues');
   await page.waitForFunction(() => document.documentElement.dataset.themePreset === 'blues');
   const themeApplied = await page.evaluate(() => document.documentElement.dataset.themePreset);
