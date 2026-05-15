@@ -514,18 +514,24 @@ select {
 
 .score-bar-labels {
   position: relative;
-  height: 18px;
-  margin-top: 4px;
+  height: 25px;
+  margin-top: 6px;
 }
 
 .score-bar-labels span {
   position: absolute;
-  font-size: 9px;
-  letter-spacing: 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 18px;
+  font-size: 7.5px;
+  letter-spacing: 0;
+  line-height: 1.05;
   color: var(--afpt-ink-dim);
   text-transform: uppercase;
   transform: translateX(-50%);
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
 }
 
 .score-bar-labels span:first-child {
@@ -534,6 +540,18 @@ select {
 
 .score-bar-labels span:last-child {
   transform: translateX(-100%);
+}
+
+.score-bar-labels strong,
+.score-bar-labels em {
+  display: block;
+  font: inherit;
+  font-style: normal;
+}
+
+.score-bar-labels strong {
+  color: var(--afpt-ink);
+  font-weight: 700;
 }
 
 /* ─── Body composition row ─────────────────────────────────────── */
@@ -655,6 +673,7 @@ select {
 /* ─── Editors container ────────────────────────────────────────── */
 .editors-container {
   /* no flex: 1 — editors take only the space they need */
+  padding: 0 16px 14px;
 }
 
 .editor-panel {
@@ -706,7 +725,7 @@ select {
 .editor-event-row .value-group {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 6px;
   min-width: 0;
   max-width: 100%;
@@ -716,7 +735,7 @@ select {
 .editor-event-row .value-group .value-input {
   flex: 0 0 auto;
   min-width: 0;
-  width: clamp(54px, 18vw, 96px);
+  width: clamp(64px, 18vw, 96px);
 }
 
 .editor-event-row .value-group .time-input {
@@ -790,7 +809,7 @@ select {
 }
 
 .body-whtr-control--single .body-input-stepper {
-  width: min(100%, 190px);
+  width: min(100%, 260px);
 }
 
 .body-whtr-control--pair {
@@ -999,6 +1018,10 @@ select {
 
   .body-whtr-control--pair {
     gap: 6px;
+    width: min(100%, 230px);
+  }
+
+  .body-whtr-control--single .body-input-stepper {
     width: min(100%, 230px);
   }
 
@@ -1859,6 +1882,7 @@ select {
   fill: var(--afpt-ink);
   font-size: 40px;
   letter-spacing: -1px;
+  dominant-baseline: middle;
 }
 
 .score-ring-cat {
@@ -2527,7 +2551,8 @@ select {
 
 :root[data-theme="blues"] .score-comp-label {
   grid-column: 1;
-  justify-self: start;
+  justify-self: center;
+  text-align: center;
 }
 
 :root[data-theme="blues"] .score-ring-wrap {
@@ -2541,24 +2566,21 @@ select {
   display: none;
 }
 :root[data-theme="blues"] .score-ring-num {
-  font-size: 32px;
+  font-size: 42px;
   font-weight: 700;
   fill: var(--afpt-ink);
 }
 :root[data-theme="blues"] .score-ring-cat {
-  font-size: 9px;
-  letter-spacing: 2px;
-  fill: var(--afpt-accent-2);
-  font-weight: 500;
+  display: none;
 }
 :root[data-theme="blues"] .score-badge {
   grid-column: 3;
-  justify-self: end;
+  justify-self: center;
   margin-top: 0;
   font-size: 11px;
   letter-spacing: 2px;
   border-radius: 3px;
-  text-align: right;
+  text-align: center;
 }
 
 /* ALT selector row: panel background card, vertically centered */
@@ -2697,7 +2719,8 @@ select {
 }
 
 /* ─── Score section ────────────────────────────────────────────── */
-:root[data-theme="fitness"] .score-section {
+:root[data-theme="fitness"] .score-section,
+:root[data-theme="blues"] .score-section {
   background: transparent;
   border-bottom: none;
   padding: 8px 16px 16px;
@@ -2713,11 +2736,12 @@ select {
 
 :root[data-theme="fitness"] .score-comp-label {
   grid-column: 1;
-  justify-self: start;
+  justify-self: center;
   color: rgba(255, 255, 255, 0.72);
   font-size: 10px;
   letter-spacing: 1.5px;
   line-height: 1.15;
+  text-align: center;
 }
 
 :root[data-theme="fitness"] .score-number {
@@ -2726,12 +2750,12 @@ select {
 
 :root[data-theme="fitness"] .score-badge {
   grid-column: 3;
-  justify-self: end;
+  justify-self: center;
   color: rgba(255, 255, 255, 0.9);
   border-color: rgba(255, 255, 255, 0.28);
   font-size: 10px;
   letter-spacing: 1.5px;
-  text-align: right;
+  text-align: center;
 }
 
 :root[data-theme="fitness"] .score-ring-wrap {
@@ -2741,7 +2765,8 @@ select {
 }
 
 /* Keep the ring centered and responsive in the three-column score row. */
-:root[data-theme="fitness"] .score-ring-svg {
+:root[data-theme="fitness"] .score-ring-svg,
+:root[data-theme="blues"] .score-ring-svg {
   width: clamp(154px, 42vw, 190px);
   height: clamp(154px, 42vw, 190px);
 }
@@ -2879,7 +2904,7 @@ select {
 
 /* ─── Editor panels — glass card ──────────────────────────────── */
 :root[data-theme="fitness"] .editor-panel {
-  margin: 0 16px 14px;
+  margin: 0 0 14px;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -3068,7 +3093,7 @@ select {
 /* ─── Pace plan section wrapper ────────────────────────────────── */
 /* PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme. */
 .pace-plan-section {
-  padding: 12px 0 0;
+  padding: 12px 16px 0;
 }
 
 .pace-plan-empty {

@@ -166,11 +166,11 @@
       <div class="demo-field">
         <label class="demo-label" for="theme-preset-select">THEME</label>
         <select id="theme-preset-select" class="demo-select" aria-label="Theme preset">
-          <option value="tactical">Tactical HUD</option>
-          <option value="stencil">Stencil Ops</option>
-          <option value="blues">AF Dress Blues</option>
-          <option value="light">Connect Light</option>
-          <option value="fitness">Fitness Gradient</option>
+          <option value="tactical">Tactical</option>
+          <option value="stencil">Stencil</option>
+          <option value="blues">Dress Blues</option>
+          <option value="light">Contrast</option>
+          <option value="fitness">Gradiant</option>
         </select>
       </div>
     </section>
@@ -188,10 +188,10 @@
         </div>
       </div>
       <div class="score-bar-labels">
-        <span style="left:0">FAIL</span>
-        <span style="left:75%">SAT-75</span>
-        <span style="left:90%">EXC-90</span>
-        <span style="left:100%">MAX</span>
+        <span style="left:0"><strong>0</strong><em>FAIL</em></span>
+        <span style="left:75%"><strong>75</strong><em>SAT</em></span>
+        <span style="left:90%"><strong>90</strong><em>EXC</em></span>
+        <span style="left:100%"><strong>100</strong><em>MAX</em></span>
       </div>
       <!-- Stencil theme: segmented threshold bar with YOU marker -->
       <div class="score-stencil-bar" aria-hidden="true">
@@ -216,7 +216,7 @@
           <circle id="score-ring-arc" class="score-ring-arc" cx="100" cy="100" r="70"
             stroke-width="10" stroke-linecap="round"
             transform="rotate(-90 100 100)" stroke-dasharray="0 440"/>
-          <text id="score-ring-num" class="score-ring-num" x="100" y="98" text-anchor="middle">--</text>
+          <text id="score-ring-num" class="score-ring-num" x="100" y="106" text-anchor="middle" dominant-baseline="middle">--</text>
           <text id="score-ring-cat" class="score-ring-cat" x="100" y="124" text-anchor="middle">--</text>
         </svg>
       </div>
@@ -348,7 +348,6 @@
           <div id="push-reps-row" class="editor-value-row">
             <div class="value-group">
               <input id="push-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Strength reps">
-              <span class="value-unit">REPS</span>
             </div>
             <button class="minmax-btn" id="push-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="push-max-btn" type="button">MAX</button>
@@ -387,7 +386,6 @@
           <div id="sit-reps-row" class="editor-value-row">
             <div class="value-group">
               <input id="sit-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Core reps">
-              <span class="value-unit">REPS</span>
             </div>
             <button class="minmax-btn" id="sit-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="sit-max-btn" type="button">MAX</button>
@@ -446,7 +444,6 @@
           <div id="run-shuttle-row" class="editor-value-row" hidden>
             <div class="value-group">
               <input id="run-shuttle-txt" type="text" inputmode="numeric" class="value-input" value="58" aria-label="HAMR shuttles">
-              <span class="value-unit">SHUTTLES</span>
             </div>
             <button class="minmax-btn" id="run-shuttle-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="run-shuttle-max-btn" type="button">MAX</button>

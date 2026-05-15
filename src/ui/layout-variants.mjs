@@ -45,14 +45,14 @@ export const VARIANT_REGISTRY = Object.freeze({
   'tactical-shell': defineVariant('tactical-shell', 'appShell', 'Tactical shell'),
   'stencil-shell': defineVariant('stencil-shell', 'appShell', 'Stencil shell'),
   'blues-shell': defineVariant('blues-shell', 'appShell', 'AF Blues shell'),
-  'light-shell': defineVariant('light-shell', 'appShell', 'Connect Light shell'),
+  'light-shell': defineVariant('light-shell', 'appShell', 'Contrast shell'),
   'fitness-shell': defineVariant('fitness-shell', 'appShell', 'Fitness shell'),
 
   'tactical-score-number': defineVariant('tactical-score-number', 'scoreHeader', 'Tactical score number'),
   'stencil-score-block': defineVariant('stencil-score-block', 'scoreHeader', 'Stencil score block'),
   'blues-ring': defineVariant('blues-ring', 'scoreHeader', 'Blues score ring'),
-  'light-card': defineVariant('light-card', 'scoreHeader', 'Light score card'),
-  'fitness-gradient-ring': defineVariant('fitness-gradient-ring', 'scoreHeader', 'Fitness gradient ring'),
+  'light-card': defineVariant('light-card', 'scoreHeader', 'Contrast score card'),
+  'fitness-gradient-ring': defineVariant('fitness-gradient-ring', 'scoreHeader', 'Gradiant score ring'),
 
   'visible-compact-selects': defineVariant('visible-compact-selects', 'demographicsControls', 'Compact visible selects'),
   'visible-shared-row': defineVariant('visible-shared-row', 'demographicsControls', 'Shared visible row'),
@@ -63,25 +63,25 @@ export const VARIANT_REGISTRY = Object.freeze({
   'tactical-panel': defineVariant('tactical-panel', 'settingsPanel', 'Tactical settings panel'),
   'stencil-compact-panel': defineVariant('stencil-compact-panel', 'settingsPanel', 'Stencil compact panel'),
   'blues-drawer': defineVariant('blues-drawer', 'settingsPanel', 'Blues drawer'),
-  'light-drawer': defineVariant('light-drawer', 'settingsPanel', 'Light drawer'),
+  'light-drawer': defineVariant('light-drawer', 'settingsPanel', 'Contrast drawer'),
   'fitness-glass-drawer': defineVariant('fitness-glass-drawer', 'settingsPanel', 'Fitness glass drawer'),
 
   'tactical-dense': defineVariant('tactical-dense', 'componentCard', 'Tactical dense card', COMPONENT_CARD_SLOTS),
   'stencil-clipped': defineVariant('stencil-clipped', 'componentCard', 'Stencil clipped card', COMPONENT_CARD_SLOTS),
   'blues-polished': defineVariant('blues-polished', 'componentCard', 'Blues polished card', COMPONENT_CARD_SLOTS),
-  'light-clean': defineVariant('light-clean', 'componentCard', 'Light clean card', COMPONENT_CARD_SLOTS),
-  'fitness-gradient-card': defineVariant('fitness-gradient-card', 'componentCard', 'Fitness gradient card', COMPONENT_CARD_SLOTS),
+  'light-clean': defineVariant('light-clean', 'componentCard', 'Contrast clean card', COMPONENT_CARD_SLOTS),
+  'fitness-gradient-card': defineVariant('fitness-gradient-card', 'componentCard', 'Gradiant card', COMPONENT_CARD_SLOTS),
 
   'tactical-horizontal-bars': defineVariant('tactical-horizontal-bars', 'lapDisplay', 'Tactical horizontal bars'),
   'stencil-vertical-bars': defineVariant('stencil-vertical-bars', 'lapDisplay', 'Stencil vertical bars'),
   'blues-table': defineVariant('blues-table', 'lapDisplay', 'Blues table'),
-  'light-rows': defineVariant('light-rows', 'lapDisplay', 'Light rows'),
+  'light-rows': defineVariant('light-rows', 'lapDisplay', 'Contrast rows'),
   'fitness-tiles': defineVariant('fitness-tiles', 'lapDisplay', 'Fitness tiles'),
 
   'tactical-drawer': defineVariant('tactical-drawer', 'chartDisplay', 'Tactical chart drawer'),
   'stencil-drawer': defineVariant('stencil-drawer', 'chartDisplay', 'Stencil chart drawer'),
   'blues-chart-drawer': defineVariant('blues-chart-drawer', 'chartDisplay', 'Blues chart drawer'),
-  'light-chart-drawer': defineVariant('light-chart-drawer', 'chartDisplay', 'Light chart drawer'),
+  'light-chart-drawer': defineVariant('light-chart-drawer', 'chartDisplay', 'Contrast chart drawer'),
   'fitness-glass-chart': defineVariant('fitness-glass-chart', 'chartDisplay', 'Fitness glass chart'),
 
   'slider-plus-field': defineVariant('slider-plus-field', 'inputControls', 'Slider plus field'),
@@ -93,18 +93,18 @@ export const VARIANT_REGISTRY = Object.freeze({
   'stencil-points': defineVariant('stencil-points', 'componentScoreDisplay', 'Stencil points'),
   'progress-strip': defineVariant('progress-strip', 'componentScoreDisplay', 'Progress strip'),
   'clean-chip': defineVariant('clean-chip', 'componentScoreDisplay', 'Clean score chip'),
-  'gradient-chip': defineVariant('gradient-chip', 'componentScoreDisplay', 'Gradient score chip'),
+  'gradient-chip': defineVariant('gradient-chip', 'componentScoreDisplay', 'Gradiant score chip'),
 
   'tactical-dense-strip': defineVariant('tactical-dense-strip', 'componentSummaryStrip', 'Tactical dense summary strip', SUMMARY_CARD_SLOTS),
   'stencil-clipped-strip': defineVariant('stencil-clipped-strip', 'componentSummaryStrip', 'Stencil clipped summary strip', SUMMARY_CARD_SLOTS),
   'blues-polished-strip': defineVariant('blues-polished-strip', 'componentSummaryStrip', 'Blues polished summary strip', SUMMARY_CARD_SLOTS),
-  'light-clean-strip': defineVariant('light-clean-strip', 'componentSummaryStrip', 'Light clean summary strip', SUMMARY_CARD_SLOTS),
-  'fitness-gradient-strip': defineVariant('fitness-gradient-strip', 'componentSummaryStrip', 'Fitness gradient summary strip', SUMMARY_CARD_SLOTS),
+  'light-clean-strip': defineVariant('light-clean-strip', 'componentSummaryStrip', 'Contrast clean summary strip', SUMMARY_CARD_SLOTS),
+  'fitness-gradient-strip': defineVariant('fitness-gradient-strip', 'componentSummaryStrip', 'Gradiant summary strip', SUMMARY_CARD_SLOTS),
 
   'tactical-editor-panel': defineVariant('tactical-editor-panel', 'activeComponentEditor', 'Tactical editor panel'),
   'stencil-editor-panel': defineVariant('stencil-editor-panel', 'activeComponentEditor', 'Stencil editor panel'),
   'blues-editor-panel': defineVariant('blues-editor-panel', 'activeComponentEditor', 'Blues editor panel'),
-  'light-editor-panel': defineVariant('light-editor-panel', 'activeComponentEditor', 'Light editor panel'),
+  'light-editor-panel': defineVariant('light-editor-panel', 'activeComponentEditor', 'Contrast editor panel'),
   'fitness-editor-panel': defineVariant('fitness-editor-panel', 'activeComponentEditor', 'Fitness editor panel'),
 
   'current-navigation': defineVariant('current-navigation', 'navigationPattern', 'Current navigation'),
@@ -119,7 +119,7 @@ function preset(id, label, variants) {
 }
 
 export const THEME_PRESETS = Object.freeze({
-  tactical: preset('tactical', 'Tactical HUD', {
+  tactical: preset('tactical', 'Tactical', {
     appShell: 'tactical-shell',
     scoreHeader: 'tactical-score-number',
     demographicsControls: 'visible-compact-selects',
@@ -138,7 +138,7 @@ export const THEME_PRESETS = Object.freeze({
     componentScoreDisplay: 'hud-chip',
     navigationPattern: 'current-navigation',
   }),
-  stencil: preset('stencil', 'Stencil Ops', {
+  stencil: preset('stencil', 'Stencil', {
     appShell: 'stencil-shell',
     scoreHeader: 'stencil-score-block',
     demographicsControls: 'visible-shared-row',
@@ -157,7 +157,7 @@ export const THEME_PRESETS = Object.freeze({
     componentScoreDisplay: 'stencil-points',
     navigationPattern: 'current-navigation',
   }),
-  blues: preset('blues', 'AF Dress Blues', {
+  blues: preset('blues', 'Dress Blues', {
     appShell: 'blues-shell',
     scoreHeader: 'blues-ring',
     demographicsControls: 'visible-shared-row',
@@ -176,7 +176,7 @@ export const THEME_PRESETS = Object.freeze({
     componentScoreDisplay: 'progress-strip',
     navigationPattern: 'current-navigation',
   }),
-  light: preset('light', 'Connect Light', {
+  light: preset('light', 'Contrast', {
     appShell: 'light-shell',
     scoreHeader: 'light-card',
     demographicsControls: 'visible-shared-row',
@@ -195,7 +195,7 @@ export const THEME_PRESETS = Object.freeze({
     componentScoreDisplay: 'clean-chip',
     navigationPattern: 'current-navigation',
   }),
-  fitness: preset('fitness', 'Fitness Gradient', {
+  fitness: preset('fitness', 'Gradiant', {
     appShell: 'fitness-shell',
     scoreHeader: 'fitness-gradient-ring',
     demographicsControls: 'visible-glass-selects',

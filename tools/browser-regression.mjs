@@ -198,6 +198,56 @@ async function assertControlsStayInsideApp(page, label) {
   assert.deepEqual(result.offenders, [], `${label} controls stay inside app bounds`);
 }
 
+async function assertEventRowEdgeAlignment(page, panelId, label) {
+  const result = await page.evaluate((id) => {
+    const panel = document.getElementById(id);
+    const row = panel?.querySelector('.editor-event-row');
+    const activeValueRow = panel?.querySelector('.editor-value-row:not([hidden])');
+    const input = activeValueRow?.querySelector('input');
+    const chart = panel?.querySelector('.chart-btn');
+    if (!row || !input || !chart) return { missing: true };
+    const rowRect = row.getBoundingClientRect();
+    const inputRect = input.getBoundingClientRect();
+    const chartRect = chart.getBoundingClientRect();
+    return {
+      leftDelta: Math.abs(inputRect.left - rowRect.left),
+      rightDelta: Math.abs(chartRect.right - rowRect.right),
+    };
+  }, panelId);
+
+  assert.equal(result.missing, undefined, `${label} row alignment elements exist`);
+  assert.ok(result.leftDelta <= 2, `${label} input aligns with row left edge: ${result.leftDelta}px`);
+  assert.ok(result.rightDelta <= 2, `${label} chart aligns with row right edge: ${result.rightDelta}px`);
+}
+
+async function assertScoreBarLabelsDoNotOverlap(page, preset, label) {
+  await setThemePreset(page, preset);
+  const result = await page.evaluate(() => {
+    const labels = Array.from(document.querySelectorAll('.score-bar-labels span'))
+      .filter((element) => {
+        const style = getComputedStyle(element);
+        return style.display !== 'none' && style.visibility !== 'hidden';
+      })
+      .map((element) => {
+        const rect = element.getBoundingClientRect();
+        return {
+          left: rect.left,
+          right: rect.right,
+          text: element.textContent.trim(),
+        };
+      });
+    const overlaps = [];
+    for (let index = 1; index < labels.length; index += 1) {
+      if (labels[index].left < labels[index - 1].right - 0.5) {
+        overlaps.push(`${labels[index - 1].text}/${labels[index].text}`);
+      }
+    }
+    return { labels, overlaps };
+  });
+
+  assert.deepEqual(result.overlaps, [], `${label} ${preset} score bar labels do not overlap`);
+}
+
 async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const { context, failures, page } = await newPage(
     browser, baseUrl, `?no-sw=1&qa=smoke-${label}`, contextOptions,
@@ -394,6 +444,11 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   // 8. Theme switch changes data-theme-preset from the demographics row control
   assert.equal(await page.locator('label[for="theme-preset-select"]').innerText(), 'THEME', 'theme control label is THEME');
   assert.equal(await page.locator('#theme-preset-select.demo-select').isVisible(), true, 'theme selector is visible in demographics row');
+  assert.deepEqual(
+    await page.locator('#theme-preset-select option').evaluateAll((options) => options.map((option) => option.textContent.trim())),
+    ['Tactical', 'Stencil', 'Dress Blues', 'Contrast', 'Gradiant'],
+    'theme selector uses compact display names',
+  );
   await page.locator('#theme-preset-select').selectOption('blues');
   await page.waitForFunction(() => document.documentElement.dataset.themePreset === 'blues');
   const themeApplied = await page.evaluate(() => document.documentElement.dataset.themePreset);
@@ -417,7 +472,23 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       minDecimalInputWidth >= 52,
       `${label} ${preset} decimal body inputs keep enough room: ${minDecimalInputWidth}px`,
     );
+    const bodyControlAlignment = await page.evaluate(() => {
+      const ratio = document.querySelector('.body-input-stepper--ratio')?.getBoundingClientRect();
+      const pair = document.querySelector('.body-whtr-control--pair')?.getBoundingClientRect();
+      const waist = document.querySelector('.body-input-stepper--waist')?.getBoundingClientRect();
+      if (!ratio || !pair || !waist) return { missing: true };
+      return {
+        leftDelta: Math.max(Math.abs(ratio.left - pair.left), Math.abs(waist.left - pair.left)),
+        rightDelta: Math.max(Math.abs(ratio.right - pair.right), Math.abs(waist.right - pair.right)),
+      };
+    });
+    assert.equal(bodyControlAlignment.missing, undefined, `${label} ${preset} body controls exist`);
+    assert.ok(bodyControlAlignment.leftDelta <= 1, `${label} ${preset} body input left edges align`);
+    assert.ok(bodyControlAlignment.rightDelta <= 1, `${label} ${preset} body input right edges align`);
   }
+
+  await assertScoreBarLabelsDoNotOverlap(page, 'tactical', label);
+  await assertScoreBarLabelsDoNotOverlap(page, 'light', label);
 
   await page.locator('#summary-cardio').click();
   await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
@@ -440,7 +511,26 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     await assertControlsStayInsideApp(page, `${label} ${preset} HAMR`);
   }
 
+  await page.locator('#summary-strength').click();
+  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+  await assertEventRowEdgeAlignment(page, 'strength-editor', `${label} strength`);
+  await page.locator('#summary-core').click();
+  await page.waitForFunction(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
+  await assertEventRowEdgeAlignment(page, 'core-editor', `${label} core`);
+  await page.locator('#summary-cardio').click();
+  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  await assertEventRowEdgeAlignment(page, 'cardio-editor', `${label} cardio run`);
+  await page.evaluate(() => {
+    const sel = document.getElementById('cardio-sel');
+    sel.value = 'hamr-20-meter';
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForTimeout(50);
+  await assertEventRowEdgeAlignment(page, 'cardio-editor', `${label} cardio HAMR`);
+  assert.equal(await page.locator('.value-unit').count(), 0, 'redundant value-unit labels are removed');
+
   await setThemePreset(page, 'blues');
+  const bluesRingWidth = await page.locator('.score-ring-svg').evaluate((element) => element.getBoundingClientRect().width);
   const bluesScoreOrder = await page.evaluate(() => {
     const label = document.querySelector('.score-comp-label')?.getBoundingClientRect();
     const ring = document.querySelector('.score-ring-wrap')?.getBoundingClientRect();
@@ -452,6 +542,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(bluesScoreOrder, true, 'blues score row orders label, ring, then status');
 
   await setThemePreset(page, 'fitness');
+  const fitnessRingWidth = await page.locator('.score-ring-svg').evaluate((element) => element.getBoundingClientRect().width);
+  assert.ok(Math.abs(bluesRingWidth - fitnessRingWidth) <= 1, 'blues and fitness score rings match size');
   const fitnessScoreOrder = await page.evaluate(() => {
     const label = document.querySelector('.score-comp-label')?.getBoundingClientRect();
     const ring = document.querySelector('.score-ring-wrap')?.getBoundingClientRect();
@@ -461,6 +553,29 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     return center(label) < center(ring) && center(ring) < center(badge);
   });
   assert.equal(fitnessScoreOrder, true, 'fitness score row orders label, ring, then status');
+  const fitnessScoreColumnAlignment = await page.evaluate(() => {
+    const section = document.querySelector('.score-section')?.getBoundingClientRect();
+    const labelRect = document.querySelector('.score-comp-label')?.getBoundingClientRect();
+    const ringRect = document.querySelector('.score-ring-wrap')?.getBoundingClientRect();
+    const badgeRect = document.querySelector('.score-badge')?.getBoundingClientRect();
+    if (!section || !labelRect || !ringRect || !badgeRect) return { missing: true };
+    const center = (rect) => rect.left + rect.width / 2;
+    return {
+      labelDelta: Math.abs(center(labelRect) - ((section.left + ringRect.left) / 2)),
+      badgeDelta: Math.abs(center(badgeRect) - ((ringRect.right + section.right) / 2)),
+    };
+  });
+  assert.equal(fitnessScoreColumnAlignment.missing, undefined, 'fitness score column elements exist');
+  assert.ok(fitnessScoreColumnAlignment.labelDelta <= 12, `fitness total label centered in left column: ${fitnessScoreColumnAlignment.labelDelta}px`);
+  assert.ok(fitnessScoreColumnAlignment.badgeDelta <= 12, `fitness status centered in right column: ${fitnessScoreColumnAlignment.badgeDelta}px`);
+  const fitnessRingTextDelta = await page.evaluate(() => {
+    const svg = document.getElementById('score-ring-svg');
+    const text = document.getElementById('score-ring-num');
+    if (!svg || !text || typeof text.getBBox !== 'function') return null;
+    const box = text.getBBox();
+    return Math.abs((box.y + box.height / 2) - 100);
+  });
+  assert.ok(fitnessRingTextDelta !== null && fitnessRingTextDelta <= 4, `fitness score number is centered in ring: ${fitnessRingTextDelta}px`);
   const fitnessRingCategoryHidden = await page.evaluate(() => {
     const cat = document.querySelector('.score-ring-cat');
     return cat ? getComputedStyle(cat).display === 'none' : false;
