@@ -717,10 +717,14 @@ select {
   text-align: center;
 }
 
-/* ─── Event row: input cell sizes to content; MIN/MAX/Chart share remainder ─── */
+/* ─── Event row: inputs get priority; MIN/MAX/Chart adapt to fit ─── */
 .editor-event-row {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns:
+    minmax(126px, 1.75fr)
+    minmax(48px, 0.62fr)
+    minmax(48px, 0.62fr)
+    minmax(56px, 0.74fr);
   gap: 8px;
   align-items: center;
   justify-items: stretch;
@@ -769,7 +773,7 @@ select {
   margin-left: 0;
 }
 
-/* Buttons keep their natural fixed size; cells just center them */
+/* Buttons fill their smaller grid tracks and match the input height. */
 .editor-event-row .minmax-btn,
 .editor-event-row .chart-btn {
   font-size: 12px;
@@ -988,7 +992,11 @@ select {
   }
 
   .editor-event-row {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns:
+      minmax(124px, 1.85fr)
+      minmax(42px, 0.58fr)
+      minmax(42px, 0.58fr)
+      minmax(50px, 0.7fr);
     gap: 6px;
   }
 
@@ -1021,6 +1029,8 @@ select {
   .editor-event-row .chart-btn {
     font-size: 11px;
     letter-spacing: 0.4px;
+    padding-left: 3px;
+    padding-right: 3px;
   }
 
   .body-whtr-row {
@@ -1063,6 +1073,39 @@ select {
 
   .body-step-btn {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 350px) {
+  .editor-event-row {
+    grid-template-columns:
+      minmax(112px, 1.9fr)
+      minmax(38px, 0.56fr)
+      minmax(38px, 0.56fr)
+      minmax(44px, 0.68fr);
+    gap: 4px;
+  }
+
+  .editor-event-row .value-group .value-input,
+  .editor-event-row .value-group .time-input {
+    font-size: 20px;
+  }
+
+  .editor-event-row .value-group .time-input {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
+  .editor-event-row .time-sep {
+    font-size: 20px;
+  }
+
+  .editor-event-row .minmax-btn,
+  .editor-event-row .chart-btn {
+    font-size: 10px;
+    letter-spacing: 0;
+    padding-left: 2px;
+    padding-right: 2px;
   }
 }
 

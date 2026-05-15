@@ -219,27 +219,64 @@ async function assertEventRowEdgeAlignment(page, panelId, label) {
     const groupRect = valueGroup.getBoundingClientRect();
     const inputRect = input.getBoundingClientRect();
     const minRect = minButton.getBoundingClientRect();
+    const maxButton = activeValueRow?.querySelectorAll('.minmax-btn')?.[1];
+    const maxRect = maxButton?.getBoundingClientRect();
     const chartRect = chart.getBoundingClientRect();
     const columnGap = parseFloat(getComputedStyle(row).columnGap) || 0;
-    const cellWidth = (rowRect.width - (columnGap * 3)) / 4;
     const heights = [...inputs.map((el) => el.getBoundingClientRect().height), ...buttons.map((el) => el.getBoundingClientRect().height)];
     const maxHeight = Math.max(...heights);
     const minHeight = Math.min(...heights);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const clippedInputs = inputs
+      .map((el) => {
+        const style = getComputedStyle(el);
+        const rect = el.getBoundingClientRect();
+        const text = el.value || el.placeholder || '';
+        if (!ctx || !text) return null;
+        ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        const required = ctx.measureText(text).width
+          + (parseFloat(style.paddingLeft) || 0)
+          + (parseFloat(style.paddingRight) || 0)
+          + 6;
+        return {
+          id: el.id,
+          width: rect.width,
+          required,
+        };
+      })
+      .filter(Boolean)
+      .filter(({ width, required }) => width + 0.5 < required)
+      .map(({ id, width, required }) => `${id}:${Math.round(width)}<${Math.round(required)}`);
+    const actionWidths = buttons.map((el) => el.getBoundingClientRect().width);
+    const maxActionWidth = Math.max(...actionWidths);
+    const gaps = maxRect
+      ? [
+        minRect.left - groupRect.right,
+        maxRect.left - minRect.right,
+        chartRect.left - maxRect.right,
+      ]
+      : [];
+    const gapDelta = gaps.length ? Math.max(...gaps.map((gap) => Math.abs(gap - columnGap))) : 0;
     return {
-      leftDelta: Math.abs(inputRect.left - rowRect.left),
-      groupWidthDelta: Math.abs(groupRect.width - cellWidth),
-      minWidthDelta: Math.abs(minRect.width - cellWidth),
+      leftDelta: Math.abs(groupRect.left - rowRect.left),
+      firstInputLeftDelta: Math.abs(inputRect.left - rowRect.left),
       rightDelta: Math.abs(chartRect.right - rowRect.right),
       heightDelta: maxHeight - minHeight,
+      inputPriorityDelta: groupRect.width - maxActionWidth,
+      gapDelta,
+      clippedInputs,
     };
   }, panelId);
 
   assert.equal(result.missing, undefined, `${label} row alignment elements exist`);
-  assert.ok(result.leftDelta <= 2, `${label} input aligns with row left edge: ${result.leftDelta}px`);
-  assert.ok(result.groupWidthDelta <= 2, `${label} input group uses one even row cell: ${result.groupWidthDelta}px`);
-  assert.ok(result.minWidthDelta <= 2, `${label} MIN button uses one even row cell: ${result.minWidthDelta}px`);
+  assert.ok(result.leftDelta <= 2, `${label} input group aligns with row left edge: ${result.leftDelta}px`);
+  assert.ok(result.firstInputLeftDelta <= 2, `${label} input aligns with row left edge: ${result.firstInputLeftDelta}px`);
   assert.ok(result.rightDelta <= 2, `${label} chart aligns with row right edge: ${result.rightDelta}px`);
   assert.ok(result.heightDelta <= 1, `${label} row controls share height: ${result.heightDelta}px`);
+  assert.ok(result.inputPriorityDelta >= 12, `${label} input group has priority over action buttons: ${result.inputPriorityDelta}px`);
+  assert.ok(result.gapDelta <= 2, `${label} row control gaps are even: ${result.gapDelta}px`);
+  assert.deepEqual(result.clippedInputs, [], `${label} input text fits without clipping`);
 }
 
 async function assertScoreBarLabelsDoNotOverlap(page, preset, label) {
@@ -523,6 +560,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     });
     await page.waitForTimeout(50);
     await assertControlsStayInsideApp(page, `${label} ${preset} run`);
+    await assertEventRowEdgeAlignment(page, 'cardio-editor', `${label} ${preset} cardio run`);
 
     await page.evaluate(() => {
       const sel = document.getElementById('cardio-sel');
@@ -531,6 +569,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     });
     await page.waitForTimeout(50);
     await assertControlsStayInsideApp(page, `${label} ${preset} HAMR`);
+    await assertEventRowEdgeAlignment(page, 'cardio-editor', `${label} ${preset} cardio HAMR`);
   }
 
   await setThemePreset(page, 'tactical');
