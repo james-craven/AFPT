@@ -203,21 +203,43 @@ async function assertEventRowEdgeAlignment(page, panelId, label) {
     const panel = document.getElementById(id);
     const row = panel?.querySelector('.editor-event-row');
     const activeValueRow = panel?.querySelector('.editor-value-row:not([hidden])');
+    const valueGroup = activeValueRow?.querySelector('.value-group');
     const input = activeValueRow?.querySelector('input');
+    const inputs = Array.from(activeValueRow?.querySelectorAll('input') || []);
+    const buttons = Array.from(panel?.querySelectorAll('.editor-event-row .minmax-btn, .editor-event-row .chart-btn') || [])
+      .filter((el) => {
+        const rect = el.getBoundingClientRect();
+        const style = getComputedStyle(el);
+        return rect.width > 0 && rect.height > 0 && style.display !== 'none' && style.visibility !== 'hidden';
+      });
+    const minButton = activeValueRow?.querySelector('.minmax-btn');
     const chart = panel?.querySelector('.chart-btn');
-    if (!row || !input || !chart) return { missing: true };
+    if (!row || !valueGroup || !input || !minButton || !chart || buttons.length < 3) return { missing: true };
     const rowRect = row.getBoundingClientRect();
+    const groupRect = valueGroup.getBoundingClientRect();
     const inputRect = input.getBoundingClientRect();
+    const minRect = minButton.getBoundingClientRect();
     const chartRect = chart.getBoundingClientRect();
+    const columnGap = parseFloat(getComputedStyle(row).columnGap) || 0;
+    const cellWidth = (rowRect.width - (columnGap * 3)) / 4;
+    const heights = [...inputs.map((el) => el.getBoundingClientRect().height), ...buttons.map((el) => el.getBoundingClientRect().height)];
+    const maxHeight = Math.max(...heights);
+    const minHeight = Math.min(...heights);
     return {
       leftDelta: Math.abs(inputRect.left - rowRect.left),
+      groupWidthDelta: Math.abs(groupRect.width - cellWidth),
+      minWidthDelta: Math.abs(minRect.width - cellWidth),
       rightDelta: Math.abs(chartRect.right - rowRect.right),
+      heightDelta: maxHeight - minHeight,
     };
   }, panelId);
 
   assert.equal(result.missing, undefined, `${label} row alignment elements exist`);
   assert.ok(result.leftDelta <= 2, `${label} input aligns with row left edge: ${result.leftDelta}px`);
+  assert.ok(result.groupWidthDelta <= 2, `${label} input group uses one even row cell: ${result.groupWidthDelta}px`);
+  assert.ok(result.minWidthDelta <= 2, `${label} MIN button uses one even row cell: ${result.minWidthDelta}px`);
   assert.ok(result.rightDelta <= 2, `${label} chart aligns with row right edge: ${result.rightDelta}px`);
+  assert.ok(result.heightDelta <= 1, `${label} row controls share height: ${result.heightDelta}px`);
 }
 
 async function assertScoreBarLabelsDoNotOverlap(page, preset, label) {
@@ -510,6 +532,80 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     await page.waitForTimeout(50);
     await assertControlsStayInsideApp(page, `${label} ${preset} HAMR`);
   }
+
+  await setThemePreset(page, 'tactical');
+  const tacticalAltitudeStyle = await page.evaluate(() => {
+    const row = document.querySelector('.altitude-row');
+    if (!row) return { missing: true };
+    const style = getComputedStyle(row);
+    return {
+      background: style.backgroundColor,
+      borderTopWidth: style.borderTopWidth,
+      paddingLeft: parseFloat(style.paddingLeft),
+      radius: parseFloat(style.borderRadius),
+    };
+  });
+  assert.equal(tacticalAltitudeStyle.missing, undefined, `${label} tactical altitude row exists`);
+  assert.notEqual(tacticalAltitudeStyle.background, 'rgba(0, 0, 0, 0)', `${label} tactical altitude row has themed container background`);
+  assert.equal(tacticalAltitudeStyle.borderTopWidth, '0px', `${label} tactical altitude row removes divider-style top border`);
+  assert.ok(tacticalAltitudeStyle.paddingLeft >= 8, `${label} tactical altitude row has container padding`);
+  assert.ok(tacticalAltitudeStyle.radius >= 5, `${label} tactical altitude row has rounded container`);
+
+  const scoreLabelTextAlign = await page.locator('.score-label-text:visible').first().evaluate((element) => getComputedStyle(element).textAlign);
+  assert.equal(scoreLabelTextAlign, 'center', `${label} score/min/max label text is centered`);
+
+  const componentDividerInset = await page.evaluate(() => {
+    const strip = document.querySelector('.component-strip');
+    if (!strip) return { missing: true };
+    const after = getComputedStyle(strip, '::after');
+    return {
+      left: parseFloat(after.left),
+      right: parseFloat(after.right),
+    };
+  });
+  assert.equal(componentDividerInset.missing, undefined, `${label} component strip divider exists`);
+  assert.ok(componentDividerInset.left >= 15, `${label} bottom divider is inset from left`);
+  assert.ok(componentDividerInset.right >= 15, `${label} bottom divider is inset from right`);
+
+  await setThemePreset(page, 'light');
+  const contrastPacePlanStyle = await page.evaluate(() => {
+    const lapDisplay = document.querySelector('.lap-display');
+    if (!lapDisplay) return { missing: true };
+    const style = getComputedStyle(lapDisplay);
+    return {
+      background: style.backgroundColor,
+      borderWidth: style.borderTopWidth,
+      radius: parseFloat(style.borderRadius),
+    };
+  });
+  assert.equal(contrastPacePlanStyle.missing, undefined, `${label} contrast pace plan exists`);
+  assert.notEqual(contrastPacePlanStyle.background, 'rgba(0, 0, 0, 0)', `${label} contrast pace plan has card background`);
+  assert.notEqual(contrastPacePlanStyle.borderWidth, '0px', `${label} contrast pace plan has card border`);
+  assert.ok(contrastPacePlanStyle.radius >= 10, `${label} contrast pace plan card is rounded`);
+
+  await setThemePreset(page, 'fitness');
+  const fitnessGlassStyle = await page.evaluate(() => {
+    const header = document.querySelector('.app-header');
+    const score = document.querySelector('.score-section');
+    if (!header || !score) return { missing: true };
+    const headerStyle = getComputedStyle(header);
+    const scoreStyle = getComputedStyle(score);
+    return {
+      headerPosition: headerStyle.position,
+      headerBackground: headerStyle.backgroundColor,
+      headerBackdrop: headerStyle.backdropFilter || headerStyle.webkitBackdropFilter || '',
+      scoreBackground: scoreStyle.backgroundColor,
+      scoreRadius: parseFloat(scoreStyle.borderRadius),
+      scoreBorder: scoreStyle.borderTopWidth,
+    };
+  });
+  assert.equal(fitnessGlassStyle.missing, undefined, `${label} gradiant glass elements exist`);
+  assert.equal(fitnessGlassStyle.headerPosition, 'sticky', `${label} gradiant header stays sticky`);
+  assert.notEqual(fitnessGlassStyle.headerBackground, 'rgba(0, 0, 0, 0)', `${label} gradiant header has glass background`);
+  assert.match(fitnessGlassStyle.headerBackdrop, /blur/i, `${label} gradiant header has blur backdrop`);
+  assert.notEqual(fitnessGlassStyle.scoreBackground, 'rgba(0, 0, 0, 0)', `${label} gradiant score section has glass background`);
+  assert.notEqual(fitnessGlassStyle.scoreBorder, '0px', `${label} gradiant score section has glass border`);
+  assert.ok(fitnessGlassStyle.scoreRadius >= 16, `${label} gradiant score section is rounded`);
 
   await page.locator('#summary-strength').click();
   await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
