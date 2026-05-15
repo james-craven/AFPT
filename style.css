@@ -150,9 +150,10 @@ select {
 
 /* ─── Header ───────────────────────────────────────────────────── */
 .app-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
   padding: 12px 16px;
   background: var(--afpt-panel);
   border-bottom: 1px solid var(--afpt-border);
@@ -162,16 +163,54 @@ select {
 }
 
 .app-title {
+  justify-self: start;
+  min-width: 0;
   font-size: 19px;
   font-weight: 700;
   letter-spacing: 3px;
   color: var(--afpt-accent);
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.header-theme-control {
+  justify-self: center;
+  min-width: 0;
+  width: clamp(120px, 36vw, 176px);
+}
+
+.header-theme-select {
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  background-color: var(--afpt-panel-2);
+  border: 1px solid var(--afpt-border-strong);
+  border-radius: 999px;
+  color: var(--afpt-ink);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  line-height: 1;
+  padding: 0 28px 0 12px;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.header-theme-select:focus {
+  outline: none;
+  border-color: var(--afpt-accent);
+  box-shadow: 0 0 0 1px var(--afpt-accent);
 }
 
 /* ─── Settings hub ─────────────────────────────────────────────── */
 .settings-hub {
   position: relative;
+  justify-self: end;
 }
 
 .settings-hub-toggle {
@@ -753,37 +792,51 @@ select {
   font-weight: 700;
 }
 
-.body-measure-row {
+#body-whtr-controls {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+.body-whtr-row {
+  display: grid;
+  grid-template-columns: minmax(112px, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
   width: 100%;
 }
 
-/* WHtR Row 1: label left, ratio stepper right */
-/* Row 1: same 3-column grid as Row 2 — label in col1, ratio centered in col2, col3 empty */
-.body-whtr-row1 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  align-items: center;
-  margin-top: 8px;
-  margin-bottom: 12px;
+.body-whtr-label {
+  color: var(--afpt-ink);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+  line-height: 1.25;
+  text-align: left;
+  text-transform: uppercase;
 }
 
-/* WHtR Row 2: FT / IN / Waist equally spaced */
-.body-whtr-row2 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.body-whtr-cell {
+.body-whtr-control {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  align-items: stretch;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
 }
 
-.body-ratio-block,
+.body-whtr-control--single .body-input-stepper {
+  width: min(100%, 190px);
+}
+
+.body-whtr-control--pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  justify-self: center;
+  width: min(100%, 260px);
+}
+
 .body-measure-block {
   display: flex;
   flex-direction: column;
@@ -800,23 +853,9 @@ select {
   font-weight: 700;
 }
 
-.body-height-inputs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  min-width: 0;
-}
-
-.body-measure-inline {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-
 .body-input-stepper {
   display: grid;
-  grid-template-columns: minmax(30px, 0.42fr) minmax(0, 1fr) minmax(30px, 0.42fr);
+  grid-template-columns: 34px minmax(58px, 1fr) 34px;
   align-items: stretch;
   min-width: 0;
   width: 100%;
@@ -828,11 +867,16 @@ select {
 }
 
 .body-input-stepper--waist {
-  grid-template-columns: minmax(30px, 0.36fr) minmax(50px, 1fr) minmax(30px, 0.36fr);
+  grid-template-columns: 34px minmax(72px, 1fr) 34px;
 }
 
 .body-input-stepper--ratio {
-  max-width: 150px;
+  grid-template-columns: 34px minmax(72px, 1fr) 34px;
+}
+
+.body-input-stepper--height {
+  grid-template-columns: 28px minmax(32px, 1fr) 28px;
+  min-height: 42px;
 }
 
 .body-measure-input {
@@ -842,13 +886,13 @@ select {
   border: none;
   color: var(--afpt-ink);
   font-family: inherit;
-  font-size: 22px;
+  font-size: clamp(18px, 5vw, 22px);
   font-weight: 700;
   height: 100%;
   min-height: 42px;
   padding: 0 4px;
   text-align: center;
-  line-height: 1;
+  line-height: normal;
   appearance: textfield;
   -moz-appearance: textfield;
 }
@@ -916,25 +960,6 @@ select {
   min-width: 20px;
 }
 
-#body-editor .body-ratio-input {
-  width: 100%;
-}
-
-.body-slider-row {
-  width: 100%;
-  display: block;
-  margin-top: 12px;
-  clear: both;
-}
-
-#body-editor .slider-row {
-  width: 100%;
-}
-
-#body-editor .slider-container {
-  margin-bottom: -20px;
-}
-
 #body-editor {
   padding-bottom: 14px;
 }
@@ -944,6 +969,27 @@ select {
 }
 
 @media (max-width: 430px) {
+  .app-header {
+    gap: 8px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .app-title {
+    font-size: 17px;
+    letter-spacing: 2px;
+  }
+
+  .header-theme-control {
+    width: clamp(116px, 34vw, 150px);
+  }
+
+  .header-theme-select {
+    font-size: 10px;
+    padding-left: 10px;
+    padding-right: 24px;
+  }
+
   .editor-panel {
     padding-left: 12px;
     padding-right: 12px;
@@ -987,8 +1033,42 @@ select {
     letter-spacing: 0.4px;
   }
 
-  .body-whtr-row2 {
+  .body-whtr-row {
+    grid-template-columns: minmax(100px, 0.85fr) minmax(0, 1.15fr);
+    gap: 8px;
+  }
+
+  .body-whtr-label {
+    font-size: 10px;
+    letter-spacing: 0.7px;
+  }
+
+  .body-whtr-control--pair {
     gap: 6px;
+    width: min(100%, 230px);
+  }
+
+  .body-input-stepper {
+    grid-template-columns: 30px minmax(50px, 1fr) 30px;
+  }
+
+  .body-input-stepper--ratio,
+  .body-input-stepper--waist {
+    grid-template-columns: 30px minmax(64px, 1fr) 30px;
+  }
+
+  .body-input-stepper--height {
+    grid-template-columns: 24px minmax(28px, 1fr) 24px;
+  }
+
+  .body-measure-input {
+    font-size: 19px;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+  .body-step-btn {
+    font-size: 12px;
   }
 }
 
@@ -2641,28 +2721,19 @@ select {
   border-bottom: none;
 }
 
-.fit-avatar {
-  display: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  color: #fff;
-  font-size: 14px;
-  flex-shrink: 0;
-  line-height: 1;
-}
-
-:root[data-theme="fitness"] .fit-avatar {
-  display: flex;
-}
-
 :root[data-theme="fitness"] .app-title {
-  display: none;
+  color: #fff;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.8px;
+}
+
+:root[data-theme="fitness"] .header-theme-select {
+  background-color: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* ─── Demographics row ─────────────────────────────────────────── */
@@ -2684,19 +2755,49 @@ select {
   background: transparent;
   border-bottom: none;
   padding: 8px 16px 16px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
+  gap: 12px;
 }
 
 :root[data-theme="fitness"] .score-main-row {
+  display: contents;
+}
+
+:root[data-theme="fitness"] .score-comp-label {
+  grid-column: 1;
+  justify-self: start;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  line-height: 1.15;
+}
+
+:root[data-theme="fitness"] .score-number {
   display: none;
 }
 
-/* Fix fitness ring size to 200×200 (mock exact) */
+:root[data-theme="fitness"] .score-badge {
+  grid-column: 3;
+  justify-self: end;
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.28);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-align: right;
+}
+
+:root[data-theme="fitness"] .score-ring-wrap {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 0;
+}
+
+/* Keep the ring centered and responsive in the three-column score row. */
 :root[data-theme="fitness"] .score-ring-svg {
-  width: 200px;
-  height: 200px;
+  width: clamp(154px, 42vw, 190px);
+  height: clamp(154px, 42vw, 190px);
 }
 
 /* Score number: large white bold per mock */
@@ -2710,12 +2811,8 @@ select {
 :root[data-theme="fitness"] .score-ring-num[data-len="4"] { font-size: 44px; }
 :root[data-theme="fitness"] .score-ring-num[data-len="5"] { font-size: 38px; }
 
-/* Category label: lighter, lettered per mock */
 :root[data-theme="fitness"] .score-ring-cat {
-  font-size: 11px;
-  letter-spacing: 3px;
-  fill: rgba(255, 255, 255, 0.85);
-  font-weight: 600;
+  display: none;
 }
 
 /* ─── Score ring deltas ────────────────────────────────────────── */
@@ -2731,6 +2828,9 @@ select {
 
 :root[data-theme="fitness"] .score-ring-deltas {
   display: flex;
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: -2px;
 }
 
 /* ─── Body composition — glass card ───────────────────────────── */

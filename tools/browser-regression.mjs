@@ -163,8 +163,13 @@ async function assertControlsStayInsideApp(page, label) {
       '.editor-panel:not([hidden]) .chart-btn',
       '.editor-panel:not([hidden]) .altitude-row',
       '.editor-panel:not([hidden]) .slider-row',
+      '.editor-panel:not([hidden]) .body-whtr-row',
+      '.editor-panel:not([hidden]) .body-input-stepper',
+      '.editor-panel:not([hidden]) .body-measure-input',
       '.component-strip',
       '.score-section',
+      '.header-theme-control',
+      '.settings-hub-toggle',
     ].join(',');
     const offenders = [];
 
@@ -265,7 +270,12 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const strHiddenAfterBody = await page.evaluate(() => document.getElementById('strength-editor')?.hasAttribute('hidden'));
   assert.equal(strHiddenAfterBody, true, 'strength editor hidden after switching to body');
   const whtrSliderExists = await page.evaluate(() => !!document.getElementById('whtr-slider'));
-  assert.equal(whtrSliderExists, true, 'whtr-slider exists in body editor');
+  assert.equal(whtrSliderExists, false, 'WHtR slider is removed from body editor');
+  const bodyInputsExist = await page.evaluate(() => (
+    ['pfra-whtr', 'height-ft-input', 'height-in-input', 'waist-input']
+      .every((id) => !!document.getElementById(id))
+  ));
+  assert.equal(bodyInputsExist, true, 'body editor exposes ratio, height, and waist inputs');
   await page.locator('#summary-strength').click();
   await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
 
@@ -380,10 +390,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.ok(cardioAlt4 !== null, 'altitude cardio score computes');
   assert.notEqual(cardioAlt4, cardioSeaLevel, 'altitude Group 4 changes cardio score for two-mile-run');
 
-  // 8. Theme switch changes data-theme-preset
-  const settingsBtn = page.locator('#settings-hub-toggle');
-  await settingsBtn.click();
-  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+  // 8. Theme switch changes data-theme-preset from the header control
+  assert.equal(await page.locator('.header-theme-control').isVisible(), true, 'theme selector is visible in header');
   await page.locator('#theme-preset-select').selectOption('blues');
   await page.waitForFunction(() => document.documentElement.dataset.themePreset === 'blues');
   const themeApplied = await page.evaluate(() => document.documentElement.dataset.themePreset);
@@ -392,10 +400,23 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   // Restore theme
   await page.locator('#theme-preset-select').selectOption('tactical');
   await page.waitForFunction(() => document.documentElement.dataset.themePreset === 'tactical');
-  await page.locator('#settings-hub-close').click();
-  await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
 
-  // 8a. Cardio controls stay in bounds across themes and event layouts
+  // 8a. Body/cardio controls stay in bounds across themes and event layouts
+  await page.locator('#summary-body').click();
+  await page.waitForFunction(() => !document.getElementById('body-editor')?.hasAttribute('hidden'));
+  for (const preset of ['tactical', 'stencil', 'blues', 'light', 'fitness']) {
+    await setThemePreset(page, preset);
+    await assertControlsStayInsideApp(page, `${label} ${preset} body`);
+    const minDecimalInputWidth = await page.evaluate(() => Math.min(
+      ...['pfra-whtr', 'waist-input']
+        .map((id) => document.getElementById(id)?.getBoundingClientRect().width || 0),
+    ));
+    assert.ok(
+      minDecimalInputWidth >= 52,
+      `${label} ${preset} decimal body inputs keep enough room: ${minDecimalInputWidth}px`,
+    );
+  }
+
   await page.locator('#summary-cardio').click();
   await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
   for (const preset of ['tactical', 'stencil', 'blues', 'light', 'fitness']) {
@@ -427,6 +448,27 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     return center(label) < center(ring) && center(ring) < center(badge);
   });
   assert.equal(bluesScoreOrder, true, 'blues score row orders label, ring, then status');
+
+  await setThemePreset(page, 'fitness');
+  const fitnessScoreOrder = await page.evaluate(() => {
+    const label = document.querySelector('.score-comp-label')?.getBoundingClientRect();
+    const ring = document.querySelector('.score-ring-wrap')?.getBoundingClientRect();
+    const badge = document.querySelector('.score-badge')?.getBoundingClientRect();
+    if (!label || !ring || !badge) return false;
+    const center = (rect) => rect.left + rect.width / 2;
+    return center(label) < center(ring) && center(ring) < center(badge);
+  });
+  assert.equal(fitnessScoreOrder, true, 'fitness score row orders label, ring, then status');
+  const fitnessRingCategoryHidden = await page.evaluate(() => {
+    const cat = document.querySelector('.score-ring-cat');
+    return cat ? getComputedStyle(cat).display === 'none' : false;
+  });
+  assert.equal(fitnessRingCategoryHidden, true, 'fitness hides status text inside ring');
+  assert.equal(
+    await page.locator('.app-title').evaluate((el) => el.textContent.trim()),
+    'AF-PRT',
+    'fitness theme header keeps AF-PRT title',
+  );
   await setThemePreset(page, 'tactical');
   await page.locator('#summary-strength').click();
   await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));

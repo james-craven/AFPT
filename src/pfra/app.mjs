@@ -49,9 +49,6 @@ let altitudeTables = {};
 let ready = false;
 let loadError = null;
 
-// Which WHtR input the slider is "locked to" — sticky on focus, not cleared on blur
-let _whtrFocus = 'ratio'; // 'ratio' | 'ft' | 'in' | 'waist'
-
 // --- DOM helpers ---
 
 function byId(id) { return document.getElementById(id); }
@@ -757,10 +754,6 @@ function renderScore(result) {
     ringCat.textContent = category === 'Excellent' ? 'EXCELLENT' : category === 'Satisfactory' ? 'SAT' : 'FAIL';
   }
 
-  // Fitness: avatar sex letter
-  const fitAvatar = byId('fit-avatar');
-  if (fitAvatar) fitAvatar.textContent = state.sex === 'male' ? 'M' : 'F';
-
   // Fitness: score deltas (above pass=75, to max=100)
   const passEl = byId('score-delta-pass');
   const maxEl = byId('score-delta-max');
@@ -822,18 +815,8 @@ function renderBodyEditor(scores) {
 
   syncWhtrMeasurementInputs();
 
-const whtrInput = byId('pfra-whtr');
-if (whtrInput) whtrInput.value = state.whtr;
-
-// Only reset slider range/value if currently in ratio focus mode
-if (_whtrFocus === 'ratio') {
-  const whtrNum = parseFloat(state.whtr);
-  const slider = byId('whtr-slider');
-  if (slider && Number.isFinite(whtrNum)) {
-    slider.min = '35'; slider.max = '70';
-    slider.value = String(Math.round(whtrNum * 100));
-  }
-}
+  const whtrInput = byId('pfra-whtr');
+  if (whtrInput) whtrInput.value = state.whtr;
 }
 
 function renderStrengthEditor(scores) {
@@ -1130,29 +1113,6 @@ function syncWhtrMeasurementInputs() {
   if (waistEl) waistEl.value = state.bodyWaist;
 }
 
-function _onWhtrFocus(field) {
-  _whtrFocus = field;
-  const slider = byId('whtr-slider');
-  if (!slider) return;
-  if (field === 'ratio') {
-    slider.min = '35'; slider.max = '70';
-    const v = parseFloat(val('pfra-whtr'));
-    if (Number.isFinite(v)) slider.value = String(Math.round(v * 100));
-  } else if (field === 'ft') {
-    slider.min = '3'; slider.max = '8';
-    const v = Number(val('height-ft-input') || 0);
-    slider.value = String(Math.max(3, Math.min(8, v)));
-  } else if (field === 'in') {
-    slider.min = '0'; slider.max = '11';
-    const v = Number(val('height-in-input') || 0);
-    slider.value = String(Math.max(0, Math.min(11, v)));
-  } else if (field === 'waist') {
-    slider.min = '200'; slider.max = '800';
-    const v = Number(val('waist-input') || 0);
-    slider.value = String(Math.round(Math.max(20, Math.min(80, v)) * 10));
-  }
-}
-
 function updateWhtrFromMeasurements() {
   const ft = val('height-ft-input') || state.bodyHeightFt;
   const inches = val('height-in-input') || state.bodyHeightIn;
@@ -1172,23 +1132,6 @@ function updateWhtrFromMeasurements() {
 
   const whtrInput = byId('pfra-whtr');
   if (whtrInput) whtrInput.value = ratio;
-
-  // Sync slider to the currently active field, not always to ratio units
-  const slider = byId('whtr-slider');
-  if (slider) {
-    if (_whtrFocus === 'ratio') {
-      slider.value = String(Math.round(Number(ratio) * 100));
-    } else if (_whtrFocus === 'ft') {
-      const v = Number(val('height-ft-input') || 0);
-      slider.value = String(Math.max(3, Math.min(8, v)));
-    } else if (_whtrFocus === 'in') {
-      const v = Number(val('height-in-input') || 0);
-      slider.value = String(Math.max(0, Math.min(11, v)));
-    } else if (_whtrFocus === 'waist') {
-      const v = Number(val('waist-input') || 0);
-      slider.value = String(Math.round(Math.max(20, Math.min(80, v)) * 10));
-    }
-  }
 
   render();
 }
@@ -1219,11 +1162,6 @@ function bindEvents() {
   byId('pfra-whtr')?.addEventListener('input', () => {
     const v = val('pfra-whtr');
     dispatch({ type: 'SET_WHTR', value: v });
-    const slider = byId('whtr-slider');
-    if (slider) {
-      const num = parseFloat(v);
-      if (Number.isFinite(num)) slider.value = String(Math.round(num * 100));
-    }
     render();
   });
 
@@ -1331,35 +1269,6 @@ function bindEvents() {
 
   document.addEventListener('pointerup', _stopStep);
   document.addEventListener('pointercancel', _stopStep);
-
-  // --- WHtR slider: targets last-focused measurement input (sticky until next focus) ---
-
-  byId('pfra-whtr')?.addEventListener('focus', () => _onWhtrFocus('ratio'));
-  byId('height-ft-input')?.addEventListener('focus', () => _onWhtrFocus('ft'));
-  byId('height-in-input')?.addEventListener('focus', () => _onWhtrFocus('in'));
-  byId('waist-input')?.addEventListener('focus', () => _onWhtrFocus('waist'));
-
-  byId('whtr-slider')?.addEventListener('input', () => {
-    const slider = byId('whtr-slider');
-    if (!slider) return;
-    const raw = Number(slider.value);
-    if (_whtrFocus === 'ratio' || _whtrFocus === undefined) {
-      const whtrStr = (raw / 100).toFixed(2);
-      dispatch({ type: 'SET_WHTR', value: whtrStr });
-      const txt = byId('pfra-whtr');
-      if (txt) txt.value = whtrStr;
-    } else if (_whtrFocus === 'ft') {
-      const ftEl = byId('height-ft-input');
-      if (ftEl) { ftEl.value = String(raw); ftEl.dispatchEvent(new Event('input', { bubbles: true })); }
-    } else if (_whtrFocus === 'in') {
-      const inEl = byId('height-in-input');
-      if (inEl) { inEl.value = String(raw); inEl.dispatchEvent(new Event('input', { bubbles: true })); }
-    } else if (_whtrFocus === 'waist') {
-      const waistEl = byId('waist-input');
-      if (waistEl) { waistEl.value = (raw / 10).toFixed(1); waistEl.dispatchEvent(new Event('input', { bubbles: true })); }
-    }
-    if (_whtrFocus === 'ratio' || _whtrFocus === undefined) render();
-  });
 
   byId('alt-select')?.addEventListener('change', () => {
     dispatch({ type: 'SET_ALTITUDE_GROUP', group: readAltitudeGroup(val('alt-select')) });
