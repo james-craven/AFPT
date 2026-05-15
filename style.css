@@ -679,10 +679,10 @@ select {
   text-align: center;
 }
 
-/* ─── Event row: 4 equal cells — input group, MIN, MAX, Chart ─── */
+/* ─── Event row: input cell sizes to content; MIN/MAX/Chart share remainder ─── */
 .editor-event-row {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: auto 1fr 1fr 1fr;
   gap: 8px;
   align-items: center;
   justify-items: center;
@@ -693,20 +693,12 @@ select {
   display: contents;
 }
 
-/* Input group lives in cell 1, flexed so inputs share that cell */
+/* Input group lives in cell 1 and stretches that cell to fit its inputs */
 .editor-event-row .value-group {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-width: 0;
-  max-width: 100%;
-}
-
-/* Allow inputs to shrink to fit their shared cell on narrow screens */
-.editor-event-row .value-group .value-input,
-.editor-event-row .value-group .time-input {
-  min-width: 0;
 }
 
 /* MM/SS time labels are redundant — colon + placeholders carry context */
