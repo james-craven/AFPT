@@ -108,6 +108,8 @@ html, body {
   font-size: 15px;
   min-height: 100vh;
   touch-action: manipulation;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .sr-only {
@@ -137,11 +139,13 @@ select {
 
 /* ─── App shell ────────────────────────────────────────────────── */
 .app-shell {
+  width: min(100%, var(--afpt-app-max-width));
   max-width: var(--afpt-app-max-width);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  overflow-x: clip;
 }
 
 /* ─── Header ───────────────────────────────────────────────────── */
@@ -682,10 +686,12 @@ select {
 /* ─── Event row: input cell sizes to content; MIN/MAX/Chart share remainder ─── */
 .editor-event-row {
   display: grid;
-  grid-template-columns: auto 1fr 1fr 1fr;
+  grid-template-columns: minmax(0, 1.45fr) repeat(3, minmax(48px, 0.75fr));
   gap: 8px;
   align-items: center;
-  justify-items: center;
+  justify-items: stretch;
+  min-width: 0;
+  width: 100%;
 }
 
 /* Value rows dissolve into the parent grid — value-group + MIN + MAX become 3 of the 4 cells */
@@ -699,17 +705,21 @@ select {
   align-items: center;
   justify-content: center;
   gap: 6px;
+  min-width: 0;
+  max-width: 100%;
 }
 
-/* Restore fixed input widths — override the flex:1/width:auto rule meant for the old layout */
+/* Keep input groups compact enough for narrow mobile themes. */
 .editor-event-row .value-group .value-input {
   flex: 0 0 auto;
-  width: 96px;
+  min-width: 0;
+  width: clamp(54px, 18vw, 96px);
 }
 
 .editor-event-row .value-group .time-input {
   flex: 0 0 auto;
-  width: 68px;
+  min-width: 0;
+  width: clamp(40px, 12vw, 68px);
 }
 
 /* MM/SS time labels are redundant — colon + placeholders carry context */
@@ -725,7 +735,11 @@ select {
 /* Buttons keep their natural fixed size; cells just center them */
 .editor-event-row .minmax-btn,
 .editor-event-row .chart-btn {
-  font-size: 13px;
+  font-size: 12px;
+  min-width: 0;
+  width: 100%;
+  padding-left: clamp(4px, 2vw, 10px);
+  padding-right: clamp(4px, 2vw, 10px);
 }
 
 .body-event-row {
@@ -802,10 +816,11 @@ select {
 
 .body-input-stepper {
   display: grid;
-  grid-template-columns: minmax(54px, 1fr) 24px;
+  grid-template-columns: minmax(30px, 0.42fr) minmax(0, 1fr) minmax(30px, 0.42fr);
   align-items: stretch;
   min-width: 0;
   width: 100%;
+  min-height: 44px;
   border: 1px solid var(--afpt-border-strong);
   border-radius: 7px;
   overflow: hidden;
@@ -813,11 +828,11 @@ select {
 }
 
 .body-input-stepper--waist {
-  grid-template-columns: minmax(76px, 1fr) 24px;
+  grid-template-columns: minmax(30px, 0.36fr) minmax(50px, 1fr) minmax(30px, 0.36fr);
 }
 
 .body-input-stepper--ratio {
-  grid-template-columns: minmax(64px, 1fr) 24px;
+  max-width: 150px;
 }
 
 .body-measure-input {
@@ -829,8 +844,11 @@ select {
   font-family: inherit;
   font-size: 22px;
   font-weight: 700;
-  padding: 9px 6px;
+  height: 100%;
+  min-height: 42px;
+  padding: 0 4px;
   text-align: center;
+  line-height: 1;
   appearance: textfield;
   -moz-appearance: textfield;
 }
@@ -857,19 +875,11 @@ select {
   box-shadow: 0 0 0 1px var(--afpt-accent);
 }
 
-.body-stepper-stack {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  width: 24px;
-  border-left: 1px solid var(--afpt-border);
-  background: color-mix(in srgb, var(--afpt-panel) 70%, transparent);
-}
-
 .body-step-btn {
-  width: 24px;
+  width: 100%;
   height: 100%;
   border: none;
-  background: transparent;
+  background: color-mix(in srgb, var(--afpt-panel) 70%, transparent);
   color: var(--afpt-ink);
   font-family: inherit;
   font-size: 13px;
@@ -880,10 +890,15 @@ select {
   justify-content: center;
   cursor: pointer;
   padding: 0;
+  touch-action: manipulation;
 }
 
-.body-step-btn:first-child {
-  border-bottom: 1px solid var(--afpt-border);
+.body-input-stepper > .body-step-btn--minus {
+  border-right: 1px solid var(--afpt-border);
+}
+
+.body-input-stepper > .body-step-btn--plus {
+  border-left: 1px solid var(--afpt-border);
 }
 
 .body-step-btn:hover {
@@ -929,6 +944,49 @@ select {
 }
 
 @media (max-width: 430px) {
+  .editor-panel {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .editor-event-row {
+    grid-template-columns: minmax(0, 1.35fr) repeat(3, minmax(42px, 0.72fr));
+    gap: 6px;
+  }
+
+  .editor-event-row .value-group {
+    gap: 4px;
+  }
+
+  .editor-event-row .value-group .value-input {
+    width: clamp(50px, 16vw, 82px);
+    font-size: 22px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .editor-event-row .value-group .time-input {
+    width: clamp(34px, 11vw, 56px);
+    font-size: 22px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .editor-event-row .value-unit {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .editor-event-row .time-sep {
+    font-size: 22px;
+  }
+
+  .editor-event-row .minmax-btn,
+  .editor-event-row .chart-btn {
+    font-size: 11px;
+    letter-spacing: 0.4px;
+  }
+
   .body-whtr-row2 {
     gap: 6px;
   }
@@ -1526,14 +1584,16 @@ select {
 
 /* Chart modal controls */
 .chart-ctrl-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
   gap: 8px;
   padding: 10px 14px 0;
   flex-shrink: 0;
 }
 
 .chart-ctrl-sel {
-  flex: 1;
+  width: 100%;
+  min-width: 0;
   background: var(--afpt-panel-2);
   border: 1px solid var(--afpt-border-strong);
   color: var(--afpt-ink);
@@ -1547,6 +1607,37 @@ select {
 
 .chart-ctrl-sel:focus {
   border-color: var(--afpt-accent);
+}
+
+.chart-reference-btn {
+  background: transparent;
+  border: 1px solid var(--afpt-border-strong);
+  border-radius: 6px;
+  color: var(--afpt-ink);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 1px;
+  min-width: 0;
+  padding: 7px 10px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.chart-reference-btn:hover {
+  border-color: var(--afpt-accent);
+  color: var(--afpt-accent);
+}
+
+@media (max-width: 430px) {
+  .chart-ctrl-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .chart-reference-btn {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
 }
 
 .chart-demo-row {
@@ -1801,7 +1892,7 @@ select {
   min-width: 0;
 }
 
-.body-step-btn {
+.body-stepper .body-step-btn {
   width: 24px;
   height: 24px;
   border-radius: 3px;
@@ -1821,14 +1912,14 @@ select {
   -webkit-user-select: none;
 }
 
-.body-step-btn:hover {
+.body-stepper .body-step-btn:hover {
   background: transparent;
   border-color: var(--afpt-accent);
   color: var(--afpt-accent);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--afpt-accent) 45%, transparent);
 }
 
-.body-step-btn:active {
+.body-stepper .body-step-btn:active {
   transform: scale(0.94);
   opacity: 0.8;
 }
@@ -2387,22 +2478,30 @@ select {
   color: var(--afpt-accent-2);
 }
 
-/* Blues score section: label LEFT, ring RIGHT, vertically centered */
+/* Blues score section: label LEFT, ring CENTER, status RIGHT */
 :root[data-theme="blues"] .score-section {
   padding: 16px;
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: 18px;
+  gap: 12px;
 }
-/* Show label + badge column on left; ring (later in DOM) is naturally on right */
+
 :root[data-theme="blues"] .score-main-row {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  flex: 1;
+  display: contents;
 }
+
+:root[data-theme="blues"] .score-comp-label {
+  grid-column: 1;
+  justify-self: start;
+}
+
+:root[data-theme="blues"] .score-ring-wrap {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 0;
+}
+
 /* Ring already shows the number; hide the redundant text number */
 :root[data-theme="blues"] .score-number {
   display: none;
@@ -2419,10 +2518,13 @@ select {
   font-weight: 500;
 }
 :root[data-theme="blues"] .score-badge {
+  grid-column: 3;
+  justify-self: end;
   margin-top: 0;
   font-size: 11px;
   letter-spacing: 2px;
   border-radius: 3px;
+  text-align: right;
 }
 
 /* ALT selector row: panel background card, vertically centered */

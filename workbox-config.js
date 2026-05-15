@@ -17,6 +17,7 @@ module.exports = {
 		'shuttle.mp3',
 		'standards/af-pfra-2026.json',
 		'standards/extracted/tables/*.json',
+		'standards/sources/pfra-score-pages/*.jpg',
 		'standards/sources/ShuttleLevels.jpeg',
 		'standards/sources/a31-crops/dafman-36-2905-2-page1-full.png',
 		'standards/sources/a31-crops/dafman-36-2905-2-page2-full.png'

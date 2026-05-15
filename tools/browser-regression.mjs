@@ -136,6 +136,62 @@ async function assertNoBrowserFailures(failures, label) {
   assert.deepEqual(failures, [], `${label} browser errors`);
 }
 
+async function setThemePreset(page, preset) {
+  await page.evaluate((themePreset) => {
+    const select = document.getElementById('theme-preset-select');
+    if (!select) return;
+    select.value = themePreset;
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  }, preset);
+  await page.waitForFunction(
+    (themePreset) => document.documentElement.dataset.themePreset === themePreset,
+    preset,
+  );
+}
+
+async function assertControlsStayInsideApp(page, label) {
+  const result = await page.evaluate(() => {
+    const shell = document.querySelector('.app-shell')?.getBoundingClientRect();
+    if (!shell) return { offenders: ['missing .app-shell'] };
+    const selectors = [
+      '.editor-panel:not([hidden])',
+      '.editor-panel:not([hidden]) .editor-event-row',
+      '.editor-panel:not([hidden]) .value-group',
+      '.editor-panel:not([hidden]) .value-input',
+      '.editor-panel:not([hidden]) .time-input',
+      '.editor-panel:not([hidden]) .minmax-btn',
+      '.editor-panel:not([hidden]) .chart-btn',
+      '.editor-panel:not([hidden]) .altitude-row',
+      '.editor-panel:not([hidden]) .slider-row',
+      '.component-strip',
+      '.score-section',
+    ].join(',');
+    const offenders = [];
+
+    for (const element of document.querySelectorAll(selectors)) {
+      const style = window.getComputedStyle(element);
+      if (style.display === 'none' || style.visibility === 'hidden') continue;
+      const rect = element.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) continue;
+      if (rect.left < shell.left - 1 || rect.right > shell.right + 1) {
+        offenders.push({
+          className: element.className,
+          id: element.id,
+          left: Math.round(rect.left),
+          right: Math.round(rect.right),
+          shellLeft: Math.round(shell.left),
+          shellRight: Math.round(shell.right),
+          tag: element.tagName.toLowerCase(),
+        });
+      }
+    }
+
+    return { offenders };
+  });
+
+  assert.deepEqual(result.offenders, [], `${label} controls stay inside app bounds`);
+}
+
 async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const { context, failures, page } = await newPage(
     browser, baseUrl, `?no-sw=1&qa=smoke-${label}`, contextOptions,
@@ -339,6 +395,42 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.locator('#settings-hub-close').click();
   await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
 
+  // 8a. Cardio controls stay in bounds across themes and event layouts
+  await page.locator('#summary-cardio').click();
+  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  for (const preset of ['tactical', 'stencil', 'blues', 'light', 'fitness']) {
+    await setThemePreset(page, preset);
+    await page.evaluate(() => {
+      const sel = document.getElementById('cardio-sel');
+      sel.value = 'two-mile-run';
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    await page.waitForTimeout(50);
+    await assertControlsStayInsideApp(page, `${label} ${preset} run`);
+
+    await page.evaluate(() => {
+      const sel = document.getElementById('cardio-sel');
+      sel.value = 'hamr-20-meter';
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    await page.waitForTimeout(50);
+    await assertControlsStayInsideApp(page, `${label} ${preset} HAMR`);
+  }
+
+  await setThemePreset(page, 'blues');
+  const bluesScoreOrder = await page.evaluate(() => {
+    const label = document.querySelector('.score-comp-label')?.getBoundingClientRect();
+    const ring = document.querySelector('.score-ring-wrap')?.getBoundingClientRect();
+    const badge = document.querySelector('.score-badge')?.getBoundingClientRect();
+    if (!label || !ring || !badge) return false;
+    const center = (rect) => rect.left + rect.width / 2;
+    return center(label) < center(ring) && center(ring) < center(badge);
+  });
+  assert.equal(bluesScoreOrder, true, 'blues score row orders label, ring, then status');
+  await setThemePreset(page, 'tactical');
+  await page.locator('#summary-strength').click();
+  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+
   // 9. Chart drawer opens with generated table and closes
   await page.locator('#push-txt').fill('48');
   const appSexBeforeChartDemo = await page.locator('#sex-sel').inputValue();
@@ -382,6 +474,19 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     await page.evaluate(() => document.getElementById('score-txt')?.textContent?.trim()),
     scoreBeforeChartDemo,
     'chart demographic selectors do not change main app score',
+  );
+  await page.locator('#chart-reference-btn').click();
+  await page.waitForFunction(() => {
+    const modal = document.getElementById('modal');
+    const image = document.querySelector('#chart-content .chart-reference__image');
+    return modal?.dataset.chartMode === 'reference'
+      && !modal.hasAttribute('hidden')
+      && image?.getAttribute('src')?.includes('pfra-scoring-page-02.jpg');
+  });
+  assert.equal(
+    await page.locator('#chart-drawer-title').evaluate((el) => el.textContent.trim()),
+    'Push-Up Official Score Chart',
+    'chart reference button opens selected event official source page',
   );
   await page.locator('#close-btn').click();
   await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));

@@ -336,6 +336,57 @@ const OFFICIAL_REFERENCES = {
   },
 };
 
+const SCORE_CHART_REFERENCES = {
+  'push-up': {
+    title: 'Push-Up Official Score Chart',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-02.jpg',
+    alt: 'Official PFRA push-up scoring standards page',
+    caption: 'AFPC PFRA Scoring Charts, Push-Up Scoring Standards',
+  },
+  'hand-release-push-up': {
+    title: 'Hand Release Push-Up Official Score Chart',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-03.jpg',
+    alt: 'Official PFRA hand release push-up scoring standards page',
+    caption: 'AFPC PFRA Scoring Charts, Hand Release Push-Up Scoring Standards',
+  },
+  'sit-up': {
+    title: 'Sit-Up Official Score Chart',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-04.jpg',
+    alt: 'Official PFRA sit-up scoring standards page',
+    caption: 'AFPC PFRA Scoring Charts, Sit-Up Scoring Standards',
+  },
+  'cross-leg-reverse-crunch': {
+    title: 'Cross-Leg Reverse Crunch Official Score Chart',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-05.jpg',
+    alt: 'Official PFRA cross-leg reverse crunch scoring standards page',
+    caption: 'AFPC PFRA Scoring Charts, Cross-Leg Reverse Crunch Scoring Standards',
+  },
+  'forearm-plank': {
+    title: 'Forearm Plank Official Score Chart',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-06.jpg',
+    alt: 'Official PFRA forearm plank scoring standards page',
+    caption: 'AFPC PFRA Scoring Charts, Forearm Plank Scoring Standards',
+  },
+  'two-mile-run': {
+    title: '2 Mile Run Official Score Chart',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-07.jpg',
+    alt: 'Official PFRA 2 mile run scoring standards page',
+    caption: 'AFPC PFRA Scoring Charts, 2 Mile Run Scoring Standards',
+  },
+  'hamr-20-meter': {
+    title: '20m HAMR Official Score Chart',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-08.jpg',
+    alt: 'Official PFRA 20 meter HAMR scoring standards page',
+    caption: 'AFPC PFRA Scoring Charts, 20-Meter HAMR Scoring Standards',
+  },
+  'two-kilometer-walk': {
+    title: '2 km Walk Official Reference',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-10.jpg',
+    alt: 'Official PFRA 2 kilometer walk male and female maximum times page',
+    caption: 'AFPC PFRA Scoring Charts, 2.0 Kilometer Walk Male and Female',
+  },
+};
+
 const HAMR_LEVEL_RANGES = [
   { level: 1, start: 1, end: 7 },
   { level: 2, start: 8, end: 15 },
@@ -367,6 +418,14 @@ function setChartControlsVisible(visible) {
   const demoRow = document.querySelector('.chart-demo-row');
   if (ctrlRow) ctrlRow.hidden = !visible;
   if (demoRow) demoRow.hidden = !visible;
+}
+
+function updateChartReferenceButton() {
+  const button = byId('chart-reference-btn');
+  if (!button) return;
+  const reference = SCORE_CHART_REFERENCES[chartModalState.event];
+  button.disabled = !reference;
+  button.title = reference ? `Open ${reference.title}` : 'No official reference is available for this event';
 }
 
 function currentPerformanceForChart(event, ageGroup, sex) {
@@ -434,6 +493,7 @@ function refreshChartContent() {
   const contentEl = byId('chart-content');
   if (contentEl) {
     setChartDrawerTitle('Score Chart');
+    updateChartReferenceButton();
     contentEl.innerHTML = generateScoreChartFor(
       chartModalState.event,
       chartModalState.ageGroup,
@@ -447,7 +507,9 @@ function refreshChartContent() {
 
 function renderOfficialReference(referenceKey) {
   const contentEl = byId('chart-content');
-  const reference = OFFICIAL_REFERENCES[referenceKey];
+  const reference = typeof referenceKey === 'string'
+    ? OFFICIAL_REFERENCES[referenceKey]
+    : referenceKey;
   if (!contentEl || !reference) return;
 
   setChartDrawerTitle(reference.title);
@@ -515,6 +577,18 @@ function openOfficialReference(referenceKey) {
   modal.dataset.chartMode = 'reference';
   setChartControlsVisible(false);
   renderOfficialReference(referenceKey);
+  modal.removeAttribute('hidden');
+  modal.dataset.chartOpen = 'true';
+}
+
+function openCurrentScoreReference() {
+  const reference = SCORE_CHART_REFERENCES[chartModalState.event];
+  if (!reference) return;
+  const modal = byId('modal');
+  if (!modal) return;
+  modal.dataset.chartMode = 'reference';
+  setChartControlsVisible(false);
+  renderOfficialReference(reference);
   modal.removeAttribute('hidden');
   modal.dataset.chartOpen = 'true';
 }
@@ -1685,6 +1759,8 @@ function bindEvents() {
     chartModalState.event = byId('chart-component-sel').value;
     refreshChartContent();
   });
+
+  byId('chart-reference-btn')?.addEventListener('click', openCurrentScoreReference);
 
   byId('chart-sex-sel')?.addEventListener('change', () => {
     chartModalState.sex = byId('chart-sex-sel').value;
