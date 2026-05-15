@@ -43,7 +43,6 @@ function handleKeyboardAction(event) {
 function initSettingsHub() {
   const elements = {
     closeButton: byId('settings-hub-close'),
-    menu: byId('menu'),
     panel: byId('settings-hub-panel'),
     scrim: byId('settings-hub-scrim'),
     toggle: byId('settings-hub-toggle'),
@@ -65,7 +64,7 @@ function initSettingsHub() {
 
   elements.panel.addEventListener('keydown', handleKeyboardAction);
 
-  elements.menu?.addEventListener('click', (event) => {
+  elements.panel.addEventListener('click', (event) => {
     const item = event.target.closest('li');
     if (!item || !CLOSE_ON_ACTION_IDS.has(item.id)) return;
     window.requestAnimationFrame(() => setHubOpen(false, elements));

@@ -18,7 +18,7 @@
   <div id="dev-version-modal" class="modal-overlay" hidden>
     <div class="modal-panel">
       <h2>Build Info</h2>
-      <p id="dev-version-text">Loading…</p>
+      <div id="dev-version-text" class="build-info">Loading…</div>
       <button id="dev-version-close" type="button">Close</button>
     </div>
   </div>
@@ -26,11 +26,11 @@
   <!-- PWA update modal -->
   <div id="pwa-update-modal" class="modal-overlay" hidden role="dialog" aria-labelledby="pwa-update-title">
     <div class="modal-panel">
-      <h2 id="pwa-update-title">Update Ready</h2>
-      <p>A new offline version is available.</p>
+      <h2 id="pwa-update-title">Update Status</h2>
+      <p id="pwa-update-message">Checking for updates…</p>
       <div class="modal-actions">
-        <button id="pwa-update-now" type="button">Update Now</button>
-        <button id="pwa-update-later" type="button">Later</button>
+        <button id="pwa-update-now" type="button" hidden>Update Now</button>
+        <button id="pwa-update-later" type="button">Close</button>
       </div>
     </div>
   </div>
@@ -38,9 +38,13 @@
   <!-- Install prompt modal -->
   <div id="install-modal" class="modal-overlay" hidden>
     <div class="modal-panel">
-      <h4>Install for Offline Use</h4>
-      <p>iPhone: tap the share icon and choose <strong>Add to Home Screen</strong>.</p>
-      <button id="install-close" type="button">Close</button>
+      <h2 id="install-title">Install for Offline Use</h2>
+      <p id="install-status">Install this app to keep it available offline from your Home Screen.</p>
+      <div id="install-instructions" class="install-instructions"></div>
+      <div class="modal-actions">
+        <button id="pwa-install-now" type="button" hidden>Install App</button>
+        <button id="install-close" type="button">Close</button>
+      </div>
     </div>
   </div>
 

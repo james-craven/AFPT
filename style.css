@@ -1382,6 +1382,41 @@ select {
   line-height: 1.5;
 }
 
+.install-instructions,
+.build-info {
+  color: var(--afpt-ink-dim);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+.install-instructions ol {
+  margin: 8px 0 0 20px;
+  padding: 0;
+}
+
+.install-instructions li {
+  margin: 5px 0;
+}
+
+.build-info dl {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: max-content minmax(0, 1fr);
+  margin: 12px 0 0;
+}
+
+.build-info dt {
+  color: var(--afpt-ink);
+  font-weight: 700;
+}
+
+.build-info dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .modal-panel pre {
   margin: 0 0 16px 0;
   font-size: 12px;

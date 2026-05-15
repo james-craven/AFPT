@@ -389,13 +389,13 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(chartClosed, true, 'chart drawer closes on close-btn click');
 
   // 9a. Settings reference actions open official source images in the themed drawer
-  await page.locator('#settings-hub-toggle').click();
-  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
   for (const [selector, expectedSource, expectedTitle] of [
     ['#run-adjust-chart', 'dafman-36-2905-2-page1-full.png', 'Run Altitude Adjustment'],
     ['#walk-adjust-chart', 'dafman-36-2905-2-page2-full.png', 'Walk/Shuttle Altitude Adjustment'],
     ['#shuttle-score-card', 'ShuttleLevels.jpeg', 'HAMR Shuttle Score Card'],
   ]) {
+    await page.locator('#settings-hub-toggle').click();
+    await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
     await page.locator(selector).click();
     await page.waitForFunction(
       (source) => {
@@ -425,8 +425,6 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     await page.locator('#close-btn').click();
     await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
   }
-  await page.locator('#settings-hub-close').click();
-  await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
 
   // 9b. Cardio chart does not contain NaN:NaN
   await page.locator('#summary-cardio').click();
@@ -449,6 +447,47 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     'function',
     'PWA update API is exposed',
   );
+  assert.equal(
+    await page.evaluate(() => typeof window.afptPwa?.showInstallHelp),
+    'function',
+    'PWA install help API is exposed',
+  );
+
+  await page.locator('#settings-hub-toggle').click();
+  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+  await page.locator('#install-app-menu').click();
+  await page.waitForFunction(() => !document.getElementById('install-modal')?.hasAttribute('hidden'));
+  assert.match(
+    await page.locator('#install-status').innerText(),
+    /install|standalone/i,
+    'install action shows install guidance',
+  );
+  await page.locator('#install-close').click();
+  await page.waitForFunction(() => document.getElementById('install-modal')?.hasAttribute('hidden'));
+
+  await page.locator('#settings-hub-toggle').click();
+  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+  await page.locator('#pwa-update-check').click();
+  await page.waitForFunction(() => !document.getElementById('pwa-update-modal')?.hasAttribute('hidden'));
+  assert.match(
+    await page.locator('#pwa-update-title').evaluate((el) => el.textContent.trim()),
+    /Update Unavailable|Current Version|Update Ready/i,
+    'update action reports update status',
+  );
+  await page.locator('#pwa-update-later').click();
+  await page.waitForFunction(() => document.getElementById('pwa-update-modal')?.hasAttribute('hidden'));
+
+  await page.locator('#settings-hub-toggle').click();
+  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+  await page.locator('#dev-version-menu').click();
+  await page.waitForFunction(() => !document.getElementById('dev-version-modal')?.hasAttribute('hidden'));
+  assert.match(
+    await page.locator('#dev-version-text').innerText(),
+    /developmental build/i,
+    'build info identifies the app as a developmental build',
+  );
+  await page.locator('#dev-version-close').click();
+  await page.waitForFunction(() => document.getElementById('dev-version-modal')?.hasAttribute('hidden'));
 
   await assertNoBrowserFailures(failures, `${label} smoke`);
   await context.close();

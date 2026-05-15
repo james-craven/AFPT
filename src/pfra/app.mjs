@@ -1720,8 +1720,11 @@ function bindEvents() {
     if (player) player.removeAttribute('hidden');
   });
   bindMenuClick('install-app-menu', () => {
-    const modal = byId('install-modal');
-    if (modal) modal.removeAttribute('hidden');
+    if (window.afptPwa?.showInstallHelp) {
+      window.afptPwa.showInstallHelp({ promptIfAvailable: true });
+      return;
+    }
+    byId('install-modal')?.removeAttribute('hidden');
   });
   bindMenuClick('pwa-update-check', () => {
     window.afptPwa?.checkForUpdates?.();
@@ -1730,10 +1733,27 @@ function bindEvents() {
     const modal = byId('dev-version-modal');
     const textEl = byId('dev-version-text');
     if (textEl) {
+      textEl.innerHTML = `<p>This is a developmental build for testing. It is not the final production release.</p>
+        <dl>
+          <dt>Status</dt><dd>Developmental build</dd>
+          <dt>Generated</dt><dd>Loading build metadata...</dd>
+        </dl>`;
       fetch('./dev-build-info.json')
         .then((r) => r.json())
-        .then((info) => { textEl.textContent = JSON.stringify(info, null, 2); })
-        .catch(() => { textEl.textContent = 'Build info unavailable.'; });
+        .then((info) => {
+          const generatedAt = info.generatedAt
+            ? new Date(info.generatedAt).toLocaleString()
+            : 'Unavailable';
+          textEl.innerHTML = `<p>This is a developmental build for testing. It is not the final production release.</p>
+            <dl>
+              <dt>Status</dt><dd>Developmental build</dd>
+              <dt>Generated</dt><dd>${generatedAt}</dd>
+            </dl>`;
+        })
+        .catch(() => {
+          textEl.innerHTML = `<p>This is a developmental build for testing. Build metadata is unavailable.</p>
+            <dl><dt>Status</dt><dd>Developmental build</dd></dl>`;
+        });
     }
     if (modal) modal.removeAttribute('hidden');
   });
@@ -1745,10 +1765,6 @@ function bindEvents() {
   byId('install-close')?.addEventListener('click', () => {
     const modal = byId('install-modal');
     if (modal) modal.setAttribute('hidden', '');
-  });
-  byId('pwa-update-now')?.addEventListener('click', () => {
-    byId('pwa-update-modal')?.setAttribute('hidden', '');
-    window.location.reload();
   });
   byId('pwa-update-later')?.addEventListener('click', () => {
     byId('pwa-update-modal')?.setAttribute('hidden', '');
