@@ -701,6 +701,17 @@ select {
   gap: 6px;
 }
 
+/* Restore fixed input widths — override the flex:1/width:auto rule meant for the old layout */
+.editor-event-row .value-group .value-input {
+  flex: 0 0 auto;
+  width: 96px;
+}
+
+.editor-event-row .value-group .time-input {
+  flex: 0 0 auto;
+  width: 68px;
+}
+
 /* MM/SS time labels are redundant — colon + placeholders carry context */
 .editor-event-row .value-group .time-label {
   display: none;
