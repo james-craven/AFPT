@@ -806,12 +806,12 @@ function renderBodyEditor(scores) {
 
   if (state.bodyExempt) {
     if (whtrControls) whtrControls.hidden = true;
-    if (bodyTxtP) bodyTxtP.textContent = 'WHtR Score: EXEMPT';
+    if (bodyTxtP) bodyTxtP.textContent = 'Score: EXEMPT';
     return;
   }
 
   if (whtrControls) whtrControls.hidden = false;
-  if (bodyTxtP) bodyTxtP.textContent = `WHtR Score: ${scores.body} | Pass ≤ 0.55`;
+  if (bodyTxtP) bodyTxtP.textContent = `Score: ${scores.body} | Pass ≤ 0.55`;
 
   syncWhtrMeasurementInputs();
 
@@ -823,7 +823,7 @@ function renderStrengthEditor(scores) {
   const pushTxtP = byId('push-txt-p');
 
   if (state.strength.exempt) {
-    if (pushTxtP) pushTxtP.textContent = 'Strength Score: EXEMPT';
+    if (pushTxtP) pushTxtP.textContent = 'Score: EXEMPT';
     const tick = byId('push-tick');
     if (tick) tick.style.display = 'none';
     return;
@@ -838,7 +838,7 @@ function renderStrengthEditor(scores) {
   const maxNum = Number(maxVal);
 
   if (pushTxtP) {
-    pushTxtP.textContent = `Strength Score: ${scores.strength} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
+    pushTxtP.textContent = `Score: ${scores.strength} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
   }
 
   const slider = byId('push-slider');
@@ -858,7 +858,7 @@ function renderCoreEditor(scores) {
   const sitTxtP = byId('sit-txt-p');
 
   if (state.core.exempt) {
-    if (sitTxtP) sitTxtP.textContent = 'Core Score: EXEMPT';
+    if (sitTxtP) sitTxtP.textContent = 'Score: EXEMPT';
     const tick = byId('sit-tick');
     if (tick) tick.style.display = 'none';
     return;
@@ -875,7 +875,7 @@ function renderCoreEditor(scores) {
     const maxSec = toSeconds(String(maxVal));
 
     if (sitTxtP) {
-      sitTxtP.textContent = `Core Score: ${scores.core} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
+      sitTxtP.textContent = `Score: ${scores.core} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
     }
 
     const slider = byId('sit-slider');
@@ -894,7 +894,7 @@ function renderCoreEditor(scores) {
     const maxNum = Number(maxVal);
 
     if (sitTxtP) {
-      sitTxtP.textContent = `Core Score: ${scores.core} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
+      sitTxtP.textContent = `Score: ${scores.core} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
     }
 
     const slider = byId('sit-slider');
@@ -926,7 +926,7 @@ function renderCardioEditor(scores) {
   const runTxtP = byId('run-txt-p');
 
   if (state.cardio.exempt) {
-    if (runTxtP) runTxtP.textContent = 'Cardio Score: EXEMPT';
+    if (runTxtP) runTxtP.textContent = 'Score: EXEMPT';
     const tick = byId('run-tick');
     if (tick) tick.style.display = 'none';
     return;
@@ -934,7 +934,7 @@ function renderCardioEditor(scores) {
 
   if (state.cardio.event === 'two-kilometer-walk') {
     const maxTime = walkMaximumTime(standards, state.ageGroup, state.sex);
-    if (runTxtP) runTxtP.textContent = `Cardio Score: ${scores.cardio} | Max Time: ${maxTime ?? '--'}`;
+    if (runTxtP) runTxtP.textContent = `Score: ${scores.cardio} | Max Time: ${maxTime ?? '--'}`;
     const tick = byId('run-tick');
     if (tick) tick.style.display = 'none';
     if (maxTime) {
@@ -960,7 +960,7 @@ function renderCardioEditor(scores) {
     const maxNum = Number(maxVal);
 
     if (runTxtP) {
-      runTxtP.textContent = `Cardio Score: ${scores.cardio} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
+      runTxtP.textContent = `Score: ${scores.cardio} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
     }
 
     if (hamrLevelEl) {
@@ -990,7 +990,7 @@ function renderCardioEditor(scores) {
   const maxSec = toSeconds(String(maxVal)); // smallest seconds = left side of slider
 
   if (runTxtP) {
-    runTxtP.textContent = `Cardio Score: ${scores.cardio} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
+    runTxtP.textContent = `Score: ${scores.cardio} | Min: ${minVal ?? '--'} | Max: ${maxVal ?? '--'}`;
   }
 
   if (Number.isFinite(minSec) && Number.isFinite(maxSec)) {
