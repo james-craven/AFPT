@@ -29,6 +29,7 @@ const PACE_TRACK = { x: 70, y: 50, w: 200, h: 90, r: 45 };
 const PACE_ROUTE = { startX: 22, endX: 318, y: 128 };
 const PACE_OUT_BACK = { startX: 24, endX: 316, outY: 48, backY: 146 };
 const PACE_TRACK_CENTER_Y = PACE_TRACK.y + PACE_TRACK.h / 2;
+const PACE_TOTAL_MILES = 2;
 
 // Per-event value cache — preserves user input across event switches
 const savedEventValues = {
@@ -797,9 +798,9 @@ function paceMarkerLayout(courseMode, t, lapNumber) {
     const labelAbove = lapNumber % 2 === 1;
     return {
       anchor: edgeAnchor,
-      label: { x: p.x, y: labelAbove ? p.y - 29 : p.y + 27 },
+      label: { x: p.x, y: labelAbove ? p.y - 29 : p.y + 24 },
       point: p,
-      split: { x: p.x, y: labelAbove ? p.y - 17 : p.y + 39 },
+      split: { x: p.x, y: labelAbove ? p.y - 17 : p.y + 36 },
     };
   }
 
@@ -909,6 +910,9 @@ function formatPaceCourseEndpoints(courseMode) {
     return `<g class="pace-endpoint pace-endpoint--start" aria-hidden="true">
       <circle cx="${PACE_OUT_BACK.startX}" cy="${PACE_OUT_BACK.outY}" r="7" class="pace-dot--start" fill="url(#pacePlanFinGrad)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
       <text x="${PACE_OUT_BACK.startX}" y="${PACE_OUT_BACK.outY + 0.5}" text-anchor="middle" dominant-baseline="middle" class="pace-start-text" font-size="6" font-weight="800" letter-spacing="0.4">ST</text>
+    </g>
+    <g class="pace-endpoint pace-endpoint--return-start" data-pace-return-dot-lap="4" aria-hidden="true">
+      <circle cx="${PACE_OUT_BACK.endX}" cy="${PACE_OUT_BACK.backY}" r="4.5" class="pace-dot pace-return-dot"/>
     </g>`;
   }
 
@@ -1104,6 +1108,10 @@ function formatPacePlan(totalSeconds, lapCount, lapSec, previousCourseMode = nul
       </svg>
     </div>
     <p class="pace-pacer-status" data-pacer-status>Tap START to start pacer.</p>
+    <div class="pace-distance-readout" aria-label="Distance traveled">
+      <span>Distance</span>
+      <strong><span data-pacer-distance-value>0.00</span> mi</strong>
+    </div>
     ${formatPaceAudioControls(paceAudioSettings)}
   </div>`;
 }
@@ -1136,16 +1144,21 @@ function updateCompletedPaceLaps(plan, completedLaps) {
     const lap = Number(marker.dataset.paceLap);
     marker.classList.toggle('pace-marker--complete', Number.isFinite(lap) && lap <= completedLaps);
   });
+  plan.querySelectorAll('[data-pace-return-dot-lap]').forEach((marker) => {
+    const lap = Number(marker.dataset.paceReturnDotLap);
+    marker.classList.toggle('pace-marker--complete', Number.isFinite(lap) && lap <= completedLaps);
+  });
 }
 
 function updatePacePacerDisplay(now = performance.now()) {
   const lapDisplay = byId('run-lap-times');
   const runner = lapDisplay?.querySelector('[data-pacer-runner]');
   const status = lapDisplay?.querySelector('[data-pacer-status]');
+  const distance = lapDisplay?.querySelector('[data-pacer-distance-value]');
   const toggle = lapDisplay?.querySelector('[data-pacer-toggle]');
   const plan = lapDisplay?.querySelector('.lap-fitness');
   const goalSeconds = pacePacer.goalSeconds ?? toSeconds(state.cardio.value);
-  if (!lapDisplay || !runner || !status || !toggle || !plan || !Number.isFinite(goalSeconds) || goalSeconds <= 0) return;
+  if (!lapDisplay || !runner || !status || !distance || !toggle || !plan || !Number.isFinite(goalSeconds) || goalSeconds <= 0) return;
 
   const goalMs = goalSeconds * 1000;
   const lapCount = Math.max(1, Number(plan.dataset.lapCount) || 8);
@@ -1156,6 +1169,7 @@ function updatePacePacerDisplay(now = performance.now()) {
   const currentLap = Math.min(lapCount, completedLaps + 1);
   const lapProgress = completedLaps >= lapCount ? 0 : ((elapsedMs % lapMs) / lapMs);
   const totalProgress = goalMs > 0 ? Math.min(1, Math.max(0, elapsedMs / goalMs)) : 0;
+  const distanceMiles = Math.min(PACE_TOTAL_MILES, totalProgress * PACE_TOTAL_MILES);
   const courseMode = plan.dataset.course || 'track';
   const courseProgress = courseMode === 'track' ? lapProgress : totalProgress;
   const p = paceCoursePoint(courseMode, courseProgress);
@@ -1170,6 +1184,7 @@ function updatePacePacerDisplay(now = performance.now()) {
 
   runner.dataset.courseLeg = p.leg || courseMode;
   runner.setAttribute('transform', `translate(${p.x.toFixed(2)} ${p.y.toFixed(2)}) rotate(${angle.toFixed(1)})`);
+  distance.textContent = distanceMiles.toFixed(2);
   updateCompletedPaceLaps(plan, completedLaps);
   paceAudioController.update(elapsedMs, goalSeconds, paceAudioSettings);
   const stateName = pacePacer.finished ? 'finished' : pacePacer.active ? 'running' : pacePacer.elapsedMs > 0 ? 'paused' : 'idle';

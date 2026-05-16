@@ -590,6 +590,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     finishLabelAnchor: document.querySelector('.pace-marker--finish .pace-fin-label')?.getAttribute('text-anchor'),
     l7LabelY: Number(document.querySelector('[data-pace-lap="7"] .pace-label')?.getAttribute('y') ?? 0),
     finishLabelY: Number(document.querySelector('.pace-marker--finish .pace-fin-label')?.getAttribute('y') ?? 0),
+    finishSplitY: Number(document.querySelector('.pace-marker--finish .pace-fin-split')?.getAttribute('y') ?? 0),
     runnerLeg: document.querySelector('[data-pacer-runner]')?.dataset.courseLeg,
   }));
   assert.equal(routeCourseVisual.hasRouteLine, true, 'route mode renders a straight course line');
@@ -607,6 +608,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.ok(Math.abs(routeCourseVisual.finishLabelX - routeCourseVisual.finishX) <= 1, 'route finish label x-position matches the finish marker');
   assert.ok(routeCourseVisual.l7LabelY < routeCourseVisual.lineY, 'route mode staggers late lap labels above the line');
   assert.ok(routeCourseVisual.finishLabelY > routeCourseVisual.lineY, 'route mode staggers the finish label below the line');
+  assert.ok(routeCourseVisual.finishLabelY - routeCourseVisual.lineY <= 24, 'route mode keeps bottom labels visually close to the line');
   assert.equal(routeCourseVisual.runnerLeg, 'route', 'route mode starts runner on route line');
 
   await page.evaluate(() => {
@@ -660,6 +662,11 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       ) / 2,
     },
     markerCount: document.querySelectorAll('[data-pace-lap]').length,
+    returnDot: {
+      x: Number(document.querySelector('.pace-endpoint--return-start .pace-return-dot')?.getAttribute('cx') ?? 0),
+      y: Number(document.querySelector('.pace-endpoint--return-start .pace-return-dot')?.getAttribute('cy') ?? 0),
+      complete: document.querySelector('.pace-endpoint--return-start')?.classList.contains('pace-marker--complete') ?? false,
+    },
     startLabelCount: document.querySelectorAll('.pace-start-label').length,
     startText: document.querySelector('.pace-start-text')?.textContent,
     turnLabelCount: document.querySelectorAll('.pace-turn-label').length,
@@ -690,6 +697,9 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.ok(outBackCourseVisual.goal.y > 60 && outBackCourseVisual.goal.bottom < 140, 'out/back goal/start controls sit between the lanes');
   assert.ok(Math.abs(outBackCourseVisual.goal.center - 97) <= 5, 'out/back goal/start stack is centered between the lanes');
   assert.equal(outBackCourseVisual.markerCount, 8, 'out/back mode keeps 8 track-equivalent lap markers');
+  assert.ok(outBackCourseVisual.returnDot.x > 300, 'out/back mode adds a visual return-lane dot at the right end');
+  assert.ok(Math.abs(outBackCourseVisual.returnDot.y - outBackCourseVisual.finish.y) <= 1, 'out/back return-lane dot aligns with the finish lane');
+  assert.equal(outBackCourseVisual.returnDot.complete, false, 'out/back return-lane dot starts incomplete');
   assert.equal(outBackCourseVisual.startLabelCount, 0, 'out/back removes the floating START label');
   assert.equal(outBackCourseVisual.startText, 'ST', 'out/back uses an inline start marker matching the finish marker');
   assert.equal(outBackCourseVisual.turnLabelCount, 0, 'out/back avoids an extra turn label competing with lap labels');
@@ -815,21 +825,27 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     const runner = document.querySelector('[data-pacer-runner]');
     const status = document.querySelector('[data-pacer-status]');
     const plan = document.querySelector('.lap-fitness');
+    const distanceText = document.querySelector('[data-pacer-distance-value]')?.textContent ?? '';
     return {
       transformChanged: runner?.getAttribute('transform') !== initialTransform,
       completedLapCount: document.querySelectorAll('.pace-marker--complete').length,
+      returnDotComplete: document.querySelector('.pace-endpoint--return-start')?.classList.contains('pace-marker--complete') ?? false,
       runnerLeg: runner?.dataset.courseLeg ?? '',
       statusText: status?.textContent ?? '',
       stateName: plan?.dataset.pacerState ?? '',
       cardioValue: window.afptApp.getState().cardio.value,
+      distanceText,
     };
   }, pacerInitial);
   assert.equal(pacerStarted.stateName, 'running', 'pace plan personal pacer enters running state');
   assert.equal(pacerStarted.transformChanged, true, 'pace plan runner moves after start');
   assert.ok(pacerStarted.completedLapCount >= 1, 'pace plan marks completed laps');
+  assert.equal(pacerStarted.returnDotComplete, true, 'pace plan marks the out/back return-lane dot complete after halfway');
   assert.equal(pacerStarted.runnerLeg, 'return', 'out/back pacer drops to the return line after halfway');
   assert.match(pacerStarted.statusText, /Pacer.*Lap/i, 'pace plan status reports elapsed pacer time and current lap');
   assert.equal(pacerStarted.cardioValue, '0:04', 'starting pacer does not change cardio value');
+  assert.match(pacerStarted.distanceText, /^\d+\.\d{2}$/, 'pace plan displays distance traveled in miles');
+  assert.ok(Number(pacerStarted.distanceText) > 0.5, 'pace plan distance readout advances while pacer runs');
   const pacerAudioRunning = await page.evaluate(() => ({
     debug: window.afptApp.getPacerAudioDebug(),
     events: window.__afptPacerAudioTestHooks.events,

@@ -3637,6 +3637,10 @@ select {
   font-family: inherit;
 }
 
+.pace-return-dot {
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--afpt-accent) 42%, transparent));
+}
+
 .pace-pacer-runner {
   opacity: 0;
   pointer-events: none;
@@ -3676,8 +3680,28 @@ select {
   font-size: 10px;
   letter-spacing: 0.6px;
   line-height: 1.3;
-  margin: 4px 4px 0;
+  margin: 3px 4px 0;
   text-align: center;
+}
+
+.pace-distance-readout {
+  align-items: baseline;
+  color: var(--afpt-ink-dim);
+  display: flex;
+  font-size: 10px;
+  gap: 6px;
+  justify-content: center;
+  letter-spacing: 0.8px;
+  line-height: 1.2;
+  margin: 2px 4px 0;
+  text-transform: uppercase;
+}
+
+.pace-distance-readout strong {
+  color: var(--afpt-ink);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.4px;
 }
 
 .pace-audio-panel {
@@ -3828,6 +3852,7 @@ select {
 .pace-marker .pace-dot,
 .pace-marker .pace-dot--finish,
 .pace-endpoint .pace-dot--start,
+.pace-endpoint .pace-dot,
 .pace-marker .pace-label,
 .pace-marker .pace-split,
 .pace-marker .pace-fin-label,
@@ -3886,6 +3911,14 @@ select {
 
 :root[data-theme="fitness"] .pace-pacer-status {
   color: rgba(255, 255, 255, 0.62);
+}
+
+:root[data-theme="fitness"] .pace-distance-readout {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+:root[data-theme="fitness"] .pace-distance-readout strong {
+  color: #fff;
 }
 
 :root[data-theme="fitness"] .pace-audio-panel {

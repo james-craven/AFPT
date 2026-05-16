@@ -432,3 +432,10 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Fixed flashing while dragging the cardio/run controls by separating "course changed" from "pace plan re-rendered."
 - Added `data-course-transition` so morph, line-draw, marker, and control animations only run when Track/Route/Out-Back mode changes.
 - Added browser coverage proving a run-time value change keeps Route selected without rendering morph layers or restarting route/control animations.
+
+## Pace Plan Visual Distance Polish
+
+- Added a return-lane endpoint dot on Out/Back mode so the bottom lane visually balances the top turn marker.
+- Nudged Route bottom lap labels upward to better match the visual distance of the top labels.
+- Added a compact distance readout below the pacer SVG showing pacer progress in miles from `0.00 mi` toward the 2-mile goal.
+- Added browser coverage for the return-lane dot, Route bottom-label spacing, dot completion after halfway, and live distance progression.
