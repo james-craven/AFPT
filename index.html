@@ -261,6 +261,7 @@
 <section id="body-editor" class="editor-panel" role="tabpanel" aria-label="Waist-to-height ratio" hidden>
   <div class="editor-header">
     <span class="editor-title">WHtR</span>
+    <p id="body-txt-p" class="score-label-text">WHtR Score: -- | Pass ≤ 0.55</p>
   </div>
 
   <div id="body-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Body mode">
@@ -320,8 +321,6 @@
     </div>
   </div>
 
-  <p id="body-txt-p" class="score-label-text">WHtR Score: -- | Pass ≤ 0.55</p>
-
   <div class="fit-body-header">
     <span class="fit-body-title">BODY COMPOSITION</span>
     <span id="fit-body-badge" class="fit-body-badge" data-pass="true">PASS</span>
@@ -332,6 +331,7 @@
       <section id="strength-editor" class="editor-panel" role="tabpanel" aria-label="Strength">
         <div class="editor-header">
           <span class="editor-title">STRENGTH</span>
+          <p id="push-txt-p" class="score-label-text">Strength Score: 0 | Min: -- | Max: --</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
         <div id="push-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Strength event">
@@ -361,7 +361,6 @@
           </div>
           <button class="slider-step-btn" type="button" data-step="1" data-target="push-slider" aria-label="Increase reps">+</button>
         </div>
-        <p id="push-txt-p" class="score-label-text">Strength Score: 0 | Min: -- | Max: --</p>
         <div></div>
       </section>
 
@@ -369,6 +368,7 @@
       <section id="core-editor" class="editor-panel" role="tabpanel" aria-label="Core" hidden>
         <div class="editor-header">
           <span class="editor-title">CORE</span>
+          <p id="sit-txt-p" class="score-label-text">Core Score: 0 | Min: -- | Max: --</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
         <div id="sit-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Core event">
@@ -410,7 +410,6 @@
           </div>
           <button class="slider-step-btn" type="button" data-step="1" data-target="sit-slider" aria-label="Increase reps">+</button>
         </div>
-        <p id="sit-txt-p" class="score-label-text">Core Score: 0 | Min: -- | Max: --</p>
         <div></div>
       </section>
 
@@ -418,6 +417,7 @@
       <section id="cardio-editor" class="editor-panel" role="tabpanel" aria-label="Cardio" hidden>
         <div class="editor-header">
           <span class="editor-title">CARDIO</span>
+          <p id="run-txt-p" class="score-label-text">Cardio Score: -- | Min: -- | Max: --</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
         <div id="run-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Cardio event">
@@ -460,7 +460,6 @@
           </div>
           <button class="slider-step-btn" type="button" data-step="1" data-target="run-slider" aria-label="Increase value">+</button>
         </div>
-        <p id="run-txt-p" class="score-label-text">Cardio Score: -- | Min: -- | Max: --</p>
         <div class="altitude-row">
           <label class="altitude-label" for="alt-select">⛰ ALT</label>
           <select id="alt-select" class="altitude-select" aria-label="Altitude adjustment group">

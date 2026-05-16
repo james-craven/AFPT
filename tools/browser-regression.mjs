@@ -662,6 +662,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
 
   const scoreLabelTextAlign = await page.locator('.score-label-text:visible').first().evaluate((element) => getComputedStyle(element).textAlign);
   assert.equal(scoreLabelTextAlign, 'center', `${label} score/min/max label text is centered`);
+  const visibleScoreLabelInHeader = await page.locator('.editor-panel:not([hidden]) .editor-header .score-label-text:visible').count();
+  assert.equal(visibleScoreLabelInHeader, 1, `${label} active editor score/min/max label sits under the editor title`);
 
   const componentDividerInset = await page.evaluate(() => {
     const strip = document.querySelector('.component-strip');

@@ -703,9 +703,11 @@ select {
   border-bottom: 1px solid var(--afpt-border);
   padding-bottom: 10px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+  gap: 5px;
 }
 
 .editor-title {
@@ -968,10 +970,6 @@ select {
 
 #body-editor {
   padding-bottom: 0px;
-}
-
-#body-txt-p {
-  margin: 14px 0;
 }
 
 @media (max-width: 430px) {
@@ -1354,7 +1352,7 @@ select {
   color: var(--afpt-accent);
 }
 
-/* Score label below slider */
+/* Score labels sit under each editor title for this layout experiment. */
 .score-label-text {
   margin: 0;
   font-size: 12px;
@@ -1362,6 +1360,11 @@ select {
   letter-spacing: 0.5px;
   line-height: 1.4;
   text-align: center;
+}
+
+.editor-header .score-label-text {
+  width: 100%;
+  max-width: 100%;
 }
 
 /* HAMR level indicator */
