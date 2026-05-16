@@ -829,6 +829,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const chartOpen = await page.evaluate(() => document.getElementById('modal')?.dataset.chartOpen);
   assert.equal(chartOpen, 'true', 'chart drawer opens on push-btn click');
   const chartControlOrderAndBorders = await page.evaluate(() => {
+    const panel = document.querySelector('.chart-drawer__panel');
+    if (panel) panel.scrollTop = 0;
     const referenceRow = document.querySelector('.chart-reference-row')?.getBoundingClientRect();
     const demoRow = document.querySelector('.chart-demo-row')?.getBoundingClientRect();
     const ctrlRow = document.querySelector('.chart-ctrl-row')?.getBoundingClientRect();
@@ -844,6 +846,35 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   });
   assert.equal(chartControlOrderAndBorders.ordered, true, 'chart controls order reference, demographics, category/component');
   assert.ok(chartControlOrderAndBorders.borders.every((border) => border === chartControlOrderAndBorders.strong), 'chart dropdowns use strong border color');
+  const chartScrollBehavior = await page.evaluate(() => {
+    const panel = document.querySelector('.chart-drawer__panel');
+    const header = document.querySelector('.chart-drawer__header');
+    const referenceRow = document.querySelector('.chart-reference-row');
+    const imageFrame = document.querySelector('.chart-drawer__image-frame');
+    if (!panel || !header || !referenceRow || !imageFrame) return { missing: true };
+    panel.scrollTop = 0;
+    const beforeRefTop = referenceRow.getBoundingClientRect().top;
+    panel.scrollTop = Math.min(180, panel.scrollHeight - panel.clientHeight);
+    const afterRefTop = referenceRow.getBoundingClientRect().top;
+    const panelRect = panel.getBoundingClientRect();
+    const headerRect = header.getBoundingClientRect();
+    const imageStyle = getComputedStyle(imageFrame);
+    const result = {
+      canScroll: panel.scrollHeight > panel.clientHeight,
+      controlsMoved: afterRefTop < beforeRefTop - 20,
+      headerPinned: Math.abs(headerRect.top - panelRect.top) <= 1,
+      imageOverflowY: imageStyle.overflowY,
+      panelOverflowY: getComputedStyle(panel).overflowY,
+    };
+    panel.scrollTop = 0;
+    return result;
+  });
+  assert.equal(chartScrollBehavior.missing, undefined, 'chart drawer scroll elements exist');
+  assert.equal(chartScrollBehavior.canScroll, true, 'chart drawer panel can scroll');
+  assert.equal(chartScrollBehavior.controlsMoved, true, 'chart controls scroll with chart content');
+  assert.equal(chartScrollBehavior.headerPinned, true, 'chart title/close row stays pinned while drawer scrolls');
+  assert.equal(chartScrollBehavior.imageOverflowY, 'visible', 'chart image frame does not create a nested sticky-control scroll area');
+  assert.match(chartScrollBehavior.panelOverflowY, /auto|scroll/i, 'chart drawer panel owns vertical scrolling');
   const segmentedBorderUsesStrong = await page.evaluate(() => {
     const strong = getComputedStyle(document.documentElement).getPropertyValue('--afpt-border-strong').trim();
     return ['body-seg-ctrl', 'push-seg-ctrl', 'sit-seg-ctrl', 'run-seg-ctrl']

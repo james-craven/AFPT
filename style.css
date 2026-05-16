@@ -1660,7 +1660,8 @@ select {
   pointer-events: auto;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 :root[data-theme="fitness"] .chart-drawer__panel {
@@ -1670,12 +1671,22 @@ select {
 }
 
 .chart-drawer__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
+  background: var(--afpt-panel);
   border-bottom: 1px solid var(--afpt-border);
   flex-shrink: 0;
+}
+
+:root[data-theme="fitness"] .chart-drawer__header {
+  background: rgba(27, 13, 42, 0.97);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .chart-drawer__header h2 {
@@ -1775,8 +1786,8 @@ select {
 }
 
 .chart-drawer__image-frame {
-  flex: 1;
-  overflow: auto;
+  flex: none;
+  overflow: visible;
   padding: 14px;
   display: flex;
   align-items: flex-start;
