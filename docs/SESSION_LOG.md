@@ -439,3 +439,11 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Nudged Route bottom lap labels upward to better match the visual distance of the top labels.
 - Added a compact distance readout below the pacer SVG showing pacer progress in miles from `0.00 mi` toward the 2-mile goal.
 - Added browser coverage for the return-lane dot, Route bottom-label spacing, dot completion after halfway, and live distance progression.
+
+## Pace Plan Icon Controls and Split Fix
+
+- Replaced the text START control with a left-side circular play button beside the goal time.
+- Added a right-side circular pause control that appears only after the pacer starts and changes to reset after pausing.
+- Kept the runner icon upright while moving around the track/course instead of rotating upside down.
+- Fixed cumulative lap split rendering so fractional per-lap goals finish at the exact goal time, including the 13:25 case.
+- Added browser coverage for play/pause/reset state changes, hidden initial pause/reset control, upright runner transform, reset distance, and exact finish split display.

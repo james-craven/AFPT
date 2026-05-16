@@ -3378,10 +3378,10 @@ select {
 .lap-fitness[data-course-transition="true"][data-course="out-back"] .pace-goal-display,
 .lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="route"] .pace-goal-display,
 .lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="out-back"] .pace-goal-display,
-.lap-fitness[data-course-transition="true"][data-course="route"] .pace-pacer-toggle,
-.lap-fitness[data-course-transition="true"][data-course="out-back"] .pace-pacer-toggle,
-.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="route"] .pace-pacer-toggle,
-.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="out-back"] .pace-pacer-toggle {
+.lap-fitness[data-course-transition="true"][data-course="route"] .pace-pacer-control,
+.lap-fitness[data-course-transition="true"][data-course="out-back"] .pace-pacer-control,
+.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="route"] .pace-pacer-control,
+.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="out-back"] .pace-pacer-control {
   animation: pace-control-settle 0.32s ease-out both;
 }
 
@@ -3609,12 +3609,12 @@ select {
   pointer-events: none;
 }
 
-.pace-pacer-toggle {
+.pace-pacer-control {
   cursor: pointer;
   outline: none;
 }
 
-.pace-pacer-toggle:focus-visible .pace-pacer-hit {
+.pace-pacer-control:focus-visible .pace-pacer-hit {
   stroke: var(--afpt-accent);
   stroke-width: 1.5;
 }
@@ -3626,10 +3626,49 @@ select {
   stroke-width: 1;
 }
 
-.pace-pacer-button-text {
+.pace-pacer-icon {
   fill: var(--afpt-bg);
-  font-family: inherit;
   pointer-events: none;
+}
+
+.pace-icon--reset {
+  fill: none;
+  stroke: var(--afpt-bg);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.pace-pacer-secondary {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.lap-fitness[data-pacer-state="running"] .pace-pacer-secondary,
+.lap-fitness[data-pacer-state="paused"] .pace-pacer-secondary,
+.lap-fitness[data-pacer-state="finished"] .pace-pacer-secondary {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.lap-fitness[data-pacer-state="running"] .pace-pacer-start {
+  opacity: 0.44;
+  pointer-events: none;
+}
+
+.pace-pacer-secondary .pace-icon--reset {
+  display: none;
+}
+
+.lap-fitness[data-pacer-state="paused"] .pace-pacer-secondary .pace-icon--pause,
+.lap-fitness[data-pacer-state="finished"] .pace-pacer-secondary .pace-icon--pause {
+  display: none;
+}
+
+.lap-fitness[data-pacer-state="paused"] .pace-pacer-secondary .pace-icon--reset,
+.lap-fitness[data-pacer-state="finished"] .pace-pacer-secondary .pace-icon--reset {
+  display: block;
 }
 
 .pace-start-text {

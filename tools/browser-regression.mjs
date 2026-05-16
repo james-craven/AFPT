@@ -576,10 +576,11 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     hasMorphTrack: Boolean(document.querySelector('.pace-morph-track--to-route')),
     morphTrackAnimation: getComputedStyle(document.querySelector('.pace-morph-track--to-route')).animationName,
     goalTimeY: Number(document.querySelector('.pace-time-text')?.getAttribute('y') ?? 0),
-    buttonY: Number(document.querySelector('.pace-pacer-hit')?.getAttribute('y') ?? 0),
-    buttonBottom: Number(document.querySelector('.pace-pacer-hit')?.getAttribute('y') ?? 0)
-      + Number(document.querySelector('.pace-pacer-hit')?.getAttribute('height') ?? 0),
-    buttonText: document.querySelector('.pace-pacer-button-text')?.textContent,
+    buttonCy: Number(document.querySelector('.pace-pacer-start .pace-pacer-hit')?.getAttribute('cy') ?? 0),
+    buttonBottom: Number(document.querySelector('.pace-pacer-start .pace-pacer-hit')?.getAttribute('cy') ?? 0)
+      + Number(document.querySelector('.pace-pacer-start .pace-pacer-hit')?.getAttribute('r') ?? 0),
+    hasPlayIcon: Boolean(document.querySelector('.pace-pacer-start .pace-icon--play')),
+    secondaryHidden: document.querySelector('.pace-pacer-secondary')?.getAttribute('aria-hidden'),
     lineY: Number(document.querySelector('.pace-route-line')?.getAttribute('y1') ?? 0),
     markerCount: document.querySelectorAll('[data-pace-lap]').length,
     startLabelCount: document.querySelectorAll('.pace-start-label').length,
@@ -596,8 +597,9 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(routeCourseVisual.hasRouteLine, true, 'route mode renders a straight course line');
   assert.equal(routeCourseVisual.hasMorphTrack, true, 'route mode animates from a visible morphing track shape');
   assert.match(routeCourseVisual.morphTrackAnimation, /pace-track-to-route/, 'route mode shrinks the track shape into the route line');
-  assert.ok(routeCourseVisual.buttonY > routeCourseVisual.goalTimeY, 'route mode places a separate START button below the goal time');
-  assert.equal(routeCourseVisual.buttonText, 'START', 'route mode uses explicit START button text');
+  assert.ok(Math.abs(routeCourseVisual.buttonCy - routeCourseVisual.goalTimeY) <= 2, 'route mode places the play button beside the goal time');
+  assert.equal(routeCourseVisual.hasPlayIcon, true, 'route mode uses a play icon instead of START text');
+  assert.equal(routeCourseVisual.secondaryHidden, 'true', 'route mode hides pause/reset before the pacer starts');
   assert.ok(routeCourseVisual.buttonBottom < routeCourseVisual.lineY - 30, 'route mode keeps goal/start controls well clear of the route line');
   assert.equal(routeCourseVisual.markerCount, 8, 'route mode keeps 8 track-equivalent lap markers');
   assert.equal(routeCourseVisual.startLabelCount, 0, 'route mode removes the floating START label');
@@ -612,9 +614,11 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(routeCourseVisual.runnerLeg, 'route', 'route mode starts runner on route line');
 
   await page.evaluate(() => {
+    const minEl = document.getElementById('run-mintxt');
     const secEl = document.getElementById('run-sectxt');
+    if (minEl) minEl.value = '13';
     if (secEl) {
-      secEl.value = secEl.value === '01' ? '02' : '01';
+      secEl.value = '25';
       secEl.dispatchEvent(new Event('input', { bubbles: true }));
     }
   });
@@ -622,7 +626,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const routeGoalChangeVisual = await page.evaluate(() => {
     const line = document.querySelector('.pace-route-line');
     const marker = document.querySelector('[data-pace-lap="1"]');
-    const toggle = document.querySelector('[data-pacer-toggle]');
+    const toggle = document.querySelector('[data-pacer-start]');
     return {
       course: document.querySelector('.lap-fitness')?.dataset.course,
       courseTransition: document.querySelector('.lap-fitness')?.dataset.courseTransition,
@@ -630,6 +634,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       lineAnimation: line ? getComputedStyle(line).animationName : '',
       markerAnimation: marker ? getComputedStyle(marker).animationName : '',
       toggleAnimation: toggle ? getComputedStyle(toggle).animationName : '',
+      goalTime: document.querySelector('.pace-time-text')?.textContent,
+      finishSplit: document.querySelector('.pace-marker--finish .pace-fin-split')?.textContent,
     };
   });
   assert.equal(routeGoalChangeVisual.course, 'route', 'changing run time keeps route mode selected');
@@ -638,6 +644,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(routeGoalChangeVisual.lineAnimation, 'none', 'changing run time does not redraw the route line');
   assert.equal(routeGoalChangeVisual.markerAnimation, 'none', 'changing run time does not reanimate route markers');
   assert.equal(routeGoalChangeVisual.toggleAnimation, 'none', 'changing run time does not reanimate pacer controls');
+  assert.equal(routeGoalChangeVisual.goalTime, '13:25', 'route goal time reflects the selected run value');
+  assert.equal(routeGoalChangeVisual.finishSplit, '13:25', 'route finish split uses exact goal time without rounded-lap drift');
 
   await page.locator('[data-pacer-audio-field="courseMode"]').selectOption('out-back');
   await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.course === 'out-back');
@@ -650,15 +658,17 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       - Number(document.querySelector('.pace-outback-line--out')?.getAttribute('y1') ?? 0),
     ),
     goal: {
-      y: Number(document.querySelector('.pace-pacer-hit')?.getAttribute('y') ?? 0),
-      bottom: Number(document.querySelector('.pace-pacer-hit')?.getAttribute('y') ?? 0)
-        + Number(document.querySelector('.pace-pacer-hit')?.getAttribute('height') ?? 0),
+      y: Number(document.querySelector('.pace-pacer-start .pace-pacer-hit')?.getAttribute('cy') ?? 0)
+        - Number(document.querySelector('.pace-pacer-start .pace-pacer-hit')?.getAttribute('r') ?? 0),
+      bottom: Number(document.querySelector('.pace-pacer-start .pace-pacer-hit')?.getAttribute('cy') ?? 0)
+        + Number(document.querySelector('.pace-pacer-start .pace-pacer-hit')?.getAttribute('r') ?? 0),
       timeY: Number(document.querySelector('.pace-time-text')?.getAttribute('y') ?? 0),
-      buttonText: document.querySelector('.pace-pacer-button-text')?.textContent,
+      hasPlayIcon: Boolean(document.querySelector('.pace-pacer-start .pace-icon--play')),
+      secondaryHidden: document.querySelector('.pace-pacer-secondary')?.getAttribute('aria-hidden'),
       center: (
         Number(document.querySelector('.pace-goal-text')?.getAttribute('y') ?? 0)
-        + Number(document.querySelector('.pace-pacer-hit')?.getAttribute('y') ?? 0)
-        + Number(document.querySelector('.pace-pacer-hit')?.getAttribute('height') ?? 0)
+        + Number(document.querySelector('.pace-pacer-start .pace-pacer-hit')?.getAttribute('cy') ?? 0)
+        + Number(document.querySelector('.pace-pacer-start .pace-pacer-hit')?.getAttribute('r') ?? 0)
       ) / 2,
     },
     markerCount: document.querySelectorAll('[data-pace-lap]').length,
@@ -692,10 +702,10 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(outBackCourseVisual.splitMorphCount, 2, 'out/back mode animates the previous route line splitting into two lanes');
   assert.equal(outBackCourseVisual.turnConnectorVisible, false, 'out/back mode does not render a connector line');
   assert.ok(outBackCourseVisual.gap >= 75, 'out/back lanes have enough vertical separation for the goal time');
-  assert.ok(outBackCourseVisual.goal.y > outBackCourseVisual.goal.timeY, 'out/back places the START button below the goal time');
-  assert.equal(outBackCourseVisual.goal.buttonText, 'START', 'out/back mode uses explicit START button text');
+  assert.ok(Math.abs(outBackCourseVisual.goal.timeY - 97) <= 8, 'out/back goal time sits near the center between the lanes');
+  assert.equal(outBackCourseVisual.goal.hasPlayIcon, true, 'out/back mode uses a play icon instead of START text');
+  assert.equal(outBackCourseVisual.goal.secondaryHidden, 'true', 'out/back mode hides pause/reset before the pacer starts');
   assert.ok(outBackCourseVisual.goal.y > 60 && outBackCourseVisual.goal.bottom < 140, 'out/back goal/start controls sit between the lanes');
-  assert.ok(Math.abs(outBackCourseVisual.goal.center - 97) <= 5, 'out/back goal/start stack is centered between the lanes');
   assert.equal(outBackCourseVisual.markerCount, 8, 'out/back mode keeps 8 track-equivalent lap markers');
   assert.ok(outBackCourseVisual.returnDot.x > 300, 'out/back mode adds a visual return-lane dot at the right end');
   assert.ok(Math.abs(outBackCourseVisual.returnDot.y - outBackCourseVisual.finish.y) <= 1, 'out/back return-lane dot aligns with the finish lane');
@@ -714,20 +724,17 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     const ring = document.querySelector('.pace-track-ring');
     const finishDot = document.querySelector('.pace-marker--finish .pace-dot--finish');
     const finishLabel = document.querySelector('.pace-marker--finish .pace-fin-label');
-    const button = document.querySelector('.pace-pacer-hit');
-    const goalLabel = document.querySelector('.pace-goal-text');
+    const button = document.querySelector('.pace-pacer-start .pace-pacer-hit');
+    const goalTime = document.querySelector('.pace-time-text');
     return {
       hasRouteLine: Boolean(document.querySelector('.pace-route-line')),
       joinMorphCount: document.querySelectorAll('.pace-morph-line--out-to-track, .pace-morph-line--back-to-track').length,
       previousCourse: document.querySelector('.lap-fitness')?.dataset.prevCourse,
       ringAnimation: ring ? getComputedStyle(ring).animationName : '',
-      goalCenter: (
-        Number(goalLabel?.getAttribute('y') ?? 0)
-        + Number(button?.getAttribute('y') ?? 0)
-        + Number(button?.getAttribute('height') ?? 0)
-      ) / 2,
+      goalTimeY: Number(goalTime?.getAttribute('y') ?? 0),
+      buttonCy: Number(button?.getAttribute('cy') ?? 0),
       trackCenterY: 95,
-      buttonBottom: Number(button?.getAttribute('y') ?? 0) + Number(button?.getAttribute('height') ?? 0),
+      buttonBottom: Number(button?.getAttribute('cy') ?? 0) + Number(button?.getAttribute('r') ?? 0),
       trackBottomY: Number(ring?.getAttribute('y') ?? 0) + Number(ring?.getAttribute('height') ?? 0),
       finishLabelX: Number(finishLabel?.getAttribute('x') ?? 0),
       finishDotX: Number(finishDot?.getAttribute('cx') ?? 0),
@@ -738,7 +745,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(trackReturnVisual.joinMorphCount, 2, 'track mode animates out/back lanes reconnecting toward the oval');
   assert.equal(trackReturnVisual.previousCourse, 'out-back', 'track mode remembers prior course for return transition');
   assert.match(trackReturnVisual.ringAnimation, /pace-track-expand-from-lines/, 'track mode animates back from line courses');
-  assert.ok(Math.abs(trackReturnVisual.goalCenter - trackReturnVisual.trackCenterY) <= 5, 'track goal/start stack is centered inside the oval');
+  assert.ok(Math.abs(trackReturnVisual.goalTimeY - trackReturnVisual.trackCenterY) <= 8, 'track goal time sits near the oval center');
+  assert.ok(Math.abs(trackReturnVisual.buttonCy - trackReturnVisual.trackCenterY) <= 8, 'track play/pause controls sit near the oval center');
   assert.ok(trackReturnVisual.buttonBottom < trackReturnVisual.trackBottomY - 10, 'track START button clears the bottom of the oval');
   assert.equal(trackReturnVisual.finishLabelAnchor, 'middle', 'track finish label is centered on the finish marker');
   assert.ok(Math.abs(trackReturnVisual.finishLabelX - trackReturnVisual.finishDotX) <= 1, 'track finish label x-position matches the finish marker');
@@ -816,9 +824,9 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       secEl.dispatchEvent(new Event('input', { bubbles: true }));
     }
   });
-  await page.waitForFunction(() => document.querySelector('[data-pacer-toggle]') && document.querySelector('[data-pacer-runner]'));
+  await page.waitForFunction(() => document.querySelector('[data-pacer-start]') && document.querySelector('[data-pacer-runner]'));
   const pacerInitial = await page.locator('[data-pacer-runner]').evaluate((element) => element.getAttribute('transform'));
-  await page.locator('[data-pacer-toggle]').click();
+  await page.locator('[data-pacer-start]').click();
   await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.pacerState === 'running');
   await page.waitForTimeout(2300);
   const pacerStarted = await page.evaluate((initialTransform) => {
@@ -826,15 +834,21 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     const status = document.querySelector('[data-pacer-status]');
     const plan = document.querySelector('.lap-fitness');
     const distanceText = document.querySelector('[data-pacer-distance-value]')?.textContent ?? '';
+    const secondary = document.querySelector('[data-pacer-secondary]');
     return {
       transformChanged: runner?.getAttribute('transform') !== initialTransform,
       completedLapCount: document.querySelectorAll('.pace-marker--complete').length,
       returnDotComplete: document.querySelector('.pace-endpoint--return-start')?.classList.contains('pace-marker--complete') ?? false,
       runnerLeg: runner?.dataset.courseLeg ?? '',
+      runnerTransform: runner?.getAttribute('transform') ?? '',
       statusText: status?.textContent ?? '',
       stateName: plan?.dataset.pacerState ?? '',
       cardioValue: window.afptApp.getState().cardio.value,
       distanceText,
+      secondaryAction: secondary?.dataset.pacerAction,
+      secondaryHidden: secondary?.getAttribute('aria-hidden'),
+      pauseIconVisible: getComputedStyle(document.querySelector('.pace-pacer-secondary .pace-icon--pause')).display !== 'none',
+      resetIconVisible: getComputedStyle(document.querySelector('.pace-pacer-secondary .pace-icon--reset')).display !== 'none',
     };
   }, pacerInitial);
   assert.equal(pacerStarted.stateName, 'running', 'pace plan personal pacer enters running state');
@@ -842,6 +856,11 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.ok(pacerStarted.completedLapCount >= 1, 'pace plan marks completed laps');
   assert.equal(pacerStarted.returnDotComplete, true, 'pace plan marks the out/back return-lane dot complete after halfway');
   assert.equal(pacerStarted.runnerLeg, 'return', 'out/back pacer drops to the return line after halfway');
+  assert.match(pacerStarted.runnerTransform, /rotate\(0(?:\.0)?\)/, 'pace plan runner stays upright while moving');
+  assert.equal(pacerStarted.secondaryAction, 'pause', 'pace plan shows pause action after start');
+  assert.equal(pacerStarted.secondaryHidden, 'false', 'pace plan reveals pause/reset control after start');
+  assert.equal(pacerStarted.pauseIconVisible, true, 'pace plan shows pause icon while running');
+  assert.equal(pacerStarted.resetIconVisible, false, 'pace plan hides reset icon while running');
   assert.match(pacerStarted.statusText, /Pacer.*Lap/i, 'pace plan status reports elapsed pacer time and current lap');
   assert.equal(pacerStarted.cardioValue, '0:04', 'starting pacer does not change cardio value');
   assert.match(pacerStarted.distanceText, /^\d+\.\d{2}$/, 'pace plan displays distance traveled in miles');
@@ -864,8 +883,16 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     pacerAudioRunning.events.some((event) => event.type === 'wake'),
     'pacer start requests wake lock through audio controller',
   );
-  await page.locator('[data-pacer-toggle]').click();
-  await page.waitForFunction(() => ['paused', 'finished'].includes(document.querySelector('.lap-fitness')?.dataset.pacerState));
+  await page.locator('[data-pacer-secondary]').click();
+  await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.pacerState === 'paused');
+  const pacerPaused = await page.evaluate(() => ({
+    secondaryAction: document.querySelector('[data-pacer-secondary]')?.dataset.pacerAction,
+    pauseIconVisible: getComputedStyle(document.querySelector('.pace-pacer-secondary .pace-icon--pause')).display !== 'none',
+    resetIconVisible: getComputedStyle(document.querySelector('.pace-pacer-secondary .pace-icon--reset')).display !== 'none',
+  }));
+  assert.equal(pacerPaused.secondaryAction, 'reset', 'pace plan changes pause control to reset after pausing');
+  assert.equal(pacerPaused.pauseIconVisible, false, 'pace plan hides pause icon after pausing');
+  assert.equal(pacerPaused.resetIconVisible, true, 'pace plan shows reset icon after pausing');
   await page.waitForFunction(() => window.afptApp.getPacerAudioDebug().running === false);
   assert.ok(
     await page.evaluate(() => window.__afptPacerAudioTestHooks.events.some(
@@ -873,6 +900,9 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     )),
     'pacer pause releases custom audio session behavior',
   );
+  await page.locator('[data-pacer-secondary]').click();
+  await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.pacerState === 'idle');
+  assert.equal(await page.locator('[data-pacer-distance-value]').innerText(), '0.00', 'pace plan reset returns distance to zero');
   await page.evaluate(() => {
     const minEl = document.getElementById('run-mintxt');
     const secEl = document.getElementById('run-sectxt');

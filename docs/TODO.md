@@ -35,6 +35,7 @@
 - [x] Pace plan course morph refinement: centered controls/finish labels and added visible SVG morph layers between Track, Route, and Out/Back course shapes.
 - [x] Pace plan animation guard fix: prevent course morph/line/marker animations from replaying on cardio goal-time changes.
 - [x] Pace plan visual distance polish: add Out/Back return-lane dot, tighten Route bottom label spacing, and display pacer distance in miles.
+- [x] Pace plan icon controls and split fix: circular play/pause/reset controls, upright runner, and exact finish split times.
 - [ ] Component editor Phase E: move cardio controls into `#cardio-editor`.
 - [ ] Component editor Phase F: component switching hides non-selected editors (already wired; verify values survive switching).
 - [ ] Component editor Phase G: live value mirroring in summary cards; add `#pfra-core-score` and `#pfra-cardio-score`.

@@ -780,10 +780,8 @@ function paceCoursePoint(courseMode, t) {
 
 function paceCourseAngle(courseMode, t) {
   if (courseMode === 'route') return 0;
-  if (courseMode === 'out-back') return t <= 0.5 ? 0 : 180;
-  const p = pacePoint(t);
-  const p2 = pacePoint((t + 0.002) % 1);
-  return Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI;
+  if (courseMode === 'out-back') return 0;
+  return 0;
 }
 
 function paceLapProgress(courseMode, lapNumber, lapCount) {
@@ -921,23 +919,34 @@ function formatPaceCourseEndpoints(courseMode) {
 
 function paceGoalLayout(courseMode) {
   if (courseMode === 'route') {
-    return { goalY: 29, timeY: 53, timeSize: 23, buttonX: 140, buttonY: 66, buttonW: 60, buttonH: 22, buttonTextY: 81 };
+    return { goalY: 29, timeY: 53, timeSize: 23, buttonCy: 52, buttonR: 13, startCx: 112, secondaryCx: 228 };
   }
   if (courseMode === 'out-back') {
-    return { goalY: 67, timeY: 91, timeSize: 23, buttonX: 136, buttonY: 104, buttonW: 68, buttonH: 22, buttonTextY: 119 };
+    return { goalY: 67, timeY: 91, timeSize: 23, buttonCy: 90, buttonR: 13, startCx: 112, secondaryCx: 228 };
   }
-  return { goalY: 65, timeY: 89, timeSize: 24, buttonX: 136, buttonY: 102, buttonW: 68, buttonH: 22, buttonTextY: 117 };
+  return { goalY: 65, timeY: 89, timeSize: 24, buttonCy: 88, buttonR: 13, startCx: 112, secondaryCx: 228 };
 }
 
 function formatPaceGoalButton(courseMode, totalStr) {
   const layout = paceGoalLayout(courseMode);
+  const playPath = `M ${layout.startCx - 4} ${layout.buttonCy - 7} L ${layout.startCx - 4} ${layout.buttonCy + 7} L ${layout.startCx + 8} ${layout.buttonCy} Z`;
+  const pauseBarY = layout.buttonCy - 7;
+  const resetPath = `M ${layout.secondaryCx + 6} ${layout.buttonCy - 7} A 9 9 0 1 0 ${layout.secondaryCx + 8} ${layout.buttonCy + 4} M ${layout.secondaryCx + 6} ${layout.buttonCy - 7} L ${layout.secondaryCx + 6} ${layout.buttonCy - 12} L ${layout.secondaryCx + 11} ${layout.buttonCy - 8}`;
   return `<g class="pace-goal-display" aria-hidden="true">
           <text x="170" y="${layout.goalY}" text-anchor="middle" class="pace-goal-text" font-size="9" letter-spacing="2">GOAL</text>
           <text x="170" y="${layout.timeY}" text-anchor="middle" class="pace-time-text" font-size="${layout.timeSize}" font-weight="800" letter-spacing="-0.5" font-variant-numeric="tabular-nums">${totalStr}</text>
         </g>
-        <g class="pace-pacer-toggle" data-pacer-toggle role="button" tabindex="0" focusable="true" aria-label="Start personal pacer for ${totalStr} goal">
-          <rect x="${layout.buttonX}" y="${layout.buttonY}" width="${layout.buttonW}" height="${layout.buttonH}" rx="11" class="pace-pacer-hit"/>
-          <text x="170" y="${layout.buttonTextY}" text-anchor="middle" class="pace-pacer-button-text" font-size="9" font-weight="900" letter-spacing="1.4">START</text>
+        <g class="pace-pacer-control pace-pacer-start" data-pacer-start role="button" tabindex="0" focusable="true" aria-label="Start personal pacer for ${totalStr} goal">
+          <circle cx="${layout.startCx}" cy="${layout.buttonCy}" r="${layout.buttonR}" class="pace-pacer-hit"/>
+          <path class="pace-pacer-icon pace-icon--play" d="${playPath}"/>
+        </g>
+        <g class="pace-pacer-control pace-pacer-secondary" data-pacer-secondary data-pacer-action="pause" role="button" tabindex="0" focusable="true" aria-label="Pause personal pacer" aria-hidden="true">
+          <circle cx="${layout.secondaryCx}" cy="${layout.buttonCy}" r="${layout.buttonR}" class="pace-pacer-hit"/>
+          <g class="pace-pacer-icon pace-icon--pause">
+            <rect x="${layout.secondaryCx - 5}" y="${pauseBarY}" width="3.5" height="14" rx="1"/>
+            <rect x="${layout.secondaryCx + 2}" y="${pauseBarY}" width="3.5" height="14" rx="1"/>
+          </g>
+          <path class="pace-pacer-icon pace-icon--reset" d="${resetPath}"/>
         </g>`;
 }
 
@@ -1060,7 +1069,8 @@ function formatPacePlan(totalSeconds, lapCount, lapSec, previousCourseMode = nul
     const layout = paceMarkerLayout(courseMode, t, n);
     const p = layout.point;
     const isFinish = i === lapCount - 1;
-    const splitStr = secondsToTimeString(lapSec * n);
+    const splitSeconds = isFinish ? totalSeconds : Math.round((totalSeconds * n) / lapCount);
+    const splitStr = secondsToTimeString(splitSeconds);
     const labelText = isFinish ? 'FINISH' : `L${n}`;
     const splitWeight = isFinish ? 800 : 600;
     const dotR = isFinish ? 7 : 4.5;
@@ -1107,7 +1117,7 @@ function formatPacePlan(totalSeconds, lapCount, lapSec, previousCourseMode = nul
         ${markers}
       </svg>
     </div>
-    <p class="pace-pacer-status" data-pacer-status>Tap START to start pacer.</p>
+    <p class="pace-pacer-status" data-pacer-status>Tap play to start pacer.</p>
     <div class="pace-distance-readout" aria-label="Distance traveled">
       <span>Distance</span>
       <strong><span data-pacer-distance-value>0.00</span> mi</strong>
@@ -1155,10 +1165,11 @@ function updatePacePacerDisplay(now = performance.now()) {
   const runner = lapDisplay?.querySelector('[data-pacer-runner]');
   const status = lapDisplay?.querySelector('[data-pacer-status]');
   const distance = lapDisplay?.querySelector('[data-pacer-distance-value]');
-  const toggle = lapDisplay?.querySelector('[data-pacer-toggle]');
+  const startControl = lapDisplay?.querySelector('[data-pacer-start]');
+  const secondaryControl = lapDisplay?.querySelector('[data-pacer-secondary]');
   const plan = lapDisplay?.querySelector('.lap-fitness');
   const goalSeconds = pacePacer.goalSeconds ?? toSeconds(state.cardio.value);
-  if (!lapDisplay || !runner || !status || !distance || !toggle || !plan || !Number.isFinite(goalSeconds) || goalSeconds <= 0) return;
+  if (!lapDisplay || !runner || !status || !distance || !startControl || !secondaryControl || !plan || !Number.isFinite(goalSeconds) || goalSeconds <= 0) return;
 
   const goalMs = goalSeconds * 1000;
   const lapCount = Math.max(1, Number(plan.dataset.lapCount) || 8);
@@ -1189,21 +1200,26 @@ function updatePacePacerDisplay(now = performance.now()) {
   paceAudioController.update(elapsedMs, goalSeconds, paceAudioSettings);
   const stateName = pacePacer.finished ? 'finished' : pacePacer.active ? 'running' : pacePacer.elapsedMs > 0 ? 'paused' : 'idle';
   plan.dataset.pacerState = stateName;
-  toggle.setAttribute('aria-label', pacePacer.active
-    ? 'Pause personal pacer'
-    : pacePacer.elapsedMs > 0 && !pacePacer.finished
-      ? 'Resume personal pacer'
-      : `Start personal pacer for ${secondsToTimeString(goalSeconds)} goal`);
+  startControl.setAttribute('aria-label', pacePacer.elapsedMs > 0 && !pacePacer.finished
+    ? 'Resume personal pacer'
+    : `Start personal pacer for ${secondsToTimeString(goalSeconds)} goal`);
+  startControl.setAttribute('aria-disabled', pacePacer.active ? 'true' : 'false');
+  startControl.setAttribute('tabindex', pacePacer.active ? '-1' : '0');
+  const secondaryAction = pacePacer.active ? 'pause' : 'reset';
+  secondaryControl.dataset.pacerAction = secondaryAction;
+  secondaryControl.setAttribute('aria-label', secondaryAction === 'pause' ? 'Pause personal pacer' : 'Reset personal pacer');
+  secondaryControl.setAttribute('aria-hidden', stateName === 'idle' ? 'true' : 'false');
+  secondaryControl.setAttribute('tabindex', stateName === 'idle' ? '-1' : '0');
 
   if (pacePacer.finished) {
-    status.textContent = `Goal reached at ${secondsToTimeString(goalSeconds)}. Tap START to restart.`;
+    status.textContent = `Goal reached at ${secondsToTimeString(goalSeconds)}. Tap play to restart or reset to start.`;
     paceAudioController.stop({ cancelSpeech: false });
   } else if (pacePacer.active) {
     status.textContent = `Pacer ${secondsToTimeString(elapsedSeconds)} / ${secondsToTimeString(goalSeconds)} · Lap ${currentLap} of ${lapCount}`;
   } else if (pacePacer.elapsedMs > 0) {
-    status.textContent = `Paused at ${secondsToTimeString(elapsedSeconds)} · Lap ${currentLap} of ${lapCount}. Tap START to resume.`;
+    status.textContent = `Paused at ${secondsToTimeString(elapsedSeconds)} · Lap ${currentLap} of ${lapCount}. Tap play to resume or reset.`;
   } else {
-    status.textContent = 'Tap START to start pacer.';
+    status.textContent = 'Tap play to start pacer.';
   }
 
   if (pacePacer.active && !pacePacer.rafId) {
@@ -1214,19 +1230,11 @@ function updatePacePacerDisplay(now = performance.now()) {
   }
 }
 
-function togglePacePacer() {
+function startPacePacer() {
   const goalSeconds = toSeconds(state.cardio.value);
   if (state.cardio.exempt || state.cardio.event !== 'two-mile-run' || !Number.isFinite(goalSeconds) || goalSeconds <= 0) return;
   const now = performance.now();
-
-  if (pacePacer.active) {
-    pacePacer.elapsedMs = currentPacePacerElapsedMs(now);
-    pacePacer.active = false;
-    paceAudioController.pause();
-    cancelPacePacerFrame();
-    updatePacePacerDisplay(now);
-    return;
-  }
+  if (pacePacer.active) return;
 
   if (pacePacer.goalSeconds !== goalSeconds || pacePacer.finished) {
     resetPacePacer(goalSeconds);
@@ -1238,6 +1246,34 @@ function togglePacePacer() {
   pacePacer.startedAt = now;
   void paceAudioController.start(goalSeconds, paceAudioSettings);
   updatePacePacerDisplay(now);
+}
+
+function pausePacePacer() {
+  if (!pacePacer.active) return;
+  const now = performance.now();
+  pacePacer.elapsedMs = currentPacePacerElapsedMs(now);
+  pacePacer.active = false;
+  paceAudioController.pause();
+  cancelPacePacerFrame();
+  updatePacePacerDisplay(now);
+}
+
+function resetVisiblePacePacer() {
+  const goalSeconds = toSeconds(state.cardio.value);
+  resetPacePacer(Number.isFinite(goalSeconds) && goalSeconds > 0 ? goalSeconds : null);
+  updatePacePacerDisplay();
+}
+
+function handlePacePacerControl(action) {
+  if (action === 'pause') {
+    pausePacePacer();
+    return;
+  }
+  if (action === 'reset') {
+    resetVisiblePacePacer();
+    return;
+  }
+  startPacePacer();
 }
 
 function syncPacePacerForGoal(goalSeconds) {
@@ -2207,15 +2243,31 @@ function bindEvents() {
   // --- Pace plan personal pacer ---
 
   byId('run-lap-times')?.addEventListener('click', (event) => {
-    const target = event.target instanceof Element ? event.target.closest('[data-pacer-toggle]') : null;
-    if (target) togglePacePacer();
+    if (!(event.target instanceof Element)) return;
+    const startTarget = event.target.closest('[data-pacer-start]');
+    if (startTarget) {
+      handlePacePacerControl('start');
+      return;
+    }
+    const secondaryTarget = event.target.closest('[data-pacer-secondary]');
+    if (secondaryTarget instanceof HTMLElement || secondaryTarget instanceof SVGElement) {
+      handlePacePacerControl(secondaryTarget.dataset.pacerAction || 'pause');
+    }
   });
 
   byId('run-lap-times')?.addEventListener('keydown', (event) => {
-    const target = event.target instanceof Element ? event.target.closest('[data-pacer-toggle]') : null;
-    if (!target || (event.key !== 'Enter' && event.key !== ' ')) return;
+    if (!(event.target instanceof Element) || (event.key !== 'Enter' && event.key !== ' ')) return;
+    const startTarget = event.target.closest('[data-pacer-start]');
+    const secondaryTarget = event.target.closest('[data-pacer-secondary]');
+    if (!startTarget && !secondaryTarget) return;
     event.preventDefault();
-    togglePacePacer();
+    if (startTarget) {
+      handlePacePacerControl('start');
+      return;
+    }
+    if (secondaryTarget instanceof HTMLElement || secondaryTarget instanceof SVGElement) {
+      handlePacePacerControl(secondaryTarget.dataset.pacerAction || 'pause');
+    }
   });
 
   byId('run-lap-times')?.addEventListener('change', (event) => {
