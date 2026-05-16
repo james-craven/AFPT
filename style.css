@@ -3278,8 +3278,7 @@ select {
 }
 
 .pace-route-dash,
-.pace-outback-dash,
-.pace-outback-turn {
+.pace-outback-dash {
   animation: pace-fade-in 0.52s ease-out both;
   stroke: var(--afpt-border);
   stroke-linecap: round;
@@ -3289,10 +3288,6 @@ select {
 .pace-outback-line--back,
 .pace-outback-dash--back {
   animation-delay: 0.08s;
-}
-
-.pace-outback-turn {
-  stroke: var(--afpt-accent);
 }
 
 .lap-fitness[data-course="route"] .pace-marker,
@@ -3370,6 +3365,25 @@ select {
 .pace-pacer-hit {
   fill: transparent;
   pointer-events: all;
+}
+
+.lap-fitness[data-course="route"] .pace-pacer-hit,
+.lap-fitness[data-course="out-back"] .pace-pacer-hit {
+  fill: color-mix(in srgb, var(--afpt-panel) 82%, transparent);
+  stroke: color-mix(in srgb, var(--afpt-border) 85%, transparent);
+  stroke-width: 1;
+}
+
+.pace-start-dot {
+  fill: var(--afpt-panel);
+  stroke: var(--afpt-accent);
+  stroke-width: 1.5;
+}
+
+.pace-start-label,
+.pace-turn-label {
+  fill: var(--afpt-ink-dim);
+  font-family: inherit;
 }
 
 .pace-pacer-runner {

@@ -403,3 +403,10 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added course-specific pace-plan geometry: Track keeps the oval, Route renders a straight route line with 8 track-equivalent lap markers, and Out/Back renders outbound plus return lanes.
 - Updated the runner animation so Route moves across the full straight line over the total goal time, while Out/Back drops to the return lane after halfway and moves back left.
 - Added SVG/CSS transition effects for route/out-back course changes and browser coverage for the new visual modes.
+
+## Pace Plan Course Layout Fixes
+
+- Moved Route goal time above the route line and widened the straight route to use more of the available pace-plan width.
+- Added explicit START labels for linear courses, moved Route finish to the right endpoint, and moved Out/Back finish to the return lane.
+- Removed the Out/Back connector curve and widened the spacing between outbound and return lanes so the goal time sits cleanly between them.
+- Added browser assertions for route/out-back start, finish, goal placement, lane spacing, and connector removal.

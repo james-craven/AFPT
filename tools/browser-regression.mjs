@@ -574,25 +574,53 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const routeCourseVisual = await page.evaluate(() => ({
     hasRouteLine: Boolean(document.querySelector('.pace-route-line')),
     hasTrackGhost: Boolean(document.querySelector('.pace-track-ghost')),
+    goalBottom: Number(document.querySelector('.pace-pacer-hit')?.getAttribute('y') ?? 0)
+      + Number(document.querySelector('.pace-pacer-hit')?.getAttribute('height') ?? 0),
+    lineY: Number(document.querySelector('.pace-route-line')?.getAttribute('y1') ?? 0),
     markerCount: document.querySelectorAll('[data-pace-lap]').length,
+    startLabel: document.querySelector('.pace-start-label')?.textContent,
+    finishX: Number(document.querySelector('.pace-marker--finish .pace-dot--finish')?.getAttribute('cx') ?? 0),
     runnerLeg: document.querySelector('[data-pacer-runner]')?.dataset.courseLeg,
   }));
   assert.equal(routeCourseVisual.hasRouteLine, true, 'route mode renders a straight course line');
   assert.equal(routeCourseVisual.hasTrackGhost, true, 'route mode animates from a ghosted track shape');
+  assert.ok(routeCourseVisual.goalBottom < routeCourseVisual.lineY - 20, 'route mode keeps goal time clear of the route line');
   assert.equal(routeCourseVisual.markerCount, 8, 'route mode keeps 8 track-equivalent lap markers');
+  assert.equal(routeCourseVisual.startLabel, 'START', 'route mode labels the true route start');
+  assert.ok(routeCourseVisual.finishX > 300, 'route mode places finish at the far right end');
   assert.equal(routeCourseVisual.runnerLeg, 'route', 'route mode starts runner on route line');
 
   await page.locator('[data-pacer-audio-field="courseMode"]').selectOption('out-back');
   await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.course === 'out-back');
   const outBackCourseVisual = await page.evaluate(() => ({
     lineCount: document.querySelectorAll('.pace-outback-line').length,
-    turnVisible: Boolean(document.querySelector('.pace-outback-turn')),
+    turnConnectorVisible: Boolean(document.querySelector('.pace-outback-turn')),
+    gap: Math.abs(
+      Number(document.querySelector('.pace-outback-line--back')?.getAttribute('y1') ?? 0)
+      - Number(document.querySelector('.pace-outback-line--out')?.getAttribute('y1') ?? 0),
+    ),
+    goal: {
+      y: Number(document.querySelector('.pace-pacer-hit')?.getAttribute('y') ?? 0),
+      bottom: Number(document.querySelector('.pace-pacer-hit')?.getAttribute('y') ?? 0)
+        + Number(document.querySelector('.pace-pacer-hit')?.getAttribute('height') ?? 0),
+    },
     markerCount: document.querySelectorAll('[data-pace-lap]').length,
+    startLabel: document.querySelector('.pace-start-label')?.textContent,
+    turnLabel: document.querySelector('.pace-turn-label')?.textContent,
+    finish: {
+      x: Number(document.querySelector('.pace-marker--finish .pace-dot--finish')?.getAttribute('cx') ?? 0),
+      y: Number(document.querySelector('.pace-marker--finish .pace-dot--finish')?.getAttribute('cy') ?? 0),
+    },
     runnerLeg: document.querySelector('[data-pacer-runner]')?.dataset.courseLeg,
   }));
   assert.equal(outBackCourseVisual.lineCount, 2, 'out/back mode renders outbound and return lines');
-  assert.equal(outBackCourseVisual.turnVisible, true, 'out/back mode renders a visual turn connector');
+  assert.equal(outBackCourseVisual.turnConnectorVisible, false, 'out/back mode does not render a connector line');
+  assert.ok(outBackCourseVisual.gap >= 75, 'out/back lanes have enough vertical separation for the goal time');
+  assert.ok(outBackCourseVisual.goal.y > 60 && outBackCourseVisual.goal.bottom < 125, 'out/back goal time sits between the lanes');
   assert.equal(outBackCourseVisual.markerCount, 8, 'out/back mode keeps 8 track-equivalent lap markers');
+  assert.equal(outBackCourseVisual.startLabel, 'START', 'out/back mode labels the outbound start');
+  assert.equal(outBackCourseVisual.turnLabel, 'TURN', 'out/back mode labels the far turn point');
+  assert.ok(outBackCourseVisual.finish.x < 40 && outBackCourseVisual.finish.y > 120, 'out/back mode places finish on the return lane at the left');
   assert.equal(outBackCourseVisual.runnerLeg, 'outbound', 'out/back mode starts runner on outbound line');
 
   const scoreBeforeAudioSettings = await page.evaluate(() => window.afptApp.getScoreResult()?.total);
