@@ -1127,9 +1127,9 @@ select {
 }
 
 .chart-btn {
-  background: transparent;
+  background: var(--afpt-panel-2);
   border: 1px solid var(--afpt-border-strong);
-  color: var(--afpt-ink-dim);
+  color: var(--afpt-ink);
   font-family: inherit;
   font-size: 12px;
   letter-spacing: 1px;
@@ -3071,7 +3071,7 @@ select {
 /* Tactical: HUD feel */
 :root[data-theme="tactical"] .fit-seg-ctrl {
   background: rgba(0, 0, 0, 0.3);
-  border-color: var(--afpt-border);
+  border: 1px solid var(--afpt-border-strong);
 }
 :root[data-theme="tactical"] .fit-seg-btn {
   color: var(--afpt-ink-dim);
