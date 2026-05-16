@@ -383,3 +383,9 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added a persisted Music setting for pacer cues: Mix uses `ambient`, Duck uses `transient`, and Priority uses `playback` when `navigator.audioSession` is available.
 - Cues now request their selected audio session immediately before playing and release back to `auto` shortly afterward, avoiding the removed continuous keepalive behavior.
 - Updated tests for the new audio-focus setting, persistence, and audio-session behavior.
+
+## Pacer Audio Spoken Signal
+
+- Added a persisted Signal setting with `Spoken Mark`, `Tone`, and `Off` options.
+- Made `Spoken Mark` the default signal because on-device testing showed Priority was required for real Web Audio tones but could pause Spotify without resuming it.
+- Kept real tone support available for users/platforms where it works, while documenting in the UI that Tone may require Priority on iOS.

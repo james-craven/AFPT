@@ -12,6 +12,7 @@ export const DEFAULT_PACER_AUDIO_SETTINGS = Object.freeze({
   outBackSegmentMeters: 1600,
   cueIntensity: 'loud',
   audioFocus: 'mix',
+  signalSound: 'spoken',
   vibration: false,
 });
 
@@ -20,6 +21,7 @@ const COURSE_MODES = new Set(['track', 'route', 'out-back', 'percent']);
 const CUE_FREQUENCIES = new Set(['100m', '200m', '400m', 'quarter']);
 const CUE_INTENSITIES = new Set(['normal', 'loud', 'max']);
 const AUDIO_FOCUS_MODES = new Set(['mix', 'duck', 'priority']);
+const SIGNAL_SOUNDS = new Set(['spoken', 'tone', 'off']);
 const OUT_BACK_SEGMENTS = new Set([100, 200, 400, 800, 1600]);
 
 const AUDIO_SESSION_BY_FOCUS = Object.freeze({
@@ -48,6 +50,7 @@ export function normalizePacerAudioSettings(settings = {}) {
     outBackSegmentMeters: OUT_BACK_SEGMENTS.has(segment) ? segment : DEFAULT_PACER_AUDIO_SETTINGS.outBackSegmentMeters,
     cueIntensity: CUE_INTENSITIES.has(merged.cueIntensity) ? merged.cueIntensity : DEFAULT_PACER_AUDIO_SETTINGS.cueIntensity,
     audioFocus: AUDIO_FOCUS_MODES.has(merged.audioFocus) ? merged.audioFocus : DEFAULT_PACER_AUDIO_SETTINGS.audioFocus,
+    signalSound: SIGNAL_SOUNDS.has(merged.signalSound) ? merged.signalSound : DEFAULT_PACER_AUDIO_SETTINGS.signalSound,
     vibration: Boolean(merged.vibration),
   };
 }
@@ -181,6 +184,7 @@ export class PacerAudioController {
       running: this.running,
       cueIntensity: this.settings.cueIntensity,
       audioFocus: this.settings.audioFocus,
+      signalSound: this.settings.signalSound,
       vibration: this.settings.vibration,
       wakeLockActive: Boolean(this.wakeLock),
     };
@@ -342,7 +346,7 @@ export class PacerAudioController {
 
   cueReleaseDelay(settings = this.settings, cueText = '') {
     const normalized = normalizePacerAudioSettings(settings);
-    if (normalized.cueStyle === 'beep') return 900;
+    if (!cueText || (normalized.cueStyle === 'beep' && normalized.signalSound !== 'spoken')) return 900;
     const estimatedSpeechMs = Math.max(1600, Math.min(5000, cueText.length * 70));
     return estimatedSpeechMs;
   }
@@ -388,29 +392,63 @@ export class PacerAudioController {
   playStartCue() {
     const cue = { kind: 'start', distanceMeters: 0, targetSeconds: 0 };
     const normalized = this.settings;
+    const speechText = this.composedCueSpeech('Pacer started.', cue, normalized);
     this.prepareCueAudioSession(normalized);
-    if (normalized.cueStyle === 'beep' || normalized.cueStyle === 'beep-voice') this.beep(cue);
-    if (normalized.cueStyle === 'voice' || normalized.cueStyle === 'beep-voice') this.speak('Pacer started.', cue);
+    this.playSignal(cue, normalized);
+    if (speechText) this.speak(speechText, cue);
     if (normalized.vibration) this.vibrate(cue);
-    this.scheduleAudioSessionRelease(this.cueReleaseDelay(normalized, 'Pacer started.'));
+    this.scheduleAudioSessionRelease(this.cueReleaseDelay(normalized, speechText));
     this.status('Pacer audio armed. Keep this screen awake for the most reliable cues.');
   }
 
   primeAudibleCue() {
     const cue = { kind: 'prime', distanceMeters: 0, targetSeconds: 0 };
+    const speechText = this.composedCueSpeech('', cue, this.settings);
     this.prepareCueAudioSession(this.settings);
-    this.beep(cue);
-    this.scheduleAudioSessionRelease(900);
+    this.playSignal(cue, this.settings);
+    if (speechText) this.speak(speechText, cue);
+    this.scheduleAudioSessionRelease(this.cueReleaseDelay(this.settings, speechText));
   }
 
   playCue(cue, settings) {
     const normalized = normalizePacerAudioSettings(settings);
     const text = formatCueText(cue, normalized);
+    const speechText = this.composedCueSpeech(text, cue, normalized);
     this.prepareCueAudioSession(normalized);
-    if (normalized.cueStyle === 'beep' || normalized.cueStyle === 'beep-voice') this.beep(cue);
-    if (normalized.cueStyle === 'voice' || normalized.cueStyle === 'beep-voice') this.speak(text, cue);
+    this.playSignal(cue, normalized);
+    if (speechText) this.speak(speechText, cue);
     if (normalized.vibration) this.vibrate(cue);
-    this.scheduleAudioSessionRelease(this.cueReleaseDelay(normalized, text));
+    this.scheduleAudioSessionRelease(this.cueReleaseDelay(normalized, speechText));
+  }
+
+  wantsSignal(settings = this.settings) {
+    return settings.cueStyle === 'beep' || settings.cueStyle === 'beep-voice';
+  }
+
+  wantsVoice(settings = this.settings) {
+    return settings.cueStyle === 'voice' || settings.cueStyle === 'beep-voice';
+  }
+
+  signalText(cue, hasVoiceText = false) {
+    if (hasVoiceText) return 'Mark.';
+    if (cue?.kind === 'finish') return 'Finish.';
+    if (cue?.kind === 'turn') return 'Turn.';
+    return 'Mark.';
+  }
+
+  composedCueSpeech(text, cue, settings = this.settings) {
+    const normalized = normalizePacerAudioSettings(settings);
+    const parts = [];
+    const hasVoiceText = this.wantsVoice(normalized) && Boolean(text);
+    if (this.wantsSignal(normalized) && normalized.signalSound === 'spoken') parts.push(this.signalText(cue, hasVoiceText));
+    if (hasVoiceText) parts.push(text);
+    return parts.join(' ').trim();
+  }
+
+  playSignal(cue, settings = this.settings) {
+    const normalized = normalizePacerAudioSettings(settings);
+    if (!this.wantsSignal(normalized) || normalized.signalSound !== 'tone') return false;
+    return this.beep(cue);
   }
 
   beep(cue) {

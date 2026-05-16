@@ -807,7 +807,15 @@ function formatPaceAudioControls(settings) {
         <select data-pacer-audio-field="audioFocus" aria-label="Pacer audio behavior with other apps">
           <option value="mix"${selectedOption('mix', normalized.audioFocus)}>Mix</option>
           <option value="duck"${selectedOption('duck', normalized.audioFocus)}>Duck</option>
-          <option value="priority"${selectedOption('priority', normalized.audioFocus)}>Priority</option>
+          <option value="priority"${selectedOption('priority', normalized.audioFocus)}>Priority*</option>
+        </select>
+      </label>
+      <label>
+        <span>Signal</span>
+        <select data-pacer-audio-field="signalSound" aria-label="Pacer signal sound">
+          <option value="spoken"${selectedOption('spoken', normalized.signalSound)}>Spoken Mark</option>
+          <option value="tone"${selectedOption('tone', normalized.signalSound)}>Tone</option>
+          <option value="off"${selectedOption('off', normalized.signalSound)}>Off</option>
         </select>
       </label>
       <label class="pace-audio-vibrate">
@@ -818,7 +826,7 @@ function formatPaceAudioControls(settings) {
         </span>
       </label>
     </div>
-    <p class="pace-audio-note">Music mode asks supported browsers to mix, duck, or prioritize cues. Install to Home Screen and test with your headphones or music before running.</p>
+    <p class="pace-audio-note">Spoken Mark is the most music-friendly signal. Tone may require Priority on iOS, which can pause other audio.</p>
     <div class="pace-audio-actions">
       <button type="button" data-pacer-audio-test>Test cue</button>
       <span class="pace-audio-status" data-pacer-audio-status>${normalized.enabled ? 'Audio cues ready.' : 'Audio cues off.'}</span>
@@ -834,7 +842,7 @@ function updatePaceAudioStatus(message) {
     return;
   }
   status.textContent = paceAudioSettings.enabled
-    ? `Audio cues on: ${paceAudioSettings.courseMode.replace('-', '/')} · ${paceAudioSettings.cueFrequency} · ${paceAudioSettings.cueIntensity} · ${paceAudioSettings.audioFocus}.`
+    ? `Audio cues on: ${paceAudioSettings.courseMode.replace('-', '/')} · ${paceAudioSettings.cueFrequency} · ${paceAudioSettings.signalSound} · ${paceAudioSettings.audioFocus}.`
     : 'Audio cues off.';
 }
 
@@ -871,6 +879,7 @@ function readPaceAudioSettingsFromControls() {
     outBackSegmentMeters: Number(field('outBackSegmentMeters')?.value),
     cueIntensity: field('cueIntensity')?.value,
     audioFocus: field('audioFocus')?.value,
+    signalSound: field('signalSound')?.value,
     vibration: Boolean(field('vibration')?.checked),
   });
 }
