@@ -198,6 +198,72 @@ async function assertControlsStayInsideApp(page, label) {
   assert.deepEqual(result.offenders, [], `${label} controls stay inside app bounds`);
 }
 
+async function assertStickyHeaderAndSettingsLayer(page, preset, label) {
+  await setThemePreset(page, preset);
+  await page.evaluate(() => window.scrollTo(0, 420));
+  await page.waitForTimeout(100);
+
+  const stickyResult = await page.evaluate(() => {
+    const header = document.querySelector('.app-header');
+    if (!header) return { missing: true };
+    const rect = header.getBoundingClientRect();
+    const style = getComputedStyle(header);
+    return {
+      position: style.position,
+      top: rect.top,
+      zIndex: Number.parseInt(style.zIndex, 10),
+    };
+  });
+
+  assert.equal(stickyResult.missing, undefined, `${label} ${preset} header exists`);
+  assert.equal(stickyResult.position, 'sticky', `${label} ${preset} header is sticky`);
+  assert.ok(Math.abs(stickyResult.top) <= 1, `${label} ${preset} header stays at viewport top: ${stickyResult.top}px`);
+  assert.ok(stickyResult.zIndex >= 100, `${label} ${preset} header has overlay-safe z-index`);
+
+  await page.locator('#settings-hub-toggle').click();
+  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+
+  const layerResult = await page.evaluate(() => {
+    const panel = document.getElementById('settings-hub-panel');
+    const scrim = document.getElementById('settings-hub-scrim');
+    const shell = document.querySelector('.app-shell');
+    if (!panel || !scrim) return { missing: true };
+    const panelRect = panel.getBoundingClientRect();
+    const shellRect = shell?.getBoundingClientRect();
+    const panelStyle = getComputedStyle(panel);
+    const scrimStyle = getComputedStyle(scrim);
+    const hit = document.elementFromPoint(
+      Math.min(panelRect.left + 24, window.innerWidth - 8),
+      Math.min(panelRect.top + 24, window.innerHeight - 8),
+    );
+    return {
+      panelParent: panel.parentElement?.tagName,
+      panelPosition: panelStyle.position,
+      panelZ: Number.parseInt(panelStyle.zIndex, 10),
+      scrimParent: scrim.parentElement?.tagName,
+      scrimZ: Number.parseInt(scrimStyle.zIndex, 10),
+      topHitInsidePanel: panel.contains(hit),
+      panelTop: panelRect.top,
+      panelRight: panelRect.right,
+      expectedRight: shellRect?.right ?? window.innerWidth,
+    };
+  });
+
+  assert.equal(layerResult.missing, undefined, `${label} ${preset} settings layer exists`);
+  assert.equal(layerResult.panelParent, 'BODY', `${label} ${preset} settings panel is portaled to body`);
+  assert.equal(layerResult.scrimParent, 'BODY', `${label} ${preset} settings scrim is portaled to body`);
+  assert.equal(layerResult.panelPosition, 'fixed', `${label} ${preset} settings panel is fixed`);
+  assert.ok(layerResult.panelZ > stickyResult.zIndex, `${label} ${preset} settings panel renders above header`);
+  assert.ok(layerResult.scrimZ > stickyResult.zIndex, `${label} ${preset} settings scrim renders above app`);
+  assert.equal(layerResult.topHitInsidePanel, true, `${label} ${preset} settings panel is topmost at its visible edge`);
+  assert.ok(Math.abs(layerResult.panelTop) <= 1, `${label} ${preset} settings panel starts at viewport top`);
+  assert.ok(Math.abs(layerResult.panelRight - layerResult.expectedRight) <= 1, `${label} ${preset} settings panel reaches app right edge`);
+
+  await page.locator('#settings-hub-close').click();
+  await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
+  await page.evaluate(() => window.scrollTo(0, 0));
+}
+
 async function assertEventRowEdgeAlignment(page, panelId, label) {
   const result = await page.evaluate((id) => {
     const panel = document.getElementById(id);
@@ -516,6 +582,10 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   // Restore theme
   await page.locator('#theme-preset-select').selectOption('tactical');
   await page.waitForFunction(() => document.documentElement.dataset.themePreset === 'tactical');
+
+  for (const preset of ['tactical', 'stencil', 'blues', 'light', 'fitness']) {
+    await assertStickyHeaderAndSettingsLayer(page, preset, label);
+  }
 
   // 8a. Body/cardio controls stay in bounds across themes and event layouts
   await page.locator('#summary-body').click();

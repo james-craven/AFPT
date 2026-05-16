@@ -109,7 +109,7 @@ html, body {
   min-height: 100vh;
   touch-action: manipulation;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .sr-only {
@@ -145,7 +145,7 @@ select {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  overflow-x: clip;
+  overflow: visible;
 }
 
 /* ─── Header ───────────────────────────────────────────────────── */
@@ -159,7 +159,7 @@ select {
   border-bottom: 1px solid var(--afpt-border);
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
 }
 
 .app-title {
@@ -216,7 +216,7 @@ select {
   background: rgba(0, 0, 0, 0.4);
   border: none;
   cursor: default;
-  z-index: 19;
+  z-index: 900;
   padding: 0;
 }
 
@@ -229,7 +229,7 @@ select {
   width: min(320px, 88vw);
   background: var(--afpt-panel);
   border-left: 1px solid var(--afpt-border-strong);
-  z-index: 20;
+  z-index: 910;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -1520,7 +1520,7 @@ select {
   display: grid;
   place-items: center;
   background: rgba(0, 0, 0, 0.55);
-  z-index: 30;
+  z-index: 800;
 }
 
 .modal-overlay[hidden] {
@@ -1628,7 +1628,7 @@ select {
 .chart-drawer {
   position: fixed;
   inset: 0;
-  z-index: 25;
+  z-index: 800;
   pointer-events: none;
 }
 

@@ -50,6 +50,10 @@ function initSettingsHub() {
 
   if (!elements.panel || !elements.scrim || !elements.toggle) return;
 
+  // Keep the visible toggle in the sticky header, but move fixed overlay pieces
+  // out to body so theme backdrops/stacking contexts cannot cover them.
+  document.body.append(elements.scrim, elements.panel);
+
   elements.toggle.addEventListener('click', () => {
     setHubOpen(!isOpen(elements.panel), elements);
   });
