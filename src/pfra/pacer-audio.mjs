@@ -147,6 +147,7 @@ export class PacerAudioController {
     this.scheduleKey = '';
     this.settings = { ...DEFAULT_PACER_AUDIO_SETTINGS };
     this.statusCallback = null;
+    this.keepAliveNodes = null;
     this.wakeLock = null;
   }
 
@@ -170,6 +171,7 @@ export class PacerAudioController {
       lastCueIndex: this.lastCueIndex,
       running: this.running,
       cueIntensity: this.settings.cueIntensity,
+      keepAliveActive: Boolean(this.keepAliveNodes),
       vibration: this.settings.vibration,
       wakeLockActive: Boolean(this.wakeLock),
     };
@@ -201,25 +203,32 @@ export class PacerAudioController {
     this.schedule = [];
     this.scheduleKey = '';
     this.cancelSpeech();
+    this.stopKeepAlive();
     this.releaseWakeLock();
   }
 
   pause() {
     this.running = false;
     this.cancelSpeech();
+    this.stopKeepAlive();
     this.releaseWakeLock();
   }
 
   stop({ cancelSpeech = true } = {}) {
     this.running = false;
     if (cancelSpeech) this.cancelSpeech();
+    this.stopKeepAlive();
     this.releaseWakeLock();
   }
 
   async start(goalSeconds, settings) {
     this.configure(goalSeconds, settings);
     this.running = true;
-    if (this.settings.enabled) await this.unlockAudio();
+    if (this.settings.enabled) {
+      await this.unlockAudio();
+      this.startKeepAlive();
+      this.playStartCue();
+    }
     await this.requestWakeLock();
   }
 
@@ -238,6 +247,7 @@ export class PacerAudioController {
     const normalized = normalizePacerAudioSettings({ ...settings, enabled: true });
     this.configure(goalSeconds, normalized, { resetCueIndex: true });
     await this.unlockAudio();
+    await this.delay(80);
     const cue = this.schedule[0] || createPacerCueSchedule(goalSeconds, normalized)[0];
     if (cue) this.playCue(cue, normalized);
     this.status(`Test cue: ${cue ? formatCueText(cue, normalized) : 'Unavailable'}`);
@@ -254,17 +264,106 @@ export class PacerAudioController {
 
   async unlockAudio() {
     const hooks = this.hooks();
+    this.setAudioSessionType('transient');
     if (hooks?.unlockAudio) return hooks.unlockAudio();
 
     const AudioCtor = this.root.AudioContext || this.root.webkitAudioContext;
     if (!AudioCtor) return false;
     if (!this.audioContext) this.audioContext = new AudioCtor();
     if (this.audioContext.state === 'suspended') await this.audioContext.resume();
+    this.primeAudioContext();
     return true;
+  }
+
+  setAudioSessionType(type) {
+    const hooks = this.hooks();
+    if (hooks?.setAudioSessionType) {
+      hooks.setAudioSessionType(type);
+      return true;
+    }
+    try {
+      const session = this.root.navigator?.audioSession;
+      if (session && 'type' in session) {
+        session.type = type;
+        return true;
+      }
+    } catch {
+      // Audio Session API is experimental; ignore unsupported assignment failures.
+    }
+    return false;
+  }
+
+  delay(ms) {
+    return new Promise((resolve) => this.root.setTimeout(resolve, ms));
+  }
+
+  primeAudioContext() {
+    if (!this.audioContext) return false;
+    try {
+      const now = this.audioContext.currentTime;
+      const oscillator = this.audioContext.createOscillator();
+      const gain = this.audioContext.createGain();
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.03);
+      oscillator.connect(gain).connect(this.audioContext.destination);
+      oscillator.start(now);
+      oscillator.stop(now + 0.04);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  startKeepAlive() {
+    const hooks = this.hooks();
+    if (hooks?.startKeepAlive) {
+      hooks.startKeepAlive();
+      this.keepAliveNodes = { hooked: true };
+      return true;
+    }
+    if (!this.audioContext || this.keepAliveNodes) return false;
+    try {
+      const oscillator = this.audioContext.createOscillator();
+      const gain = this.audioContext.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime);
+      gain.gain.setValueAtTime(0.00001, this.audioContext.currentTime);
+      oscillator.connect(gain).connect(this.audioContext.destination);
+      oscillator.start();
+      this.keepAliveNodes = { gain, oscillator };
+      return true;
+    } catch {
+      this.keepAliveNodes = null;
+      return false;
+    }
+  }
+
+  stopKeepAlive() {
+    const hooks = this.hooks();
+    if (hooks?.stopKeepAlive && this.keepAliveNodes) hooks.stopKeepAlive();
+    try {
+      this.keepAliveNodes?.oscillator?.stop?.();
+      this.keepAliveNodes?.oscillator?.disconnect?.();
+      this.keepAliveNodes?.gain?.disconnect?.();
+    } catch {
+      // Ignore already-stopped keepalive nodes.
+    }
+    this.keepAliveNodes = null;
+    this.setAudioSessionType('auto');
+  }
+
+  playStartCue() {
+    const cue = { kind: 'start', distanceMeters: 0, targetSeconds: 0 };
+    const normalized = this.settings;
+    if (normalized.cueStyle === 'beep' || normalized.cueStyle === 'beep-voice') this.beep(cue);
+    if (normalized.cueStyle === 'voice' || normalized.cueStyle === 'beep-voice') this.speak('Pacer started.', cue);
+    if (normalized.vibration) this.vibrate(cue);
+    this.status('Pacer audio armed. Keep this screen awake for the most reliable cues.');
   }
 
   playCue(cue, settings) {
     const normalized = normalizePacerAudioSettings(settings);
+    this.setAudioSessionType('transient');
     const text = formatCueText(cue, normalized);
     if (normalized.cueStyle === 'beep' || normalized.cueStyle === 'beep-voice') this.beep(cue);
     if (normalized.cueStyle === 'voice' || normalized.cueStyle === 'beep-voice') this.speak(text, cue);
@@ -305,7 +404,7 @@ export class PacerAudioController {
 
   vibrate(cue) {
     const hooks = this.hooks();
-    const pattern = cue?.kind === 'finish' ? [180, 80, 180, 80, 260] : cue?.turn ? [220, 80, 220] : [160];
+    const pattern = cue?.kind === 'finish' ? [180, 80, 180, 80, 260] : cue?.turn ? [220, 80, 220] : cue?.kind === 'start' ? [120, 60, 120] : [160];
     if (hooks?.vibrate) {
       hooks.vibrate(pattern, cue);
       return true;

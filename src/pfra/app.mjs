@@ -810,7 +810,7 @@ function formatPaceAudioControls(settings) {
         </span>
       </label>
     </div>
-    <p class="pace-audio-note">For reliable cues, keep this screen awake and test volume with your headphones or music before running.</p>
+    <p class="pace-audio-note">For best cue behavior, install to Home Screen, keep this screen awake, and test volume with your headphones or music before running.</p>
     <div class="pace-audio-actions">
       <button type="button" data-pacer-audio-test>Test cue</button>
       <span class="pace-audio-status" data-pacer-audio-status>${normalized.enabled ? 'Audio cues ready.' : 'Audio cues off.'}</span>

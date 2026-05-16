@@ -18,8 +18,8 @@ This is a practical launch checklist, not legal advice. Final public release cop
   - Use pace plan for 2-mile run targets.
   - Enable pacer audio only after testing volume.
 - Explain pacer audio plainly:
-  - "Keep screen awake for reliable cues."
-  - "PWA audio cannot lower music volume like a native navigation app."
+  - "Install to Home Screen and keep screen awake for the best cue behavior."
+  - "Music ducking and locked-screen cues vary by device/browser, so test before running."
   - "Test cues before running."
 - Create a 30-60 second screen recording showing:
   - Install for offline use.
@@ -38,7 +38,7 @@ This is a practical launch checklist, not legal advice. Final public release cop
 - Native later, only if justified by user demand:
   - Apple requires a public privacy policy URL for App Store privacy details.
   - Google Play requires a Data Safety form and matching privacy policy, even if no data is collected.
-  - Native app is the right path for reliable background/locked-screen audio and audio ducking.
+  - Native app is the right path if users require guaranteed background/locked-screen audio and audio ducking.
 
 ## Required Public Documents
 

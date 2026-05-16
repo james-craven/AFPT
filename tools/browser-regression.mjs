@@ -561,7 +561,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(pacerAudioDefaults.settings.vibration, false, 'pacer audio vibration is off by default');
   assert.match(
     await page.locator('.pace-audio-note').innerText(),
-    /keep this screen awake/i,
+    /install to Home Screen/i,
     'pacer audio explains screen/volume reliability',
   );
 
@@ -609,10 +609,13 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     window.__afptPacerAudioTestHooks = {
       events: [],
       unlockAudio() { this.events.push({ type: 'unlock' }); return Promise.resolve(true); },
-      beep(cue) { this.events.push({ type: 'beep', distanceMeters: cue.distanceMeters }); },
-      speak(text) { this.events.push({ type: 'speak', text }); },
-      vibrate(pattern) { this.events.push({ type: 'vibrate', pattern }); },
+      beep(cue) { this.events.push({ type: 'beep', distanceMeters: cue.distanceMeters, kind: cue.kind }); },
+      speak(text, cue) { this.events.push({ type: 'speak', kind: cue.kind, text }); },
+      vibrate(pattern, cue) { this.events.push({ type: 'vibrate', kind: cue.kind, pattern }); },
       cancelSpeech() { this.events.push({ type: 'cancel' }); },
+      setAudioSessionType(type) { this.events.push({ type: 'audio-session', audioSessionType: type }); },
+      startKeepAlive() { this.events.push({ type: 'keepalive-start' }); },
+      stopKeepAlive() { this.events.push({ type: 'keepalive-stop' }); },
       requestWakeLock() {
         this.events.push({ type: 'wake' });
         return Promise.resolve({
@@ -667,7 +670,20 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     events: window.__afptPacerAudioTestHooks.events,
   }));
   assert.equal(pacerAudioRunning.debug.running, true, 'pacer audio controller runs while pacer is active');
+  assert.equal(pacerAudioRunning.debug.keepAliveActive, true, 'pacer audio keeps audio context warm while running');
   assert.ok(pacerAudioRunning.debug.lastCueIndex >= 0, 'pacer audio controller advances cues while running');
+  assert.ok(
+    pacerAudioRunning.events.some((event) => event.type === 'beep' && event.kind === 'start'),
+    'pacer start tap plays an arming cue',
+  );
+  assert.ok(
+    pacerAudioRunning.events.some((event) => event.type === 'audio-session' && event.audioSessionType === 'transient'),
+    'pacer audio requests transient audio session behavior when available',
+  );
+  assert.ok(
+    pacerAudioRunning.events.some((event) => event.type === 'keepalive-start'),
+    'pacer start tap starts audio keepalive',
+  );
   assert.ok(
     pacerAudioRunning.events.some((event) => event.type === 'wake'),
     'pacer start requests wake lock through audio controller',
@@ -675,6 +691,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.locator('[data-pacer-toggle]').click();
   await page.waitForFunction(() => ['paused', 'finished'].includes(document.querySelector('.lap-fitness')?.dataset.pacerState));
   await page.waitForFunction(() => window.afptApp.getPacerAudioDebug().running === false);
+  await page.waitForFunction(() => window.afptApp.getPacerAudioDebug().keepAliveActive === false);
   await page.evaluate(() => {
     const minEl = document.getElementById('run-mintxt');
     const secEl = document.getElementById('run-sectxt');

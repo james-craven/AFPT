@@ -358,3 +358,10 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added optional vibration/haptics for browsers/devices that support `navigator.vibrate`.
 - Added inline user guidance to keep the screen awake and test volume with headphones or music before running.
 - Added `docs/MARKETING_LEGAL_LAUNCH_PLAN.md` covering positioning, user education, distribution, privacy/terms/disclaimer needs, and launch assets.
+
+## Pacer Audio PWA Priming
+
+- Updated guidance after on-device testing showed installed Home Screen PWA cues can duck Spotify on at least one iPhone setup.
+- Added audio priming on pacer start: the goal-time tap now unlocks audio, requests transient audio-session behavior when available, plays a start/arming cue, and keeps the audio context warm while the pacer is running.
+- Added a short delay after Test Cue audio unlock to improve first-tap reliability on installed PWAs.
+- Updated browser coverage for the start arming cue, audio-session hint, keepalive lifecycle, and revised Home Screen guidance.
