@@ -1875,12 +1875,12 @@ select {
 }
 
 .chart-hamr-level {
-  color: var(--afpt-ink-dim);
-  display: block;
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  line-height: 1.35;
-  margin-top: 2px;
+  color: inherit;
+  display: inline;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  margin-left: 4px;
   white-space: nowrap;
 }
 

@@ -980,17 +980,24 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     const levelLabels = Array.from(document.querySelectorAll('#chart-content .chart-hamr-level'))
       .map((label) => label.textContent.trim());
     const currentRowText = document.querySelector('#chart-content .chart-row--you .chart-cell--perf')?.textContent || '';
+    const firstLabel = document.querySelector('#chart-content .chart-hamr-level');
+    const firstLabelStyle = firstLabel ? getComputedStyle(firstLabel) : null;
     return {
       headers,
       hasLevelLabels: levelLabels.length > 0,
       sampleMatches: levelLabels.some((text) => /^\(L:\d+ \| S:\d+\)$/.test(text)),
       currentRowIncludesLevel: /\(L:\d+ \| S:\d+\)/.test(currentRowText),
+      firstLabelDisplay: firstLabelStyle?.display,
+      firstLabelColor: firstLabelStyle?.color,
+      firstCellColor: firstLabel ? getComputedStyle(firstLabel.closest('.chart-cell')).color : null,
     };
   });
   assert.deepEqual(hamrChartLevelLabels.headers, ['Shuttles', 'Pts', 'Your Gap'], 'HAMR chart uses shuttles, points, gap columns');
   assert.equal(hamrChartLevelLabels.hasLevelLabels, true, 'HAMR chart adds level/shuttle labels in shuttles column');
   assert.equal(hamrChartLevelLabels.sampleMatches, true, 'HAMR level/shuttle labels use L/S format');
   assert.equal(hamrChartLevelLabels.currentRowIncludesLevel, true, 'HAMR current row includes level/shuttle position');
+  assert.equal(hamrChartLevelLabels.firstLabelDisplay, 'inline', 'HAMR level/shuttle label stays inline with shuttle count');
+  assert.equal(hamrChartLevelLabels.firstLabelColor, hamrChartLevelLabels.firstCellColor, 'HAMR level/shuttle label matches shuttle count styling');
   await page.locator('#chart-reference-btn').click();
   await page.waitForFunction(() => {
     const sources = Array.from(document.querySelectorAll('#chart-content .chart-reference__image'))
