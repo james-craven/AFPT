@@ -28,19 +28,19 @@ assert.match(
   'track lap boundary cue is descriptive',
 );
 
-const percentSchedule = createPacerCueSchedule(fourteenMinutes, {
-  courseMode: 'percent',
-  cueFrequency: '100m',
+const quarterSchedule = createPacerCueSchedule(fourteenMinutes, {
+  courseMode: 'route',
+  cueFrequency: 'quarter',
 });
 assert.deepEqual(
-  percentSchedule.map((cue) => cue.percent),
+  quarterSchedule.map((cue) => cue.percent),
   [25, 50, 75, 100],
-  'percent mode creates quarter-point cues',
+  'quarter cue frequency creates quarter-point cues',
 );
 assert.match(
-  formatCueText(percentSchedule[1], { courseMode: 'percent' }),
-  /Halfway\. Target 7:00\./,
-  'percent halfway cue is human-readable',
+  formatCueText(quarterSchedule[1], { courseMode: 'route' }),
+  /1600 meters\. Target 7:00\./,
+  'route halfway cue is human-readable',
 );
 
 const outBackSchedule = createPacerCueSchedule(fourteenMinutes, {
@@ -64,7 +64,7 @@ assert.match(
 assert.deepEqual(
   normalizePacerAudioSettings({
     enabled: true,
-    courseMode: 'mystery',
+    courseMode: 'percent',
     cueFrequency: 'lots',
   }),
   {

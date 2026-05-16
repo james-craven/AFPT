@@ -396,3 +396,10 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Simplified pacer audio to voice cues plus optional haptics, with cue timing controlled by course mode and cue frequency only.
 - Hardcoded cue playback to request transient audio-session behavior when available so supported browsers can duck background music without exposing that implementation detail.
 - Changed out-and-back pacing to use one halfway turn cue instead of repeated segment turns.
+
+## Pace Plan Course Visuals
+
+- Removed Percent course mode from the pacer controls.
+- Added course-specific pace-plan geometry: Track keeps the oval, Route renders a straight route line with 8 track-equivalent lap markers, and Out/Back renders outbound plus return lanes.
+- Updated the runner animation so Route moves across the full straight line over the total goal time, while Out/Back drops to the return lane after halfway and moves back left.
+- Added SVG/CSS transition effects for route/out-back course changes and browser coverage for the new visual modes.

@@ -3258,6 +3258,95 @@ select {
   stroke: var(--afpt-border);
 }
 
+.pace-course-shape {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.pace-track-ghost {
+  animation: pace-oval-collapse 0.46s ease-out both;
+  opacity: 0.2;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.pace-route-line,
+.pace-outback-line {
+  animation: pace-line-draw 0.46s ease-out both;
+  stroke: var(--afpt-border-strong);
+  stroke-linecap: round;
+}
+
+.pace-route-dash,
+.pace-outback-dash,
+.pace-outback-turn {
+  animation: pace-fade-in 0.52s ease-out both;
+  stroke: var(--afpt-border);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pace-outback-line--back,
+.pace-outback-dash--back {
+  animation-delay: 0.08s;
+}
+
+.pace-outback-turn {
+  stroke: var(--afpt-accent);
+}
+
+.lap-fitness[data-course="route"] .pace-marker,
+.lap-fitness[data-course="out-back"] .pace-marker {
+  animation: pace-marker-rise 0.28s ease-out both;
+}
+
+.lap-fitness[data-course="route"] .pace-marker:nth-of-type(odd),
+.lap-fitness[data-course="out-back"] .pace-marker:nth-of-type(odd) {
+  animation-delay: 0.04s;
+}
+
+@keyframes pace-oval-collapse {
+  from {
+    opacity: 0.55;
+    transform: scaleY(1);
+  }
+  to {
+    opacity: 0;
+    transform: scaleY(0.08);
+  }
+}
+
+@keyframes pace-line-draw {
+  from {
+    opacity: 0;
+    stroke-dasharray: 0 360;
+  }
+  to {
+    opacity: 1;
+    stroke-dasharray: 360 0;
+  }
+}
+
+@keyframes pace-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pace-marker-rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .pace-goal-text {
   fill: var(--afpt-ink-dim);
   font-family: inherit;
@@ -3506,6 +3595,16 @@ select {
 
 :root[data-theme="fitness"] .pace-track-dash {
   stroke: rgba(255, 255, 255, 0.4);
+}
+
+:root[data-theme="fitness"] .pace-route-line,
+:root[data-theme="fitness"] .pace-outback-line {
+  stroke: rgba(255, 255, 255, 0.3);
+}
+
+:root[data-theme="fitness"] .pace-route-dash,
+:root[data-theme="fitness"] .pace-outback-dash {
+  stroke: rgba(255, 255, 255, 0.45);
 }
 
 :root[data-theme="fitness"] .pace-goal-text {

@@ -562,11 +562,38 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(await page.locator('[data-pacer-audio-field="cueStyle"]').count(), 0, 'pacer audio no longer exposes beep style choices');
   assert.equal(await page.locator('[data-pacer-audio-field="cueIntensity"]').count(), 0, 'pacer audio no longer exposes intensity choices');
   assert.equal(await page.locator('[data-pacer-audio-field="outBackSegmentMeters"]').count(), 0, 'pacer audio no longer exposes repeated turn presets');
+  assert.equal(await page.locator('[data-pacer-audio-field="courseMode"] option[value="percent"]').count(), 0, 'pacer audio no longer exposes percent course mode');
   assert.match(
     await page.locator('.pace-audio-note').innerText(),
     /voice cues.*ducking/i,
     'pacer audio explains simplified voice cue behavior',
   );
+
+  await page.locator('[data-pacer-audio-field="courseMode"]').selectOption('route');
+  await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.course === 'route');
+  const routeCourseVisual = await page.evaluate(() => ({
+    hasRouteLine: Boolean(document.querySelector('.pace-route-line')),
+    hasTrackGhost: Boolean(document.querySelector('.pace-track-ghost')),
+    markerCount: document.querySelectorAll('[data-pace-lap]').length,
+    runnerLeg: document.querySelector('[data-pacer-runner]')?.dataset.courseLeg,
+  }));
+  assert.equal(routeCourseVisual.hasRouteLine, true, 'route mode renders a straight course line');
+  assert.equal(routeCourseVisual.hasTrackGhost, true, 'route mode animates from a ghosted track shape');
+  assert.equal(routeCourseVisual.markerCount, 8, 'route mode keeps 8 track-equivalent lap markers');
+  assert.equal(routeCourseVisual.runnerLeg, 'route', 'route mode starts runner on route line');
+
+  await page.locator('[data-pacer-audio-field="courseMode"]').selectOption('out-back');
+  await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.course === 'out-back');
+  const outBackCourseVisual = await page.evaluate(() => ({
+    lineCount: document.querySelectorAll('.pace-outback-line').length,
+    turnVisible: Boolean(document.querySelector('.pace-outback-turn')),
+    markerCount: document.querySelectorAll('[data-pace-lap]').length,
+    runnerLeg: document.querySelector('[data-pacer-runner]')?.dataset.courseLeg,
+  }));
+  assert.equal(outBackCourseVisual.lineCount, 2, 'out/back mode renders outbound and return lines');
+  assert.equal(outBackCourseVisual.turnVisible, true, 'out/back mode renders a visual turn connector');
+  assert.equal(outBackCourseVisual.markerCount, 8, 'out/back mode keeps 8 track-equivalent lap markers');
+  assert.equal(outBackCourseVisual.runnerLeg, 'outbound', 'out/back mode starts runner on outbound line');
 
   const scoreBeforeAudioSettings = await page.evaluate(() => window.afptApp.getScoreResult()?.total);
   await page.locator('[data-pacer-audio-field="enabled"]').check();
@@ -645,7 +672,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const pacerInitial = await page.locator('[data-pacer-runner]').evaluate((element) => element.getAttribute('transform'));
   await page.locator('[data-pacer-toggle]').click();
   await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.pacerState === 'running');
-  await page.waitForTimeout(650);
+  await page.waitForTimeout(2300);
   const pacerStarted = await page.evaluate((initialTransform) => {
     const runner = document.querySelector('[data-pacer-runner]');
     const status = document.querySelector('[data-pacer-status]');
@@ -653,6 +680,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     return {
       transformChanged: runner?.getAttribute('transform') !== initialTransform,
       completedLapCount: document.querySelectorAll('.pace-marker--complete').length,
+      runnerLeg: runner?.dataset.courseLeg ?? '',
       statusText: status?.textContent ?? '',
       stateName: plan?.dataset.pacerState ?? '',
       cardioValue: window.afptApp.getState().cardio.value,
@@ -661,6 +689,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(pacerStarted.stateName, 'running', 'pace plan personal pacer enters running state');
   assert.equal(pacerStarted.transformChanged, true, 'pace plan runner moves after start');
   assert.ok(pacerStarted.completedLapCount >= 1, 'pace plan marks completed laps');
+  assert.equal(pacerStarted.runnerLeg, 'return', 'out/back pacer drops to the return line after halfway');
   assert.match(pacerStarted.statusText, /Pacer.*Lap/i, 'pace plan status reports elapsed pacer time and current lap');
   assert.equal(pacerStarted.cardioValue, '0:04', 'starting pacer does not change cardio value');
   const pacerAudioRunning = await page.evaluate(() => ({

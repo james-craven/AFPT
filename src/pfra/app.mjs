@@ -26,6 +26,8 @@ import {
 
 const defaultCardioValue = '20:00'; // fallback before tables load
 const PACE_TRACK = { x: 70, y: 50, w: 200, h: 90, r: 45 };
+const PACE_ROUTE = { startX: 42, endX: 298, y: 95 };
+const PACE_OUT_BACK = { startX: 52, endX: 288, outY: 74, backY: 124 };
 
 // Per-event value cache — preserves user input across event switches
 const savedEventValues = {
@@ -742,6 +744,113 @@ function pacePoint(t, expand = 0) {
   return stadiumPoint(t, PACE_TRACK.x, PACE_TRACK.y, PACE_TRACK.w, PACE_TRACK.h, PACE_TRACK.r, expand);
 }
 
+function routePoint(t) {
+  const clamped = Math.max(0, Math.min(1, t));
+  return {
+    x: PACE_ROUTE.startX + (PACE_ROUTE.endX - PACE_ROUTE.startX) * clamped,
+    y: PACE_ROUTE.y,
+  };
+}
+
+function outBackPoint(t) {
+  const clamped = Math.max(0, Math.min(1, t));
+  if (clamped <= 0.5) {
+    const outbound = clamped / 0.5;
+    return {
+      x: PACE_OUT_BACK.startX + (PACE_OUT_BACK.endX - PACE_OUT_BACK.startX) * outbound,
+      y: PACE_OUT_BACK.outY,
+      leg: 'outbound',
+    };
+  }
+  const inbound = (clamped - 0.5) / 0.5;
+  return {
+    x: PACE_OUT_BACK.endX - (PACE_OUT_BACK.endX - PACE_OUT_BACK.startX) * inbound,
+    y: PACE_OUT_BACK.backY,
+    leg: 'return',
+  };
+}
+
+function paceCoursePoint(courseMode, t) {
+  if (courseMode === 'route') return routePoint(t);
+  if (courseMode === 'out-back') return outBackPoint(t);
+  return pacePoint(t);
+}
+
+function paceCourseAngle(courseMode, t) {
+  if (courseMode === 'route') return 0;
+  if (courseMode === 'out-back') return t <= 0.5 ? 0 : 180;
+  const p = pacePoint(t);
+  const p2 = pacePoint((t + 0.002) % 1);
+  return Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI;
+}
+
+function paceMarkerLayout(courseMode, t, lapNumber) {
+  if (courseMode === 'route') {
+    const p = routePoint(t);
+    const above = lapNumber % 2 === 1;
+    return {
+      anchor: 'middle',
+      label: { x: p.x, y: above ? p.y - 27 : p.y + 24 },
+      point: p,
+      split: { x: p.x, y: above ? p.y - 15 : p.y + 35 },
+    };
+  }
+
+  if (courseMode === 'out-back') {
+    const p = outBackPoint(t);
+    const outbound = p.leg !== 'return';
+    return {
+      anchor: 'middle',
+      label: { x: p.x, y: outbound ? p.y - 22 : p.y + 25 },
+      point: p,
+      split: { x: p.x, y: outbound ? p.y - 10 : p.y + 36 },
+    };
+  }
+
+  const p = pacePoint(t, 0);
+  const lp = pacePoint(t, 22);
+  const anchor = (t > 0.05 && t < 0.45) ? 'start' : (t > 0.55 && t < 0.95) ? 'end' : 'middle';
+  const dx = anchor === 'start' ? 4 : anchor === 'end' ? -4 : 0;
+  return {
+    anchor,
+    label: { x: lp.x + dx, y: lp.y - 4 },
+    point: p,
+    split: { x: lp.x + dx, y: lp.y + 7 },
+  };
+}
+
+function formatPaceCourseShape(courseMode) {
+  if (courseMode === 'route') {
+    return `<rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-ring pace-track-ghost" stroke-width="14"/>
+        <line x1="${PACE_ROUTE.startX}" y1="${PACE_ROUTE.y}" x2="${PACE_ROUTE.endX}" y2="${PACE_ROUTE.y}" class="pace-route-line" stroke-width="14"/>
+        <line x1="${PACE_ROUTE.startX}" y1="${PACE_ROUTE.y}" x2="${PACE_ROUTE.endX}" y2="${PACE_ROUTE.y}" class="pace-route-dash" stroke-width="1" stroke-dasharray="2 6"/>`;
+  }
+
+  if (courseMode === 'out-back') {
+    return `<rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-ring pace-track-ghost" stroke-width="14"/>
+        <line x1="${PACE_OUT_BACK.startX}" y1="${PACE_OUT_BACK.outY}" x2="${PACE_OUT_BACK.endX}" y2="${PACE_OUT_BACK.outY}" class="pace-outback-line pace-outback-line--out" stroke-width="12"/>
+        <line x1="${PACE_OUT_BACK.endX}" y1="${PACE_OUT_BACK.backY}" x2="${PACE_OUT_BACK.startX}" y2="${PACE_OUT_BACK.backY}" class="pace-outback-line pace-outback-line--back" stroke-width="12"/>
+        <line x1="${PACE_OUT_BACK.startX}" y1="${PACE_OUT_BACK.outY}" x2="${PACE_OUT_BACK.endX}" y2="${PACE_OUT_BACK.outY}" class="pace-outback-dash" stroke-width="1" stroke-dasharray="2 6"/>
+        <line x1="${PACE_OUT_BACK.endX}" y1="${PACE_OUT_BACK.backY}" x2="${PACE_OUT_BACK.startX}" y2="${PACE_OUT_BACK.backY}" class="pace-outback-dash pace-outback-dash--back" stroke-width="1" stroke-dasharray="2 6"/>
+        <path d="M ${PACE_OUT_BACK.endX} ${PACE_OUT_BACK.outY + 8} C ${PACE_OUT_BACK.endX + 15} ${PACE_OUT_BACK.outY + 22}, ${PACE_OUT_BACK.endX + 15} ${PACE_OUT_BACK.backY - 22}, ${PACE_OUT_BACK.endX} ${PACE_OUT_BACK.backY - 8}" class="pace-outback-turn" fill="none" stroke-width="2"/>`;
+  }
+
+  return `<rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-ring" stroke-width="14"/>
+        <rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-dash" stroke-width="1" stroke-dasharray="2 6"/>`;
+}
+
+function paceCourseSubText(courseMode, lapTimeStr) {
+  if (courseMode === 'route') return `route marks &middot; <span class="lap-fitness__pace">${lapTimeStr}</span>`;
+  if (courseMode === 'out-back') return `out/back marks &middot; <span class="lap-fitness__pace">${lapTimeStr}</span>`;
+  return `each lap &middot; <span class="lap-fitness__pace">${lapTimeStr}</span>`;
+}
+
+function paceCourseCueText(courseMode) {
+  if (courseMode === 'route') return 'Runner moves down the route; dots show track-lap equivalents.';
+  if (courseMode === 'out-back') return 'Runner drops to the return lane at halfway.';
+  return 'Glance at your watch crossing the line.';
+}
+
 function selectedOption(value, current) {
   return value === current ? ' selected' : '';
 }
@@ -764,7 +873,6 @@ function formatPaceAudioControls(settings) {
           <option value="track"${selectedOption('track', normalized.courseMode)}>Track</option>
           <option value="route"${selectedOption('route', normalized.courseMode)}>Route</option>
           <option value="out-back"${selectedOption('out-back', normalized.courseMode)}>Out/Back</option>
-          <option value="percent"${selectedOption('percent', normalized.courseMode)}>Percent</option>
         </select>
       </label>
       <label>
@@ -812,8 +920,14 @@ function currentPaceGoalSeconds() {
 }
 
 function applyPaceAudioSettings(nextSettings, { persist = true, syncElapsed = true } = {}) {
+  const previousCourseMode = paceAudioSettings.courseMode;
   paceAudioSettings = normalizePacerAudioSettings(nextSettings);
   if (persist) savePacerAudioSettings(paceAudioSettings);
+
+  if (paceAudioSettings.courseMode !== previousCourseMode) {
+    renderPacePlan(previousCourseMode);
+    return;
+  }
 
   const panel = byId('run-lap-times')?.querySelector('[data-pacer-audio-panel]');
   if (panel) panel.dataset.audioEnabled = paceAudioSettings.enabled ? 'true' : 'false';
@@ -840,20 +954,21 @@ function readPaceAudioSettingsFromControls() {
 // PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme.
 // Canonical pace plan — used on all themes. SVG uses CSS classes for token-based theming.
 // viewBox 0 0 340 190, rect x=70 y=50 w=200 h=90 rx=45 (exact mock-fitness.jsx params).
-function formatPacePlan(totalSeconds, lapCount, lapSec) {
+function formatPacePlan(totalSeconds, lapCount, lapSec, previousCourseMode = null) {
   const totalStr = secondsToTimeString(totalSeconds);
   const lapTimeStr = secondsToTimeString(lapSec);
-  const startPoint = pacePoint(0);
+  const courseMode = normalizePacerAudioSettings(paceAudioSettings).courseMode;
+  const startPoint = paceCoursePoint(courseMode, 0);
+  const startAngle = paceCourseAngle(courseMode, 0);
+  const previousCourse = previousCourseMode || courseMode;
   let markers = '';
 
   for (let i = 0; i < lapCount; i++) {
     const n = i + 1;
     const t = (n / lapCount) % 1; // lap n=lapCount → t=0 → top-center = FINISH
-    const p = pacePoint(t, 0);
-    const lp = pacePoint(t, 22);
+    const layout = paceMarkerLayout(courseMode, t, n);
+    const p = layout.point;
     const isFinish = i === lapCount - 1;
-    const anchor = (t > 0.05 && t < 0.45) ? 'start' : (t > 0.55 && t < 0.95) ? 'end' : 'middle';
-    const dx = anchor === 'start' ? 4 : anchor === 'end' ? -4 : 0;
     const splitStr = secondsToTimeString(lapSec * n);
     const labelText = isFinish ? 'FINISH' : `L${n}`;
     const splitWeight = isFinish ? 800 : 600;
@@ -869,17 +984,17 @@ function formatPacePlan(totalSeconds, lapCount, lapSec) {
     markers += `<g class="pace-marker${isFinish ? ' pace-marker--finish' : ''}" data-pace-lap="${n}">
       <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${dotR}" ${dotAttrs}/>
       ${finText}
-      <text x="${(lp.x + dx).toFixed(1)}" y="${(lp.y - 4).toFixed(1)}" text-anchor="${anchor}" class="${isFinish ? 'pace-fin-label' : 'pace-label'}" font-size="8" letter-spacing="1" font-weight="600">${labelText}</text>
-      <text x="${(lp.x + dx).toFixed(1)}" y="${(lp.y + 7).toFixed(1)}" text-anchor="${anchor}" class="${isFinish ? 'pace-fin-split' : 'pace-split'}" font-size="11" font-weight="${splitWeight}" font-variant-numeric="tabular-nums">${splitStr}</text>
+      <text x="${layout.label.x.toFixed(1)}" y="${layout.label.y.toFixed(1)}" text-anchor="${layout.anchor}" class="${isFinish ? 'pace-fin-label' : 'pace-label'}" font-size="8" letter-spacing="1" font-weight="600">${labelText}</text>
+      <text x="${layout.split.x.toFixed(1)}" y="${layout.split.y.toFixed(1)}" text-anchor="${layout.anchor}" class="${isFinish ? 'pace-fin-split' : 'pace-split'}" font-size="11" font-weight="${splitWeight}" font-variant-numeric="tabular-nums">${splitStr}</text>
     </g>`;
   }
 
-  return `<div class="lap-fitness" data-lap-count="${lapCount}">
+  return `<div class="lap-fitness" data-lap-count="${lapCount}" data-course="${courseMode}" data-prev-course="${previousCourse}">
     <div class="lap-fitness__hdr">
       <span class="lap-fitness__title">Pace plan</span>
-      <span class="lap-fitness__sub">each lap &middot; <span class="lap-fitness__pace">${lapTimeStr}</span></span>
+      <span class="lap-fitness__sub">${paceCourseSubText(courseMode, lapTimeStr)}</span>
     </div>
-    <p class="lap-fitness__cue">Glance at your watch crossing the line.</p>
+    <p class="lap-fitness__cue">${paceCourseCueText(courseMode)}</p>
     <div class="lap-fitness__svg-wrap">
       <svg width="100%" viewBox="0 0 340 190" style="max-width:340px;display:block;margin:0 auto">
         <defs>
@@ -888,14 +1003,13 @@ function formatPacePlan(totalSeconds, lapCount, lapSec) {
             <stop offset="1" stop-color="#ff5dab"/>
           </linearGradient>
         </defs>
-        <rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-ring" stroke-width="14"/>
-        <rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-dash" stroke-width="1" stroke-dasharray="2 6"/>
+        <g class="pace-course-shape">${formatPaceCourseShape(courseMode)}</g>
         <g class="pace-pacer-toggle" data-pacer-toggle role="button" tabindex="0" focusable="true" aria-label="Start personal pacer for ${totalStr} goal">
           <rect x="118" y="74" width="104" height="50" rx="15" class="pace-pacer-hit"/>
           <text x="170" y="87" text-anchor="middle" class="pace-goal-text" font-size="9" letter-spacing="2">GOAL</text>
           <text x="170" y="113" text-anchor="middle" class="pace-time-text" font-size="26" font-weight="800" letter-spacing="-0.5" font-variant-numeric="tabular-nums">${totalStr}</text>
         </g>
-        <g class="pace-pacer-runner" data-pacer-runner transform="translate(${startPoint.x.toFixed(2)} ${startPoint.y.toFixed(2)})" aria-hidden="true">
+        <g class="pace-pacer-runner" data-pacer-runner data-course-leg="${startPoint.leg || 'track'}" transform="translate(${startPoint.x.toFixed(2)} ${startPoint.y.toFixed(2)}) rotate(${startAngle.toFixed(1)})" aria-hidden="true">
           <circle class="pace-pacer-halo" r="10"/>
           <circle class="pace-runner-head" cx="0" cy="-6" r="2.3"/>
           <path class="pace-runner-body" d="M0 -3 L0 2 M0 -1 L-5 2 M0 -1 L5 -3 M0 2 L-4 7 M0 2 L5 6"/>
@@ -955,9 +1069,11 @@ function updatePacePacerDisplay(now = performance.now()) {
   const completedLaps = lapMs > 0 ? Math.min(lapCount, Math.floor(elapsedMs / lapMs)) : 0;
   const currentLap = Math.min(lapCount, completedLaps + 1);
   const lapProgress = completedLaps >= lapCount ? 0 : ((elapsedMs % lapMs) / lapMs);
-  const p = pacePoint(lapProgress);
-  const p2 = pacePoint((lapProgress + 0.002) % 1);
-  const angle = Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI;
+  const totalProgress = goalMs > 0 ? Math.min(1, Math.max(0, elapsedMs / goalMs)) : 0;
+  const courseMode = plan.dataset.course || 'track';
+  const courseProgress = courseMode === 'track' ? lapProgress : totalProgress;
+  const p = paceCoursePoint(courseMode, courseProgress);
+  const angle = paceCourseAngle(courseMode, courseProgress);
 
   if (elapsedMs >= goalMs && pacePacer.active) {
     pacePacer.active = false;
@@ -966,6 +1082,7 @@ function updatePacePacerDisplay(now = performance.now()) {
     cancelPacePacerFrame();
   }
 
+  runner.dataset.courseLeg = p.leg || courseMode;
   runner.setAttribute('transform', `translate(${p.x.toFixed(2)} ${p.y.toFixed(2)}) rotate(${angle.toFixed(1)})`);
   updateCompletedPaceLaps(plan, completedLaps);
   paceAudioController.update(elapsedMs, goalSeconds, paceAudioSettings);
@@ -1032,7 +1149,7 @@ function syncPacePacerForGoal(goalSeconds) {
 }
 
 // PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme.
-function renderPacePlan() {
+function renderPacePlan(previousCourseMode = null) {
   const lapDisplay = byId('run-lap-times');
   if (!lapDisplay) return;
   const section = lapDisplay.closest('.pace-plan-section');
@@ -1050,7 +1167,11 @@ function renderPacePlan() {
     return;
   }
   if (section) section.hidden = false;
-  lapDisplay.innerHTML = formatPacePlan(curSec, 8, Math.round(curSec / 8));
+  const currentCourseMode = normalizePacerAudioSettings(paceAudioSettings).courseMode;
+  const previousCourse = previousCourseMode
+    || lapDisplay.querySelector('.lap-fitness')?.dataset.course
+    || currentCourseMode;
+  lapDisplay.innerHTML = formatPacePlan(curSec, 8, Math.round(curSec / 8), previousCourse);
   syncPacePacerForGoal(curSec);
   updatePaceAudioStatus();
 }

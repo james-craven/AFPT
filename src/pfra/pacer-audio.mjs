@@ -11,7 +11,7 @@ export const DEFAULT_PACER_AUDIO_SETTINGS = Object.freeze({
   vibration: false,
 });
 
-const COURSE_MODES = new Set(['track', 'route', 'out-back', 'percent']);
+const COURSE_MODES = new Set(['track', 'route', 'out-back']);
 const CUE_FREQUENCIES = new Set(['100m', '200m', '400m', 'quarter']);
 const PACER_AUDIO_SESSION_TYPE = 'transient';
 
@@ -56,7 +56,7 @@ export function savePacerAudioSettings(settings, storage = safeStorage()) {
 
 function cueDistances(settings) {
   const normalized = normalizePacerAudioSettings(settings);
-  if (normalized.courseMode === 'percent' || normalized.cueFrequency === 'quarter') {
+  if (normalized.cueFrequency === 'quarter') {
     return [800, 1600, 2400, 3200];
   }
 
@@ -67,12 +67,6 @@ function cueDistances(settings) {
   }
   if (distances[distances.length - 1] !== PACER_TOTAL_DISTANCE_METERS) distances.push(PACER_TOTAL_DISTANCE_METERS);
   return distances;
-}
-
-function percentLabel(percent) {
-  if (percent === 50) return 'Halfway';
-  if (percent === 100) return 'Finish';
-  return `${percent} percent`;
 }
 
 export function createPacerCueSchedule(goalSeconds, settings = {}) {
@@ -107,10 +101,6 @@ export function formatCueText(cue, settings = {}) {
   const target = secondsToTimeString(cue.targetSeconds);
 
   if (cue.kind === 'finish') return `Finish. Target ${target}.`;
-
-  if (normalized.courseMode === 'percent') {
-    return `${percentLabel(cue.percent)}. Target ${target}.`;
-  }
 
   if (normalized.courseMode === 'track') {
     if (cue.lapDistanceMeters === PACER_TRACK_LAP_METERS) {
