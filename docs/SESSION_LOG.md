@@ -419,3 +419,10 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Balanced Out/Back marker label offsets so top-lane and bottom-lane labels sit the same distance from their lanes.
 - Added a return-to-track animation so switching back from Route or Out/Back no longer snaps directly to the oval.
 - Added browser assertions for separate START controls, inline start markers, route label staggering, out/back label symmetry, and track return animation.
+
+## Pace Plan Course Morph Refinement
+
+- Moved the GOAL/time/START stack upward so Route clears the line and Track/Out-Back keep the three-row control stack centered in the available course space.
+- Centered finish labels over the finish marker instead of edge-aligning them behind the dot.
+- Added a temporary SVG morph layer for course changes: Track shrinks toward Route, Route splits toward Out/Back lanes, and Out/Back lanes reconnect while Track expands back in.
+- Added browser assertions for goal-stack placement, finish-label centering, route-to-out/back split morphs, and out/back-to-track reconnect morphs.

@@ -32,6 +32,7 @@
 - [x] Clean runtime Phase 1: `src/pfra/app.mjs` passive state observer — `getState`, `refreshStateFromDom`, `dispatch` (internal only); exposed as `window.afptApp`; browser regression added.
 - [x] Clean runtime Phase 2A: shadow scoring — `computeScoreFromState`, `getScoreResult`, `refreshScoreFromDom`, `isReady`, `getLoadError`; altitude-aware; no DOM rendering; shadow total verified to match visible PFRA total.
 - [x] Pace plan course polish: inline start markers, separate START button, route label staggering, out/back label symmetry, and return-to-track animation.
+- [x] Pace plan course morph refinement: centered controls/finish labels and added visible SVG morph layers between Track, Route, and Out/Back course shapes.
 - [ ] Component editor Phase E: move cardio controls into `#cardio-editor`.
 - [ ] Component editor Phase F: component switching hides non-selected editors (already wired; verify values survive switching).
 - [ ] Component editor Phase G: live value mirroring in summary cards; add `#pfra-core-score` and `#pfra-cardio-score`.

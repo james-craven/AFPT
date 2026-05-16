@@ -3263,16 +3263,73 @@ select {
   transform-origin: center;
 }
 
-.pace-track-ghost {
-  animation: pace-oval-collapse 0.46s ease-out both;
-  opacity: 0.2;
+.pace-course-morph {
+  pointer-events: none;
+}
+
+.pace-morph-track,
+.pace-morph-line {
+  fill: none;
+  opacity: 0;
+  pointer-events: none;
+  stroke: var(--afpt-border-strong);
+  stroke-linecap: round;
   transform-box: fill-box;
   transform-origin: center;
 }
 
-.lap-fitness[data-course="track"][data-prev-course="route"] .pace-track-ring,
+.pace-morph-track--to-route {
+  animation: pace-track-to-route 0.68s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.pace-morph-track--to-out-back {
+  animation: pace-track-to-outback 0.68s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.pace-morph-line--track-to-out {
+  animation: pace-center-line-to-out 0.68s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.pace-morph-line--track-to-back {
+  animation: pace-center-line-to-back 0.68s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.pace-morph-line--route-to-out {
+  animation: pace-route-line-to-out 0.58s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.pace-morph-line--route-to-back {
+  animation: pace-route-line-to-back 0.58s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.pace-morph-line--out-to-route {
+  animation: pace-out-line-to-route 0.58s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.pace-morph-line--back-to-route {
+  animation: pace-back-line-to-route 0.58s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.pace-morph-line--route-to-track {
+  animation: pace-route-line-to-track 0.54s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.pace-morph-line--out-to-track {
+  animation: pace-out-line-to-track 0.54s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.pace-morph-line--back-to-track {
+  animation: pace-back-line-to-track 0.54s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.lap-fitness[data-course="track"][data-prev-course="route"] .pace-track-ring {
+  animation: pace-track-expand-from-route 0.58s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
 .lap-fitness[data-course="track"][data-prev-course="out-back"] .pace-track-ring {
-  animation: pace-track-expand 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: pace-track-expand-from-lines 0.58s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   transform-box: fill-box;
   transform-origin: center;
 }
@@ -3325,10 +3382,29 @@ select {
   animation-delay: 0.04s;
 }
 
-@keyframes pace-oval-collapse {
+@keyframes pace-track-to-route {
   from {
-    opacity: 0.55;
+    opacity: 0.72;
+    transform: translateY(0) scaleY(1);
+  }
+  70% {
+    opacity: 0.58;
+    transform: translateY(33px) scaleY(0.08);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(33px) scaleY(0.08);
+  }
+}
+
+@keyframes pace-track-to-outback {
+  from {
+    opacity: 0.68;
     transform: scaleY(1);
+  }
+  62% {
+    opacity: 0.42;
+    transform: scaleY(0.08);
   }
   to {
     opacity: 0;
@@ -3336,7 +3412,21 @@ select {
   }
 }
 
-@keyframes pace-track-expand {
+@keyframes pace-track-expand-from-route {
+  from {
+    opacity: 0.2;
+    transform: translateY(33px) scaleY(0.08);
+  }
+  60% {
+    opacity: 0.85;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+@keyframes pace-track-expand-from-lines {
   from {
     opacity: 0.2;
     transform: scaleY(0.08);
@@ -3347,6 +3437,111 @@ select {
   to {
     opacity: 1;
     transform: scaleY(1);
+  }
+}
+
+@keyframes pace-center-line-to-out {
+  from {
+    opacity: 0.05;
+    transform: translateY(0);
+  }
+  18% {
+    opacity: 0.62;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-47px);
+  }
+}
+
+@keyframes pace-center-line-to-back {
+  from {
+    opacity: 0.05;
+    transform: translateY(0);
+  }
+  18% {
+    opacity: 0.62;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(51px);
+  }
+}
+
+@keyframes pace-route-line-to-out {
+  from {
+    opacity: 0.68;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-80px);
+  }
+}
+
+@keyframes pace-route-line-to-back {
+  from {
+    opacity: 0.68;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes pace-out-line-to-route {
+  from {
+    opacity: 0.68;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+}
+
+@keyframes pace-back-line-to-route {
+  from {
+    opacity: 0.68;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+}
+
+@keyframes pace-route-line-to-track {
+  from {
+    opacity: 0.58;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-33px);
+  }
+}
+
+@keyframes pace-out-line-to-track {
+  from {
+    opacity: 0.58;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+}
+
+@keyframes pace-back-line-to-track {
+  from {
+    opacity: 0.58;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
   }
 }
 
@@ -3662,7 +3857,9 @@ select {
 }
 
 :root[data-theme="fitness"] .pace-route-line,
-:root[data-theme="fitness"] .pace-outback-line {
+:root[data-theme="fitness"] .pace-outback-line,
+:root[data-theme="fitness"] .pace-morph-track,
+:root[data-theme="fitness"] .pace-morph-line {
   stroke: rgba(255, 255, 255, 0.3);
 }
 

@@ -28,6 +28,7 @@ const defaultCardioValue = '20:00'; // fallback before tables load
 const PACE_TRACK = { x: 70, y: 50, w: 200, h: 90, r: 45 };
 const PACE_ROUTE = { startX: 22, endX: 318, y: 128 };
 const PACE_OUT_BACK = { startX: 24, endX: 316, outY: 48, backY: 146 };
+const PACE_TRACK_CENTER_Y = PACE_TRACK.y + PACE_TRACK.h / 2;
 
 // Per-event value cache — preserves user input across event switches
 const savedEventValues = {
@@ -828,14 +829,12 @@ function paceMarkerLayout(courseMode, t, lapNumber) {
 
 function formatPaceCourseShape(courseMode) {
   if (courseMode === 'route') {
-    return `<rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-ring pace-track-ghost" stroke-width="14"/>
-        <line x1="${PACE_ROUTE.startX}" y1="${PACE_ROUTE.y}" x2="${PACE_ROUTE.endX}" y2="${PACE_ROUTE.y}" class="pace-route-line" stroke-width="14"/>
+    return `<line x1="${PACE_ROUTE.startX}" y1="${PACE_ROUTE.y}" x2="${PACE_ROUTE.endX}" y2="${PACE_ROUTE.y}" class="pace-route-line" stroke-width="14"/>
         <line x1="${PACE_ROUTE.startX}" y1="${PACE_ROUTE.y}" x2="${PACE_ROUTE.endX}" y2="${PACE_ROUTE.y}" class="pace-route-dash" stroke-width="1" stroke-dasharray="2 6"/>`;
   }
 
   if (courseMode === 'out-back') {
-    return `<rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-ring pace-track-ghost" stroke-width="14"/>
-        <line x1="${PACE_OUT_BACK.startX}" y1="${PACE_OUT_BACK.outY}" x2="${PACE_OUT_BACK.endX}" y2="${PACE_OUT_BACK.outY}" class="pace-outback-line pace-outback-line--out" stroke-width="12"/>
+    return `<line x1="${PACE_OUT_BACK.startX}" y1="${PACE_OUT_BACK.outY}" x2="${PACE_OUT_BACK.endX}" y2="${PACE_OUT_BACK.outY}" class="pace-outback-line pace-outback-line--out" stroke-width="12"/>
         <line x1="${PACE_OUT_BACK.endX}" y1="${PACE_OUT_BACK.backY}" x2="${PACE_OUT_BACK.startX}" y2="${PACE_OUT_BACK.backY}" class="pace-outback-line pace-outback-line--back" stroke-width="12"/>
         <line x1="${PACE_OUT_BACK.startX}" y1="${PACE_OUT_BACK.outY}" x2="${PACE_OUT_BACK.endX}" y2="${PACE_OUT_BACK.outY}" class="pace-outback-dash" stroke-width="1" stroke-dasharray="2 6"/>
         <line x1="${PACE_OUT_BACK.endX}" y1="${PACE_OUT_BACK.backY}" x2="${PACE_OUT_BACK.startX}" y2="${PACE_OUT_BACK.backY}" class="pace-outback-dash pace-outback-dash--back" stroke-width="1" stroke-dasharray="2 6"/>`;
@@ -843,6 +842,47 @@ function formatPaceCourseShape(courseMode) {
 
   return `<rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-ring" stroke-width="14"/>
         <rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-dash" stroke-width="1" stroke-dasharray="2 6"/>`;
+}
+
+function formatPaceCourseMorph(courseMode, previousCourse) {
+  if (!previousCourse || previousCourse === courseMode) return '';
+
+  const trackRect = `<rect x="${PACE_TRACK.x}" y="${PACE_TRACK.y}" width="${PACE_TRACK.w}" height="${PACE_TRACK.h}" rx="${PACE_TRACK.r}" fill="none" class="pace-morph-track pace-morph-track--to-${courseMode}" stroke-width="14"/>`;
+  const centerLine = (extraClass) => `<line x1="${PACE_OUT_BACK.startX}" y1="${PACE_TRACK_CENTER_Y}" x2="${PACE_OUT_BACK.endX}" y2="${PACE_TRACK_CENTER_Y}" class="pace-morph-line ${extraClass}" stroke-width="12"/>`;
+  const routeLine = (extraClass) => `<line x1="${PACE_ROUTE.startX}" y1="${PACE_ROUTE.y}" x2="${PACE_ROUTE.endX}" y2="${PACE_ROUTE.y}" class="pace-morph-line ${extraClass}" stroke-width="14"/>`;
+  const outLine = (extraClass) => `<line x1="${PACE_OUT_BACK.startX}" y1="${PACE_OUT_BACK.outY}" x2="${PACE_OUT_BACK.endX}" y2="${PACE_OUT_BACK.outY}" class="pace-morph-line ${extraClass}" stroke-width="12"/>`;
+  const backLine = (extraClass) => `<line x1="${PACE_OUT_BACK.endX}" y1="${PACE_OUT_BACK.backY}" x2="${PACE_OUT_BACK.startX}" y2="${PACE_OUT_BACK.backY}" class="pace-morph-line ${extraClass}" stroke-width="12"/>`;
+
+  if (previousCourse === 'track' && courseMode === 'route') {
+    return `${trackRect}`;
+  }
+
+  if (previousCourse === 'track' && courseMode === 'out-back') {
+    return `${trackRect}
+      ${centerLine('pace-morph-line--track-to-out')}
+      ${centerLine('pace-morph-line--track-to-back')}`;
+  }
+
+  if (previousCourse === 'route' && courseMode === 'out-back') {
+    return `${routeLine('pace-morph-line--route-to-out')}
+      ${routeLine('pace-morph-line--route-to-back')}`;
+  }
+
+  if (previousCourse === 'out-back' && courseMode === 'route') {
+    return `${outLine('pace-morph-line--out-to-route')}
+      ${backLine('pace-morph-line--back-to-route')}`;
+  }
+
+  if (previousCourse === 'route' && courseMode === 'track') {
+    return `${routeLine('pace-morph-line--route-to-track')}`;
+  }
+
+  if (previousCourse === 'out-back' && courseMode === 'track') {
+    return `${outLine('pace-morph-line--out-to-track')}
+      ${backLine('pace-morph-line--back-to-track')}`;
+  }
+
+  return '';
 }
 
 function paceCourseSubText(courseMode, lapTimeStr) {
@@ -877,12 +917,12 @@ function formatPaceCourseEndpoints(courseMode) {
 
 function paceGoalLayout(courseMode) {
   if (courseMode === 'route') {
-    return { goalY: 42, timeY: 67, timeSize: 24, buttonX: 140, buttonY: 81, buttonW: 60, buttonH: 22, buttonTextY: 96 };
+    return { goalY: 29, timeY: 53, timeSize: 23, buttonX: 140, buttonY: 66, buttonW: 60, buttonH: 22, buttonTextY: 81 };
   }
   if (courseMode === 'out-back') {
-    return { goalY: 77, timeY: 102, timeSize: 23, buttonX: 136, buttonY: 113, buttonW: 68, buttonH: 22, buttonTextY: 128 };
+    return { goalY: 67, timeY: 91, timeSize: 23, buttonX: 136, buttonY: 104, buttonW: 68, buttonH: 22, buttonTextY: 119 };
   }
-  return { goalY: 78, timeY: 103, timeSize: 25, buttonX: 136, buttonY: 115, buttonW: 68, buttonH: 22, buttonTextY: 130 };
+  return { goalY: 65, timeY: 89, timeSize: 24, buttonX: 136, buttonY: 102, buttonW: 68, buttonH: 22, buttonTextY: 117 };
 }
 
 function formatPaceGoalButton(courseMode, totalStr) {
@@ -1027,11 +1067,12 @@ function formatPacePlan(totalSeconds, lapCount, lapSec, previousCourseMode = nul
     const finText = isFinish
       ? `<text x="${p.x.toFixed(1)}" y="${(p.y + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" class="pace-fin-text" font-size="6" font-weight="800" letter-spacing="0.5">FIN</text>`
       : '';
+    const textAnchor = isFinish ? 'middle' : layout.anchor;
     markers += `<g class="pace-marker${isFinish ? ' pace-marker--finish' : ''}" data-pace-lap="${n}">
       <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${dotR}" ${dotAttrs}/>
       ${finText}
-      <text x="${layout.label.x.toFixed(1)}" y="${layout.label.y.toFixed(1)}" text-anchor="${layout.anchor}" class="${isFinish ? 'pace-fin-label' : 'pace-label'}" font-size="8" letter-spacing="1" font-weight="600">${labelText}</text>
-      <text x="${layout.split.x.toFixed(1)}" y="${layout.split.y.toFixed(1)}" text-anchor="${layout.anchor}" class="${isFinish ? 'pace-fin-split' : 'pace-split'}" font-size="11" font-weight="${splitWeight}" font-variant-numeric="tabular-nums">${splitStr}</text>
+      <text x="${layout.label.x.toFixed(1)}" y="${layout.label.y.toFixed(1)}" text-anchor="${textAnchor}" class="${isFinish ? 'pace-fin-label' : 'pace-label'}" font-size="8" letter-spacing="1" font-weight="600">${labelText}</text>
+      <text x="${layout.split.x.toFixed(1)}" y="${layout.split.y.toFixed(1)}" text-anchor="${textAnchor}" class="${isFinish ? 'pace-fin-split' : 'pace-split'}" font-size="11" font-weight="${splitWeight}" font-variant-numeric="tabular-nums">${splitStr}</text>
     </g>`;
   }
 
@@ -1050,6 +1091,7 @@ function formatPacePlan(totalSeconds, lapCount, lapSec, previousCourseMode = nul
           </linearGradient>
         </defs>
         <g class="pace-course-shape">${formatPaceCourseShape(courseMode)}</g>
+        <g class="pace-course-morph" data-morph-from="${previousCourse}" data-morph-to="${courseMode}">${formatPaceCourseMorph(courseMode, previousCourse)}</g>
         ${formatPaceCourseEndpoints(courseMode)}
         ${formatPaceGoalButton(courseMode, totalStr)}
         <g class="pace-pacer-runner" data-pacer-runner data-course-leg="${startPoint.leg || 'track'}" transform="translate(${startPoint.x.toFixed(2)} ${startPoint.y.toFixed(2)}) rotate(${startAngle.toFixed(1)})" aria-hidden="true">
