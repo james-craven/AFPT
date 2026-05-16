@@ -2,9 +2,6 @@ const CLOSE_ON_ACTION_IDS = new Set([
   'dev-version-menu',
   'install-app-menu',
   'pwa-update-check',
-  'run-adjust-chart',
-  'walk-adjust-chart',
-  'shuttle-score-card',
 ]);
 
 function byId(id) {

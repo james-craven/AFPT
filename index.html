@@ -56,14 +56,7 @@
         <h2 id="chart-drawer-title">Score Chart</h2>
         <button id="close-btn" class="close-btn" type="button">Close ✕</button>
       </header>
-      <!-- Chart controls row: category dropdown + component dropdown -->
-      <div class="chart-ctrl-row">
-        <select id="chart-category-sel" class="chart-ctrl-sel" aria-label="Chart category">
-          <option value="strength">Strength</option>
-          <option value="core">Core</option>
-          <option value="cardio">Cardio</option>
-        </select>
-        <select id="chart-component-sel" class="chart-ctrl-sel" aria-label="Chart component"></select>
+      <div class="chart-reference-row">
         <button id="chart-reference-btn" class="chart-reference-btn" type="button">Reference</button>
       </div>
       <!-- Demographics row: sex + age (modal-local, reset on open) -->
@@ -83,6 +76,15 @@
           <option value="55-59">55–59</option>
           <option value="60-and-over">60+</option>
         </select>
+      </div>
+      <!-- Chart controls row: category dropdown + component dropdown -->
+      <div class="chart-ctrl-row">
+        <select id="chart-category-sel" class="chart-ctrl-sel" aria-label="Chart category">
+          <option value="strength">Strength</option>
+          <option value="core">Core</option>
+          <option value="cardio">Cardio</option>
+        </select>
+        <select id="chart-component-sel" class="chart-ctrl-sel" aria-label="Chart component"></select>
       </div>
       <div class="chart-drawer__image-frame">
         <div id="chart-content" class="chart-content"></div>
@@ -212,8 +214,8 @@
               <stop offset="100%" stop-color="#ff5d7c"/>
             </linearGradient>
           </defs>
-          <circle class="score-ring-track" cx="100" cy="100" r="70" stroke-width="10"/>
-          <circle id="score-ring-arc" class="score-ring-arc" cx="100" cy="100" r="70"
+          <circle class="score-ring-track" cx="100" cy="100" r="64" stroke-width="10"/>
+          <circle id="score-ring-arc" class="score-ring-arc" cx="100" cy="100" r="64"
             stroke-width="10" stroke-linecap="round"
             transform="rotate(-90 100 100)" stroke-dasharray="0 440"/>
           <text id="score-ring-num" class="score-ring-num" x="100" y="106" text-anchor="middle" dominant-baseline="middle">--</text>

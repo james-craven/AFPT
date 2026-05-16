@@ -411,8 +411,10 @@ function setChartDrawerTitle(titleText) {
 }
 
 function setChartControlsVisible(visible) {
+  const referenceRow = document.querySelector('.chart-reference-row');
   const ctrlRow = document.querySelector('.chart-ctrl-row');
   const demoRow = document.querySelector('.chart-demo-row');
+  if (referenceRow) referenceRow.hidden = !visible;
   if (ctrlRow) ctrlRow.hidden = !visible;
   if (demoRow) demoRow.hidden = !visible;
 }
@@ -739,7 +741,7 @@ function renderScore(result) {
   // SVG ring (fitness + blues themes)
   const ringArc = byId('score-ring-arc');
   if (ringArc) {
-    const C = 2 * Math.PI * 70; // circumference for r=70
+    const C = 2 * Math.PI * 64; // circumference for r=64
     const filled = (Math.min(100, Math.max(0, total)) / 100) * C;
     ringArc.setAttribute('stroke-dasharray', `${filled.toFixed(1)} ${C.toFixed(1)}`);
   }

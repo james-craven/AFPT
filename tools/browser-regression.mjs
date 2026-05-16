@@ -738,6 +738,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
 
   await setThemePreset(page, 'blues');
   const bluesRingWidth = await page.locator('.score-ring-svg').evaluate((element) => element.getBoundingClientRect().width);
+  assert.ok(bluesRingWidth <= 172, `blues score ring is tightened: ${bluesRingWidth}px`);
   const bluesScoreOrder = await page.evaluate(() => {
     const label = document.querySelector('.score-comp-label')?.getBoundingClientRect();
     const ring = document.querySelector('.score-ring-wrap')?.getBoundingClientRect();
@@ -750,6 +751,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
 
   await setThemePreset(page, 'fitness');
   const fitnessRingWidth = await page.locator('.score-ring-svg').evaluate((element) => element.getBoundingClientRect().width);
+  assert.ok(fitnessRingWidth <= 172, `fitness score ring is tightened: ${fitnessRingWidth}px`);
   assert.ok(Math.abs(bluesRingWidth - fitnessRingWidth) <= 1, 'blues and fitness score rings match size');
   const fitnessScoreOrder = await page.evaluate(() => {
     const label = document.querySelector('.score-comp-label')?.getBoundingClientRect();
@@ -793,6 +795,25 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     'AF-PRT',
     'fitness theme header keeps AF-PRT title',
   );
+  await setThemePreset(page, 'light');
+  const contrastScoreColumnAlignment = await page.evaluate(() => {
+    const section = document.querySelector('.score-section')?.getBoundingClientRect();
+    const labelRect = document.querySelector('.score-comp-label')?.getBoundingClientRect();
+    const numberRect = document.querySelector('.score-number')?.getBoundingClientRect();
+    const badgeRect = document.querySelector('.score-badge')?.getBoundingClientRect();
+    if (!section || !labelRect || !numberRect || !badgeRect) return { missing: true };
+    const center = (rect) => rect.left + rect.width / 2;
+    const colWidth = section.width / 3;
+    return {
+      labelDelta: Math.abs(center(labelRect) - (section.left + colWidth / 2)),
+      numberDelta: Math.abs(center(numberRect) - (section.left + colWidth * 1.5)),
+      badgeDelta: Math.abs(center(badgeRect) - (section.left + colWidth * 2.5)),
+    };
+  });
+  assert.equal(contrastScoreColumnAlignment.missing, undefined, 'contrast score column elements exist');
+  assert.ok(contrastScoreColumnAlignment.labelDelta <= 12, `contrast total label centered in left column: ${contrastScoreColumnAlignment.labelDelta}px`);
+  assert.ok(contrastScoreColumnAlignment.numberDelta <= 12, `contrast score number centered in middle column: ${contrastScoreColumnAlignment.numberDelta}px`);
+  assert.ok(contrastScoreColumnAlignment.badgeDelta <= 12, `contrast status centered in right column: ${contrastScoreColumnAlignment.badgeDelta}px`);
   await setThemePreset(page, 'tactical');
   await page.locator('#summary-strength').click();
   await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
@@ -807,6 +828,29 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForFunction(() => !document.getElementById('modal')?.hasAttribute('hidden'));
   const chartOpen = await page.evaluate(() => document.getElementById('modal')?.dataset.chartOpen);
   assert.equal(chartOpen, 'true', 'chart drawer opens on push-btn click');
+  const chartControlOrderAndBorders = await page.evaluate(() => {
+    const referenceRow = document.querySelector('.chart-reference-row')?.getBoundingClientRect();
+    const demoRow = document.querySelector('.chart-demo-row')?.getBoundingClientRect();
+    const ctrlRow = document.querySelector('.chart-ctrl-row')?.getBoundingClientRect();
+    const strong = getComputedStyle(document.documentElement).getPropertyValue('--afpt-border-strong').trim();
+    const dropdowns = Array.from(document.querySelectorAll('.chart-demo-sel, .chart-ctrl-sel'));
+    return {
+      ordered: !!referenceRow && !!demoRow && !!ctrlRow
+        && referenceRow.top < demoRow.top
+        && demoRow.top < ctrlRow.top,
+      borders: dropdowns.map((el) => getComputedStyle(el).borderTopColor),
+      strong,
+    };
+  });
+  assert.equal(chartControlOrderAndBorders.ordered, true, 'chart controls order reference, demographics, category/component');
+  assert.ok(chartControlOrderAndBorders.borders.every((border) => border === chartControlOrderAndBorders.strong), 'chart dropdowns use strong border color');
+  const segmentedBorderUsesStrong = await page.evaluate(() => {
+    const strong = getComputedStyle(document.documentElement).getPropertyValue('--afpt-border-strong').trim();
+    return ['body-seg-ctrl', 'push-seg-ctrl', 'sit-seg-ctrl', 'run-seg-ctrl']
+      .map((id) => getComputedStyle(document.getElementById(id)).borderTopColor)
+      .every((border) => border === strong);
+  });
+  assert.equal(segmentedBorderUsesStrong, true, 'component segmented toggles use strong border color');
   const hasChartTable = await page.evaluate(() => !!document.querySelector('#chart-content .chart-table'));
   assert.equal(hasChartTable, true, 'chart drawer contains generated score table');
   const chartHasNaN = await page.evaluate(
@@ -865,7 +909,9 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     ['#walk-adjust-chart', 'dafman-36-2905-2-page2-full.png', 'Walk/Shuttle Altitude Adjustment'],
     ['#shuttle-score-card', 'ShuttleLevels.jpeg', 'HAMR Shuttle Score Card'],
   ]) {
-    await page.locator('#settings-hub-toggle').click();
+    if (await page.locator('#settings-hub-panel').isHidden()) {
+      await page.locator('#settings-hub-toggle').click();
+    }
     await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
     await page.locator(selector).click();
     await page.waitForFunction(
@@ -884,6 +930,11 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       `${selector} sets reference drawer title`,
     );
     assert.equal(
+      await page.locator('.chart-reference-row').isHidden(),
+      true,
+      `${selector} hides score chart reference control`,
+    );
+    assert.equal(
       await page.locator('.chart-ctrl-row').isHidden(),
       true,
       `${selector} hides score chart controls`,
@@ -895,7 +946,14 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     );
     await page.locator('#close-btn').click();
     await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
+    assert.equal(
+      await page.locator('#settings-hub-panel').isVisible(),
+      true,
+      `${selector} returns to still-open settings hub after closing reference`,
+    );
   }
+  await page.locator('#settings-hub-close').click();
+  await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
 
   // 9b. Cardio chart does not contain NaN:NaN
   await page.locator('#summary-cardio').click();

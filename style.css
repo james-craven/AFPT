@@ -1631,7 +1631,7 @@ select {
 .chart-drawer {
   position: fixed;
   inset: 0;
-  z-index: 800;
+  z-index: 1000;
   pointer-events: none;
 }
 
@@ -1704,15 +1704,24 @@ select {
 }
 
 /* Chart modal controls */
+.chart-reference-row,
 .chart-ctrl-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
   gap: 8px;
   padding: 10px 14px 0;
   flex-shrink: 0;
 }
 
-.chart-ctrl-sel {
+.chart-ctrl-row {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.chart-reference-row {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.chart-ctrl-sel,
+.chart-demo-sel {
   width: 100%;
   min-width: 0;
   background: var(--afpt-panel-2);
@@ -1726,7 +1735,8 @@ select {
   cursor: pointer;
 }
 
-.chart-ctrl-sel:focus {
+.chart-ctrl-sel:focus,
+.chart-demo-sel:focus {
   border-color: var(--afpt-accent);
 }
 
@@ -1750,17 +1760,6 @@ select {
   color: var(--afpt-accent);
 }
 
-@media (max-width: 430px) {
-  .chart-ctrl-row {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-
-  .chart-reference-btn {
-    grid-column: 1 / -1;
-    width: 100%;
-  }
-}
-
 .chart-demo-row {
   display: flex;
   gap: 8px;
@@ -1770,19 +1769,9 @@ select {
 
 .chart-demo-sel {
   flex: 1;
-  background: var(--afpt-panel-2);
-  border: 1px solid var(--afpt-border);
-  color: var(--afpt-ink);
-  font-family: inherit;
   font-size: 12px;
   padding: 6px 28px 6px 8px;
   border-radius: 5px;
-  outline: none;
-  cursor: pointer;
-}
-
-.chart-demo-sel:focus {
-  border-color: var(--afpt-accent);
 }
 
 .chart-drawer__image-frame {
@@ -1925,8 +1914,8 @@ select {
   display: none;
 }
 
-:root[data-theme="fitness"] .score-ring-svg { width: 200px; height: 200px; }
-:root[data-theme="blues"] .score-ring-svg { width: 140px; height: 140px; }
+:root[data-theme="fitness"] .score-ring-svg { width: 176px; height: 176px; }
+:root[data-theme="blues"] .score-ring-svg { width: 132px; height: 132px; }
 
 .score-ring-track {
   stroke: var(--afpt-panel-2);
@@ -1944,7 +1933,7 @@ select {
   font-family: inherit;
   font-weight: 700;
   fill: var(--afpt-ink);
-  font-size: 40px;
+  font-size: 38px;
   letter-spacing: -1px;
   dominant-baseline: middle;
 }
@@ -2633,10 +2622,12 @@ select {
   display: none;
 }
 :root[data-theme="blues"] .score-ring-num {
-  font-size: 42px;
+  font-size: 38px;
   font-weight: 700;
   fill: var(--afpt-ink);
 }
+:root[data-theme="blues"] .score-ring-num[data-len="4"] { font-size: 34px; }
+:root[data-theme="blues"] .score-ring-num[data-len="5"] { font-size: 30px; }
 :root[data-theme="blues"] .score-ring-cat {
   display: none;
 }
@@ -2696,6 +2687,22 @@ select {
   box-shadow: 0 2px 8px rgba(20, 30, 55, 0.05);
   background: var(--afpt-panel);
   padding: 16px;
+  text-align: center;
+}
+
+:root[data-theme="light"] .score-main-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+:root[data-theme="light"] .score-comp-label,
+:root[data-theme="light"] .score-badge {
+  justify-self: center;
+  text-align: center;
 }
 
 /* Score badge: pill shape */
@@ -2855,20 +2862,20 @@ select {
 /* Keep the ring centered and responsive in the three-column score row. */
 :root[data-theme="fitness"] .score-ring-svg,
 :root[data-theme="blues"] .score-ring-svg {
-  width: clamp(154px, 42vw, 190px);
-  height: clamp(154px, 42vw, 190px);
+  width: clamp(140px, 38vw, 172px);
+  height: clamp(140px, 38vw, 172px);
 }
 
 /* Score number: large white bold per mock */
 :root[data-theme="fitness"] .score-ring-num {
-  font-size: 56px;
+  font-size: 50px;
   font-weight: 700;
   fill: #fff;
   letter-spacing: -1px;
 }
 /* Shrink for decimal scores (4+ chars like 75.5) to prevent ring overflow */
-:root[data-theme="fitness"] .score-ring-num[data-len="4"] { font-size: 44px; }
-:root[data-theme="fitness"] .score-ring-num[data-len="5"] { font-size: 38px; }
+:root[data-theme="fitness"] .score-ring-num[data-len="4"] { font-size: 39px; }
+:root[data-theme="fitness"] .score-ring-num[data-len="5"] { font-size: 34px; }
 
 :root[data-theme="fitness"] .score-ring-cat {
   display: none;
@@ -3025,7 +3032,7 @@ select {
 .fit-seg-ctrl {
   display: flex;
   background: var(--afpt-panel-2);
-  border: 1px solid var(--afpt-border);
+  border: 1px solid var(--afpt-border-strong);
   border-radius: 999px;
   padding: 3px;
   gap: 2px;
@@ -3061,7 +3068,7 @@ select {
 /* Fitness: glass background + white active pill */
 :root[data-theme="fitness"] .fit-seg-ctrl {
   background: rgba(0, 0, 0, 0.18);
-  border-color: transparent;
+  border-color: var(--afpt-border-strong);
 }
 :root[data-theme="fitness"] .fit-seg-btn {
   color: rgba(255, 255, 255, 0.7);
