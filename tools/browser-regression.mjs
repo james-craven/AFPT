@@ -614,8 +614,6 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       vibrate(pattern, cue) { this.events.push({ type: 'vibrate', kind: cue.kind, pattern }); },
       cancelSpeech() { this.events.push({ type: 'cancel' }); },
       setAudioSessionType(type) { this.events.push({ type: 'audio-session', audioSessionType: type }); },
-      startKeepAlive() { this.events.push({ type: 'keepalive-start' }); },
-      stopKeepAlive() { this.events.push({ type: 'keepalive-stop' }); },
       requestWakeLock() {
         this.events.push({ type: 'wake' });
         return Promise.resolve({
@@ -670,7 +668,6 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     events: window.__afptPacerAudioTestHooks.events,
   }));
   assert.equal(pacerAudioRunning.debug.running, true, 'pacer audio controller runs while pacer is active');
-  assert.equal(pacerAudioRunning.debug.keepAliveActive, true, 'pacer audio keeps audio context warm while running');
   assert.ok(pacerAudioRunning.debug.lastCueIndex >= 0, 'pacer audio controller advances cues while running');
   assert.ok(
     pacerAudioRunning.events.some((event) => event.type === 'beep' && event.kind === 'start'),
@@ -678,15 +675,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   );
   assert.ok(
     pacerAudioRunning.events.some((event) => event.type === 'audio-session' && event.audioSessionType === 'transient'),
-    'test cue requests transient audio session behavior when available',
-  );
-  assert.ok(
-    pacerAudioRunning.events.some((event) => event.type === 'audio-session' && event.audioSessionType === 'playback'),
-    'pacer start tap requests playback audio session behavior when available',
-  );
-  assert.ok(
-    pacerAudioRunning.events.some((event) => event.type === 'keepalive-start'),
-    'pacer start tap starts audio keepalive',
+    'test cue and pacer start request transient audio session behavior when available',
   );
   assert.ok(
     pacerAudioRunning.events.some((event) => event.type === 'wake'),
@@ -695,7 +684,12 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.locator('[data-pacer-toggle]').click();
   await page.waitForFunction(() => ['paused', 'finished'].includes(document.querySelector('.lap-fitness')?.dataset.pacerState));
   await page.waitForFunction(() => window.afptApp.getPacerAudioDebug().running === false);
-  await page.waitForFunction(() => window.afptApp.getPacerAudioDebug().keepAliveActive === false);
+  assert.ok(
+    await page.evaluate(() => window.__afptPacerAudioTestHooks.events.some(
+      (event) => event.type === 'audio-session' && event.audioSessionType === 'auto',
+    )),
+    'pacer pause releases custom audio session behavior',
+  );
   await page.evaluate(() => {
     const minEl = document.getElementById('run-mintxt');
     const secEl = document.getElementById('run-sectxt');

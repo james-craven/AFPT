@@ -147,7 +147,6 @@ export class PacerAudioController {
     this.scheduleKey = '';
     this.settings = { ...DEFAULT_PACER_AUDIO_SETTINGS };
     this.statusCallback = null;
-    this.keepAliveNodes = null;
     this.wakeLock = null;
   }
 
@@ -171,7 +170,6 @@ export class PacerAudioController {
       lastCueIndex: this.lastCueIndex,
       running: this.running,
       cueIntensity: this.settings.cueIntensity,
-      keepAliveActive: Boolean(this.keepAliveNodes),
       vibration: this.settings.vibration,
       wakeLockActive: Boolean(this.wakeLock),
     };
@@ -203,21 +201,21 @@ export class PacerAudioController {
     this.schedule = [];
     this.scheduleKey = '';
     this.cancelSpeech();
-    this.stopKeepAlive();
+    this.setAudioSessionType('auto');
     this.releaseWakeLock();
   }
 
   pause() {
     this.running = false;
     this.cancelSpeech();
-    this.stopKeepAlive();
+    this.setAudioSessionType('auto');
     this.releaseWakeLock();
   }
 
   stop({ cancelSpeech = true } = {}) {
     this.running = false;
     if (cancelSpeech) this.cancelSpeech();
-    this.stopKeepAlive();
+    this.setAudioSessionType('auto');
     this.releaseWakeLock();
   }
 
@@ -225,8 +223,7 @@ export class PacerAudioController {
     this.configure(goalSeconds, settings);
     this.running = true;
     if (this.settings.enabled) {
-      this.armAudioFromUserGesture({ cue: 'start', sessionType: 'playback' });
-      this.startKeepAlive();
+      this.armAudioFromUserGesture({ cue: 'start', sessionType: 'transient' });
     }
     void this.requestWakeLock();
   }
@@ -339,44 +336,6 @@ export class PacerAudioController {
     }
   }
 
-  startKeepAlive() {
-    const hooks = this.hooks();
-    if (hooks?.startKeepAlive) {
-      hooks.startKeepAlive();
-      this.keepAliveNodes = { hooked: true };
-      return true;
-    }
-    if (!this.audioContext || this.keepAliveNodes) return false;
-    try {
-      const oscillator = this.audioContext.createOscillator();
-      const gain = this.audioContext.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(440, this.audioContext.currentTime);
-      gain.gain.setValueAtTime(0.00001, this.audioContext.currentTime);
-      oscillator.connect(gain).connect(this.audioContext.destination);
-      oscillator.start();
-      this.keepAliveNodes = { gain, oscillator };
-      return true;
-    } catch {
-      this.keepAliveNodes = null;
-      return false;
-    }
-  }
-
-  stopKeepAlive() {
-    const hooks = this.hooks();
-    if (hooks?.stopKeepAlive && this.keepAliveNodes) hooks.stopKeepAlive();
-    try {
-      this.keepAliveNodes?.oscillator?.stop?.();
-      this.keepAliveNodes?.oscillator?.disconnect?.();
-      this.keepAliveNodes?.gain?.disconnect?.();
-    } catch {
-      // Ignore already-stopped keepalive nodes.
-    }
-    this.keepAliveNodes = null;
-    this.setAudioSessionType('auto');
-  }
-
   playStartCue() {
     const cue = { kind: 'start', distanceMeters: 0, targetSeconds: 0 };
     const normalized = this.settings;
@@ -410,9 +369,9 @@ export class PacerAudioController {
     const now = this.audioContext.currentTime;
     const profile = {
       normal: { volume: 0.18, duration: 0.22, gap: 0.07, count: 1 },
-      loud: { volume: 0.36, duration: 0.24, gap: 0.07, count: cue?.kind === 'finish' ? 3 : 2 },
-      max: { volume: 0.64, duration: 0.28, gap: 0.06, count: cue?.kind === 'finish' ? 4 : 3 },
-    }[this.settings.cueIntensity] || { volume: 0.36, duration: 0.24, gap: 0.07, count: 2 };
+      loud: { volume: 0.36, duration: 0.24, gap: 0.07, count: 1 },
+      max: { volume: 0.64, duration: 0.28, gap: 0.06, count: 1 },
+    }[this.settings.cueIntensity] || { volume: 0.36, duration: 0.24, gap: 0.07, count: 1 };
     const baseFrequency = cue?.turn ? 740 : cue?.kind === 'finish' ? 880 : 660;
 
     for (let i = 0; i < profile.count; i += 1) {

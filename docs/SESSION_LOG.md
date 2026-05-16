@@ -371,3 +371,9 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Reworked Test Cue and pacer start so their audible cue is scheduled immediately inside the user tap handler instead of after an awaited resume/delay.
 - Pacer start now requests playback audio-session behavior when available, then keeps the audio context warm while running.
 - Test Cue still requests transient audio-session behavior, but no longer waits before playing the test cue.
+
+## Pacer Audio Music Compatibility
+
+- Removed the quiet background keepalive node because on-device testing showed it could stop Spotify without improving locked-screen cue playback.
+- Changed pacer start back to transient audio-session behavior instead of playback.
+- Simplified generated cue sounds back to one beep per cue; intensity now changes volume/duration only.
