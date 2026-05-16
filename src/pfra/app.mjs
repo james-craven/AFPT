@@ -14,6 +14,13 @@ import {
   topCellValue,
 } from './scoring.mjs';
 import { eventDefaults } from './state.mjs';
+import {
+  DEFAULT_PACER_AUDIO_SETTINGS,
+  PacerAudioController,
+  loadPacerAudioSettings,
+  normalizePacerAudioSettings,
+  savePacerAudioSettings,
+} from './pacer-audio.mjs';
 
 // --- State ---
 
@@ -58,6 +65,9 @@ let pacePacer = {
   rafId: 0,
   startedAt: 0,
 };
+
+let paceAudioSettings = loadPacerAudioSettings();
+const paceAudioController = new PacerAudioController();
 
 // --- DOM helpers ---
 
@@ -732,6 +742,112 @@ function pacePoint(t, expand = 0) {
   return stadiumPoint(t, PACE_TRACK.x, PACE_TRACK.y, PACE_TRACK.w, PACE_TRACK.h, PACE_TRACK.r, expand);
 }
 
+function selectedOption(value, current) {
+  return value === current ? ' selected' : '';
+}
+
+function formatPaceAudioControls(settings) {
+  const normalized = normalizePacerAudioSettings(settings || DEFAULT_PACER_AUDIO_SETTINGS);
+  const enabled = normalized.enabled ? ' checked' : '';
+  return `<div class="pace-audio-panel" data-pacer-audio-panel data-audio-enabled="${normalized.enabled ? 'true' : 'false'}">
+    <div class="pace-audio-panel__top">
+      <span class="pace-audio-panel__title">Pacer Audio</span>
+      <label class="pace-audio-toggle">
+        <input type="checkbox" data-pacer-audio-field="enabled"${enabled}>
+        <span>Audio cues</span>
+      </label>
+    </div>
+    <div class="pace-audio-grid">
+      <label>
+        <span>Style</span>
+        <select data-pacer-audio-field="cueStyle" aria-label="Pacer cue style">
+          <option value="beep-voice"${selectedOption('beep-voice', normalized.cueStyle)}>Beep + Voice</option>
+          <option value="beep"${selectedOption('beep', normalized.cueStyle)}>Beeps Only</option>
+          <option value="voice"${selectedOption('voice', normalized.cueStyle)}>Voice Only</option>
+        </select>
+      </label>
+      <label>
+        <span>Course</span>
+        <select data-pacer-audio-field="courseMode" aria-label="Pacer course mode">
+          <option value="track"${selectedOption('track', normalized.courseMode)}>Track</option>
+          <option value="route"${selectedOption('route', normalized.courseMode)}>Route</option>
+          <option value="out-back"${selectedOption('out-back', normalized.courseMode)}>Out/Back</option>
+          <option value="percent"${selectedOption('percent', normalized.courseMode)}>Percent</option>
+        </select>
+      </label>
+      <label>
+        <span>Cue</span>
+        <select data-pacer-audio-field="cueFrequency" aria-label="Pacer cue frequency">
+          <option value="100m"${selectedOption('100m', normalized.cueFrequency)}>100m</option>
+          <option value="200m"${selectedOption('200m', normalized.cueFrequency)}>200m</option>
+          <option value="400m"${selectedOption('400m', normalized.cueFrequency)}>400m</option>
+          <option value="quarter"${selectedOption('quarter', normalized.cueFrequency)}>Quarter</option>
+        </select>
+      </label>
+      <label>
+        <span>Turn</span>
+        <select data-pacer-audio-field="outBackSegmentMeters" aria-label="Out and back turn segment">
+          <option value="100"${selectedOption(100, normalized.outBackSegmentMeters)}>100m</option>
+          <option value="200"${selectedOption(200, normalized.outBackSegmentMeters)}>200m</option>
+          <option value="400"${selectedOption(400, normalized.outBackSegmentMeters)}>400m</option>
+          <option value="800"${selectedOption(800, normalized.outBackSegmentMeters)}>800m</option>
+          <option value="1600"${selectedOption(1600, normalized.outBackSegmentMeters)}>1600m</option>
+        </select>
+      </label>
+    </div>
+    <div class="pace-audio-actions">
+      <button type="button" data-pacer-audio-test>Test cue</button>
+      <span class="pace-audio-status" data-pacer-audio-status>${normalized.enabled ? 'Audio cues ready.' : 'Audio cues off.'}</span>
+    </div>
+  </div>`;
+}
+
+function updatePaceAudioStatus(message) {
+  const status = byId('run-lap-times')?.querySelector('[data-pacer-audio-status]');
+  if (!status) return;
+  if (message) {
+    status.textContent = message;
+    return;
+  }
+  status.textContent = paceAudioSettings.enabled
+    ? `Audio cues on: ${paceAudioSettings.courseMode.replace('-', '/')} · ${paceAudioSettings.cueFrequency}.`
+    : 'Audio cues off.';
+}
+
+paceAudioController.setStatusCallback(updatePaceAudioStatus);
+
+function currentPaceGoalSeconds() {
+  const goalSeconds = toSeconds(state.cardio.value);
+  return Number.isFinite(goalSeconds) && goalSeconds > 0 ? goalSeconds : null;
+}
+
+function applyPaceAudioSettings(nextSettings, { persist = true, syncElapsed = true } = {}) {
+  paceAudioSettings = normalizePacerAudioSettings(nextSettings);
+  if (persist) savePacerAudioSettings(paceAudioSettings);
+
+  const panel = byId('run-lap-times')?.querySelector('[data-pacer-audio-panel]');
+  if (panel) panel.dataset.audioEnabled = paceAudioSettings.enabled ? 'true' : 'false';
+
+  const goalSeconds = currentPaceGoalSeconds();
+  if (syncElapsed && goalSeconds !== null) {
+    paceAudioController.syncToElapsed(currentPacePacerElapsedMs(), goalSeconds, paceAudioSettings);
+  }
+  updatePaceAudioStatus();
+}
+
+function readPaceAudioSettingsFromControls() {
+  const panel = byId('run-lap-times')?.querySelector('[data-pacer-audio-panel]');
+  if (!panel) return paceAudioSettings;
+  const field = (name) => panel.querySelector(`[data-pacer-audio-field="${name}"]`);
+  return normalizePacerAudioSettings({
+    enabled: Boolean(field('enabled')?.checked),
+    cueStyle: field('cueStyle')?.value,
+    courseMode: field('courseMode')?.value,
+    cueFrequency: field('cueFrequency')?.value,
+    outBackSegmentMeters: Number(field('outBackSegmentMeters')?.value),
+  });
+}
+
 // PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme.
 // Canonical pace plan — used on all themes. SVG uses CSS classes for token-based theming.
 // viewBox 0 0 340 190, rect x=70 y=50 w=200 h=90 rx=45 (exact mock-fitness.jsx params).
@@ -799,6 +915,7 @@ function formatPacePlan(totalSeconds, lapCount, lapSec) {
       </svg>
     </div>
     <p class="pace-pacer-status" data-pacer-status>Tap goal time to start pacer.</p>
+    ${formatPaceAudioControls(paceAudioSettings)}
   </div>`;
 }
 
@@ -810,6 +927,7 @@ function cancelPacePacerFrame() {
 
 function resetPacePacer(goalSeconds = null) {
   cancelPacePacerFrame();
+  paceAudioController.reset();
   pacePacer = {
     active: false,
     elapsedMs: 0,
@@ -861,6 +979,7 @@ function updatePacePacerDisplay(now = performance.now()) {
 
   runner.setAttribute('transform', `translate(${p.x.toFixed(2)} ${p.y.toFixed(2)}) rotate(${angle.toFixed(1)})`);
   updateCompletedPaceLaps(plan, completedLaps);
+  paceAudioController.update(elapsedMs, goalSeconds, paceAudioSettings);
   const stateName = pacePacer.finished ? 'finished' : pacePacer.active ? 'running' : pacePacer.elapsedMs > 0 ? 'paused' : 'idle';
   plan.dataset.pacerState = stateName;
   toggle.setAttribute('aria-label', pacePacer.active
@@ -871,6 +990,7 @@ function updatePacePacerDisplay(now = performance.now()) {
 
   if (pacePacer.finished) {
     status.textContent = `Goal reached at ${secondsToTimeString(goalSeconds)}. Tap goal time to restart.`;
+    paceAudioController.stop({ cancelSpeech: false });
   } else if (pacePacer.active) {
     status.textContent = `Pacer ${secondsToTimeString(elapsedSeconds)} / ${secondsToTimeString(goalSeconds)} · Lap ${currentLap} of ${lapCount}`;
   } else if (pacePacer.elapsedMs > 0) {
@@ -895,6 +1015,7 @@ function togglePacePacer() {
   if (pacePacer.active) {
     pacePacer.elapsedMs = currentPacePacerElapsedMs(now);
     pacePacer.active = false;
+    paceAudioController.pause();
     cancelPacePacerFrame();
     updatePacePacerDisplay(now);
     return;
@@ -908,6 +1029,7 @@ function togglePacePacer() {
   pacePacer.active = true;
   pacePacer.finished = false;
   pacePacer.startedAt = now;
+  void paceAudioController.start(goalSeconds, paceAudioSettings);
   updatePacePacerDisplay(now);
 }
 
@@ -941,6 +1063,7 @@ function renderPacePlan() {
   if (section) section.hidden = false;
   lapDisplay.innerHTML = formatPacePlan(curSec, 8, Math.round(curSec / 8));
   syncPacePacerForGoal(curSec);
+  updatePaceAudioStatus();
 }
 
 // --- Tick positioning ---
@@ -1884,6 +2007,19 @@ function bindEvents() {
     togglePacePacer();
   });
 
+  byId('run-lap-times')?.addEventListener('change', (event) => {
+    const target = event.target instanceof Element ? event.target.closest('[data-pacer-audio-field]') : null;
+    if (!target) return;
+    applyPaceAudioSettings(readPaceAudioSettingsFromControls());
+  });
+
+  byId('run-lap-times')?.addEventListener('click', (event) => {
+    const target = event.target instanceof Element ? event.target.closest('[data-pacer-audio-test]') : null;
+    if (!target) return;
+    const goalSeconds = currentPaceGoalSeconds() ?? 840;
+    void paceAudioController.testCue({ ...paceAudioSettings, enabled: true }, goalSeconds);
+  });
+
   // --- Slider step buttons (−/+ flanking each slider) ---
   // Handled by the unified pointerdown hold-to-repeat above.
 
@@ -2051,4 +2187,6 @@ window.afptApp = {
   refreshScoreFromDom,
   isReady,
   getLoadError,
+  getPacerAudioSettings: () => ({ ...paceAudioSettings }),
+  getPacerAudioDebug: () => paceAudioController.getDebugState(),
 };

@@ -549,6 +549,72 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const runAfterHamrRoundTrip = await page.evaluate(() => window.afptApp.getState().cardio.value);
   assert.equal(runAfterHamrRoundTrip, '14:00', '2-mile run value preserved after HAMR round-trip');
 
+  const pacerAudioDefaults = await page.evaluate(() => ({
+    controlsVisible: Boolean(document.querySelector('[data-pacer-audio-panel]')),
+    enabled: document.querySelector('[data-pacer-audio-field="enabled"]')?.checked,
+    settings: window.afptApp.getPacerAudioSettings(),
+  }));
+  assert.equal(pacerAudioDefaults.controlsVisible, true, 'pacer audio controls render inside pace plan');
+  assert.equal(pacerAudioDefaults.enabled, false, 'pacer audio is off by default');
+  assert.equal(pacerAudioDefaults.settings.cueStyle, 'beep-voice', 'pacer audio default cue style is beep + voice');
+
+  const scoreBeforeAudioSettings = await page.evaluate(() => window.afptApp.getScoreResult()?.total);
+  await page.locator('[data-pacer-audio-field="enabled"]').check();
+  await page.locator('[data-pacer-audio-field="cueStyle"]').selectOption('beep');
+  await page.locator('[data-pacer-audio-field="courseMode"]').selectOption('out-back');
+  await page.locator('[data-pacer-audio-field="cueFrequency"]').selectOption('200m');
+  await page.locator('[data-pacer-audio-field="outBackSegmentMeters"]').selectOption('800');
+  await page.waitForFunction(() => window.afptApp.getPacerAudioSettings().courseMode === 'out-back');
+  assert.equal(
+    await page.evaluate(() => window.afptApp.getScoreResult()?.total),
+    scoreBeforeAudioSettings,
+    'changing pacer audio settings does not change score',
+  );
+
+  await page.reload({ waitUntil: 'load' });
+  await page.waitForFunction(
+    () => document.querySelector('#pfra-status')?.textContent.includes('Standards loaded'),
+    undefined,
+    { timeout: 10000 },
+  );
+  const persistedPacerAudio = await page.evaluate(() => ({
+    enabled: document.querySelector('[data-pacer-audio-field="enabled"]')?.checked,
+    cueStyle: document.querySelector('[data-pacer-audio-field="cueStyle"]')?.value,
+    courseMode: document.querySelector('[data-pacer-audio-field="courseMode"]')?.value,
+    cueFrequency: document.querySelector('[data-pacer-audio-field="cueFrequency"]')?.value,
+    outBackSegmentMeters: document.querySelector('[data-pacer-audio-field="outBackSegmentMeters"]')?.value,
+    settings: window.afptApp.getPacerAudioSettings(),
+  }));
+  assert.equal(persistedPacerAudio.enabled, true, 'pacer audio enabled setting persists after reload');
+  assert.equal(persistedPacerAudio.cueStyle, 'beep', 'pacer audio cue style persists after reload');
+  assert.equal(persistedPacerAudio.courseMode, 'out-back', 'pacer audio course mode persists after reload');
+  assert.equal(persistedPacerAudio.cueFrequency, '200m', 'pacer audio cue frequency persists after reload');
+  assert.equal(persistedPacerAudio.outBackSegmentMeters, '800', 'pacer audio out/back segment persists after reload');
+  assert.equal(persistedPacerAudio.settings.enabled, true, 'pacer audio API reflects persisted enabled setting');
+
+  await page.evaluate(() => {
+    window.__afptPacerAudioTestHooks = {
+      events: [],
+      unlockAudio() { this.events.push({ type: 'unlock' }); return Promise.resolve(true); },
+      beep(cue) { this.events.push({ type: 'beep', distanceMeters: cue.distanceMeters }); },
+      speak(text) { this.events.push({ type: 'speak', text }); },
+      cancelSpeech() { this.events.push({ type: 'cancel' }); },
+      requestWakeLock() {
+        this.events.push({ type: 'wake' });
+        return Promise.resolve({
+          release: () => window.__afptPacerAudioTestHooks.events.push({ type: 'release' }),
+        });
+      },
+    };
+  });
+  await page.locator('[data-pacer-audio-test]').click();
+  await page.waitForFunction(() => window.__afptPacerAudioTestHooks?.events?.some((event) => event.type === 'beep'));
+  assert.match(
+    await page.locator('[data-pacer-audio-status]').innerText(),
+    /Test cue/i,
+    'pacer audio test cue reports status',
+  );
+
   // 6d. Pace plan personal pacer loops once per lap and marks completed laps.
   await page.evaluate(() => {
     const minEl = document.getElementById('run-mintxt');
@@ -581,8 +647,19 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.ok(pacerStarted.completedLapCount >= 1, 'pace plan marks completed laps');
   assert.match(pacerStarted.statusText, /Pacer.*Lap/i, 'pace plan status reports elapsed pacer time and current lap');
   assert.equal(pacerStarted.cardioValue, '0:04', 'starting pacer does not change cardio value');
+  const pacerAudioRunning = await page.evaluate(() => ({
+    debug: window.afptApp.getPacerAudioDebug(),
+    events: window.__afptPacerAudioTestHooks.events,
+  }));
+  assert.equal(pacerAudioRunning.debug.running, true, 'pacer audio controller runs while pacer is active');
+  assert.ok(pacerAudioRunning.debug.lastCueIndex >= 0, 'pacer audio controller advances cues while running');
+  assert.ok(
+    pacerAudioRunning.events.some((event) => event.type === 'wake'),
+    'pacer start requests wake lock through audio controller',
+  );
   await page.locator('[data-pacer-toggle]').click();
   await page.waitForFunction(() => ['paused', 'finished'].includes(document.querySelector('.lap-fitness')?.dataset.pacerState));
+  await page.waitForFunction(() => window.afptApp.getPacerAudioDebug().running === false);
   await page.evaluate(() => {
     const minEl = document.getElementById('run-mintxt');
     const secEl = document.getElementById('run-sectxt');
@@ -593,6 +670,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     }
   });
   await page.waitForFunction(() => window.afptApp.getState().cardio.value === '14:00');
+  await page.waitForFunction(() => window.afptApp.getPacerAudioDebug().lastCueIndex === -1);
 
   await page.locator('#summary-strength').click();
   await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));

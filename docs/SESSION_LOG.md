@@ -342,3 +342,12 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 **Next task:** Phase D — move Core controls into `#core-editor`. See `CLAUDE.md` → "Current Next Phase" and `docs/NEXT_SESSION_PROMPT.md` for the exact continuation prompt.
 
 **Tests:** 98 PFRA fixtures, SW build (84 files), PWA cache (28 required assets), browser regressions — all pass.
+
+## Pacer Audio Cue Experiment
+
+- Created rollback tag `pre-pacer-audio-37800c4` before implementation.
+- Added optional pace-plan audio cues that are off by default and use the existing 3200m / 8-lap visual pacer timing.
+- Added inline pace-plan controls for cue style, course mode, cue frequency, out/back segment preset, and a test cue.
+- Added generated beep support, optional speech synthesis, missed-cue coalescing, and graceful screen wake-lock handling.
+- Added pure cue-schedule tests and browser coverage for defaults, persistence, score safety, test cue stubbing, wake-lock request, and audio controller state.
+- Added TODO to later experiment with replacing inline controls with a compact pace-plan settings icon/modal.

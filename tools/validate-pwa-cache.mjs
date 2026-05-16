@@ -7,6 +7,7 @@ const requiredAssets = [
   'index.html',
   'style.css',
   'src/pfra/app.mjs',
+  'src/pfra/pacer-audio.mjs',
   'src/pfra/scoring.mjs',
   'src/pfra/standards.mjs',
   'src/pfra/state.mjs',
