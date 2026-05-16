@@ -884,6 +884,24 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(segmentedBorderUsesStrong, true, 'component segmented toggles use strong border color');
   const hasChartTable = await page.evaluate(() => !!document.querySelector('#chart-content .chart-table'));
   assert.equal(hasChartTable, true, 'chart drawer contains generated score table');
+  const chartDeltaColumn = await page.evaluate(() => {
+    const headers = Array.from(document.querySelectorAll('#chart-content .chart-th'))
+      .map((header) => header.textContent.trim());
+    const deltaCells = Array.from(document.querySelectorAll('#chart-content .chart-cell--delta'))
+      .map((cell) => cell.textContent.trim());
+    return {
+      headers,
+      hasCurrent: deltaCells.includes('You'),
+      hasNeed: deltaCells.some((text) => /^[+-]/.test(text)),
+      hasMet: deltaCells.some((text) => text.startsWith('✓')),
+      tierCells: document.querySelectorAll('#chart-content .chart-cell--tier').length,
+    };
+  });
+  assert.deepEqual(chartDeltaColumn.headers, ['Reps', 'Pts', 'Delta'], 'chart table uses performance, points, delta columns');
+  assert.equal(chartDeltaColumn.hasCurrent, true, 'chart delta column marks current row');
+  assert.equal(chartDeltaColumn.hasNeed, true, 'chart delta column shows distance to unmet targets');
+  assert.equal(chartDeltaColumn.hasMet, true, 'chart delta column shows already-met targets');
+  assert.equal(chartDeltaColumn.tierCells, 0, 'chart no longer renders tier cells');
   const chartHasNaN = await page.evaluate(
     () => document.getElementById('chart-content')?.textContent?.includes('NaN'),
   );

@@ -445,6 +445,43 @@ function currentPerformanceForChart(event, ageGroup, sex) {
   return null;
 }
 
+function deltaForChartCell(table, cell, currentPerformance, isCurrentRow) {
+  if (isCurrentRow) {
+    return { text: 'You', className: 'delta--current' };
+  }
+
+  const current = table.unit === 'min:sec'
+    ? toSeconds(currentPerformance)
+    : Number(currentPerformance);
+  const target = table.unit === 'min:sec'
+    ? toSeconds(cell.value)
+    : Number(cell.value);
+
+  if (!Number.isFinite(current) || !Number.isFinite(target)) {
+    return { text: '—', className: 'delta--na' };
+  }
+
+  const higherIsBetter = cell.atLeast || table.higherIsBetter;
+  const meetsTarget = higherIsBetter ? current >= target : current <= target;
+  const rawDelta = higherIsBetter ? target - current : current - target;
+  const delta = Math.abs(rawDelta);
+  const formattedDelta = table.unit === 'min:sec'
+    ? secondsToTimeString(delta)
+    : String(delta);
+
+  if (meetsTarget) {
+    return {
+      text: delta === 0 ? 'You' : `✓ ${formattedDelta}`,
+      className: delta === 0 ? 'delta--current' : 'delta--met',
+    };
+  }
+
+  return {
+    text: higherIsBetter ? `+${formattedDelta}` : `-${formattedDelta}`,
+    className: 'delta--need',
+  };
+}
+
 function generateScoreChartFor(event, ageGroup, sex) {
   if (!ready) return '<p class="chart-empty">Standards not yet loaded.</p>';
 
@@ -464,7 +501,7 @@ function generateScoreChartFor(event, ageGroup, sex) {
   if (!table) return `<p class="chart-empty">No chart available for ${event}.</p>`;
 
   const isTime = table.unit === 'min:sec';
-  const colHeader = isTime ? 'Time' : 'Reps';
+  const colHeader = table.unit === 'shuttles' ? 'Shuttles' : isTime ? 'Time' : 'Reps';
   const currentPerformance = currentPerformanceForChart(event, ageGroup, sex);
   const currentMatch = currentPerformance
     ? scoreFromTable(table, { ageGroup, sex, performance: currentPerformance }).matchedCell
@@ -479,15 +516,14 @@ function generateScoreChartFor(event, ageGroup, sex) {
     const displayVal = isTime
       ? rawVal
       : (cell.atLeast ? `&ge;&nbsp;${rawVal}` : `&le;&nbsp;${rawVal}`);
-    const tier = pts >= 15 ? 'MAX' : pts >= 10 ? 'EXC' : pts >= 5 ? 'SAT' : 'MIN';
-    const tierCls = pts >= 15 ? 'tier--max' : pts >= 10 ? 'tier--exc' : pts >= 5 ? 'tier--sat' : 'tier--min';
     const isCurrentRow = currentMatch === cell;
+    const delta = deltaForChartCell(table, cell, currentPerformance, isCurrentRow);
     const youMarker = isCurrentRow ? '<span class="chart-you" aria-label="You are here">&lt; YOU</span>' : '';
-    rows += `<tr class="${isCurrentRow ? 'chart-row--you' : ''}"><td class="chart-cell chart-cell--perf">${displayVal}</td><td class="chart-cell chart-cell--score">${pts}${youMarker}</td><td class="chart-cell chart-cell--tier ${tierCls}">${tier}</td></tr>`;
+    rows += `<tr class="${isCurrentRow ? 'chart-row--you' : ''}"><td class="chart-cell chart-cell--perf">${displayVal}</td><td class="chart-cell chart-cell--score">${pts}${youMarker}</td><td class="chart-cell chart-cell--delta ${delta.className}">${delta.text}</td></tr>`;
   }
 
   const ageFmt = ageGroup.replace('under-', '< ').replace('-and-over', '+').replace('-', '–');
-  return `<p class="chart-meta">${sex === 'male' ? 'Male' : 'Female'} &middot; Age ${ageFmt}</p><table class="chart-table"><thead><tr><th class="chart-th">${colHeader}</th><th class="chart-th">Pts</th><th class="chart-th">Tier</th></tr></thead><tbody>${rows}</tbody></table>`;
+  return `<p class="chart-meta">${sex === 'male' ? 'Male' : 'Female'} &middot; Age ${ageFmt}</p><table class="chart-table"><thead><tr><th class="chart-th">${colHeader}</th><th class="chart-th">Pts</th><th class="chart-th">Delta</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function refreshChartContent() {

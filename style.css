@@ -1874,9 +1874,10 @@ select {
   font-weight: 700;
 }
 
-.chart-cell--tier {
+.chart-cell--delta {
   font-size: 11px;
   letter-spacing: 1px;
+  white-space: nowrap;
 }
 
 .chart-row--you .chart-cell {
@@ -1905,10 +1906,23 @@ select {
   color: var(--afpt-accent);
 }
 
-.tier--max { color: var(--afpt-accent-2); font-weight: 700; }
-.tier--exc { color: var(--afpt-accent); }
-.tier--sat { color: var(--afpt-warn); }
-.tier--min { color: var(--afpt-ink-dim); }
+.delta--current {
+  color: var(--afpt-accent);
+  font-weight: 700;
+}
+
+.delta--met {
+  color: var(--afpt-accent-2);
+}
+
+.delta--need {
+  color: var(--afpt-warn);
+  font-weight: 700;
+}
+
+.delta--na {
+  color: var(--afpt-ink-dim);
+}
 
 /* ─── Score ring (fitness + blues themes) ─────────────────────── */
 .score-ring-wrap {
