@@ -3322,63 +3322,71 @@ select {
   animation: pace-back-line-to-track 0.54s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-.lap-fitness[data-course="track"][data-prev-course="route"] .pace-track-ring {
+.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="route"] .pace-track-ring {
   animation: pace-track-expand-from-route 0.58s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   transform-box: fill-box;
   transform-origin: center;
 }
 
-.lap-fitness[data-course="track"][data-prev-course="out-back"] .pace-track-ring {
+.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="out-back"] .pace-track-ring {
   animation: pace-track-expand-from-lines 0.58s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   transform-box: fill-box;
   transform-origin: center;
 }
 
-.lap-fitness[data-course="track"][data-prev-course="route"] .pace-track-dash,
-.lap-fitness[data-course="track"][data-prev-course="out-back"] .pace-track-dash {
+.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="route"] .pace-track-dash,
+.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="out-back"] .pace-track-dash {
   animation: pace-fade-in 0.48s ease-out 0.1s both;
 }
 
 .pace-route-line,
 .pace-outback-line {
-  animation: pace-line-draw 0.46s ease-out both;
   stroke: var(--afpt-border-strong);
   stroke-linecap: round;
 }
 
+.lap-fitness[data-course-transition="true"] .pace-route-line,
+.lap-fitness[data-course-transition="true"] .pace-outback-line {
+  animation: pace-line-draw 0.46s ease-out both;
+}
+
 .pace-route-dash,
 .pace-outback-dash {
-  animation: pace-fade-in 0.52s ease-out both;
   stroke: var(--afpt-border);
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.pace-outback-line--back,
-.pace-outback-dash--back {
+.lap-fitness[data-course-transition="true"] .pace-route-dash,
+.lap-fitness[data-course-transition="true"] .pace-outback-dash {
+  animation: pace-fade-in 0.52s ease-out both;
+}
+
+.lap-fitness[data-course-transition="true"] .pace-outback-line--back,
+.lap-fitness[data-course-transition="true"] .pace-outback-dash--back {
   animation-delay: 0.08s;
 }
 
-.lap-fitness[data-course="route"] .pace-marker,
-.lap-fitness[data-course="out-back"] .pace-marker {
+.lap-fitness[data-course-transition="true"][data-course="route"] .pace-marker,
+.lap-fitness[data-course-transition="true"][data-course="out-back"] .pace-marker {
   animation: pace-marker-rise 0.28s ease-out both;
 }
 
-.lap-fitness[data-course="route"] .pace-endpoint,
-.lap-fitness[data-course="out-back"] .pace-endpoint,
-.lap-fitness[data-course="route"] .pace-goal-display,
-.lap-fitness[data-course="out-back"] .pace-goal-display,
-.lap-fitness[data-course="track"][data-prev-course="route"] .pace-goal-display,
-.lap-fitness[data-course="track"][data-prev-course="out-back"] .pace-goal-display,
-.lap-fitness[data-course="route"] .pace-pacer-toggle,
-.lap-fitness[data-course="out-back"] .pace-pacer-toggle,
-.lap-fitness[data-course="track"][data-prev-course="route"] .pace-pacer-toggle,
-.lap-fitness[data-course="track"][data-prev-course="out-back"] .pace-pacer-toggle {
+.lap-fitness[data-course-transition="true"][data-course="route"] .pace-endpoint,
+.lap-fitness[data-course-transition="true"][data-course="out-back"] .pace-endpoint,
+.lap-fitness[data-course-transition="true"][data-course="route"] .pace-goal-display,
+.lap-fitness[data-course-transition="true"][data-course="out-back"] .pace-goal-display,
+.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="route"] .pace-goal-display,
+.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="out-back"] .pace-goal-display,
+.lap-fitness[data-course-transition="true"][data-course="route"] .pace-pacer-toggle,
+.lap-fitness[data-course-transition="true"][data-course="out-back"] .pace-pacer-toggle,
+.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="route"] .pace-pacer-toggle,
+.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="out-back"] .pace-pacer-toggle {
   animation: pace-control-settle 0.32s ease-out both;
 }
 
-.lap-fitness[data-course="route"] .pace-marker:nth-of-type(odd),
-.lap-fitness[data-course="out-back"] .pace-marker:nth-of-type(odd) {
+.lap-fitness[data-course-transition="true"][data-course="route"] .pace-marker:nth-of-type(odd),
+.lap-fitness[data-course-transition="true"][data-course="out-back"] .pace-marker:nth-of-type(odd) {
   animation-delay: 0.04s;
 }
 

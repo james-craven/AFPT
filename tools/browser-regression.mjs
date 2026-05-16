@@ -609,6 +609,34 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.ok(routeCourseVisual.finishLabelY > routeCourseVisual.lineY, 'route mode staggers the finish label below the line');
   assert.equal(routeCourseVisual.runnerLeg, 'route', 'route mode starts runner on route line');
 
+  await page.evaluate(() => {
+    const secEl = document.getElementById('run-sectxt');
+    if (secEl) {
+      secEl.value = secEl.value === '01' ? '02' : '01';
+      secEl.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  });
+  await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.courseTransition === 'false');
+  const routeGoalChangeVisual = await page.evaluate(() => {
+    const line = document.querySelector('.pace-route-line');
+    const marker = document.querySelector('[data-pace-lap="1"]');
+    const toggle = document.querySelector('[data-pacer-toggle]');
+    return {
+      course: document.querySelector('.lap-fitness')?.dataset.course,
+      courseTransition: document.querySelector('.lap-fitness')?.dataset.courseTransition,
+      morphChildCount: document.querySelector('.pace-course-morph')?.children.length ?? -1,
+      lineAnimation: line ? getComputedStyle(line).animationName : '',
+      markerAnimation: marker ? getComputedStyle(marker).animationName : '',
+      toggleAnimation: toggle ? getComputedStyle(toggle).animationName : '',
+    };
+  });
+  assert.equal(routeGoalChangeVisual.course, 'route', 'changing run time keeps route mode selected');
+  assert.equal(routeGoalChangeVisual.courseTransition, 'false', 'changing run time is not treated as a course transition');
+  assert.equal(routeGoalChangeVisual.morphChildCount, 0, 'changing run time does not render a morph layer');
+  assert.equal(routeGoalChangeVisual.lineAnimation, 'none', 'changing run time does not redraw the route line');
+  assert.equal(routeGoalChangeVisual.markerAnimation, 'none', 'changing run time does not reanimate route markers');
+  assert.equal(routeGoalChangeVisual.toggleAnimation, 'none', 'changing run time does not reanimate pacer controls');
+
   await page.locator('[data-pacer-audio-field="courseMode"]').selectOption('out-back');
   await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.course === 'out-back');
   const outBackCourseVisual = await page.evaluate(() => ({

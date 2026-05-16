@@ -426,3 +426,9 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Centered finish labels over the finish marker instead of edge-aligning them behind the dot.
 - Added a temporary SVG morph layer for course changes: Track shrinks toward Route, Route splits toward Out/Back lanes, and Out/Back lanes reconnect while Track expands back in.
 - Added browser assertions for goal-stack placement, finish-label centering, route-to-out/back split morphs, and out/back-to-track reconnect morphs.
+
+## Pace Plan Animation Guard Fix
+
+- Fixed flashing while dragging the cardio/run controls by separating "course changed" from "pace plan re-rendered."
+- Added `data-course-transition` so morph, line-draw, marker, and control animations only run when Track/Route/Out-Back mode changes.
+- Added browser coverage proving a run-time value change keeps Route selected without rendering morph layers or restarting route/control animations.

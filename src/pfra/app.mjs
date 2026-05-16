@@ -1047,6 +1047,7 @@ function formatPacePlan(totalSeconds, lapCount, lapSec, previousCourseMode = nul
   const startPoint = paceCoursePoint(courseMode, 0);
   const startAngle = paceCourseAngle(courseMode, 0);
   const previousCourse = previousCourseMode || courseMode;
+  const hasCourseTransition = previousCourse !== courseMode;
   let markers = '';
 
   for (let i = 0; i < lapCount; i++) {
@@ -1076,7 +1077,7 @@ function formatPacePlan(totalSeconds, lapCount, lapSec, previousCourseMode = nul
     </g>`;
   }
 
-  return `<div class="lap-fitness" data-lap-count="${lapCount}" data-course="${courseMode}" data-prev-course="${previousCourse}">
+  return `<div class="lap-fitness" data-lap-count="${lapCount}" data-course="${courseMode}" data-prev-course="${previousCourse}" data-course-transition="${hasCourseTransition ? 'true' : 'false'}">
     <div class="lap-fitness__hdr">
       <span class="lap-fitness__title">Pace plan</span>
       <span class="lap-fitness__sub">${paceCourseSubText(courseMode, lapTimeStr)}</span>
@@ -1091,7 +1092,7 @@ function formatPacePlan(totalSeconds, lapCount, lapSec, previousCourseMode = nul
           </linearGradient>
         </defs>
         <g class="pace-course-shape">${formatPaceCourseShape(courseMode)}</g>
-        <g class="pace-course-morph" data-morph-from="${previousCourse}" data-morph-to="${courseMode}">${formatPaceCourseMorph(courseMode, previousCourse)}</g>
+        <g class="pace-course-morph" data-morph-from="${previousCourse}" data-morph-to="${courseMode}">${hasCourseTransition ? formatPaceCourseMorph(courseMode, previousCourse) : ''}</g>
         ${formatPaceCourseEndpoints(courseMode)}
         ${formatPaceGoalButton(courseMode, totalStr)}
         <g class="pace-pacer-runner" data-pacer-runner data-course-leg="${startPoint.leg || 'track'}" transform="translate(${startPoint.x.toFixed(2)} ${startPoint.y.toFixed(2)}) rotate(${startAngle.toFixed(1)})" aria-hidden="true">
