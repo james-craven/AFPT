@@ -1801,6 +1801,10 @@ select {
   width: 100%;
 }
 
+.chart-reference + .chart-reference {
+  margin-top: 18px;
+}
+
 .chart-reference__frame {
   background: #ffffff;
   border: 1px solid var(--afpt-border);

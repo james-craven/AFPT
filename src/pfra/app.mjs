@@ -424,7 +424,9 @@ function updateChartReferenceButton() {
   if (!button) return;
   const reference = SCORE_CHART_REFERENCES[chartModalState.event];
   button.disabled = !reference;
-  button.title = reference ? `Open ${reference.title}` : 'No official reference is available for this event';
+  button.title = chartModalState.event === 'hamr-20-meter'
+    ? 'Open HAMR score chart and shuttle score card'
+    : reference ? `Open ${reference.title}` : 'No official reference is available for this event';
 }
 
 function currentPerformanceForChart(event, ageGroup, sex) {
@@ -504,20 +506,38 @@ function refreshChartContent() {
   }
 }
 
-function renderOfficialReference(referenceKey) {
-  const contentEl = byId('chart-content');
-  const reference = typeof referenceKey === 'string'
-    ? OFFICIAL_REFERENCES[referenceKey]
-    : referenceKey;
-  if (!contentEl || !reference) return;
-
-  setChartDrawerTitle(reference.title);
-  contentEl.innerHTML = `<figure class="chart-reference">
+function referenceFigure(reference) {
+  return `<figure class="chart-reference">
     <div class="chart-reference__frame">
       <img class="chart-reference__image" src="${reference.src}" alt="${reference.alt}">
     </div>
     <figcaption class="chart-reference__caption">${reference.caption}</figcaption>
   </figure>`;
+}
+
+function resolveOfficialReference(referenceKey) {
+  return typeof referenceKey === 'string'
+    ? OFFICIAL_REFERENCES[referenceKey]
+    : referenceKey;
+}
+
+function renderOfficialReference(referenceKey) {
+  const contentEl = byId('chart-content');
+  const reference = resolveOfficialReference(referenceKey);
+  if (!contentEl || !reference) return;
+
+  setChartDrawerTitle(reference.title);
+  contentEl.innerHTML = referenceFigure(reference);
+}
+
+function renderOfficialReferenceSet(title, referenceKeys) {
+  const contentEl = byId('chart-content');
+  if (!contentEl) return;
+  const references = referenceKeys.map(resolveOfficialReference).filter(Boolean);
+  if (!references.length) return;
+
+  setChartDrawerTitle(title);
+  contentEl.innerHTML = references.map(referenceFigure).join('');
 }
 
 function populateChartComponentSel(category) {
@@ -587,7 +607,11 @@ function openCurrentScoreReference() {
   if (!modal) return;
   modal.dataset.chartMode = 'reference';
   setChartControlsVisible(false);
-  renderOfficialReference(reference);
+  if (chartModalState.event === 'hamr-20-meter') {
+    renderOfficialReferenceSet('20m HAMR Official References', [reference, 'shuttleScoreCard']);
+  } else {
+    renderOfficialReference(reference);
+  }
   modal.removeAttribute('hidden');
   modal.dataset.chartOpen = 'true';
 }

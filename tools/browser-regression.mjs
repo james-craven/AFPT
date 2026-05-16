@@ -903,6 +903,38 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const chartClosed = await page.evaluate(() => document.getElementById('modal')?.hasAttribute('hidden'));
   assert.equal(chartClosed, true, 'chart drawer closes on close-btn click');
 
+  await page.locator('#summary-cardio').click();
+  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  await page.evaluate(() => {
+    const sel = document.getElementById('cardio-sel');
+    sel.value = 'hamr-20-meter';
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForTimeout(50);
+  await page.locator('#run-btn').click();
+  await page.waitForFunction(() => !document.getElementById('modal')?.hasAttribute('hidden'));
+  await page.locator('#chart-reference-btn').click();
+  await page.waitForFunction(() => {
+    const sources = Array.from(document.querySelectorAll('#chart-content .chart-reference__image'))
+      .map((image) => image.getAttribute('src') || '');
+    return sources.some((source) => source.includes('pfra-scoring-page-08.jpg'))
+      && sources.some((source) => source.includes('ShuttleLevels.jpeg'));
+  });
+  assert.equal(
+    await page.locator('#chart-drawer-title').evaluate((el) => el.textContent.trim()),
+    '20m HAMR Official References',
+    'HAMR reference button opens score chart plus shuttle card',
+  );
+  assert.equal(
+    await page.locator('#chart-content .chart-reference__image').count(),
+    2,
+    'HAMR reference view shows both official images',
+  );
+  await page.locator('#close-btn').click();
+  await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
+  await page.locator('#summary-strength').click();
+  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+
   // 9a. Settings reference actions open official source images in the themed drawer
   for (const [selector, expectedSource, expectedTitle] of [
     ['#run-adjust-chart', 'dafman-36-2905-2-page1-full.png', 'Run Altitude Adjustment'],
