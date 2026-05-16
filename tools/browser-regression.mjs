@@ -549,13 +549,13 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const runAfterHamrRoundTrip = await page.evaluate(() => window.afptApp.getState().cardio.value);
   assert.equal(runAfterHamrRoundTrip, '14:00', '2-mile run value preserved after HAMR round-trip');
 
-  // 6d. Pace plan personal pacer starts from the visible goal time without changing cardio state.
+  // 6d. Pace plan personal pacer loops once per lap and marks completed laps.
   await page.evaluate(() => {
     const minEl = document.getElementById('run-mintxt');
     const secEl = document.getElementById('run-sectxt');
     if (minEl) minEl.value = '0';
     if (secEl) {
-      secEl.value = '08';
+      secEl.value = '04';
       secEl.dispatchEvent(new Event('input', { bubbles: true }));
     }
   });
@@ -563,13 +563,14 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const pacerInitial = await page.locator('[data-pacer-runner]').evaluate((element) => element.getAttribute('transform'));
   await page.locator('[data-pacer-toggle]').click();
   await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.pacerState === 'running');
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(650);
   const pacerStarted = await page.evaluate((initialTransform) => {
     const runner = document.querySelector('[data-pacer-runner]');
     const status = document.querySelector('[data-pacer-status]');
     const plan = document.querySelector('.lap-fitness');
     return {
       transformChanged: runner?.getAttribute('transform') !== initialTransform,
+      completedLapCount: document.querySelectorAll('.pace-marker--complete').length,
       statusText: status?.textContent ?? '',
       stateName: plan?.dataset.pacerState ?? '',
       cardioValue: window.afptApp.getState().cardio.value,
@@ -577,8 +578,9 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   }, pacerInitial);
   assert.equal(pacerStarted.stateName, 'running', 'pace plan personal pacer enters running state');
   assert.equal(pacerStarted.transformChanged, true, 'pace plan runner moves after start');
-  assert.match(pacerStarted.statusText, /Pacer/, 'pace plan status reports elapsed pacer time');
-  assert.equal(pacerStarted.cardioValue, '0:08', 'starting pacer does not change cardio value');
+  assert.ok(pacerStarted.completedLapCount >= 1, 'pace plan marks completed laps');
+  assert.match(pacerStarted.statusText, /Pacer.*Lap/i, 'pace plan status reports elapsed pacer time and current lap');
+  assert.equal(pacerStarted.cardioValue, '0:04', 'starting pacer does not change cardio value');
   await page.locator('[data-pacer-toggle]').click();
   await page.waitForFunction(() => ['paused', 'finished'].includes(document.querySelector('.lap-fitness')?.dataset.pacerState));
   await page.evaluate(() => {

@@ -756,12 +756,12 @@ function formatPacePlan(totalSeconds, lapCount, lapSec) {
     // Finish dot uses hardcoded gold→pink gradient (always distinctive on any theme).
     // Non-finish dots use .pace-dot CSS class so the theme token applies.
     const dotAttrs = isFinish
-      ? `fill="url(#pacePlanFinGrad)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"`
+      ? `class="pace-dot--finish" fill="url(#pacePlanFinGrad)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"`
       : `class="pace-dot"`;
     const finText = isFinish
       ? `<text x="${p.x.toFixed(1)}" y="${(p.y + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" class="pace-fin-text" font-size="6" font-weight="800" letter-spacing="0.5">FIN</text>`
       : '';
-    markers += `<g>
+    markers += `<g class="pace-marker${isFinish ? ' pace-marker--finish' : ''}" data-pace-lap="${n}">
       <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${dotR}" ${dotAttrs}/>
       ${finText}
       <text x="${(lp.x + dx).toFixed(1)}" y="${(lp.y - 4).toFixed(1)}" text-anchor="${anchor}" class="${isFinish ? 'pace-fin-label' : 'pace-label'}" font-size="8" letter-spacing="1" font-weight="600">${labelText}</text>
@@ -769,7 +769,7 @@ function formatPacePlan(totalSeconds, lapCount, lapSec) {
     </g>`;
   }
 
-  return `<div class="lap-fitness">
+  return `<div class="lap-fitness" data-lap-count="${lapCount}">
     <div class="lap-fitness__hdr">
       <span class="lap-fitness__title">Pace plan</span>
       <span class="lap-fitness__sub">each lap &middot; <span class="lap-fitness__pace">${lapTimeStr}</span></span>
@@ -824,6 +824,13 @@ function currentPacePacerElapsedMs(now = performance.now()) {
   return pacePacer.elapsedMs + (pacePacer.active ? now - pacePacer.startedAt : 0);
 }
 
+function updateCompletedPaceLaps(plan, completedLaps) {
+  plan.querySelectorAll('[data-pace-lap]').forEach((marker) => {
+    const lap = Number(marker.dataset.paceLap);
+    marker.classList.toggle('pace-marker--complete', Number.isFinite(lap) && lap <= completedLaps);
+  });
+}
+
 function updatePacePacerDisplay(now = performance.now()) {
   const lapDisplay = byId('run-lap-times');
   const runner = lapDisplay?.querySelector('[data-pacer-runner]');
@@ -834,11 +841,15 @@ function updatePacePacerDisplay(now = performance.now()) {
   if (!lapDisplay || !runner || !status || !toggle || !plan || !Number.isFinite(goalSeconds) || goalSeconds <= 0) return;
 
   const goalMs = goalSeconds * 1000;
+  const lapCount = Math.max(1, Number(plan.dataset.lapCount) || 8);
+  const lapMs = goalMs / lapCount;
   const elapsedMs = Math.min(goalMs, currentPacePacerElapsedMs(now));
   const elapsedSeconds = Math.floor(elapsedMs / 1000);
-  const progress = goalMs > 0 ? elapsedMs / goalMs : 0;
-  const p = pacePoint(progress % 1);
-  const p2 = pacePoint((progress + 0.002) % 1);
+  const completedLaps = lapMs > 0 ? Math.min(lapCount, Math.floor(elapsedMs / lapMs)) : 0;
+  const currentLap = Math.min(lapCount, completedLaps + 1);
+  const lapProgress = completedLaps >= lapCount ? 0 : ((elapsedMs % lapMs) / lapMs);
+  const p = pacePoint(lapProgress);
+  const p2 = pacePoint((lapProgress + 0.002) % 1);
   const angle = Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI;
 
   if (elapsedMs >= goalMs && pacePacer.active) {
@@ -849,6 +860,7 @@ function updatePacePacerDisplay(now = performance.now()) {
   }
 
   runner.setAttribute('transform', `translate(${p.x.toFixed(2)} ${p.y.toFixed(2)}) rotate(${angle.toFixed(1)})`);
+  updateCompletedPaceLaps(plan, completedLaps);
   const stateName = pacePacer.finished ? 'finished' : pacePacer.active ? 'running' : pacePacer.elapsedMs > 0 ? 'paused' : 'idle';
   plan.dataset.pacerState = stateName;
   toggle.setAttribute('aria-label', pacePacer.active
@@ -860,9 +872,9 @@ function updatePacePacerDisplay(now = performance.now()) {
   if (pacePacer.finished) {
     status.textContent = `Goal reached at ${secondsToTimeString(goalSeconds)}. Tap goal time to restart.`;
   } else if (pacePacer.active) {
-    status.textContent = `Pacer ${secondsToTimeString(elapsedSeconds)} / ${secondsToTimeString(goalSeconds)}`;
+    status.textContent = `Pacer ${secondsToTimeString(elapsedSeconds)} / ${secondsToTimeString(goalSeconds)} · Lap ${currentLap} of ${lapCount}`;
   } else if (pacePacer.elapsedMs > 0) {
-    status.textContent = `Paused at ${secondsToTimeString(elapsedSeconds)}. Tap goal time to resume.`;
+    status.textContent = `Paused at ${secondsToTimeString(elapsedSeconds)} · Lap ${currentLap} of ${lapCount}. Tap goal time to resume.`;
   } else {
     status.textContent = 'Tap goal time to start pacer.';
   }

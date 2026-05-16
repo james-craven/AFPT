@@ -3355,6 +3355,34 @@ select {
   font-family: inherit;
 }
 
+.pace-marker .pace-dot,
+.pace-marker .pace-dot--finish,
+.pace-marker .pace-label,
+.pace-marker .pace-split,
+.pace-marker .pace-fin-label,
+.pace-marker .pace-fin-split,
+.pace-marker .pace-fin-text {
+  transition: fill 0.22s ease, stroke 0.22s ease, filter 0.22s ease;
+}
+
+.pace-marker--complete .pace-dot,
+.pace-marker--complete .pace-dot--finish {
+  fill: #37ff8b;
+  filter: drop-shadow(0 0 4px rgba(55, 255, 139, 0.55));
+  stroke: rgba(55, 255, 139, 0.8);
+}
+
+.pace-marker--complete .pace-label,
+.pace-marker--complete .pace-split,
+.pace-marker--complete .pace-fin-label,
+.pace-marker--complete .pace-fin-split {
+  fill: #37ff8b;
+}
+
+.pace-marker--complete .pace-fin-text {
+  fill: #052e16;
+}
+
 /* Fitness theme overrides — keep all white on the dark gradient */
 :root[data-theme="fitness"] .pace-track-ring {
   stroke: rgba(255, 255, 255, 0.25);
