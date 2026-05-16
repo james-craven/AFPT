@@ -603,8 +603,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     };
   });
   assert.equal(componentDividerInset.missing, undefined, `${label} component strip divider exists`);
-  assert.ok(componentDividerInset.left >= 15, `${label} bottom divider is inset from left`);
-  assert.ok(componentDividerInset.right >= 15, `${label} bottom divider is inset from right`);
+  assert.equal(componentDividerInset.left, 0, `${label} bottom divider is flush to left`);
+  assert.equal(componentDividerInset.right, 0, `${label} bottom divider is flush to right`);
 
   await setThemePreset(page, 'light');
   const contrastPacePlanStyle = await page.evaluate(() => {
