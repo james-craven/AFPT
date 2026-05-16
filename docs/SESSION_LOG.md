@@ -365,3 +365,9 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added audio priming on pacer start: the goal-time tap now unlocks audio, requests transient audio-session behavior when available, plays a start/arming cue, and keeps the audio context warm while the pacer is running.
 - Added a short delay after Test Cue audio unlock to improve first-tap reliability on installed PWAs.
 - Updated browser coverage for the start arming cue, audio-session hint, keepalive lifecycle, and revised Home Screen guidance.
+
+## Pacer Audio First-Tap Arming Fix
+
+- Reworked Test Cue and pacer start so their audible cue is scheduled immediately inside the user tap handler instead of after an awaited resume/delay.
+- Pacer start now requests playback audio-session behavior when available, then keeps the audio context warm while running.
+- Test Cue still requests transient audio-session behavior, but no longer waits before playing the test cue.

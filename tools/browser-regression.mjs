@@ -678,7 +678,11 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   );
   assert.ok(
     pacerAudioRunning.events.some((event) => event.type === 'audio-session' && event.audioSessionType === 'transient'),
-    'pacer audio requests transient audio session behavior when available',
+    'test cue requests transient audio session behavior when available',
+  );
+  assert.ok(
+    pacerAudioRunning.events.some((event) => event.type === 'audio-session' && event.audioSessionType === 'playback'),
+    'pacer start tap requests playback audio session behavior when available',
   );
   assert.ok(
     pacerAudioRunning.events.some((event) => event.type === 'keepalive-start'),

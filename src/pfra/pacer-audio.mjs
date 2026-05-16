@@ -221,15 +221,14 @@ export class PacerAudioController {
     this.releaseWakeLock();
   }
 
-  async start(goalSeconds, settings) {
+  start(goalSeconds, settings) {
     this.configure(goalSeconds, settings);
     this.running = true;
     if (this.settings.enabled) {
-      await this.unlockAudio();
+      this.armAudioFromUserGesture({ cue: 'start', sessionType: 'playback' });
       this.startKeepAlive();
-      this.playStartCue();
     }
-    await this.requestWakeLock();
+    void this.requestWakeLock();
   }
 
   update(elapsedMs, goalSeconds, settings) {
@@ -243,13 +242,11 @@ export class PacerAudioController {
     this.playCue(this.schedule[latestDueIndex], this.settings);
   }
 
-  async testCue(settings, goalSeconds = 840) {
+  testCue(settings, goalSeconds = 840) {
     const normalized = normalizePacerAudioSettings({ ...settings, enabled: true });
     this.configure(goalSeconds, normalized, { resetCueIndex: true });
-    await this.unlockAudio();
-    await this.delay(80);
     const cue = this.schedule[0] || createPacerCueSchedule(goalSeconds, normalized)[0];
-    if (cue) this.playCue(cue, normalized);
+    this.armAudioFromUserGesture({ cue: 'test', sessionType: 'transient', testCue: cue });
     this.status(`Test cue: ${cue ? formatCueText(cue, normalized) : 'Unavailable'}`);
   }
 
@@ -262,17 +259,49 @@ export class PacerAudioController {
     return latest;
   }
 
+  armAudioFromUserGesture({ cue = 'prime', sessionType = 'transient', testCue = null } = {}) {
+    this.setAudioSessionType(sessionType);
+    const hasContext = this.ensureAudioContext();
+    this.resumeAudioContext();
+    if (hasContext) this.primeAudioContext();
+
+    if (cue === 'start') this.playStartCue();
+    else if (cue === 'test' && testCue) this.playCue(testCue, this.settings);
+    else if (cue === 'prime') this.primeAudibleCue();
+
+    return hasContext;
+  }
+
   async unlockAudio() {
     const hooks = this.hooks();
     this.setAudioSessionType('transient');
     if (hooks?.unlockAudio) return hooks.unlockAudio();
 
+    const hasContext = this.ensureAudioContext();
+    const resumed = await this.resumeAudioContext();
+    if (hasContext) this.primeAudioContext();
+    return resumed;
+  }
+
+  ensureAudioContext() {
+    const hooks = this.hooks();
+    if (hooks?.ensureAudioContext) return hooks.ensureAudioContext();
     const AudioCtor = this.root.AudioContext || this.root.webkitAudioContext;
     if (!AudioCtor) return false;
     if (!this.audioContext) this.audioContext = new AudioCtor();
-    if (this.audioContext.state === 'suspended') await this.audioContext.resume();
-    this.primeAudioContext();
     return true;
+  }
+
+  resumeAudioContext() {
+    const hooks = this.hooks();
+    if (hooks?.resumeAudioContext) return hooks.resumeAudioContext();
+    if (!this.audioContext) return Promise.resolve(false);
+    if (this.audioContext.state !== 'suspended') return Promise.resolve(true);
+    try {
+      return this.audioContext.resume().then(() => true, () => false);
+    } catch {
+      return Promise.resolve(false);
+    }
   }
 
   setAudioSessionType(type) {
@@ -291,10 +320,6 @@ export class PacerAudioController {
       // Audio Session API is experimental; ignore unsupported assignment failures.
     }
     return false;
-  }
-
-  delay(ms) {
-    return new Promise((resolve) => this.root.setTimeout(resolve, ms));
   }
 
   primeAudioContext() {
@@ -361,9 +386,13 @@ export class PacerAudioController {
     this.status('Pacer audio armed. Keep this screen awake for the most reliable cues.');
   }
 
+  primeAudibleCue() {
+    const cue = { kind: 'prime', distanceMeters: 0, targetSeconds: 0 };
+    this.beep(cue);
+  }
+
   playCue(cue, settings) {
     const normalized = normalizePacerAudioSettings(settings);
-    this.setAudioSessionType('transient');
     const text = formatCueText(cue, normalized);
     if (normalized.cueStyle === 'beep' || normalized.cueStyle === 'beep-voice') this.beep(cue);
     if (normalized.cueStyle === 'voice' || normalized.cueStyle === 'beep-voice') this.speak(text, cue);
