@@ -389,3 +389,10 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added a persisted Signal setting with `Spoken Mark`, `Tone`, and `Off` options.
 - Made `Spoken Mark` the default signal because on-device testing showed Priority was required for real Web Audio tones but could pause Spotify without resuming it.
 - Kept real tone support available for users/platforms where it works, while documenting in the UI that Tone may require Priority on iOS.
+
+## Pacer Audio Simplification
+
+- Removed experimental beep/tone, spoken-mark, intensity, music-mode, and repeated turn-segment controls from the pacer audio UI.
+- Simplified pacer audio to voice cues plus optional haptics, with cue timing controlled by course mode and cue frequency only.
+- Hardcoded cue playback to request transient audio-session behavior when available so supported browsers can duck background music without exposing that implementation detail.
+- Changed out-and-back pacing to use one halfway turn cue instead of repeated segment turns.

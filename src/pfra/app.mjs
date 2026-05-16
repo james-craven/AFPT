@@ -759,14 +759,6 @@ function formatPaceAudioControls(settings) {
     </div>
     <div class="pace-audio-grid">
       <label>
-        <span>Style</span>
-        <select data-pacer-audio-field="cueStyle" aria-label="Pacer cue style">
-          <option value="beep-voice"${selectedOption('beep-voice', normalized.cueStyle)}>Beep + Voice</option>
-          <option value="beep"${selectedOption('beep', normalized.cueStyle)}>Beeps Only</option>
-          <option value="voice"${selectedOption('voice', normalized.cueStyle)}>Voice Only</option>
-        </select>
-      </label>
-      <label>
         <span>Course</span>
         <select data-pacer-audio-field="courseMode" aria-label="Pacer course mode">
           <option value="track"${selectedOption('track', normalized.courseMode)}>Track</option>
@@ -784,40 +776,6 @@ function formatPaceAudioControls(settings) {
           <option value="quarter"${selectedOption('quarter', normalized.cueFrequency)}>Quarter</option>
         </select>
       </label>
-      <label>
-        <span>Turn</span>
-        <select data-pacer-audio-field="outBackSegmentMeters" aria-label="Out and back turn segment">
-          <option value="100"${selectedOption(100, normalized.outBackSegmentMeters)}>100m</option>
-          <option value="200"${selectedOption(200, normalized.outBackSegmentMeters)}>200m</option>
-          <option value="400"${selectedOption(400, normalized.outBackSegmentMeters)}>400m</option>
-          <option value="800"${selectedOption(800, normalized.outBackSegmentMeters)}>800m</option>
-          <option value="1600"${selectedOption(1600, normalized.outBackSegmentMeters)}>1600m</option>
-        </select>
-      </label>
-      <label>
-        <span>Intensity</span>
-        <select data-pacer-audio-field="cueIntensity" aria-label="Pacer cue intensity">
-          <option value="normal"${selectedOption('normal', normalized.cueIntensity)}>Normal</option>
-          <option value="loud"${selectedOption('loud', normalized.cueIntensity)}>Loud</option>
-          <option value="max"${selectedOption('max', normalized.cueIntensity)}>Max</option>
-        </select>
-      </label>
-      <label>
-        <span>Music</span>
-        <select data-pacer-audio-field="audioFocus" aria-label="Pacer audio behavior with other apps">
-          <option value="mix"${selectedOption('mix', normalized.audioFocus)}>Mix</option>
-          <option value="duck"${selectedOption('duck', normalized.audioFocus)}>Duck</option>
-          <option value="priority"${selectedOption('priority', normalized.audioFocus)}>Priority*</option>
-        </select>
-      </label>
-      <label>
-        <span>Signal</span>
-        <select data-pacer-audio-field="signalSound" aria-label="Pacer signal sound">
-          <option value="spoken"${selectedOption('spoken', normalized.signalSound)}>Spoken Mark</option>
-          <option value="tone"${selectedOption('tone', normalized.signalSound)}>Tone</option>
-          <option value="off"${selectedOption('off', normalized.signalSound)}>Off</option>
-        </select>
-      </label>
       <label class="pace-audio-vibrate">
         <span>Haptics</span>
         <span class="pace-audio-check">
@@ -826,7 +784,7 @@ function formatPaceAudioControls(settings) {
         </span>
       </label>
     </div>
-    <p class="pace-audio-note">Spoken Mark is the most music-friendly signal. Tone may require Priority on iOS, which can pause other audio.</p>
+    <p class="pace-audio-note">Audio pacer uses voice cues and requests ducking behavior when supported. Test with your headphones or music before running.</p>
     <div class="pace-audio-actions">
       <button type="button" data-pacer-audio-test>Test cue</button>
       <span class="pace-audio-status" data-pacer-audio-status>${normalized.enabled ? 'Audio cues ready.' : 'Audio cues off.'}</span>
@@ -842,7 +800,7 @@ function updatePaceAudioStatus(message) {
     return;
   }
   status.textContent = paceAudioSettings.enabled
-    ? `Audio cues on: ${paceAudioSettings.courseMode.replace('-', '/')} · ${paceAudioSettings.cueFrequency} · ${paceAudioSettings.signalSound} · ${paceAudioSettings.audioFocus}.`
+    ? `Audio pacer on: ${paceAudioSettings.courseMode.replace('-', '/')} · ${paceAudioSettings.cueFrequency}.`
     : 'Audio cues off.';
 }
 
@@ -873,13 +831,8 @@ function readPaceAudioSettingsFromControls() {
   const field = (name) => panel.querySelector(`[data-pacer-audio-field="${name}"]`);
   return normalizePacerAudioSettings({
     enabled: Boolean(field('enabled')?.checked),
-    cueStyle: field('cueStyle')?.value,
     courseMode: field('courseMode')?.value,
     cueFrequency: field('cueFrequency')?.value,
-    outBackSegmentMeters: Number(field('outBackSegmentMeters')?.value),
-    cueIntensity: field('cueIntensity')?.value,
-    audioFocus: field('audioFocus')?.value,
-    signalSound: field('signalSound')?.value,
     vibration: Boolean(field('vibration')?.checked),
   });
 }

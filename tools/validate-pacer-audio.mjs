@@ -46,40 +46,31 @@ assert.match(
 const outBackSchedule = createPacerCueSchedule(fourteenMinutes, {
   courseMode: 'out-back',
   cueFrequency: '400m',
-  outBackSegmentMeters: 800,
 });
 assert.deepEqual(
   outBackSchedule.filter((cue) => cue.turn).map((cue) => cue.distanceMeters),
-  [800, 1600, 2400],
-  'out-and-back 800m preset adds turn cues before finish',
+  [1600],
+  'out-and-back mode adds a single halfway turn cue',
 );
 assert.match(
-  formatCueText(outBackSchedule.find((cue) => cue.distanceMeters === 800), {
+  formatCueText(outBackSchedule.find((cue) => cue.distanceMeters === 1600), {
     courseMode: 'out-back',
     cueFrequency: '400m',
-    outBackSegmentMeters: 800,
   }),
-  /Turn\. 800 meters\. Target 3:30\./,
+  /Turn\. 1600 meters\. Target 7:00\./,
   'out-and-back turn cue announces turn, distance, and target time',
 );
 
 assert.deepEqual(
   normalizePacerAudioSettings({
     enabled: true,
-    cueStyle: 'loud',
     courseMode: 'mystery',
     cueFrequency: 'lots',
-    outBackSegmentMeters: 123,
   }),
   {
     enabled: true,
-    cueStyle: 'beep-voice',
     courseMode: 'track',
     cueFrequency: '100m',
-    outBackSegmentMeters: 1600,
-    cueIntensity: 'loud',
-    audioFocus: 'mix',
-    signalSound: 'spoken',
     vibration: false,
   },
   'invalid persisted settings normalize to safe defaults',

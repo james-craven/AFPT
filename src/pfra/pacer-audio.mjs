@@ -6,29 +6,14 @@ export const PACER_TRACK_LAP_METERS = 400;
 
 export const DEFAULT_PACER_AUDIO_SETTINGS = Object.freeze({
   enabled: false,
-  cueStyle: 'beep-voice',
   courseMode: 'track',
   cueFrequency: '100m',
-  outBackSegmentMeters: 1600,
-  cueIntensity: 'loud',
-  audioFocus: 'mix',
-  signalSound: 'spoken',
   vibration: false,
 });
 
-const CUE_STYLES = new Set(['beep-voice', 'beep', 'voice']);
 const COURSE_MODES = new Set(['track', 'route', 'out-back', 'percent']);
 const CUE_FREQUENCIES = new Set(['100m', '200m', '400m', 'quarter']);
-const CUE_INTENSITIES = new Set(['normal', 'loud', 'max']);
-const AUDIO_FOCUS_MODES = new Set(['mix', 'duck', 'priority']);
-const SIGNAL_SOUNDS = new Set(['spoken', 'tone', 'off']);
-const OUT_BACK_SEGMENTS = new Set([100, 200, 400, 800, 1600]);
-
-const AUDIO_SESSION_BY_FOCUS = Object.freeze({
-  mix: 'ambient',
-  duck: 'transient',
-  priority: 'playback',
-});
+const PACER_AUDIO_SESSION_TYPE = 'transient';
 
 function safeStorage() {
   try {
@@ -40,17 +25,11 @@ function safeStorage() {
 
 export function normalizePacerAudioSettings(settings = {}) {
   const merged = { ...DEFAULT_PACER_AUDIO_SETTINGS, ...(settings || {}) };
-  const segment = Number(merged.outBackSegmentMeters);
 
   return {
     enabled: Boolean(merged.enabled),
-    cueStyle: CUE_STYLES.has(merged.cueStyle) ? merged.cueStyle : DEFAULT_PACER_AUDIO_SETTINGS.cueStyle,
     courseMode: COURSE_MODES.has(merged.courseMode) ? merged.courseMode : DEFAULT_PACER_AUDIO_SETTINGS.courseMode,
     cueFrequency: CUE_FREQUENCIES.has(merged.cueFrequency) ? merged.cueFrequency : DEFAULT_PACER_AUDIO_SETTINGS.cueFrequency,
-    outBackSegmentMeters: OUT_BACK_SEGMENTS.has(segment) ? segment : DEFAULT_PACER_AUDIO_SETTINGS.outBackSegmentMeters,
-    cueIntensity: CUE_INTENSITIES.has(merged.cueIntensity) ? merged.cueIntensity : DEFAULT_PACER_AUDIO_SETTINGS.cueIntensity,
-    audioFocus: AUDIO_FOCUS_MODES.has(merged.audioFocus) ? merged.audioFocus : DEFAULT_PACER_AUDIO_SETTINGS.audioFocus,
-    signalSound: SIGNAL_SOUNDS.has(merged.signalSound) ? merged.signalSound : DEFAULT_PACER_AUDIO_SETTINGS.signalSound,
     vibration: Boolean(merged.vibration),
   };
 }
@@ -108,8 +87,7 @@ export function createPacerCueSchedule(goalSeconds, settings = {}) {
     const lapDistanceMeters = distanceMeters % PACER_TRACK_LAP_METERS || PACER_TRACK_LAP_METERS;
     const percent = Math.round(ratio * 100);
     const turn = normalized.courseMode === 'out-back'
-      && distanceMeters < PACER_TOTAL_DISTANCE_METERS
-      && distanceMeters % normalized.outBackSegmentMeters === 0;
+      && distanceMeters === PACER_TOTAL_DISTANCE_METERS / 2;
 
     return {
       atMs: Math.round(targetSeconds * 1000),
@@ -151,7 +129,6 @@ export function formatCueText(cue, settings = {}) {
 export class PacerAudioController {
   constructor({ root = globalThis } = {}) {
     this.root = root;
-    this.audioContext = null;
     this.goalSeconds = null;
     this.lastCueIndex = -1;
     this.running = false;
@@ -182,9 +159,6 @@ export class PacerAudioController {
       goalSeconds: this.goalSeconds,
       lastCueIndex: this.lastCueIndex,
       running: this.running,
-      cueIntensity: this.settings.cueIntensity,
-      audioFocus: this.settings.audioFocus,
-      signalSound: this.settings.signalSound,
       vibration: this.settings.vibration,
       wakeLockActive: Boolean(this.wakeLock),
     };
@@ -272,48 +246,20 @@ export class PacerAudioController {
   }
 
   armAudioFromUserGesture({ cue = 'prime', testCue = null } = {}) {
-    this.prepareCueAudioSession(this.settings);
-    const hasContext = this.ensureAudioContext();
-    this.resumeAudioContext();
-    if (hasContext) this.primeAudioContext();
+    this.prepareCueAudioSession();
 
     if (cue === 'start') this.playStartCue();
     else if (cue === 'test' && testCue) this.playCue(testCue, this.settings);
     else if (cue === 'prime') this.primeAudibleCue();
 
-    return hasContext;
+    return true;
   }
 
   async unlockAudio() {
     const hooks = this.hooks();
-    this.prepareCueAudioSession(this.settings);
+    this.prepareCueAudioSession();
     if (hooks?.unlockAudio) return hooks.unlockAudio();
-
-    const hasContext = this.ensureAudioContext();
-    const resumed = await this.resumeAudioContext();
-    if (hasContext) this.primeAudioContext();
-    return resumed;
-  }
-
-  ensureAudioContext() {
-    const hooks = this.hooks();
-    if (hooks?.ensureAudioContext) return hooks.ensureAudioContext();
-    const AudioCtor = this.root.AudioContext || this.root.webkitAudioContext;
-    if (!AudioCtor) return false;
-    if (!this.audioContext) this.audioContext = new AudioCtor();
     return true;
-  }
-
-  resumeAudioContext() {
-    const hooks = this.hooks();
-    if (hooks?.resumeAudioContext) return hooks.resumeAudioContext();
-    if (!this.audioContext) return Promise.resolve(false);
-    if (this.audioContext.state !== 'suspended') return Promise.resolve(true);
-    try {
-      return this.audioContext.resume().then(() => true, () => false);
-    } catch {
-      return Promise.resolve(false);
-    }
   }
 
   setAudioSessionType(type) {
@@ -334,19 +280,13 @@ export class PacerAudioController {
     return false;
   }
 
-  audioSessionTypeFor(settings = this.settings) {
-    const normalized = normalizePacerAudioSettings(settings);
-    return AUDIO_SESSION_BY_FOCUS[normalized.audioFocus] || AUDIO_SESSION_BY_FOCUS.mix;
-  }
-
-  prepareCueAudioSession(settings = this.settings) {
+  prepareCueAudioSession() {
     this.clearAudioSessionReleaseTimer();
-    return this.setAudioSessionType(this.audioSessionTypeFor(settings));
+    return this.setAudioSessionType(PACER_AUDIO_SESSION_TYPE);
   }
 
-  cueReleaseDelay(settings = this.settings, cueText = '') {
-    const normalized = normalizePacerAudioSettings(settings);
-    if (!cueText || (normalized.cueStyle === 'beep' && normalized.signalSound !== 'spoken')) return 900;
+  cueReleaseDelay(cueText = '') {
+    if (!cueText) return 900;
     const estimatedSpeechMs = Math.max(1600, Math.min(5000, cueText.length * 70));
     return estimatedSpeechMs;
   }
@@ -372,115 +312,32 @@ export class PacerAudioController {
     this.setAudioSessionType('auto');
   }
 
-  primeAudioContext() {
-    if (!this.audioContext) return false;
-    try {
-      const now = this.audioContext.currentTime;
-      const oscillator = this.audioContext.createOscillator();
-      const gain = this.audioContext.createGain();
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.03);
-      oscillator.connect(gain).connect(this.audioContext.destination);
-      oscillator.start(now);
-      oscillator.stop(now + 0.04);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
   playStartCue() {
     const cue = { kind: 'start', distanceMeters: 0, targetSeconds: 0 };
     const normalized = this.settings;
-    const speechText = this.composedCueSpeech('Pacer started.', cue, normalized);
-    this.prepareCueAudioSession(normalized);
-    this.playSignal(cue, normalized);
-    if (speechText) this.speak(speechText, cue);
+    const speechText = 'Pacer started.';
+    this.prepareCueAudioSession();
+    this.speak(speechText, cue);
     if (normalized.vibration) this.vibrate(cue);
-    this.scheduleAudioSessionRelease(this.cueReleaseDelay(normalized, speechText));
+    this.scheduleAudioSessionRelease(this.cueReleaseDelay(speechText));
     this.status('Pacer audio armed. Keep this screen awake for the most reliable cues.');
   }
 
   primeAudibleCue() {
     const cue = { kind: 'prime', distanceMeters: 0, targetSeconds: 0 };
-    const speechText = this.composedCueSpeech('', cue, this.settings);
-    this.prepareCueAudioSession(this.settings);
-    this.playSignal(cue, this.settings);
-    if (speechText) this.speak(speechText, cue);
-    this.scheduleAudioSessionRelease(this.cueReleaseDelay(this.settings, speechText));
+    const speechText = 'Pacer audio ready.';
+    this.prepareCueAudioSession();
+    this.speak(speechText, cue);
+    this.scheduleAudioSessionRelease(this.cueReleaseDelay(speechText));
   }
 
   playCue(cue, settings) {
     const normalized = normalizePacerAudioSettings(settings);
     const text = formatCueText(cue, normalized);
-    const speechText = this.composedCueSpeech(text, cue, normalized);
-    this.prepareCueAudioSession(normalized);
-    this.playSignal(cue, normalized);
-    if (speechText) this.speak(speechText, cue);
+    this.prepareCueAudioSession();
+    this.speak(text, cue);
     if (normalized.vibration) this.vibrate(cue);
-    this.scheduleAudioSessionRelease(this.cueReleaseDelay(normalized, speechText));
-  }
-
-  wantsSignal(settings = this.settings) {
-    return settings.cueStyle === 'beep' || settings.cueStyle === 'beep-voice';
-  }
-
-  wantsVoice(settings = this.settings) {
-    return settings.cueStyle === 'voice' || settings.cueStyle === 'beep-voice';
-  }
-
-  signalText(cue, hasVoiceText = false) {
-    if (hasVoiceText) return 'Mark.';
-    if (cue?.kind === 'finish') return 'Finish.';
-    if (cue?.kind === 'turn') return 'Turn.';
-    return 'Mark.';
-  }
-
-  composedCueSpeech(text, cue, settings = this.settings) {
-    const normalized = normalizePacerAudioSettings(settings);
-    const parts = [];
-    const hasVoiceText = this.wantsVoice(normalized) && Boolean(text);
-    if (this.wantsSignal(normalized) && normalized.signalSound === 'spoken') parts.push(this.signalText(cue, hasVoiceText));
-    if (hasVoiceText) parts.push(text);
-    return parts.join(' ').trim();
-  }
-
-  playSignal(cue, settings = this.settings) {
-    const normalized = normalizePacerAudioSettings(settings);
-    if (!this.wantsSignal(normalized) || normalized.signalSound !== 'tone') return false;
-    return this.beep(cue);
-  }
-
-  beep(cue) {
-    const hooks = this.hooks();
-    if (hooks?.beep) {
-      hooks.beep(cue);
-      return true;
-    }
-
-    if (!this.audioContext) return false;
-    const now = this.audioContext.currentTime;
-    const profile = {
-      normal: { volume: 0.18, duration: 0.22, gap: 0.07, count: 1 },
-      loud: { volume: 0.36, duration: 0.24, gap: 0.07, count: 1 },
-      max: { volume: 0.64, duration: 0.28, gap: 0.06, count: 1 },
-    }[this.settings.cueIntensity] || { volume: 0.36, duration: 0.24, gap: 0.07, count: 1 };
-    const baseFrequency = cue?.turn ? 740 : cue?.kind === 'finish' ? 880 : 660;
-
-    for (let i = 0; i < profile.count; i += 1) {
-      const oscillator = this.audioContext.createOscillator();
-      const gain = this.audioContext.createGain();
-      const start = now + i * (profile.duration + profile.gap);
-      oscillator.type = cue?.kind === 'finish' ? 'triangle' : 'square';
-      oscillator.frequency.setValueAtTime(baseFrequency + i * 60, start);
-      gain.gain.setValueAtTime(0.0001, start);
-      gain.gain.exponentialRampToValueAtTime(profile.volume, start + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, start + profile.duration);
-      oscillator.connect(gain).connect(this.audioContext.destination);
-      oscillator.start(start);
-      oscillator.stop(start + profile.duration + 0.02);
-    }
-    return true;
+    this.scheduleAudioSessionRelease(this.cueReleaseDelay(text));
   }
 
   vibrate(cue) {
