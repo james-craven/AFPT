@@ -26,8 +26,8 @@ import {
 
 const defaultCardioValue = '20:00'; // fallback before tables load
 const PACE_TRACK = { x: 70, y: 50, w: 200, h: 90, r: 45 };
-const PACE_ROUTE = { startX: 24, endX: 316, y: 128 };
-const PACE_OUT_BACK = { startX: 26, endX: 314, outY: 54, backY: 136 };
+const PACE_ROUTE = { startX: 22, endX: 318, y: 128 };
+const PACE_OUT_BACK = { startX: 24, endX: 316, outY: 48, backY: 146 };
 
 // Per-event value cache — preserves user input across event switches
 const savedEventValues = {
@@ -793,11 +793,12 @@ function paceMarkerLayout(courseMode, t, lapNumber) {
   if (courseMode === 'route') {
     const p = routePoint(t);
     const edgeAnchor = t >= 0.98 ? 'end' : t <= 0.02 ? 'start' : 'middle';
+    const labelAbove = lapNumber % 2 === 1;
     return {
       anchor: edgeAnchor,
-      label: { x: p.x, y: p.y + 27 },
+      label: { x: p.x, y: labelAbove ? p.y - 29 : p.y + 27 },
       point: p,
-      split: { x: p.x, y: p.y + 39 },
+      split: { x: p.x, y: labelAbove ? p.y - 17 : p.y + 39 },
     };
   }
 
@@ -807,9 +808,9 @@ function paceMarkerLayout(courseMode, t, lapNumber) {
     const edgeAnchor = p.x >= PACE_OUT_BACK.endX - 1 ? 'end' : p.x <= PACE_OUT_BACK.startX + 1 ? 'start' : 'middle';
     return {
       anchor: edgeAnchor,
-      label: { x: p.x, y: outbound ? p.y - 20 : p.y + 28 },
+      label: { x: p.x, y: outbound ? p.y - 34 : p.y + 22 },
       point: p,
-      split: { x: p.x, y: outbound ? p.y - 8 : p.y + 40 },
+      split: { x: p.x, y: outbound ? p.y - 22 : p.y + 34 },
     };
   }
 
@@ -859,18 +860,15 @@ function paceCourseCueText(courseMode) {
 function formatPaceCourseEndpoints(courseMode) {
   if (courseMode === 'route') {
     return `<g class="pace-endpoint pace-endpoint--start" aria-hidden="true">
-      <circle cx="${PACE_ROUTE.startX}" cy="${PACE_ROUTE.y}" r="4.5" class="pace-start-dot"/>
-      <text x="${PACE_ROUTE.startX}" y="${PACE_ROUTE.y - 23}" text-anchor="start" class="pace-start-label" font-size="8" letter-spacing="1" font-weight="700">START</text>
+      <circle cx="${PACE_ROUTE.startX}" cy="${PACE_ROUTE.y}" r="7" class="pace-dot--start" fill="url(#pacePlanFinGrad)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+      <text x="${PACE_ROUTE.startX}" y="${PACE_ROUTE.y + 0.5}" text-anchor="middle" dominant-baseline="middle" class="pace-start-text" font-size="6" font-weight="800" letter-spacing="0.4">ST</text>
     </g>`;
   }
 
   if (courseMode === 'out-back') {
     return `<g class="pace-endpoint pace-endpoint--start" aria-hidden="true">
-      <circle cx="${PACE_OUT_BACK.startX}" cy="${PACE_OUT_BACK.outY}" r="4.5" class="pace-start-dot"/>
-      <text x="${PACE_OUT_BACK.startX}" y="${PACE_OUT_BACK.outY - 22}" text-anchor="start" class="pace-start-label" font-size="8" letter-spacing="1" font-weight="700">START</text>
-    </g>
-    <g class="pace-endpoint pace-endpoint--turn" aria-hidden="true">
-      <text x="${PACE_OUT_BACK.endX}" y="${PACE_OUT_BACK.outY - 34}" text-anchor="end" class="pace-turn-label" font-size="8" letter-spacing="1" font-weight="700">TURN</text>
+      <circle cx="${PACE_OUT_BACK.startX}" cy="${PACE_OUT_BACK.outY}" r="7" class="pace-dot--start" fill="url(#pacePlanFinGrad)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+      <text x="${PACE_OUT_BACK.startX}" y="${PACE_OUT_BACK.outY + 0.5}" text-anchor="middle" dominant-baseline="middle" class="pace-start-text" font-size="6" font-weight="800" letter-spacing="0.4">ST</text>
     </g>`;
   }
 
@@ -879,20 +877,23 @@ function formatPaceCourseEndpoints(courseMode) {
 
 function paceGoalLayout(courseMode) {
   if (courseMode === 'route') {
-    return { x: 118, y: 48, w: 104, h: 44, goalY: 61, timeY: 86, timeSize: 25 };
+    return { goalY: 42, timeY: 67, timeSize: 24, buttonX: 140, buttonY: 81, buttonW: 60, buttonH: 22, buttonTextY: 96 };
   }
   if (courseMode === 'out-back') {
-    return { x: 118, y: 78, w: 104, h: 36, goalY: 89, timeY: 111, timeSize: 23 };
+    return { goalY: 77, timeY: 102, timeSize: 23, buttonX: 136, buttonY: 113, buttonW: 68, buttonH: 22, buttonTextY: 128 };
   }
-  return { x: 118, y: 74, w: 104, h: 50, goalY: 87, timeY: 113, timeSize: 26 };
+  return { goalY: 78, timeY: 103, timeSize: 25, buttonX: 136, buttonY: 115, buttonW: 68, buttonH: 22, buttonTextY: 130 };
 }
 
 function formatPaceGoalButton(courseMode, totalStr) {
   const layout = paceGoalLayout(courseMode);
-  return `<g class="pace-pacer-toggle" data-pacer-toggle role="button" tabindex="0" focusable="true" aria-label="Start personal pacer for ${totalStr} goal">
-          <rect x="${layout.x}" y="${layout.y}" width="${layout.w}" height="${layout.h}" rx="15" class="pace-pacer-hit"/>
+  return `<g class="pace-goal-display" aria-hidden="true">
           <text x="170" y="${layout.goalY}" text-anchor="middle" class="pace-goal-text" font-size="9" letter-spacing="2">GOAL</text>
           <text x="170" y="${layout.timeY}" text-anchor="middle" class="pace-time-text" font-size="${layout.timeSize}" font-weight="800" letter-spacing="-0.5" font-variant-numeric="tabular-nums">${totalStr}</text>
+        </g>
+        <g class="pace-pacer-toggle" data-pacer-toggle role="button" tabindex="0" focusable="true" aria-label="Start personal pacer for ${totalStr} goal">
+          <rect x="${layout.buttonX}" y="${layout.buttonY}" width="${layout.buttonW}" height="${layout.buttonH}" rx="11" class="pace-pacer-hit"/>
+          <text x="170" y="${layout.buttonTextY}" text-anchor="middle" class="pace-pacer-button-text" font-size="9" font-weight="900" letter-spacing="1.4">START</text>
         </g>`;
 }
 
@@ -1059,7 +1060,7 @@ function formatPacePlan(totalSeconds, lapCount, lapSec, previousCourseMode = nul
         ${markers}
       </svg>
     </div>
-    <p class="pace-pacer-status" data-pacer-status>Tap goal time to start pacer.</p>
+    <p class="pace-pacer-status" data-pacer-status>Tap START to start pacer.</p>
     ${formatPaceAudioControls(paceAudioSettings)}
   </div>`;
 }
@@ -1137,14 +1138,14 @@ function updatePacePacerDisplay(now = performance.now()) {
       : `Start personal pacer for ${secondsToTimeString(goalSeconds)} goal`);
 
   if (pacePacer.finished) {
-    status.textContent = `Goal reached at ${secondsToTimeString(goalSeconds)}. Tap goal time to restart.`;
+    status.textContent = `Goal reached at ${secondsToTimeString(goalSeconds)}. Tap START to restart.`;
     paceAudioController.stop({ cancelSpeech: false });
   } else if (pacePacer.active) {
     status.textContent = `Pacer ${secondsToTimeString(elapsedSeconds)} / ${secondsToTimeString(goalSeconds)} · Lap ${currentLap} of ${lapCount}`;
   } else if (pacePacer.elapsedMs > 0) {
-    status.textContent = `Paused at ${secondsToTimeString(elapsedSeconds)} · Lap ${currentLap} of ${lapCount}. Tap goal time to resume.`;
+    status.textContent = `Paused at ${secondsToTimeString(elapsedSeconds)} · Lap ${currentLap} of ${lapCount}. Tap START to resume.`;
   } else {
-    status.textContent = 'Tap goal time to start pacer.';
+    status.textContent = 'Tap START to start pacer.';
   }
 
   if (pacePacer.active && !pacePacer.rafId) {

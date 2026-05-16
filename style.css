@@ -3270,6 +3270,18 @@ select {
   transform-origin: center;
 }
 
+.lap-fitness[data-course="track"][data-prev-course="route"] .pace-track-ring,
+.lap-fitness[data-course="track"][data-prev-course="out-back"] .pace-track-ring {
+  animation: pace-track-expand 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.lap-fitness[data-course="track"][data-prev-course="route"] .pace-track-dash,
+.lap-fitness[data-course="track"][data-prev-course="out-back"] .pace-track-dash {
+  animation: pace-fade-in 0.48s ease-out 0.1s both;
+}
+
 .pace-route-line,
 .pace-outback-line {
   animation: pace-line-draw 0.46s ease-out both;
@@ -3295,6 +3307,19 @@ select {
   animation: pace-marker-rise 0.28s ease-out both;
 }
 
+.lap-fitness[data-course="route"] .pace-endpoint,
+.lap-fitness[data-course="out-back"] .pace-endpoint,
+.lap-fitness[data-course="route"] .pace-goal-display,
+.lap-fitness[data-course="out-back"] .pace-goal-display,
+.lap-fitness[data-course="track"][data-prev-course="route"] .pace-goal-display,
+.lap-fitness[data-course="track"][data-prev-course="out-back"] .pace-goal-display,
+.lap-fitness[data-course="route"] .pace-pacer-toggle,
+.lap-fitness[data-course="out-back"] .pace-pacer-toggle,
+.lap-fitness[data-course="track"][data-prev-course="route"] .pace-pacer-toggle,
+.lap-fitness[data-course="track"][data-prev-course="out-back"] .pace-pacer-toggle {
+  animation: pace-control-settle 0.32s ease-out both;
+}
+
 .lap-fitness[data-course="route"] .pace-marker:nth-of-type(odd),
 .lap-fitness[data-course="out-back"] .pace-marker:nth-of-type(odd) {
   animation-delay: 0.04s;
@@ -3308,6 +3333,20 @@ select {
   to {
     opacity: 0;
     transform: scaleY(0.08);
+  }
+}
+
+@keyframes pace-track-expand {
+  from {
+    opacity: 0.2;
+    transform: scaleY(0.08);
+  }
+  60% {
+    opacity: 0.85;
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
   }
 }
 
@@ -3342,6 +3381,17 @@ select {
   }
 }
 
+@keyframes pace-control-settle {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .pace-goal-text {
   fill: var(--afpt-ink-dim);
   font-family: inherit;
@@ -3350,6 +3400,10 @@ select {
 .pace-time-text {
   fill: var(--afpt-ink);
   font-family: inherit;
+}
+
+.pace-goal-display {
+  pointer-events: none;
 }
 
 .pace-pacer-toggle {
@@ -3363,26 +3417,20 @@ select {
 }
 
 .pace-pacer-hit {
-  fill: transparent;
+  fill: var(--afpt-accent);
   pointer-events: all;
-}
-
-.lap-fitness[data-course="route"] .pace-pacer-hit,
-.lap-fitness[data-course="out-back"] .pace-pacer-hit {
-  fill: color-mix(in srgb, var(--afpt-panel) 82%, transparent);
-  stroke: color-mix(in srgb, var(--afpt-border) 85%, transparent);
+  stroke: color-mix(in srgb, var(--afpt-accent) 54%, transparent);
   stroke-width: 1;
 }
 
-.pace-start-dot {
-  fill: var(--afpt-panel);
-  stroke: var(--afpt-accent);
-  stroke-width: 1.5;
+.pace-pacer-button-text {
+  fill: var(--afpt-bg);
+  font-family: inherit;
+  pointer-events: none;
 }
 
-.pace-start-label,
-.pace-turn-label {
-  fill: var(--afpt-ink-dim);
+.pace-start-text {
+  fill: #1a0a2a;
   font-family: inherit;
 }
 
@@ -3576,11 +3624,13 @@ select {
 
 .pace-marker .pace-dot,
 .pace-marker .pace-dot--finish,
+.pace-endpoint .pace-dot--start,
 .pace-marker .pace-label,
 .pace-marker .pace-split,
 .pace-marker .pace-fin-label,
 .pace-marker .pace-fin-split,
-.pace-marker .pace-fin-text {
+.pace-marker .pace-fin-text,
+.pace-endpoint .pace-start-text {
   transition: fill 0.22s ease, stroke 0.22s ease, filter 0.22s ease;
 }
 

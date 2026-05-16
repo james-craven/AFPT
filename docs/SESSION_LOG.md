@@ -410,3 +410,12 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added explicit START labels for linear courses, moved Route finish to the right endpoint, and moved Out/Back finish to the return lane.
 - Removed the Out/Back connector curve and widened the spacing between outbound and return lanes so the goal time sits cleanly between them.
 - Added browser assertions for route/out-back start, finish, goal placement, lane spacing, and connector removal.
+
+## Pace Plan Course Interaction Polish
+
+- Replaced floating linear-course START labels with inline start markers that visually match the finish marker.
+- Split the pace-plan goal time from the pacer control so GOAL is display-only and a separate START button begins/resumes the pacer.
+- Restored staggered Route lap labels so late route markers do not overlap at the finish end.
+- Balanced Out/Back marker label offsets so top-lane and bottom-lane labels sit the same distance from their lanes.
+- Added a return-to-track animation so switching back from Route or Out/Back no longer snaps directly to the oval.
+- Added browser assertions for separate START controls, inline start markers, route label staggering, out/back label symmetry, and track return animation.
