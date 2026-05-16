@@ -2526,6 +2526,10 @@ select {
   letter-spacing: 3px;
 }
 
+:root[data-theme="stencil"] .altitude-row {
+  padding: 16px 0px;
+}
+
 /* Active chip: filled accent block with clip-path cut corners */
 :root[data-theme="stencil"] .component-chip.chip--active {
   background: var(--afpt-accent);
