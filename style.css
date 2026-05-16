@@ -625,8 +625,8 @@ select {
 .component-strip::after {
   content: '';
   position: absolute;
-  left: 16px;
-  right: 16px;
+  left: 0px;
+  right: 0px;
   bottom: -1px;
   height: 1px;
   background: var(--afpt-border);
@@ -685,11 +685,11 @@ select {
 /* ─── Editors container ────────────────────────────────────────── */
 .editors-container {
   /* no flex: 1 — editors take only the space they need */
-  padding: 0 16px 14px;
+  padding: 0px 16px;
 }
 
 .editor-panel {
-  padding: 16px 16px 24px;
+  padding: 16px 0px 0px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -967,7 +967,7 @@ select {
 }
 
 #body-editor {
-  padding-bottom: 14px;
+  padding-bottom: 0px;
 }
 
 #body-txt-p {
@@ -987,8 +987,8 @@ select {
   }
 
   .editor-panel {
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 0px;
+    padding-right: 0px;
   }
 
   .editor-event-row {
@@ -1408,7 +1408,7 @@ select {
 /* ─── Lap display — pace plan tile grid ────────────────────────── */
 .lap-display {
   border-top: 1px solid var(--afpt-border);
-  padding-top: 2px;
+  padding: 14px 0px;
 }
 
 .lap-display:empty {
@@ -2573,8 +2573,11 @@ select {
 :root[data-theme="blues"] .component-strip {
   background: none;
   gap: 8px;
-  padding: 12px 12px 0;
+  padding: 0px;
   border-bottom: none;
+}
+:root[data-theme="blues"] .component-strip::after {
+  display: none;
 }
 :root[data-theme="blues"] .component-chip {
   border-radius: 8px;
@@ -2599,7 +2602,7 @@ select {
 
 /* Blues score section: label LEFT, ring CENTER, status RIGHT */
 :root[data-theme="blues"] .score-section {
-  padding: 16px;
+  padding: 18px 16px 14px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
@@ -2795,7 +2798,7 @@ select {
 :root[data-theme="blues"] .score-section {
   background: transparent;
   border-bottom: none;
-  padding: 8px 16px 16px;
+  padding: 8px 16px 8px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
@@ -3175,7 +3178,7 @@ select {
 /* ─── Pace plan section wrapper ────────────────────────────────── */
 /* PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme. */
 .pace-plan-section {
-  padding: 12px 16px 0;
+  padding: 0px 16px 0px;
 }
 
 .pace-plan-empty {
