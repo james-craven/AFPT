@@ -548,6 +548,50 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForTimeout(50);
   const runAfterHamrRoundTrip = await page.evaluate(() => window.afptApp.getState().cardio.value);
   assert.equal(runAfterHamrRoundTrip, '14:00', '2-mile run value preserved after HAMR round-trip');
+
+  // 6d. Pace plan personal pacer starts from the visible goal time without changing cardio state.
+  await page.evaluate(() => {
+    const minEl = document.getElementById('run-mintxt');
+    const secEl = document.getElementById('run-sectxt');
+    if (minEl) minEl.value = '0';
+    if (secEl) {
+      secEl.value = '08';
+      secEl.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  });
+  await page.waitForFunction(() => document.querySelector('[data-pacer-toggle]') && document.querySelector('[data-pacer-runner]'));
+  const pacerInitial = await page.locator('[data-pacer-runner]').evaluate((element) => element.getAttribute('transform'));
+  await page.locator('[data-pacer-toggle]').click();
+  await page.waitForFunction(() => document.querySelector('.lap-fitness')?.dataset.pacerState === 'running');
+  await page.waitForTimeout(250);
+  const pacerStarted = await page.evaluate((initialTransform) => {
+    const runner = document.querySelector('[data-pacer-runner]');
+    const status = document.querySelector('[data-pacer-status]');
+    const plan = document.querySelector('.lap-fitness');
+    return {
+      transformChanged: runner?.getAttribute('transform') !== initialTransform,
+      statusText: status?.textContent ?? '',
+      stateName: plan?.dataset.pacerState ?? '',
+      cardioValue: window.afptApp.getState().cardio.value,
+    };
+  }, pacerInitial);
+  assert.equal(pacerStarted.stateName, 'running', 'pace plan personal pacer enters running state');
+  assert.equal(pacerStarted.transformChanged, true, 'pace plan runner moves after start');
+  assert.match(pacerStarted.statusText, /Pacer/, 'pace plan status reports elapsed pacer time');
+  assert.equal(pacerStarted.cardioValue, '0:08', 'starting pacer does not change cardio value');
+  await page.locator('[data-pacer-toggle]').click();
+  await page.waitForFunction(() => ['paused', 'finished'].includes(document.querySelector('.lap-fitness')?.dataset.pacerState));
+  await page.evaluate(() => {
+    const minEl = document.getElementById('run-mintxt');
+    const secEl = document.getElementById('run-sectxt');
+    if (minEl) minEl.value = '14';
+    if (secEl) {
+      secEl.value = '00';
+      secEl.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  });
+  await page.waitForFunction(() => window.afptApp.getState().cardio.value === '14:00');
+
   await page.locator('#summary-strength').click();
   await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
 

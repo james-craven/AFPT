@@ -18,6 +18,7 @@ import { eventDefaults } from './state.mjs';
 // --- State ---
 
 const defaultCardioValue = '20:00'; // fallback before tables load
+const PACE_TRACK = { x: 70, y: 50, w: 200, h: 90, r: 45 };
 
 // Per-event value cache — preserves user input across event switches
 const savedEventValues = {
@@ -48,6 +49,15 @@ let tables = {};
 let altitudeTables = {};
 let ready = false;
 let loadError = null;
+
+let pacePacer = {
+  active: false,
+  elapsedMs: 0,
+  finished: false,
+  goalSeconds: null,
+  rafId: 0,
+  startedAt: 0,
+};
 
 // --- DOM helpers ---
 
@@ -718,19 +728,24 @@ function stadiumPoint(t, x, y, w, h, r, expand) {
   return { x: x + r + s, y: y - expand };
 }
 
+function pacePoint(t, expand = 0) {
+  return stadiumPoint(t, PACE_TRACK.x, PACE_TRACK.y, PACE_TRACK.w, PACE_TRACK.h, PACE_TRACK.r, expand);
+}
+
 // PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme.
 // Canonical pace plan — used on all themes. SVG uses CSS classes for token-based theming.
 // viewBox 0 0 340 190, rect x=70 y=50 w=200 h=90 rx=45 (exact mock-fitness.jsx params).
 function formatPacePlan(totalSeconds, lapCount, lapSec) {
   const totalStr = secondsToTimeString(totalSeconds);
   const lapTimeStr = secondsToTimeString(lapSec);
+  const startPoint = pacePoint(0);
   let markers = '';
 
   for (let i = 0; i < lapCount; i++) {
     const n = i + 1;
     const t = (n / lapCount) % 1; // lap n=lapCount → t=0 → top-center = FINISH
-    const p = stadiumPoint(t, 70, 50, 200, 90, 45, 0);
-    const lp = stadiumPoint(t, 70, 50, 200, 90, 45, 22);
+    const p = pacePoint(t, 0);
+    const lp = pacePoint(t, 22);
     const isFinish = i === lapCount - 1;
     const anchor = (t > 0.05 && t < 0.45) ? 'start' : (t > 0.55 && t < 0.95) ? 'end' : 'middle';
     const dx = anchor === 'start' ? 4 : anchor === 'end' ? -4 : 0;
@@ -770,12 +785,127 @@ function formatPacePlan(totalSeconds, lapCount, lapSec) {
         </defs>
         <rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-ring" stroke-width="14"/>
         <rect x="70" y="50" width="200" height="90" rx="45" fill="none" class="pace-track-dash" stroke-width="1" stroke-dasharray="2 6"/>
-        <text x="170" y="87" text-anchor="middle" class="pace-goal-text" font-size="9" letter-spacing="2">GOAL</text>
-        <text x="170" y="113" text-anchor="middle" class="pace-time-text" font-size="26" font-weight="800" letter-spacing="-0.5" font-variant-numeric="tabular-nums">${totalStr}</text>
+        <g class="pace-pacer-toggle" data-pacer-toggle role="button" tabindex="0" focusable="true" aria-label="Start personal pacer for ${totalStr} goal">
+          <rect x="118" y="74" width="104" height="50" rx="15" class="pace-pacer-hit"/>
+          <text x="170" y="87" text-anchor="middle" class="pace-goal-text" font-size="9" letter-spacing="2">GOAL</text>
+          <text x="170" y="113" text-anchor="middle" class="pace-time-text" font-size="26" font-weight="800" letter-spacing="-0.5" font-variant-numeric="tabular-nums">${totalStr}</text>
+        </g>
+        <g class="pace-pacer-runner" data-pacer-runner transform="translate(${startPoint.x.toFixed(2)} ${startPoint.y.toFixed(2)})" aria-hidden="true">
+          <circle class="pace-pacer-halo" r="10"/>
+          <circle class="pace-runner-head" cx="0" cy="-6" r="2.3"/>
+          <path class="pace-runner-body" d="M0 -3 L0 2 M0 -1 L-5 2 M0 -1 L5 -3 M0 2 L-4 7 M0 2 L5 6"/>
+        </g>
         ${markers}
       </svg>
     </div>
+    <p class="pace-pacer-status" data-pacer-status>Tap goal time to start pacer.</p>
   </div>`;
+}
+
+function cancelPacePacerFrame() {
+  if (!pacePacer.rafId) return;
+  cancelAnimationFrame(pacePacer.rafId);
+  pacePacer.rafId = 0;
+}
+
+function resetPacePacer(goalSeconds = null) {
+  cancelPacePacerFrame();
+  pacePacer = {
+    active: false,
+    elapsedMs: 0,
+    finished: false,
+    goalSeconds,
+    rafId: 0,
+    startedAt: 0,
+  };
+}
+
+function currentPacePacerElapsedMs(now = performance.now()) {
+  return pacePacer.elapsedMs + (pacePacer.active ? now - pacePacer.startedAt : 0);
+}
+
+function updatePacePacerDisplay(now = performance.now()) {
+  const lapDisplay = byId('run-lap-times');
+  const runner = lapDisplay?.querySelector('[data-pacer-runner]');
+  const status = lapDisplay?.querySelector('[data-pacer-status]');
+  const toggle = lapDisplay?.querySelector('[data-pacer-toggle]');
+  const plan = lapDisplay?.querySelector('.lap-fitness');
+  const goalSeconds = pacePacer.goalSeconds ?? toSeconds(state.cardio.value);
+  if (!lapDisplay || !runner || !status || !toggle || !plan || !Number.isFinite(goalSeconds) || goalSeconds <= 0) return;
+
+  const goalMs = goalSeconds * 1000;
+  const elapsedMs = Math.min(goalMs, currentPacePacerElapsedMs(now));
+  const elapsedSeconds = Math.floor(elapsedMs / 1000);
+  const progress = goalMs > 0 ? elapsedMs / goalMs : 0;
+  const p = pacePoint(progress % 1);
+  const p2 = pacePoint((progress + 0.002) % 1);
+  const angle = Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI;
+
+  if (elapsedMs >= goalMs && pacePacer.active) {
+    pacePacer.active = false;
+    pacePacer.finished = true;
+    pacePacer.elapsedMs = goalMs;
+    cancelPacePacerFrame();
+  }
+
+  runner.setAttribute('transform', `translate(${p.x.toFixed(2)} ${p.y.toFixed(2)}) rotate(${angle.toFixed(1)})`);
+  const stateName = pacePacer.finished ? 'finished' : pacePacer.active ? 'running' : pacePacer.elapsedMs > 0 ? 'paused' : 'idle';
+  plan.dataset.pacerState = stateName;
+  toggle.setAttribute('aria-label', pacePacer.active
+    ? 'Pause personal pacer'
+    : pacePacer.elapsedMs > 0 && !pacePacer.finished
+      ? 'Resume personal pacer'
+      : `Start personal pacer for ${secondsToTimeString(goalSeconds)} goal`);
+
+  if (pacePacer.finished) {
+    status.textContent = `Goal reached at ${secondsToTimeString(goalSeconds)}. Tap goal time to restart.`;
+  } else if (pacePacer.active) {
+    status.textContent = `Pacer ${secondsToTimeString(elapsedSeconds)} / ${secondsToTimeString(goalSeconds)}`;
+  } else if (pacePacer.elapsedMs > 0) {
+    status.textContent = `Paused at ${secondsToTimeString(elapsedSeconds)}. Tap goal time to resume.`;
+  } else {
+    status.textContent = 'Tap goal time to start pacer.';
+  }
+
+  if (pacePacer.active && !pacePacer.rafId) {
+    pacePacer.rafId = requestAnimationFrame((nextNow) => {
+      pacePacer.rafId = 0;
+      updatePacePacerDisplay(nextNow);
+    });
+  }
+}
+
+function togglePacePacer() {
+  const goalSeconds = toSeconds(state.cardio.value);
+  if (state.cardio.exempt || state.cardio.event !== 'two-mile-run' || !Number.isFinite(goalSeconds) || goalSeconds <= 0) return;
+  const now = performance.now();
+
+  if (pacePacer.active) {
+    pacePacer.elapsedMs = currentPacePacerElapsedMs(now);
+    pacePacer.active = false;
+    cancelPacePacerFrame();
+    updatePacePacerDisplay(now);
+    return;
+  }
+
+  if (pacePacer.goalSeconds !== goalSeconds || pacePacer.finished) {
+    resetPacePacer(goalSeconds);
+  }
+
+  pacePacer.goalSeconds = goalSeconds;
+  pacePacer.active = true;
+  pacePacer.finished = false;
+  pacePacer.startedAt = now;
+  updatePacePacerDisplay(now);
+}
+
+function syncPacePacerForGoal(goalSeconds) {
+  if (pacePacer.goalSeconds !== null && pacePacer.goalSeconds !== goalSeconds) {
+    resetPacePacer(goalSeconds);
+  } else if (pacePacer.goalSeconds === null) {
+    pacePacer.goalSeconds = goalSeconds;
+  }
+  updatePacePacerDisplay();
 }
 
 // PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme.
@@ -784,18 +914,21 @@ function renderPacePlan() {
   if (!lapDisplay) return;
   const section = lapDisplay.closest('.pace-plan-section');
   if (state.cardio.exempt || state.cardio.event !== 'two-mile-run') {
+    resetPacePacer(null);
     lapDisplay.innerHTML = '';
     if (section) section.hidden = true;
     return;
   }
   const curSec = toSeconds(state.cardio.value);
   if (!Number.isFinite(curSec) || curSec <= 0) {
+    resetPacePacer(null);
     lapDisplay.innerHTML = '';
     if (section) section.hidden = true;
     return;
   }
   if (section) section.hidden = false;
   lapDisplay.innerHTML = formatPacePlan(curSec, 8, Math.round(curSec / 8));
+  syncPacePacerForGoal(curSec);
 }
 
 // --- Tick positioning ---
@@ -1723,6 +1856,20 @@ function bindEvents() {
         sel.dispatchEvent(new Event('change', { bubbles: true }));
       }
     });
+  });
+
+  // --- Pace plan personal pacer ---
+
+  byId('run-lap-times')?.addEventListener('click', (event) => {
+    const target = event.target instanceof Element ? event.target.closest('[data-pacer-toggle]') : null;
+    if (target) togglePacePacer();
+  });
+
+  byId('run-lap-times')?.addEventListener('keydown', (event) => {
+    const target = event.target instanceof Element ? event.target.closest('[data-pacer-toggle]') : null;
+    if (!target || (event.key !== 'Enter' && event.key !== ' ')) return;
+    event.preventDefault();
+    togglePacePacer();
   });
 
   // --- Slider step buttons (−/+ flanking each slider) ---
