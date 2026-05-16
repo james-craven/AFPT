@@ -10,11 +10,14 @@ export const DEFAULT_PACER_AUDIO_SETTINGS = Object.freeze({
   courseMode: 'track',
   cueFrequency: '100m',
   outBackSegmentMeters: 1600,
+  cueIntensity: 'loud',
+  vibration: false,
 });
 
 const CUE_STYLES = new Set(['beep-voice', 'beep', 'voice']);
 const COURSE_MODES = new Set(['track', 'route', 'out-back', 'percent']);
 const CUE_FREQUENCIES = new Set(['100m', '200m', '400m', 'quarter']);
+const CUE_INTENSITIES = new Set(['normal', 'loud', 'max']);
 const OUT_BACK_SEGMENTS = new Set([100, 200, 400, 800, 1600]);
 
 function safeStorage() {
@@ -35,6 +38,8 @@ export function normalizePacerAudioSettings(settings = {}) {
     courseMode: COURSE_MODES.has(merged.courseMode) ? merged.courseMode : DEFAULT_PACER_AUDIO_SETTINGS.courseMode,
     cueFrequency: CUE_FREQUENCIES.has(merged.cueFrequency) ? merged.cueFrequency : DEFAULT_PACER_AUDIO_SETTINGS.cueFrequency,
     outBackSegmentMeters: OUT_BACK_SEGMENTS.has(segment) ? segment : DEFAULT_PACER_AUDIO_SETTINGS.outBackSegmentMeters,
+    cueIntensity: CUE_INTENSITIES.has(merged.cueIntensity) ? merged.cueIntensity : DEFAULT_PACER_AUDIO_SETTINGS.cueIntensity,
+    vibration: Boolean(merged.vibration),
   };
 }
 
@@ -164,6 +169,8 @@ export class PacerAudioController {
       goalSeconds: this.goalSeconds,
       lastCueIndex: this.lastCueIndex,
       running: this.running,
+      cueIntensity: this.settings.cueIntensity,
+      vibration: this.settings.vibration,
       wakeLockActive: Boolean(this.wakeLock),
     };
   }
@@ -261,6 +268,7 @@ export class PacerAudioController {
     const text = formatCueText(cue, normalized);
     if (normalized.cueStyle === 'beep' || normalized.cueStyle === 'beep-voice') this.beep(cue);
     if (normalized.cueStyle === 'voice' || normalized.cueStyle === 'beep-voice') this.speak(text, cue);
+    if (normalized.vibration) this.vibrate(cue);
   }
 
   beep(cue) {
@@ -271,18 +279,42 @@ export class PacerAudioController {
     }
 
     if (!this.audioContext) return false;
-    const oscillator = this.audioContext.createOscillator();
-    const gain = this.audioContext.createGain();
     const now = this.audioContext.currentTime;
-    oscillator.type = cue?.kind === 'finish' ? 'triangle' : 'sine';
-    oscillator.frequency.setValueAtTime(cue?.turn ? 740 : cue?.kind === 'finish' ? 880 : 660, now);
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.16, now + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-    oscillator.connect(gain).connect(this.audioContext.destination);
-    oscillator.start(now);
-    oscillator.stop(now + 0.24);
+    const profile = {
+      normal: { volume: 0.18, duration: 0.22, gap: 0.07, count: 1 },
+      loud: { volume: 0.36, duration: 0.24, gap: 0.07, count: cue?.kind === 'finish' ? 3 : 2 },
+      max: { volume: 0.64, duration: 0.28, gap: 0.06, count: cue?.kind === 'finish' ? 4 : 3 },
+    }[this.settings.cueIntensity] || { volume: 0.36, duration: 0.24, gap: 0.07, count: 2 };
+    const baseFrequency = cue?.turn ? 740 : cue?.kind === 'finish' ? 880 : 660;
+
+    for (let i = 0; i < profile.count; i += 1) {
+      const oscillator = this.audioContext.createOscillator();
+      const gain = this.audioContext.createGain();
+      const start = now + i * (profile.duration + profile.gap);
+      oscillator.type = cue?.kind === 'finish' ? 'triangle' : 'square';
+      oscillator.frequency.setValueAtTime(baseFrequency + i * 60, start);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(profile.volume, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + profile.duration);
+      oscillator.connect(gain).connect(this.audioContext.destination);
+      oscillator.start(start);
+      oscillator.stop(start + profile.duration + 0.02);
+    }
     return true;
+  }
+
+  vibrate(cue) {
+    const hooks = this.hooks();
+    const pattern = cue?.kind === 'finish' ? [180, 80, 180, 80, 260] : cue?.turn ? [220, 80, 220] : [160];
+    if (hooks?.vibrate) {
+      hooks.vibrate(pattern, cue);
+      return true;
+    }
+    try {
+      return Boolean(this.root.navigator?.vibrate?.(pattern));
+    } catch {
+      return false;
+    }
   }
 
   speak(text, cue) {

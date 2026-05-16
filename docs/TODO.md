@@ -46,6 +46,7 @@
 - Add a dev-only layout variant picker after the shared render/action contract exists.
 - Add persistent user layout customization after all theme presets pass parity.
 - Try replacing the inline pace-plan audio controls with a compact settings icon/modal after the audio cue workflow is proven on-device.
+- Before public distribution, add in-app links for Privacy Policy, Terms of Use, Disclaimer, Support, and the marketing/legal launch checklist.
 - Move legacy standards out of `main2.js` into versioned data.
 - Add a review-first standards import workflow for PDFs/images.
 - Add more browser regression cases for exemptions, walk scoring, plank time entry, and alternate component combinations.

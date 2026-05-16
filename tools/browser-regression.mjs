@@ -557,6 +557,13 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(pacerAudioDefaults.controlsVisible, true, 'pacer audio controls render inside pace plan');
   assert.equal(pacerAudioDefaults.enabled, false, 'pacer audio is off by default');
   assert.equal(pacerAudioDefaults.settings.cueStyle, 'beep-voice', 'pacer audio default cue style is beep + voice');
+  assert.equal(pacerAudioDefaults.settings.cueIntensity, 'loud', 'pacer audio defaults to loud cue intensity');
+  assert.equal(pacerAudioDefaults.settings.vibration, false, 'pacer audio vibration is off by default');
+  assert.match(
+    await page.locator('.pace-audio-note').innerText(),
+    /keep this screen awake/i,
+    'pacer audio explains screen/volume reliability',
+  );
 
   const scoreBeforeAudioSettings = await page.evaluate(() => window.afptApp.getScoreResult()?.total);
   await page.locator('[data-pacer-audio-field="enabled"]').check();
@@ -564,6 +571,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.locator('[data-pacer-audio-field="courseMode"]').selectOption('out-back');
   await page.locator('[data-pacer-audio-field="cueFrequency"]').selectOption('200m');
   await page.locator('[data-pacer-audio-field="outBackSegmentMeters"]').selectOption('800');
+  await page.locator('[data-pacer-audio-field="cueIntensity"]').selectOption('max');
+  await page.locator('[data-pacer-audio-field="vibration"]').check();
   await page.waitForFunction(() => window.afptApp.getPacerAudioSettings().courseMode === 'out-back');
   assert.equal(
     await page.evaluate(() => window.afptApp.getScoreResult()?.total),
@@ -583,6 +592,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     courseMode: document.querySelector('[data-pacer-audio-field="courseMode"]')?.value,
     cueFrequency: document.querySelector('[data-pacer-audio-field="cueFrequency"]')?.value,
     outBackSegmentMeters: document.querySelector('[data-pacer-audio-field="outBackSegmentMeters"]')?.value,
+    cueIntensity: document.querySelector('[data-pacer-audio-field="cueIntensity"]')?.value,
+    vibration: document.querySelector('[data-pacer-audio-field="vibration"]')?.checked,
     settings: window.afptApp.getPacerAudioSettings(),
   }));
   assert.equal(persistedPacerAudio.enabled, true, 'pacer audio enabled setting persists after reload');
@@ -590,6 +601,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(persistedPacerAudio.courseMode, 'out-back', 'pacer audio course mode persists after reload');
   assert.equal(persistedPacerAudio.cueFrequency, '200m', 'pacer audio cue frequency persists after reload');
   assert.equal(persistedPacerAudio.outBackSegmentMeters, '800', 'pacer audio out/back segment persists after reload');
+  assert.equal(persistedPacerAudio.cueIntensity, 'max', 'pacer audio cue intensity persists after reload');
+  assert.equal(persistedPacerAudio.vibration, true, 'pacer audio vibration setting persists after reload');
   assert.equal(persistedPacerAudio.settings.enabled, true, 'pacer audio API reflects persisted enabled setting');
 
   await page.evaluate(() => {
@@ -598,6 +611,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       unlockAudio() { this.events.push({ type: 'unlock' }); return Promise.resolve(true); },
       beep(cue) { this.events.push({ type: 'beep', distanceMeters: cue.distanceMeters }); },
       speak(text) { this.events.push({ type: 'speak', text }); },
+      vibrate(pattern) { this.events.push({ type: 'vibrate', pattern }); },
       cancelSpeech() { this.events.push({ type: 'cancel' }); },
       requestWakeLock() {
         this.events.push({ type: 'wake' });
@@ -609,6 +623,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   });
   await page.locator('[data-pacer-audio-test]').click();
   await page.waitForFunction(() => window.__afptPacerAudioTestHooks?.events?.some((event) => event.type === 'beep'));
+  await page.waitForFunction(() => window.__afptPacerAudioTestHooks?.events?.some((event) => event.type === 'vibrate'));
   assert.match(
     await page.locator('[data-pacer-audio-status]').innerText(),
     /Test cue/i,

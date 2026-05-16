@@ -351,3 +351,10 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added generated beep support, optional speech synthesis, missed-cue coalescing, and graceful screen wake-lock handling.
 - Added pure cue-schedule tests and browser coverage for defaults, persistence, score safety, test cue stubbing, wake-lock request, and audio controller state.
 - Added TODO to later experiment with replacing inline controls with a compact pace-plan settings icon/modal.
+
+## Pacer Audio Hardening and Launch Planning
+
+- Added cue intensity (`normal`, `loud`, `max`) with louder multi-beep patterns to make cues more noticeable over music.
+- Added optional vibration/haptics for browsers/devices that support `navigator.vibrate`.
+- Added inline user guidance to keep the screen awake and test volume with headphones or music before running.
+- Added `docs/MARKETING_LEGAL_LAUNCH_PLAN.md` covering positioning, user education, distribution, privacy/terms/disclaimer needs, and launch assets.

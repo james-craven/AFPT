@@ -77,6 +77,8 @@ assert.deepEqual(
     courseMode: 'track',
     cueFrequency: '100m',
     outBackSegmentMeters: 1600,
+    cueIntensity: 'loud',
+    vibration: false,
   },
   'invalid persisted settings normalize to safe defaults',
 );

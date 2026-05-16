@@ -794,7 +794,23 @@ function formatPaceAudioControls(settings) {
           <option value="1600"${selectedOption(1600, normalized.outBackSegmentMeters)}>1600m</option>
         </select>
       </label>
+      <label>
+        <span>Intensity</span>
+        <select data-pacer-audio-field="cueIntensity" aria-label="Pacer cue intensity">
+          <option value="normal"${selectedOption('normal', normalized.cueIntensity)}>Normal</option>
+          <option value="loud"${selectedOption('loud', normalized.cueIntensity)}>Loud</option>
+          <option value="max"${selectedOption('max', normalized.cueIntensity)}>Max</option>
+        </select>
+      </label>
+      <label class="pace-audio-vibrate">
+        <span>Haptics</span>
+        <span class="pace-audio-check">
+          <input type="checkbox" data-pacer-audio-field="vibration"${normalized.vibration ? ' checked' : ''}>
+          Vibrate
+        </span>
+      </label>
     </div>
+    <p class="pace-audio-note">For reliable cues, keep this screen awake and test volume with your headphones or music before running.</p>
     <div class="pace-audio-actions">
       <button type="button" data-pacer-audio-test>Test cue</button>
       <span class="pace-audio-status" data-pacer-audio-status>${normalized.enabled ? 'Audio cues ready.' : 'Audio cues off.'}</span>
@@ -810,7 +826,7 @@ function updatePaceAudioStatus(message) {
     return;
   }
   status.textContent = paceAudioSettings.enabled
-    ? `Audio cues on: ${paceAudioSettings.courseMode.replace('-', '/')} · ${paceAudioSettings.cueFrequency}.`
+    ? `Audio cues on: ${paceAudioSettings.courseMode.replace('-', '/')} · ${paceAudioSettings.cueFrequency} · ${paceAudioSettings.cueIntensity}.`
     : 'Audio cues off.';
 }
 
@@ -845,6 +861,8 @@ function readPaceAudioSettingsFromControls() {
     courseMode: field('courseMode')?.value,
     cueFrequency: field('cueFrequency')?.value,
     outBackSegmentMeters: Number(field('outBackSegmentMeters')?.value),
+    cueIntensity: field('cueIntensity')?.value,
+    vibration: Boolean(field('vibration')?.checked),
   });
 }
 
