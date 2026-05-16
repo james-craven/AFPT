@@ -2653,10 +2653,7 @@ select {
   align-items: center;
 }
 
-:root[data-theme="blues"] .altitude-row {
-  margin-top: 8px;
-}
-
+:root[data-theme="blues"] .altitude-row,
 :root[data-theme="tactical"] .altitude-row {
   margin: 0px 0px 16px;
 }
