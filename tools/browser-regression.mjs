@@ -558,11 +558,12 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(pacerAudioDefaults.enabled, false, 'pacer audio is off by default');
   assert.equal(pacerAudioDefaults.settings.cueStyle, 'beep-voice', 'pacer audio default cue style is beep + voice');
   assert.equal(pacerAudioDefaults.settings.cueIntensity, 'loud', 'pacer audio defaults to loud cue intensity');
+  assert.equal(pacerAudioDefaults.settings.audioFocus, 'mix', 'pacer audio defaults to mix-with-music behavior');
   assert.equal(pacerAudioDefaults.settings.vibration, false, 'pacer audio vibration is off by default');
   assert.match(
     await page.locator('.pace-audio-note').innerText(),
-    /install to Home Screen/i,
-    'pacer audio explains screen/volume reliability',
+    /mix, duck, or prioritize/i,
+    'pacer audio explains music behavior',
   );
 
   const scoreBeforeAudioSettings = await page.evaluate(() => window.afptApp.getScoreResult()?.total);
@@ -572,6 +573,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.locator('[data-pacer-audio-field="cueFrequency"]').selectOption('200m');
   await page.locator('[data-pacer-audio-field="outBackSegmentMeters"]').selectOption('800');
   await page.locator('[data-pacer-audio-field="cueIntensity"]').selectOption('max');
+  await page.locator('[data-pacer-audio-field="audioFocus"]').selectOption('duck');
   await page.locator('[data-pacer-audio-field="vibration"]').check();
   await page.waitForFunction(() => window.afptApp.getPacerAudioSettings().courseMode === 'out-back');
   assert.equal(
@@ -593,6 +595,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     cueFrequency: document.querySelector('[data-pacer-audio-field="cueFrequency"]')?.value,
     outBackSegmentMeters: document.querySelector('[data-pacer-audio-field="outBackSegmentMeters"]')?.value,
     cueIntensity: document.querySelector('[data-pacer-audio-field="cueIntensity"]')?.value,
+    audioFocus: document.querySelector('[data-pacer-audio-field="audioFocus"]')?.value,
     vibration: document.querySelector('[data-pacer-audio-field="vibration"]')?.checked,
     settings: window.afptApp.getPacerAudioSettings(),
   }));
@@ -602,6 +605,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(persistedPacerAudio.cueFrequency, '200m', 'pacer audio cue frequency persists after reload');
   assert.equal(persistedPacerAudio.outBackSegmentMeters, '800', 'pacer audio out/back segment persists after reload');
   assert.equal(persistedPacerAudio.cueIntensity, 'max', 'pacer audio cue intensity persists after reload');
+  assert.equal(persistedPacerAudio.audioFocus, 'duck', 'pacer audio music behavior persists after reload');
   assert.equal(persistedPacerAudio.vibration, true, 'pacer audio vibration setting persists after reload');
   assert.equal(persistedPacerAudio.settings.enabled, true, 'pacer audio API reflects persisted enabled setting');
 

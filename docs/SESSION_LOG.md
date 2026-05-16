@@ -377,3 +377,9 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Removed the quiet background keepalive node because on-device testing showed it could stop Spotify without improving locked-screen cue playback.
 - Changed pacer start back to transient audio-session behavior instead of playback.
 - Simplified generated cue sounds back to one beep per cue; intensity now changes volume/duration only.
+
+## Pacer Audio Music Behavior Setting
+
+- Added a persisted Music setting for pacer cues: Mix uses `ambient`, Duck uses `transient`, and Priority uses `playback` when `navigator.audioSession` is available.
+- Cues now request their selected audio session immediately before playing and release back to `auto` shortly afterward, avoiding the removed continuous keepalive behavior.
+- Updated tests for the new audio-focus setting, persistence, and audio-session behavior.

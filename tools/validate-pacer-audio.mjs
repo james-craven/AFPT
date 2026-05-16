@@ -78,6 +78,7 @@ assert.deepEqual(
     cueFrequency: '100m',
     outBackSegmentMeters: 1600,
     cueIntensity: 'loud',
+    audioFocus: 'mix',
     vibration: false,
   },
   'invalid persisted settings normalize to safe defaults',

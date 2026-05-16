@@ -802,6 +802,14 @@ function formatPaceAudioControls(settings) {
           <option value="max"${selectedOption('max', normalized.cueIntensity)}>Max</option>
         </select>
       </label>
+      <label>
+        <span>Music</span>
+        <select data-pacer-audio-field="audioFocus" aria-label="Pacer audio behavior with other apps">
+          <option value="mix"${selectedOption('mix', normalized.audioFocus)}>Mix</option>
+          <option value="duck"${selectedOption('duck', normalized.audioFocus)}>Duck</option>
+          <option value="priority"${selectedOption('priority', normalized.audioFocus)}>Priority</option>
+        </select>
+      </label>
       <label class="pace-audio-vibrate">
         <span>Haptics</span>
         <span class="pace-audio-check">
@@ -810,7 +818,7 @@ function formatPaceAudioControls(settings) {
         </span>
       </label>
     </div>
-    <p class="pace-audio-note">For best cue behavior, install to Home Screen, keep this screen awake, and test volume with your headphones or music before running.</p>
+    <p class="pace-audio-note">Music mode asks supported browsers to mix, duck, or prioritize cues. Install to Home Screen and test with your headphones or music before running.</p>
     <div class="pace-audio-actions">
       <button type="button" data-pacer-audio-test>Test cue</button>
       <span class="pace-audio-status" data-pacer-audio-status>${normalized.enabled ? 'Audio cues ready.' : 'Audio cues off.'}</span>
@@ -826,7 +834,7 @@ function updatePaceAudioStatus(message) {
     return;
   }
   status.textContent = paceAudioSettings.enabled
-    ? `Audio cues on: ${paceAudioSettings.courseMode.replace('-', '/')} · ${paceAudioSettings.cueFrequency} · ${paceAudioSettings.cueIntensity}.`
+    ? `Audio cues on: ${paceAudioSettings.courseMode.replace('-', '/')} · ${paceAudioSettings.cueFrequency} · ${paceAudioSettings.cueIntensity} · ${paceAudioSettings.audioFocus}.`
     : 'Audio cues off.';
 }
 
@@ -862,6 +870,7 @@ function readPaceAudioSettingsFromControls() {
     cueFrequency: field('cueFrequency')?.value,
     outBackSegmentMeters: Number(field('outBackSegmentMeters')?.value),
     cueIntensity: field('cueIntensity')?.value,
+    audioFocus: field('audioFocus')?.value,
     vibration: Boolean(field('vibration')?.checked),
   });
 }
