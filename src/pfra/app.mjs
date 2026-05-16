@@ -482,6 +482,23 @@ function deltaForChartCell(table, cell, currentPerformance, isCurrentRow) {
   };
 }
 
+function hamrLevelParts(totalShuttles) {
+  const n = Number(totalShuttles);
+  if (!Number.isFinite(n) || n < 1) return null;
+  const rounded = Math.round(n);
+  const range = HAMR_LEVEL_RANGES.find(({ start, end }) => rounded >= start && rounded <= end)
+    || HAMR_LEVEL_RANGES[HAMR_LEVEL_RANGES.length - 1];
+  return {
+    level: range.level,
+    shuttle: Math.max(1, Math.min(range.end - range.start + 1, rounded - range.start + 1)),
+  };
+}
+
+function hamrLevelShortText(totalShuttles) {
+  const parts = hamrLevelParts(totalShuttles);
+  return parts ? `(L:${parts.level} | S:${parts.shuttle})` : '';
+}
+
 function generateScoreChartFor(event, ageGroup, sex) {
   if (!ready) return '<p class="chart-empty">Standards not yet loaded.</p>';
 
@@ -513,9 +530,12 @@ function generateScoreChartFor(event, ageGroup, sex) {
     if (!cell) continue;
     const pts = row.points;
     const rawVal = cell.value;
-    const displayVal = isTime
+    const baseDisplayVal = isTime
       ? rawVal
       : (cell.atLeast ? `&ge;&nbsp;${rawVal}` : `&le;&nbsp;${rawVal}`);
+    const displayVal = event === 'hamr-20-meter'
+      ? `${baseDisplayVal} <span class="chart-hamr-level">${hamrLevelShortText(rawVal)}</span>`
+      : baseDisplayVal;
     const isCurrentRow = currentMatch === cell;
     const delta = deltaForChartCell(table, cell, currentPerformance, isCurrentRow);
     const youMarker = isCurrentRow ? '<span class="chart-you" aria-label="You are here">&lt; YOU</span>' : '';
@@ -987,14 +1007,8 @@ function renderCoreEditor(scores) {
 }
 
 function hamrLevelText(totalShuttles) {
-  const n = Number(totalShuttles);
-  if (!Number.isFinite(n) || n < 1) return '';
-  const rounded = Math.round(n);
-  const range = HAMR_LEVEL_RANGES.find(({ start, end }) => rounded >= start && rounded <= end)
-    || HAMR_LEVEL_RANGES[HAMR_LEVEL_RANGES.length - 1];
-  const level = range.level;
-  const shuttle = Math.max(1, Math.min(range.end - range.start + 1, rounded - range.start + 1));
-  return `Level: ${level} | Shuttle: ${shuttle}`;
+  const parts = hamrLevelParts(totalShuttles);
+  return parts ? `Level: ${parts.level} | Shuttle: ${parts.shuttle}` : '';
 }
 
 function renderCardioEditor(scores) {

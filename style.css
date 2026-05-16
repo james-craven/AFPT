@@ -1874,6 +1874,16 @@ select {
   font-weight: 700;
 }
 
+.chart-hamr-level {
+  color: var(--afpt-ink-dim);
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  line-height: 1.35;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
 .chart-cell--delta {
   font-size: 11px;
   letter-spacing: 1px;

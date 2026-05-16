@@ -974,6 +974,23 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForTimeout(50);
   await page.locator('#run-btn').click();
   await page.waitForFunction(() => !document.getElementById('modal')?.hasAttribute('hidden'));
+  const hamrChartLevelLabels = await page.evaluate(() => {
+    const headers = Array.from(document.querySelectorAll('#chart-content .chart-th'))
+      .map((header) => header.textContent.trim());
+    const levelLabels = Array.from(document.querySelectorAll('#chart-content .chart-hamr-level'))
+      .map((label) => label.textContent.trim());
+    const currentRowText = document.querySelector('#chart-content .chart-row--you .chart-cell--perf')?.textContent || '';
+    return {
+      headers,
+      hasLevelLabels: levelLabels.length > 0,
+      sampleMatches: levelLabels.some((text) => /^\(L:\d+ \| S:\d+\)$/.test(text)),
+      currentRowIncludesLevel: /\(L:\d+ \| S:\d+\)/.test(currentRowText),
+    };
+  });
+  assert.deepEqual(hamrChartLevelLabels.headers, ['Shuttles', 'Pts', 'Your Gap'], 'HAMR chart uses shuttles, points, gap columns');
+  assert.equal(hamrChartLevelLabels.hasLevelLabels, true, 'HAMR chart adds level/shuttle labels in shuttles column');
+  assert.equal(hamrChartLevelLabels.sampleMatches, true, 'HAMR level/shuttle labels use L/S format');
+  assert.equal(hamrChartLevelLabels.currentRowIncludesLevel, true, 'HAMR current row includes level/shuttle position');
   await page.locator('#chart-reference-btn').click();
   await page.waitForFunction(() => {
     const sources = Array.from(document.querySelectorAll('#chart-content .chart-reference__image'))
