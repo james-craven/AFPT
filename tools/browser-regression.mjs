@@ -897,7 +897,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       tierCells: document.querySelectorAll('#chart-content .chart-cell--tier').length,
     };
   });
-  assert.deepEqual(chartDeltaColumn.headers, ['Reps', 'Pts', 'Delta'], 'chart table uses performance, points, delta columns');
+  assert.deepEqual(chartDeltaColumn.headers, ['Reps', 'Pts', 'Your Gap'], 'chart table uses performance, points, gap columns');
   assert.equal(chartDeltaColumn.hasCurrent, true, 'chart delta column marks current row');
   assert.equal(chartDeltaColumn.hasNeed, true, 'chart delta column shows distance to unmet targets');
   assert.equal(chartDeltaColumn.hasMet, true, 'chart delta column shows already-met targets');
@@ -948,6 +948,18 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     'chart reference button opens selected event official source page',
   );
   await page.locator('#close-btn').click();
+  await page.waitForFunction(() => {
+    const modal = document.getElementById('modal');
+    return modal?.dataset.chartMode === 'score'
+      && !modal.hasAttribute('hidden')
+      && !!document.querySelector('#chart-content .chart-table');
+  });
+  assert.equal(
+    await page.locator('#chart-drawer-title').evaluate((el) => el.textContent.trim()),
+    'Score Chart',
+    'closing chart reference returns to score chart data',
+  );
+  await page.locator('#close-btn').click();
   await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
   const chartClosed = await page.evaluate(() => document.getElementById('modal')?.hasAttribute('hidden'));
   assert.equal(chartClosed, true, 'chart drawer closes on close-btn click');
@@ -978,6 +990,18 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     await page.locator('#chart-content .chart-reference__image').count(),
     2,
     'HAMR reference view shows both official images',
+  );
+  await page.locator('#close-btn').click();
+  await page.waitForFunction(() => {
+    const modal = document.getElementById('modal');
+    return modal?.dataset.chartMode === 'score'
+      && !modal.hasAttribute('hidden')
+      && !!document.querySelector('#chart-content .chart-table');
+  });
+  assert.equal(
+    await page.locator('#chart-drawer-title').evaluate((el) => el.textContent.trim()),
+    'Score Chart',
+    'closing HAMR reference returns to chart data',
   );
   await page.locator('#close-btn').click();
   await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));

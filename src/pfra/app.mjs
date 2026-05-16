@@ -523,7 +523,7 @@ function generateScoreChartFor(event, ageGroup, sex) {
   }
 
   const ageFmt = ageGroup.replace('under-', '< ').replace('-and-over', '+').replace('-', '–');
-  return `<p class="chart-meta">${sex === 'male' ? 'Male' : 'Female'} &middot; Age ${ageFmt}</p><table class="chart-table"><thead><tr><th class="chart-th">${colHeader}</th><th class="chart-th">Pts</th><th class="chart-th">Delta</th></tr></thead><tbody>${rows}</tbody></table>`;
+  return `<p class="chart-meta">${sex === 'male' ? 'Male' : 'Female'} &middot; Age ${ageFmt}</p><table class="chart-table"><thead><tr><th class="chart-th">${colHeader}</th><th class="chart-th">Pts</th><th class="chart-th" title="Difference between your current result and this row">Your Gap</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function refreshChartContent() {
@@ -604,6 +604,7 @@ function openChart(component, _title) {
 
   // Reset modal state to main app demographics
   chartModalState = { sex: state.sex, ageGroup: state.ageGroup, category, event };
+  delete modal.dataset.returnToChart;
 
   // Sync category selector
   const catSel = byId('chart-category-sel');
@@ -630,6 +631,7 @@ function openOfficialReference(referenceKey) {
   const modal = byId('modal');
   if (!modal) return;
   modal.dataset.chartMode = 'reference';
+  delete modal.dataset.returnToChart;
   setChartControlsVisible(false);
   renderOfficialReference(referenceKey);
   modal.removeAttribute('hidden');
@@ -642,6 +644,7 @@ function openCurrentScoreReference() {
   const modal = byId('modal');
   if (!modal) return;
   modal.dataset.chartMode = 'reference';
+  modal.dataset.returnToChart = 'true';
   setChartControlsVisible(false);
   if (chartModalState.event === 'hamr-20-meter') {
     renderOfficialReferenceSet('20m HAMR Official References', [reference, 'shuttleScoreCard']);
@@ -655,8 +658,18 @@ function openCurrentScoreReference() {
 function closeChart() {
   const modal = byId('modal');
   if (!modal) return;
+
+  if (modal.dataset.chartMode === 'reference' && modal.dataset.returnToChart === 'true') {
+    modal.dataset.chartMode = 'score';
+    delete modal.dataset.returnToChart;
+    setChartControlsVisible(true);
+    refreshChartContent();
+    return;
+  }
+
   modal.setAttribute('hidden', '');
   delete modal.dataset.chartOpen;
+  delete modal.dataset.returnToChart;
 }
 
 // PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme.
