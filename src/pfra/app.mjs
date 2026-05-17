@@ -931,7 +931,9 @@ function formatPaceGoalButton(courseMode, totalStr) {
   const layout = paceGoalLayout(courseMode);
   const playPath = `M ${layout.startCx - 4} ${layout.buttonCy - 7} L ${layout.startCx - 4} ${layout.buttonCy + 7} L ${layout.startCx + 8} ${layout.buttonCy} Z`;
   const pauseBarY = layout.buttonCy - 7;
-  const resetPath = `M ${layout.secondaryCx + 6} ${layout.buttonCy - 7} A 9 9 0 1 0 ${layout.secondaryCx + 8} ${layout.buttonCy + 4} M ${layout.secondaryCx + 6} ${layout.buttonCy - 7} L ${layout.secondaryCx + 6} ${layout.buttonCy - 12} L ${layout.secondaryCx + 11} ${layout.buttonCy - 8}`;
+  const resetBarX = layout.secondaryCx - 8;
+  const resetBarY = layout.buttonCy - 7;
+  const resetTrianglePath = `M ${layout.secondaryCx + 6} ${layout.buttonCy - 7} L ${layout.secondaryCx - 3} ${layout.buttonCy} L ${layout.secondaryCx + 6} ${layout.buttonCy + 7} Z`;
   return `<g class="pace-goal-display" aria-hidden="true">
           <text x="170" y="${layout.goalY}" text-anchor="middle" class="pace-goal-text" font-size="9" letter-spacing="2">GOAL</text>
           <text x="170" y="${layout.timeY}" text-anchor="middle" class="pace-time-text" font-size="${layout.timeSize}" font-weight="800" letter-spacing="-0.5" font-variant-numeric="tabular-nums">${totalStr}</text>
@@ -946,7 +948,10 @@ function formatPaceGoalButton(courseMode, totalStr) {
             <rect x="${layout.secondaryCx - 5}" y="${pauseBarY}" width="3.5" height="14" rx="1"/>
             <rect x="${layout.secondaryCx + 2}" y="${pauseBarY}" width="3.5" height="14" rx="1"/>
           </g>
-          <path class="pace-pacer-icon pace-icon--reset" d="${resetPath}"/>
+          <g class="pace-pacer-icon pace-icon--reset" aria-hidden="true">
+            <rect x="${resetBarX}" y="${resetBarY}" width="2.5" height="14" rx="1"/>
+            <path d="${resetTrianglePath}"/>
+          </g>
         </g>`;
 }
 

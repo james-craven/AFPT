@@ -3628,11 +3628,8 @@ select {
 }
 
 .pace-icon--reset {
-  fill: none;
-  stroke: var(--afpt-bg);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 2;
+  fill: var(--afpt-bg);
+  stroke: none;
 }
 
 .pace-pacer-secondary {
