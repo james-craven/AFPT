@@ -482,6 +482,18 @@
       <div id="run-lap-times" class="lap-display" aria-label="Lap split times"></div>
     </section>
 
+    <!-- Desktop-only contextual chart panel; mobile keeps the chart drawer flow. -->
+    <section id="desktop-chart-panel" class="desktop-chart-panel" aria-label="Desktop score chart">
+      <div class="desktop-chart-panel__header">
+        <div>
+          <span class="desktop-chart-panel__eyebrow">Score chart</span>
+          <h2 id="desktop-chart-title">Selected Component</h2>
+        </div>
+        <button id="desktop-chart-open" class="desktop-chart-open" type="button">Open</button>
+      </div>
+      <div id="desktop-chart-content" class="desktop-chart-content"></div>
+    </section>
+
     <div id="pfra-status" class="pfra-status" aria-live="polite">Loading standards…</div>
 
   </div><!-- app-shell -->

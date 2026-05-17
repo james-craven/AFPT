@@ -37,6 +37,7 @@
 - [x] Pace plan visual distance polish: add Out/Back return-lane dot, tighten Route bottom label spacing, and display pacer distance in miles.
 - [x] Pace plan icon controls and split fix: circular play/pause/reset controls, upright runner, and exact finish split times.
 - [x] Pace plan course switch control fix: keep pause/reset hidden before start when switching Track, Route, and Out/Back.
+- [x] Desktop dashboard layout: add a 980px+ responsive grid, desktop chart context panel, and browser regression coverage while preserving mobile layout.
 - [ ] Component editor Phase E: move cardio controls into `#cardio-editor`.
 - [ ] Component editor Phase F: component switching hides non-selected editors (already wired; verify values survive switching).
 - [ ] Component editor Phase G: live value mirroring in summary cards; add `#pfra-core-score` and `#pfra-cardio-score`.

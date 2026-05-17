@@ -373,6 +373,107 @@ async function assertScoreBarLabelsDoNotOverlap(page, preset, label) {
   assert.deepEqual(result.overlaps, [], `${label} ${preset} score bar labels do not overlap`);
 }
 
+async function assertResponsiveDashboardLayout(page, label) {
+  const result = await page.evaluate(() => {
+    const rectFor = (selector) => {
+      const element = document.querySelector(selector);
+      if (!element) return null;
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      return {
+        bottom: rect.bottom,
+        display: style.display,
+        gridArea: style.gridArea,
+        height: rect.height,
+        left: rect.left,
+        right: rect.right,
+        top: rect.top,
+        width: rect.width,
+      };
+    };
+    const shell = document.querySelector('.app-shell');
+    const shellRect = shell?.getBoundingClientRect();
+    const shellStyle = shell ? getComputedStyle(shell) : null;
+    return {
+      isDesktop: matchMedia('(min-width: 980px)').matches,
+      shell: shellRect ? {
+        display: shellStyle.display,
+        width: shellRect.width,
+      } : null,
+      chart: rectFor('#desktop-chart-panel'),
+      controls: rectFor('.demographics-row'),
+      editor: rectFor('.editors-container'),
+      nav: rectFor('.component-strip'),
+      pace: rectFor('.pace-plan-section'),
+      score: rectFor('.score-section'),
+    };
+  });
+
+  assert.ok(result.shell, `${label} app shell exists`);
+
+  if (!result.isDesktop) {
+    assert.equal(result.shell.display, 'flex', `${label} keeps the mobile stacked shell`);
+    assert.equal(result.chart.display, 'none', `${label} hides desktop chart panel on mobile`);
+    return;
+  }
+
+  assert.equal(result.shell.display, 'grid', `${label} uses desktop dashboard grid shell`);
+  assert.ok(result.shell.width >= 900, `${label} app shell expands beyond phone width: ${result.shell.width}px`);
+  assert.notEqual(result.chart.display, 'none', `${label} shows desktop chart panel`);
+  assert.ok(result.score.width > result.nav.width + 200, `${label} score header spans the wider desktop scoring area`);
+  assert.ok(result.controls.left > result.score.left, `${label} controls sit to the right of score header`);
+  assert.ok(result.nav.right < result.editor.left, `${label} component summary rail sits left of editor`);
+  assert.ok(result.editor.right < result.pace.left, `${label} active editor sits left of pace panel`);
+  assert.ok(Math.abs(result.pace.left - result.chart.left) <= 1, `${label} pace and chart share the right context column`);
+}
+
+async function assertDesktopChartPanel(page, label) {
+  const isDesktop = await page.evaluate(() => matchMedia('(min-width: 980px)').matches);
+  if (!isDesktop) {
+    assert.equal(
+      await page.locator('#desktop-chart-panel').evaluate((element) => getComputedStyle(element).display),
+      'none',
+      `${label} desktop chart panel remains hidden below desktop breakpoint`,
+    );
+    return;
+  }
+
+  await page.locator('#summary-strength').click();
+  await page.waitForFunction(() => document.getElementById('desktop-chart-title')?.textContent.includes('Strength'));
+  const strengthChart = await page.evaluate(() => ({
+    hasCurrentMarker: Boolean(document.querySelector('#desktop-chart-content .chart-row--you')),
+    hasOpenButton: !document.getElementById('desktop-chart-open')?.hidden,
+    hasTable: Boolean(document.querySelector('#desktop-chart-content .chart-table')),
+    title: document.getElementById('desktop-chart-title')?.textContent.trim(),
+  }));
+  assert.equal(strengthChart.title, 'Strength Score Chart', `${label} desktop chart follows strength selection`);
+  assert.equal(strengthChart.hasTable, true, `${label} desktop chart renders generated score table`);
+  assert.equal(strengthChart.hasCurrentMarker, true, `${label} desktop chart highlights current performance`);
+  assert.equal(strengthChart.hasOpenButton, true, `${label} desktop chart exposes drawer button`);
+
+  await page.locator('#summary-cardio').click();
+  await page.waitForFunction(() => document.getElementById('desktop-chart-title')?.textContent.includes('Cardio'));
+  assert.equal(
+    await page.locator('#desktop-chart-title').evaluate((element) => element.textContent.trim()),
+    'Cardio Score Chart',
+    `${label} desktop chart follows cardio selection`,
+  );
+
+  await page.locator('#summary-body').click();
+  await page.waitForFunction(() => document.getElementById('desktop-chart-title')?.textContent.includes('Body'));
+  const bodyInsight = await page.evaluate(() => ({
+    content: document.getElementById('desktop-chart-content')?.textContent ?? '',
+    openHidden: document.getElementById('desktop-chart-open')?.hidden,
+    title: document.getElementById('desktop-chart-title')?.textContent.trim(),
+  }));
+  assert.equal(bodyInsight.title, 'Body Composition', `${label} desktop chart panel becomes body insight panel`);
+  assert.equal(bodyInsight.openHidden, true, `${label} body insight hides chart drawer button`);
+  assert.match(bodyInsight.content, /Current WHtR/i, `${label} body insight shows WHtR context`);
+
+  await page.locator('#summary-strength').click();
+  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+}
+
 async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const { context, failures, page } = await newPage(
     browser, baseUrl, `?no-sw=1&qa=smoke-${label}`, contextOptions,
@@ -454,6 +555,9 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(bodyInputsExist, true, 'body editor exposes ratio, height, and waist inputs');
   await page.locator('#summary-strength').click();
   await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+
+  await assertResponsiveDashboardLayout(page, label);
+  await assertDesktopChartPanel(page, label);
 
   await page.locator('#summary-core').click();
   await page.waitForFunction(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));

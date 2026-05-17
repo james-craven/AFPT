@@ -453,3 +453,10 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Re-centered the Track, Route, and Out/Back goal-time/play control placement so the controls sit visually inside the active course geometry.
 - Removed course-transition animation from pacer control groups so switching Route/Out-Back no longer makes the hidden pause/reset button appear before the pacer starts.
 - Added browser coverage for the computed hidden state of the secondary pause/reset control after Track, Route, and Out/Back course switches.
+
+## Desktop Dashboard Layout
+
+- Added a desktop-only dashboard breakpoint at 980px while preserving the approved mobile stacked layout below that breakpoint.
+- Reflowed existing sections into a desktop grid: wide score header, right-side demographics/theme controls, left component summary rail, center active editor, and right pace/chart context panels.
+- Added a desktop score chart panel that reuses the existing generated chart table and current-performance marker, with mobile retaining the existing chart drawer flow.
+- Added browser coverage for desktop grid placement, hidden mobile desktop panel behavior, desktop chart panel updates, current-row highlighting, and body composition insight mode.

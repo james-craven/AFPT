@@ -77,6 +77,15 @@ const paceAudioController = new PacerAudioController();
 
 function byId(id) { return document.getElementById(id); }
 function val(id) { return byId(id)?.value ?? ''; }
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (char) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  }[char]));
+}
 
 // --- Altitude ---
 
@@ -584,6 +593,47 @@ function refreshChartContent() {
       contentEl.querySelector('.chart-row--you')?.scrollIntoView({ block: 'center' });
     });
   }
+}
+
+function selectedDesktopChartContext() {
+  if (state.selectedComponent === 'strength') {
+    return { category: 'strength', event: state.strength.event, title: 'Strength Score Chart' };
+  }
+  if (state.selectedComponent === 'core') {
+    return { category: 'core', event: state.core.event, title: 'Core Score Chart' };
+  }
+  if (state.selectedComponent === 'cardio') {
+    return { category: 'cardio', event: state.cardio.event, title: 'Cardio Score Chart' };
+  }
+  return null;
+}
+
+function renderDesktopChartPanel(result) {
+  const panel = byId('desktop-chart-panel');
+  const title = byId('desktop-chart-title');
+  const content = byId('desktop-chart-content');
+  const openButton = byId('desktop-chart-open');
+  if (!panel || !title || !content || !openButton) return;
+
+  const context = selectedDesktopChartContext();
+  if (!context) {
+    const bodyScore = result?.scores?.body ?? '--';
+    const bodyDisplay = state.bodyExempt ? 'EXEMPT' : escapeHtml(state.whtr);
+    const scoreDisplay = state.bodyExempt ? 'EXEMPT' : escapeHtml(bodyScore);
+    title.textContent = 'Body Composition';
+    openButton.hidden = true;
+    content.innerHTML = `<div class="desktop-chart-empty">
+      <p class="desktop-chart-empty__label">Current WHtR</p>
+      <strong>${bodyDisplay}</strong>
+      <span>Score: ${scoreDisplay} · Pass ≤ 0.55</span>
+    </div>`;
+    return;
+  }
+
+  title.textContent = context.title;
+  openButton.hidden = false;
+  openButton.dataset.chartCategory = context.category;
+  content.innerHTML = generateScoreChartFor(context.event, state.ageGroup, state.sex);
 }
 
 function referenceFigure(reference) {
@@ -1679,6 +1729,7 @@ function render() {
   renderCardioEditor(result.scores);
   renderEditorVisibility();
   renderPacePlan();
+  renderDesktopChartPanel(result);
 }
 
 // --- Component selection ---
@@ -2305,6 +2356,10 @@ function bindEvents() {
   });
   byId('run-btn')?.addEventListener('click', () => {
     openChart('cardio', 'Cardio Score Chart');
+  });
+  byId('desktop-chart-open')?.addEventListener('click', () => {
+    const context = selectedDesktopChartContext();
+    if (context) openChart(context.category, context.title);
   });
 
   // --- Chart modal controls ---
