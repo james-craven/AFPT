@@ -72,11 +72,13 @@ let pacePacer = {
 
 let paceAudioSettings = loadPacerAudioSettings();
 const paceAudioController = new PacerAudioController();
+const desktopEditorQuery = window.matchMedia('(min-width: 980px)');
 
 // --- DOM helpers ---
 
 function byId(id) { return document.getElementById(id); }
 function val(id) { return byId(id)?.value ?? ''; }
+function isDesktopEditorLayout() { return desktopEditorQuery.matches; }
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (char) => ({
     '&': '&amp;',
@@ -1690,9 +1692,13 @@ function renderEditorVisibility() {
   if (runShuttleRow) runShuttleRow.hidden = !isHamr;
 
   const editors = ['body', 'strength', 'core', 'cardio'];
+  const showAllEditors = isDesktopEditorLayout();
   editors.forEach((name) => {
     const panel = byId(`${name}-editor`);
-    if (panel) panel.hidden = name !== state.selectedComponent;
+    if (panel) {
+      panel.hidden = !showAllEditors && name !== state.selectedComponent;
+      panel.dataset.desktopVisible = String(showAllEditors);
+    }
   });
 
   // Drive run slider direction: time events flip slider via CSS
@@ -2345,6 +2351,11 @@ function bindEvents() {
   // --- Theme change: re-render lap display and ring ---
 
   document.addEventListener('afpt:themechange', () => { render(); });
+  if (desktopEditorQuery.addEventListener) {
+    desktopEditorQuery.addEventListener('change', () => render());
+  } else if (desktopEditorQuery.addListener) {
+    desktopEditorQuery.addListener(() => render());
+  }
 
   // --- Chart buttons ---
 

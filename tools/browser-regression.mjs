@@ -396,6 +396,9 @@ async function assertResponsiveDashboardLayout(page, label) {
     const shellStyle = shell ? getComputedStyle(shell) : null;
     return {
       isDesktop: matchMedia('(min-width: 980px)').matches,
+      visibleEditors: [...document.querySelectorAll('.editor-panel')]
+        .filter((element) => !element.hasAttribute('hidden') && getComputedStyle(element).display !== 'none')
+        .map((element) => element.id),
       shell: shellRect ? {
         display: shellStyle.display,
         width: shellRect.width,
@@ -403,6 +406,8 @@ async function assertResponsiveDashboardLayout(page, label) {
       chart: rectFor('#desktop-chart-panel'),
       controls: rectFor('.demographics-row'),
       editor: rectFor('.editors-container'),
+      guide: rectFor('.desktop-guide'),
+      intro: rectFor('.desktop-intro'),
       nav: rectFor('.component-strip'),
       pace: rectFor('.pace-plan-section'),
       score: rectFor('.score-section'),
@@ -414,20 +419,29 @@ async function assertResponsiveDashboardLayout(page, label) {
   if (!result.isDesktop) {
     assert.equal(result.shell.display, 'flex', `${label} keeps the mobile stacked shell`);
     assert.equal(result.chart.display, 'none', `${label} hides desktop chart panel on mobile`);
+    assert.equal(result.intro.display, 'none', `${label} hides desktop intro on mobile`);
+    assert.equal(result.guide.display, 'none', `${label} hides desktop guide on mobile`);
+    assert.equal(result.visibleEditors.length, 1, `${label} keeps one active mobile editor`);
     return;
   }
 
-  assert.equal(result.shell.display, 'grid', `${label} uses desktop dashboard grid shell`);
+  assert.equal(result.shell.display, 'grid', `${label} uses desktop calculator page grid shell`);
   assert.ok(result.shell.width >= 900, `${label} app shell expands beyond phone width: ${result.shell.width}px`);
+  assert.notEqual(result.intro.display, 'none', `${label} shows desktop intro content`);
+  assert.notEqual(result.guide.display, 'none', `${label} shows desktop guide content`);
   assert.notEqual(result.chart.display, 'none', `${label} shows desktop chart panel`);
-  assert.ok(result.score.width > result.nav.width + 200, `${label} score header spans the wider desktop scoring area`);
+  assert.deepEqual(
+    result.visibleEditors.sort(),
+    ['body-editor', 'cardio-editor', 'core-editor', 'strength-editor'].sort(),
+    `${label} desktop shows all four component editors`,
+  );
+  assert.ok(result.score.width > result.controls.width, `${label} score header remains the primary calculator area`);
   assert.ok(result.controls.left > result.score.left, `${label} controls sit to the right of score header`);
-  assert.ok(result.nav.right < result.editor.left, `${label} component summary rail sits left of editor`);
-  assert.ok(result.editor.right < result.pace.left, `${label} active editor sits left of pace panel`);
-  assert.ok(Math.abs(result.editor.left - result.chart.left) <= 1, `${label} desktop chart belongs to the center workflow column`);
-  assert.ok(Math.abs(result.editor.width - result.chart.width) <= 1, `${label} desktop chart matches active editor width`);
-  assert.ok(result.chart.top > result.editor.bottom, `${label} desktop chart sits below the active editor`);
-  assert.ok(Math.abs(result.editor.top - result.pace.top) <= 1, `${label} pace panel aligns with the active editor top`);
+  assert.ok(result.nav.top > result.score.bottom, `${label} component summary sits below the score/profile band`);
+  assert.ok(result.editor.top > result.nav.bottom, `${label} all editors sit below the component summary`);
+  assert.ok(result.chart.left > result.pace.left, `${label} chart/reference panel sits beside the pace plan`);
+  assert.ok(Math.abs(result.chart.top - result.pace.top) <= 1, `${label} pace and chart panels align as reference content`);
+  assert.ok(result.guide.top > result.chart.top, `${label} guide content follows the calculator/reference area`);
 }
 
 async function assertDesktopChartPanel(page, label) {
@@ -547,8 +561,15 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForFunction(() => !document.getElementById('body-editor')?.hasAttribute('hidden'));
   const bodyVisible = await page.evaluate(() => !document.getElementById('body-editor')?.hasAttribute('hidden'));
   assert.equal(bodyVisible, true, 'body editor visible after clicking BODY chip');
-  const strHiddenAfterBody = await page.evaluate(() => document.getElementById('strength-editor')?.hasAttribute('hidden'));
-  assert.equal(strHiddenAfterBody, true, 'strength editor hidden after switching to body');
+  const strHiddenAfterBody = await page.evaluate(() => ({
+    isDesktop: matchMedia('(min-width: 980px)').matches,
+    hidden: document.getElementById('strength-editor')?.hasAttribute('hidden'),
+  }));
+  assert.equal(
+    strHiddenAfterBody.hidden,
+    !strHiddenAfterBody.isDesktop,
+    'strength editor hides only in mobile switching layout after selecting body',
+  );
   const whtrSliderExists = await page.evaluate(() => !!document.getElementById('whtr-slider'));
   assert.equal(whtrSliderExists, false, 'WHtR slider is removed from body editor');
   const bodyInputsExist = await page.evaluate(() => (
@@ -566,8 +587,15 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForFunction(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
   const coreVisible = await page.evaluate(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
   assert.equal(coreVisible, true, 'core editor visible after clicking CORE chip');
-  const strHidden = await page.evaluate(() => document.getElementById('strength-editor')?.hasAttribute('hidden'));
-  assert.equal(strHidden, true, 'strength editor hidden after switching to core');
+  const strHidden = await page.evaluate(() => ({
+    isDesktop: matchMedia('(min-width: 980px)').matches,
+    hidden: document.getElementById('strength-editor')?.hasAttribute('hidden'),
+  }));
+  assert.equal(
+    strHidden.hidden,
+    !strHidden.isDesktop,
+    'strength editor hides only in mobile switching layout after selecting core',
+  );
 
   await page.locator('#summary-cardio').click();
   await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
@@ -1162,8 +1190,15 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
 
   const scoreLabelTextAlign = await page.locator('.score-label-text:visible').first().evaluate((element) => getComputedStyle(element).textAlign);
   assert.equal(scoreLabelTextAlign, 'center', `${label} score/min/max label text is centered`);
-  const visibleScoreLabelInHeader = await page.locator('.editor-panel:not([hidden]) .editor-header .score-label-text:visible').count();
-  assert.equal(visibleScoreLabelInHeader, 1, `${label} active editor score/min/max label sits under the editor title`);
+  const visibleScoreLabelInHeader = await page.evaluate(() => ({
+    isDesktop: matchMedia('(min-width: 980px)').matches,
+    count: document.querySelectorAll('.editor-panel:not([hidden]) .editor-header .score-label-text').length,
+  }));
+  assert.equal(
+    visibleScoreLabelInHeader.count,
+    visibleScoreLabelInHeader.isDesktop ? 4 : 1,
+    `${label} visible editor score/min/max labels sit under their editor titles`,
+  );
 
   const componentDividerInset = await page.evaluate(() => {
     const strip = document.querySelector('.component-strip');

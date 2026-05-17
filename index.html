@@ -142,6 +142,33 @@
       </div>
     </header>
 
+    <!-- Desktop-only intro. Mobile keeps the approved compact app layout. -->
+    <section class="desktop-intro" aria-labelledby="desktop-intro-title">
+      <div class="desktop-intro__copy">
+        <p class="desktop-intro__eyebrow">PFRA 2026 calculator</p>
+        <h1 id="desktop-intro-title">Plan your Air Force fitness score before test day.</h1>
+        <p>
+          Estimate your total score across strength, core, cardio, and body composition.
+          Try alternate events, check component minimums, and use the pace plan when you
+          want a practical run target.
+        </p>
+      </div>
+      <div class="desktop-intro__steps" aria-label="How to use the calculator">
+        <div>
+          <strong>1</strong>
+          <span>Set sex, age group, and theme.</span>
+        </div>
+        <div>
+          <strong>2</strong>
+          <span>Enter each component below. Desktop keeps all editors visible.</span>
+        </div>
+        <div>
+          <strong>3</strong>
+          <span>Use charts and notes as a reference, then confirm official guidance with your UFPM.</span>
+        </div>
+      </div>
+    </section>
+
     <!-- Demographics -->
     <section class="demographics-row" aria-label="Demographic controls">
       <div class="demo-field">
@@ -264,6 +291,7 @@
   <div class="editor-header">
     <span class="editor-title">WHtR</span>
     <p id="body-txt-p" class="score-label-text">Score: -- | Pass ≤ 0.55</p>
+    <p class="desktop-editor-note">20 points. Enter WHtR directly or use height and waist to calculate it.</p>
   </div>
 
   <div id="body-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Body mode">
@@ -334,6 +362,7 @@
         <div class="editor-header">
           <span class="editor-title">STRENGTH</span>
           <p id="push-txt-p" class="score-label-text">Score: 0 | Min: -- | Max: --</p>
+          <p class="desktop-editor-note">15 points. Compare standard push-ups with hand-release push-ups before you settle on an event.</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
         <div id="push-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Strength event">
@@ -371,6 +400,7 @@
         <div class="editor-header">
           <span class="editor-title">CORE</span>
           <p id="sit-txt-p" class="score-label-text">Score: 0 | Min: -- | Max: --</p>
+          <p class="desktop-editor-note">15 points. Reps and plank time use separate tables, so check the variant that matches your strengths.</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
         <div id="sit-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Core event">
@@ -420,6 +450,7 @@
         <div class="editor-header">
           <span class="editor-title">CARDIO</span>
           <p id="run-txt-p" class="score-label-text">Score: -- | Min: -- | Max: --</p>
+          <p class="desktop-editor-note">50 points. Small changes in run time can move the total score quickly.</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
         <div id="run-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Cardio event">
@@ -492,6 +523,65 @@
         <button id="desktop-chart-open" class="desktop-chart-open" type="button">Open</button>
       </div>
       <div id="desktop-chart-content" class="desktop-chart-content"></div>
+    </section>
+
+    <section class="desktop-guide" aria-labelledby="desktop-guide-title">
+      <div class="desktop-guide__header">
+        <p class="desktop-guide__eyebrow">Guide</p>
+        <h2 id="desktop-guide-title">How to read the numbers</h2>
+        <p>
+          This calculator is a planning tool. It helps you see the score impact of different events and goals,
+          but your unit guidance and current official standards are still the authority.
+        </p>
+      </div>
+
+      <div class="desktop-guide-grid">
+        <article class="desktop-guide-card">
+          <h3>Scoring at a glance</h3>
+          <p>
+            The composite score is out of 100 points: strength 15, core 15, cardio 50,
+            and body composition 20. A 75 total is the usual pass line, but each component
+            still has its own floor.
+          </p>
+        </article>
+        <article class="desktop-guide-card">
+          <h3>Choosing event variants</h3>
+          <p>
+            Alternate events can change the tradeoff. A lower rep standard does not always
+            mean an easier score, so run your real numbers for each authorized option.
+          </p>
+        </article>
+        <article class="desktop-guide-card">
+          <h3>Cardio strategy</h3>
+          <p>
+            Cardio carries half the test. Use the pace plan to see what each lap should feel
+            like, then check whether shaving 20 or 30 seconds changes your score enough to matter.
+          </p>
+        </article>
+        <article class="desktop-guide-card">
+          <h3>Understanding WHtR</h3>
+          <p>
+            WHtR compares waist to height. It is a ratio, so a small measurement change can
+            move the score. Measure consistently and avoid treating one quick tape reading as final.
+          </p>
+        </article>
+      </div>
+
+      <div class="desktop-faq">
+        <h3>Common questions</h3>
+        <details>
+          <summary>Can a high total score make up for failing one component?</summary>
+          <p>No. The total matters, but component minimums matter too. If one component is below its required minimum, confirm the result with your UFPM before assuming the test is good.</p>
+        </details>
+        <details>
+          <summary>Why should I compare alternate events?</summary>
+          <p>The best event is the one that matches your current fitness, your profile, and what your testing location supports. The calculator makes it easier to compare without rebuilding the whole score by hand.</p>
+        </details>
+        <details>
+          <summary>Is this an official scoring source?</summary>
+          <p>No. It is a reference calculator built around the standards data in the app. Use it to plan, then verify anything important against official guidance and your unit’s process.</p>
+        </details>
+      </div>
     </section>
 
     <div id="pfra-status" class="pfra-status" aria-live="polite">Loading standards…</div>

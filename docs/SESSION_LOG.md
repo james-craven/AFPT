@@ -467,3 +467,12 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Increased the desktop max width to 1440px with wider-screen spacing guards, refined the 980px and 1200px grid tracks, and reduced the empty sidebar feel by keeping the component summary rail compact.
 - Tightened panel radii, shadows, padding, and chart scrolling so desktop charts are visible and useful without overwhelming the calculator.
 - Updated browser regression expectations to verify the polished desktop information architecture while preserving the mobile stacked layout.
+
+## Desktop Calculator Guide Page
+
+- Replaced the generic desktop-dashboard direction with a desktop-first calculator page: intro/usage guidance at the top, the real calculator controls near the top, all four component editors visible as separate desktop interfaces, and guide/FAQ content below.
+- Preserved the approved mobile behavior below 980px: the desktop intro/guide/chart panel stay hidden and the component chips continue to show one active editor at a time.
+- Updated `src/pfra/app.mjs` so editor visibility is breakpoint-aware: desktop shows Body, Strength, Core, and Cardio simultaneously; mobile keeps the existing selected-component switching behavior.
+- Added concise in-app guidance for scoring at a glance, event variant selection, cardio strategy, WHtR, component minimums, and official-source disclaimers in the app's own voice.
+- Kept the desktop chart/reference panel, chart drawer, pace plan, settings hub, themes, and scoring logic intact.
+- Updated browser regression coverage to assert the calculator-page layout: desktop intro/guide visible, all four editors visible at wide widths, mobile intro/guide hidden, and one active editor on mobile.

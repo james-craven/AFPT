@@ -4012,7 +4012,10 @@ select {
   fill: #fff;
 }
 
-/* ─── Desktop dashboard enhancement ────────────────────────────── */
+/* ─── Desktop calculator page enhancement ─────────────────────── */
+.desktop-intro,
+.desktop-guide,
+.desktop-editor-note,
 .desktop-chart-panel {
   display: none;
 }
@@ -4035,20 +4038,20 @@ select {
     width: min(calc(100% - 48px), var(--afpt-app-max-width));
     max-width: var(--afpt-app-max-width);
     display: grid;
-    grid-template-columns:
-      minmax(216px, 0.82fr)
-      minmax(360px, 1.7fr)
-      minmax(300px, 1fr);
+    grid-template-columns: minmax(0, 1.9fr) minmax(280px, 0.82fr);
     grid-template-areas:
-      "header header header"
-      "score score controls"
-      "nav editor pace"
-      "nav chart pace"
-      "status status status";
+      "header header"
+      "intro intro"
+      "score controls"
+      "summary summary"
+      "editors editors"
+      "pace chart"
+      "guide guide"
+      "status status";
     gap: 18px;
     align-items: start;
     margin: 0 auto;
-    padding: 0 0 28px;
+    padding: 0 0 32px;
     overflow: visible;
   }
 
@@ -4073,12 +4076,14 @@ select {
     width: min(620px, calc(100vw - 48px));
   }
 
+  .desktop-intro,
   .score-section,
   .demographics-row,
   .component-strip,
   .editor-panel,
   .lap-display,
-  .desktop-chart-panel {
+  .desktop-chart-panel,
+  .desktop-guide {
     border: 1px solid var(--afpt-border);
     border-radius: 16px;
     background: color-mix(in srgb, var(--afpt-panel) 94%, transparent);
@@ -4086,15 +4091,89 @@ select {
     min-width: 0;
   }
 
+  .desktop-intro {
+    grid-area: intro;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+    gap: 18px;
+    align-items: center;
+    padding: 24px;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--afpt-panel) 92%, transparent), color-mix(in srgb, var(--afpt-panel-2) 74%, transparent));
+  }
+
+  .desktop-intro__eyebrow,
+  .desktop-guide__eyebrow {
+    color: var(--afpt-accent);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+  }
+
+  .desktop-intro h1 {
+    color: var(--afpt-ink);
+    font-size: clamp(30px, 3.45vw, 48px);
+    letter-spacing: 0;
+    line-height: 0.98;
+    margin: 0;
+    max-width: 820px;
+    text-transform: none;
+  }
+
+  .desktop-intro p {
+    color: var(--afpt-ink-dim);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 14px 0 0;
+    max-width: 760px;
+  }
+
+  .desktop-intro__steps {
+    display: grid;
+    gap: 10px;
+  }
+
+  .desktop-intro__steps div {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--afpt-border);
+    border-radius: 11px;
+    background: color-mix(in srgb, var(--afpt-panel-2) 78%, transparent);
+  }
+
+  .desktop-intro__steps strong {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--afpt-border-strong);
+    border-radius: 50%;
+    color: var(--afpt-accent);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .desktop-intro__steps span {
+    color: var(--afpt-ink);
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
   .score-section {
     grid-area: score;
     align-self: stretch;
-    margin: 0;
-    min-height: 186px;
-    padding: 22px 22px 18px;
-    border-bottom: 1px solid var(--afpt-border);
     display: grid;
     align-content: center;
+    min-height: 176px;
+    margin: 0;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid var(--afpt-border);
   }
 
   .demographics-row {
@@ -4103,10 +4182,10 @@ select {
     display: grid;
     grid-template-columns: 1fr;
     gap: 12px;
+    align-content: center;
     padding: 16px;
     border-bottom: 1px solid var(--afpt-border);
     background: color-mix(in srgb, var(--afpt-panel-2) 92%, transparent);
-    align-content: center;
   }
 
   .demo-field {
@@ -4123,15 +4202,13 @@ select {
   }
 
   .component-strip {
-    grid-area: nav;
-    align-self: start;
+    grid-area: summary;
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
     padding: 14px;
     background: color-mix(in srgb, var(--afpt-panel) 88%, transparent);
     border-bottom: 1px solid var(--afpt-border);
-    align-content: start;
   }
 
   .component-strip::after {
@@ -4147,10 +4224,10 @@ select {
     align-items: center;
     justify-items: start;
     gap: 4px 12px;
-    min-height: 82px;
+    min-height: 78px;
     padding: 14px;
     border: 1px solid var(--afpt-border);
-    border-radius: 10px;
+    border-radius: 11px;
     background: var(--afpt-panel-2);
     text-align: left;
   }
@@ -4167,19 +4244,22 @@ select {
 
   .chip-value {
     grid-area: value;
-    font-size: 20px;
+    font-size: 21px;
   }
 
   .chip-score {
     grid-area: score;
     justify-self: end;
-    min-width: 56px;
+    min-width: 58px;
     text-align: right;
     font-size: 14px;
   }
 
   .editors-container {
-    grid-area: editor;
+    grid-area: editors;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
     padding: 0;
     min-width: 0;
     width: 100%;
@@ -4190,8 +4270,35 @@ select {
     gap: 18px;
   }
 
+  #strength-editor {
+    order: 1;
+  }
+
+  #core-editor {
+    order: 2;
+  }
+
+  #cardio-editor {
+    order: 3;
+  }
+
+  #body-editor {
+    order: 4;
+  }
+
   .editor-header {
     padding-bottom: 12px;
+  }
+
+  .desktop-editor-note {
+    display: block;
+    max-width: 46rem;
+    margin: 0;
+    color: var(--afpt-ink-dim);
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-align: center;
   }
 
   .fit-seg-ctrl {
@@ -4211,10 +4318,10 @@ select {
 
   .editor-event-row {
     grid-template-columns:
-      minmax(142px, 1.9fr)
-      minmax(50px, 0.58fr)
-      minmax(50px, 0.58fr)
-      minmax(60px, 0.72fr);
+      minmax(150px, 1.8fr)
+      minmax(52px, 0.58fr)
+      minmax(52px, 0.58fr)
+      minmax(64px, 0.72fr);
     gap: 8px;
   }
 
@@ -4251,7 +4358,6 @@ select {
     grid-area: pace;
     padding: 0;
     min-width: 0;
-    align-self: start;
   }
 
   .lap-display {
@@ -4271,10 +4377,10 @@ select {
 
   .desktop-chart-panel {
     grid-area: chart;
-    align-self: start;
+    align-self: stretch;
     display: flex;
     flex-direction: column;
-    max-height: min(420px, calc(100vh - 120px));
+    max-height: min(560px, calc(100vh - 120px));
     overflow: hidden;
     padding: 0;
   }
@@ -4360,7 +4466,7 @@ select {
     display: grid;
     gap: 7px;
     place-items: center;
-    min-height: 168px;
+    min-height: 220px;
     padding: 22px 14px;
     text-align: center;
   }
@@ -4387,6 +4493,78 @@ select {
     line-height: 1.4;
   }
 
+  .desktop-guide {
+    grid-area: guide;
+    display: grid;
+    gap: 18px;
+    padding: 24px;
+  }
+
+  .desktop-guide__header {
+    max-width: 760px;
+  }
+
+  .desktop-guide h2 {
+    color: var(--afpt-ink);
+    font-size: clamp(26px, 3vw, 38px);
+    letter-spacing: 0;
+    line-height: 1.05;
+    margin: 0;
+    text-transform: none;
+  }
+
+  .desktop-guide__header p,
+  .desktop-guide-card p,
+  .desktop-faq p {
+    color: var(--afpt-ink-dim);
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 10px 0 0;
+  }
+
+  .desktop-guide-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .desktop-guide-card {
+    padding: 16px;
+    border: 1px solid var(--afpt-border);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--afpt-panel-2) 82%, transparent);
+  }
+
+  .desktop-guide-card h3,
+  .desktop-faq h3 {
+    color: var(--afpt-ink);
+    font-size: 13px;
+    letter-spacing: 1.3px;
+    line-height: 1.2;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .desktop-faq {
+    display: grid;
+    gap: 10px;
+  }
+
+  .desktop-faq details {
+    border: 1px solid var(--afpt-border);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--afpt-panel-2) 72%, transparent);
+    padding: 13px 14px;
+  }
+
+  .desktop-faq summary {
+    color: var(--afpt-ink);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
   .pfra-status {
     grid-area: status;
     margin-top: 0;
@@ -4400,12 +4578,16 @@ select {
     right: 12px;
   }
 
+  :root[data-theme="stencil"] .desktop-intro,
   :root[data-theme="stencil"] .score-section,
   :root[data-theme="stencil"] .demographics-row,
   :root[data-theme="stencil"] .component-strip,
   :root[data-theme="stencil"] .editor-panel,
   :root[data-theme="stencil"] .lap-display,
-  :root[data-theme="stencil"] .desktop-chart-panel {
+  :root[data-theme="stencil"] .desktop-chart-panel,
+  :root[data-theme="stencil"] .desktop-guide,
+  :root[data-theme="stencil"] .desktop-guide-card,
+  :root[data-theme="stencil"] .desktop-faq details {
     border-radius: 6px;
   }
 
@@ -4418,7 +4600,9 @@ select {
   :root[data-theme="light"] .score-section,
   :root[data-theme="light"] .component-strip,
   :root[data-theme="light"] .editor-panel,
-  :root[data-theme="light"] .lap-display {
+  :root[data-theme="light"] .lap-display,
+  :root[data-theme="light"] .desktop-intro,
+  :root[data-theme="light"] .desktop-guide {
     margin: 0;
   }
 
@@ -4428,12 +4612,16 @@ select {
     padding: 14px;
   }
 
+  :root[data-theme="fitness"] .desktop-intro,
   :root[data-theme="fitness"] .score-section,
   :root[data-theme="fitness"] .demographics-row,
   :root[data-theme="fitness"] .component-strip,
   :root[data-theme="fitness"] .editor-panel,
   :root[data-theme="fitness"] .lap-display,
-  :root[data-theme="fitness"] .desktop-chart-panel {
+  :root[data-theme="fitness"] .desktop-chart-panel,
+  :root[data-theme="fitness"] .desktop-guide,
+  :root[data-theme="fitness"] .desktop-guide-card,
+  :root[data-theme="fitness"] .desktop-faq details {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.13);
     backdrop-filter: blur(14px);
@@ -4447,24 +4635,44 @@ select {
     -webkit-backdrop-filter: blur(14px);
   }
 
+  :root[data-theme="fitness"] .desktop-intro__steps div,
+  :root[data-theme="fitness"] .desktop-guide-card,
+  :root[data-theme="fitness"] .desktop-faq details {
+    background: rgba(255, 255, 255, 0.07);
+  }
+
   :root[data-theme="fitness"] .lap-display {
     margin-top: 0;
   }
 
-  @media (min-width: 1200px) {
+  @media (max-width: 1120px) {
     .app-shell {
+      width: min(calc(100% - 32px), var(--afpt-app-max-width));
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.72fr);
+      gap: 16px;
+    }
+
+    .desktop-guide-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .editor-event-row {
       grid-template-columns:
-        minmax(260px, 0.85fr)
-        minmax(500px, 1.65fr)
-        minmax(360px, 1fr);
+        minmax(140px, 1.8fr)
+        minmax(48px, 0.56fr)
+        minmax(48px, 0.56fr)
+        minmax(58px, 0.7fr);
+      gap: 7px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .app-shell {
+      grid-template-columns: minmax(0, 1.85fr) minmax(340px, 0.75fr);
     }
 
     .score-section {
-      min-height: 198px;
-    }
-
-    .desktop-chart-panel {
-      max-height: min(470px, calc(100vh - 120px));
+      min-height: 190px;
     }
   }
 

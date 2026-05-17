@@ -39,8 +39,9 @@
 - [x] Pace plan course switch control fix: keep pause/reset hidden before start when switching Track, Route, and Out/Back.
 - [x] Desktop dashboard layout: add a 980px+ responsive grid, desktop chart context panel, and browser regression coverage while preserving mobile layout.
 - [x] Desktop dashboard polish: move desktop chart context into the center editor workflow, keep pace as the right-side context panel, refine desktop grid tracks/max width, and preserve mobile layout.
+- [x] Desktop calculator guide page: replace the generic dashboard draft with a desktop-first calculator + educational guide layout, show all four real editors at wide widths, and preserve mobile switching behavior.
 - [ ] Component editor Phase E: move cardio controls into `#cardio-editor`.
-- [ ] Component editor Phase F: component switching hides non-selected editors (already wired; verify values survive switching).
+- [ ] Component editor Phase F: mobile component switching hides non-selected editors while desktop shows all editor panels; verify values survive switching.
 - [ ] Component editor Phase G: live value mirroring in summary cards; add `#pfra-core-score` and `#pfra-cardio-score`.
 
 ## Later Improvements
