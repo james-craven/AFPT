@@ -149,6 +149,17 @@ async function setThemePreset(page, preset) {
   );
 }
 
+async function selectComponentForViewport(page, component) {
+  const isDesktop = await page.evaluate(() => matchMedia('(min-width: 980px)').matches);
+  if (!isDesktop) {
+    await page.locator(`#summary-${component}`).click();
+  }
+  await page.waitForFunction(
+    (editorId) => !document.getElementById(editorId)?.hasAttribute('hidden'),
+    `${component}-editor`,
+  );
+}
+
 async function assertControlsStayInsideApp(page, label) {
   const result = await page.evaluate(() => {
     const shell = document.querySelector('.app-shell')?.getBoundingClientRect();
@@ -396,6 +407,7 @@ async function assertResponsiveDashboardLayout(page, label) {
     const shellStyle = shell ? getComputedStyle(shell) : null;
     return {
       isDesktop: matchMedia('(min-width: 980px)').matches,
+      viewportHeight: window.innerHeight,
       visibleEditors: [...document.querySelectorAll('.editor-panel')]
         .filter((element) => !element.hasAttribute('hidden') && getComputedStyle(element).display !== 'none')
         .map((element) => element.id),
@@ -411,6 +423,7 @@ async function assertResponsiveDashboardLayout(page, label) {
       nav: rectFor('.component-strip'),
       pace: rectFor('.pace-plan-section'),
       score: rectFor('.score-section'),
+      summary: rectFor('.desktop-score-breakdown'),
     };
   });
 
@@ -421,6 +434,7 @@ async function assertResponsiveDashboardLayout(page, label) {
     assert.equal(result.chart.display, 'none', `${label} hides desktop chart panel on mobile`);
     assert.equal(result.intro.display, 'none', `${label} hides desktop intro on mobile`);
     assert.equal(result.guide.display, 'none', `${label} hides desktop guide on mobile`);
+    assert.equal(result.summary.display, 'none', `${label} hides desktop score breakdown on mobile`);
     assert.equal(result.visibleEditors.length, 1, `${label} keeps one active mobile editor`);
     return;
   }
@@ -429,66 +443,79 @@ async function assertResponsiveDashboardLayout(page, label) {
   assert.ok(result.shell.width >= 900, `${label} app shell expands beyond phone width: ${result.shell.width}px`);
   assert.notEqual(result.intro.display, 'none', `${label} shows desktop intro content`);
   assert.notEqual(result.guide.display, 'none', `${label} shows desktop guide content`);
-  assert.notEqual(result.chart.display, 'none', `${label} shows desktop chart panel`);
+  assert.equal(result.nav.display, 'none', `${label} hides the mobile component selector row on desktop`);
+  assert.equal(result.chart.display, 'none', `${label} avoids clipped inline desktop chart panels`);
+  assert.notEqual(result.summary.display, 'none', `${label} shows desktop component score breakdown`);
   assert.deepEqual(
     result.visibleEditors.sort(),
     ['body-editor', 'cardio-editor', 'core-editor', 'strength-editor'].sort(),
     `${label} desktop shows all four component editors`,
   );
-  assert.ok(result.score.width > result.controls.width, `${label} score header remains the primary calculator area`);
-  assert.ok(result.controls.left > result.score.left, `${label} controls sit to the right of score header`);
-  assert.ok(result.nav.top > result.score.bottom, `${label} component summary sits below the score/profile band`);
-  assert.ok(result.editor.top > result.nav.bottom, `${label} all editors sit below the component summary`);
-  assert.ok(result.chart.left > result.pace.left, `${label} chart/reference panel sits beside the pace plan`);
-  assert.ok(Math.abs(result.chart.top - result.pace.top) <= 1, `${label} pace and chart panels align as reference content`);
-  assert.ok(result.guide.top > result.chart.top, `${label} guide content follows the calculator/reference area`);
+  assert.ok(result.controls.bottom <= result.score.top + 2, `${label} profile controls sit above the calculator`);
+  assert.ok(result.summary.left > result.score.left, `${label} component score breakdown sits beside the total score`);
+  assert.ok(Math.abs(result.summary.top - result.score.top) <= 1, `${label} total score and component breakdown align`);
+  assert.ok(result.editor.top > result.score.bottom, `${label} all editors sit immediately below the score band`);
+  assert.ok(result.editor.bottom <= result.viewportHeight + 8, `${label} calculator editors fit in the initial desktop viewport`);
+  assert.ok(result.pace.top > result.editor.bottom, `${label} pace/reference content follows the calculator controls`);
+  assert.ok(result.intro.top > result.editor.bottom, `${label} intro/help content no longer pushes calculator below the fold`);
+  assert.ok(result.guide.top > result.intro.top, `${label} guide content follows the calculator and intro`);
 }
 
 async function assertDesktopChartPanel(page, label) {
   const isDesktop = await page.evaluate(() => matchMedia('(min-width: 980px)').matches);
+  assert.equal(
+    await page.locator('#desktop-chart-panel').evaluate((element) => getComputedStyle(element).display),
+    'none',
+    `${label} keeps the inline desktop chart panel hidden to avoid clipped tables`,
+  );
+  if (!isDesktop) return;
+
+  await page.locator('#push-btn').click();
+  await page.waitForFunction(() => document.getElementById('modal')?.dataset.chartOpen === 'true');
+  const drawerChart = await page.evaluate(() => ({
+    controlsVisible: !document.querySelector('.chart-ctrl-row')?.hidden,
+    hasCurrentMarker: Boolean(document.querySelector('#chart-content .chart-row--you')),
+    hasTable: Boolean(document.querySelector('#chart-content .chart-table')),
+    title: document.getElementById('chart-drawer-title')?.textContent.trim(),
+  }));
+  assert.equal(drawerChart.title, 'Score Chart', `${label} desktop chart opens in the polished drawer`);
+  assert.equal(drawerChart.hasTable, true, `${label} drawer renders generated score table`);
+  assert.equal(drawerChart.hasCurrentMarker, true, `${label} drawer highlights current performance`);
+  assert.equal(drawerChart.controlsVisible, true, `${label} drawer keeps chart controls available`);
+  await page.locator('#close-btn').click();
+  await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
+}
+
+async function assertDesktopReferencesDrawer(page, label) {
+  const isDesktop = await page.evaluate(() => matchMedia('(min-width: 980px)').matches);
   if (!isDesktop) {
     assert.equal(
-      await page.locator('#desktop-chart-panel').evaluate((element) => getComputedStyle(element).display),
+      await page.locator('#desktop-references-open').evaluate((element) => getComputedStyle(element).display),
       'none',
-      `${label} desktop chart panel remains hidden below desktop breakpoint`,
+      `${label} hides desktop references action on mobile`,
     );
     return;
   }
 
-  await page.locator('#summary-strength').click();
-  await page.waitForFunction(() => document.getElementById('desktop-chart-title')?.textContent.includes('Strength'));
-  const strengthChart = await page.evaluate(() => ({
-    hasCurrentMarker: Boolean(document.querySelector('#desktop-chart-content .chart-row--you')),
-    hasOpenButton: !document.getElementById('desktop-chart-open')?.hidden,
-    hasTable: Boolean(document.querySelector('#desktop-chart-content .chart-table')),
-    title: document.getElementById('desktop-chart-title')?.textContent.trim(),
+  await page.locator('#desktop-references-open').click();
+  await page.waitForFunction(() => !document.getElementById('desktop-references-modal')?.hasAttribute('hidden'));
+  const referenceState = await page.evaluate(() => ({
+    groupCount: document.querySelectorAll('.desktop-reference-group').length,
+    imageCount: document.querySelectorAll('#desktop-references-content .chart-reference__image').length,
+    settingsReferencesVisible: (() => {
+      const section = document.querySelector('.settings-hub-section--references');
+      return section ? getComputedStyle(section).display !== 'none' : false;
+    })(),
+    text: document.getElementById('desktop-references-content')?.textContent ?? '',
   }));
-  assert.equal(strengthChart.title, 'Strength Score Chart', `${label} desktop chart follows strength selection`);
-  assert.equal(strengthChart.hasTable, true, `${label} desktop chart renders generated score table`);
-  assert.equal(strengthChart.hasCurrentMarker, true, `${label} desktop chart highlights current performance`);
-  assert.equal(strengthChart.hasOpenButton, true, `${label} desktop chart exposes drawer button`);
-
-  await page.locator('#summary-cardio').click();
-  await page.waitForFunction(() => document.getElementById('desktop-chart-title')?.textContent.includes('Cardio'));
-  assert.equal(
-    await page.locator('#desktop-chart-title').evaluate((element) => element.textContent.trim()),
-    'Cardio Score Chart',
-    `${label} desktop chart follows cardio selection`,
-  );
-
-  await page.locator('#summary-body').click();
-  await page.waitForFunction(() => document.getElementById('desktop-chart-title')?.textContent.includes('Body'));
-  const bodyInsight = await page.evaluate(() => ({
-    content: document.getElementById('desktop-chart-content')?.textContent ?? '',
-    openHidden: document.getElementById('desktop-chart-open')?.hidden,
-    title: document.getElementById('desktop-chart-title')?.textContent.trim(),
-  }));
-  assert.equal(bodyInsight.title, 'Body Composition', `${label} desktop chart panel becomes body insight panel`);
-  assert.equal(bodyInsight.openHidden, true, `${label} body insight hides chart drawer button`);
-  assert.match(bodyInsight.content, /Current WHtR/i, `${label} body insight shows WHtR context`);
-
-  await page.locator('#summary-strength').click();
-  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+  assert.ok(referenceState.groupCount >= 4, `${label} desktop references are grouped`);
+  assert.ok(referenceState.imageCount >= 10, `${label} desktop references stack official chart images`);
+  assert.equal(referenceState.settingsReferencesVisible, false, `${label} desktop references are not buried in the settings hub`);
+  assert.match(referenceState.text, /Official Scoring Charts/i, `${label} references include scoring charts`);
+  assert.match(referenceState.text, /Altitude Adjustments/i, `${label} references include altitude adjustments`);
+  assert.match(referenceState.text, /HAMR Resources/i, `${label} references include HAMR resources`);
+  await page.locator('#desktop-references-close').click();
+  await page.waitForFunction(() => document.getElementById('desktop-references-modal')?.hasAttribute('hidden'));
 }
 
 async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
@@ -557,8 +584,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(strengthVisible, true, 'strength editor visible by default');
 
   // 6a-body. BODY chip opens body editor
-  await page.locator('#summary-body').click();
-  await page.waitForFunction(() => !document.getElementById('body-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'body');
   const bodyVisible = await page.evaluate(() => !document.getElementById('body-editor')?.hasAttribute('hidden'));
   assert.equal(bodyVisible, true, 'body editor visible after clicking BODY chip');
   const strHiddenAfterBody = await page.evaluate(() => ({
@@ -577,14 +603,13 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       .every((id) => !!document.getElementById(id))
   ));
   assert.equal(bodyInputsExist, true, 'body editor exposes ratio, height, and waist inputs');
-  await page.locator('#summary-strength').click();
-  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'strength');
 
   await assertResponsiveDashboardLayout(page, label);
   await assertDesktopChartPanel(page, label);
+  await assertDesktopReferencesDrawer(page, label);
 
-  await page.locator('#summary-core').click();
-  await page.waitForFunction(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'core');
   const coreVisible = await page.evaluate(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
   assert.equal(coreVisible, true, 'core editor visible after clicking CORE chip');
   const strHidden = await page.evaluate(() => ({
@@ -597,13 +622,11 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     'strength editor hides only in mobile switching layout after selecting core',
   );
 
-  await page.locator('#summary-cardio').click();
-  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'cardio');
   const cardioVisible = await page.evaluate(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
   assert.equal(cardioVisible, true, 'cardio editor visible after clicking RUN chip');
 
-  await page.locator('#summary-strength').click();
-  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'strength');
 
   // 6b. Pace plan section is always present in DOM (not hidden when switching editors)
   const pacePlanSection = await page.evaluate(() => !!document.querySelector('.pace-plan-section'));
@@ -638,8 +661,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(strengthAfterRoundTrip, '27', 'push-up value preserved after HRPU round-trip');
 
   // Set 2-mile run to 14:00, switch to HAMR, switch back — run time must persist
-  await page.locator('#summary-cardio').click();
-  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'cardio');
   await page.evaluate(() => {
     window.afptApp.dispatch({ type: 'SET_CARDIO_VALUE', value: '14:00' });
     const minEl = document.getElementById('run-mintxt');
@@ -1076,8 +1098,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForFunction(() => window.afptApp.getState().cardio.value === '14:00');
   await page.waitForFunction(() => window.afptApp.getPacerAudioDebug().lastCueIndex === -1);
 
-  await page.locator('#summary-strength').click();
-  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'strength');
 
   // 7. Altitude via dispatch changes cardio score
   const { cardioSeaLevel, cardioAlt4 } = await page.evaluate(() => {
@@ -1116,8 +1137,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   }
 
   // 8a. Body/cardio controls stay in bounds across themes and event layouts
-  await page.locator('#summary-body').click();
-  await page.waitForFunction(() => !document.getElementById('body-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'body');
   for (const preset of ['tactical', 'stencil', 'blues', 'light', 'fitness']) {
     await setThemePreset(page, preset);
     await assertControlsStayInsideApp(page, `${label} ${preset} body`);
@@ -1147,8 +1167,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await assertScoreBarLabelsDoNotOverlap(page, 'tactical', label);
   await assertScoreBarLabelsDoNotOverlap(page, 'light', label);
 
-  await page.locator('#summary-cardio').click();
-  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'cardio');
   for (const preset of ['tactical', 'stencil', 'blues', 'light', 'fitness']) {
     await setThemePreset(page, preset);
     await page.evaluate(() => {
@@ -1253,14 +1272,11 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.notEqual(fitnessGlassStyle.scoreBorder, '0px', `${label} gradiant score section has glass border`);
   assert.ok(fitnessGlassStyle.scoreRadius >= 16, `${label} gradiant score section is rounded`);
 
-  await page.locator('#summary-strength').click();
-  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'strength');
   await assertEventRowEdgeAlignment(page, 'strength-editor', `${label} strength`);
-  await page.locator('#summary-core').click();
-  await page.waitForFunction(() => !document.getElementById('core-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'core');
   await assertEventRowEdgeAlignment(page, 'core-editor', `${label} core`);
-  await page.locator('#summary-cardio').click();
-  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'cardio');
   await assertEventRowEdgeAlignment(page, 'cardio-editor', `${label} cardio run`);
   await page.evaluate(() => {
     const sel = document.getElementById('cardio-sel');
@@ -1350,8 +1366,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.ok(contrastScoreColumnAlignment.numberDelta <= 12, `contrast score number centered in middle column: ${contrastScoreColumnAlignment.numberDelta}px`);
   assert.ok(contrastScoreColumnAlignment.badgeDelta <= 12, `contrast status centered in right column: ${contrastScoreColumnAlignment.badgeDelta}px`);
   await setThemePreset(page, 'tactical');
-  await page.locator('#summary-strength').click();
-  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'strength');
 
   // 9. Chart drawer opens with generated table and closes
   await page.locator('#push-txt').fill('48');
@@ -1499,8 +1514,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const chartClosed = await page.evaluate(() => document.getElementById('modal')?.hasAttribute('hidden'));
   assert.equal(chartClosed, true, 'chart drawer closes on close-btn click');
 
-  await page.locator('#summary-cardio').click();
-  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'cardio');
   await page.evaluate(() => {
     const sel = document.getElementById('cardio-sel');
     sel.value = 'hamr-20-meter';
@@ -1564,64 +1578,70 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   );
   await page.locator('#close-btn').click();
   await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
-  await page.locator('#summary-strength').click();
-  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'strength');
 
   // 9a. Settings reference actions open official source images in the themed drawer
-  for (const [selector, expectedSource, expectedTitle] of [
-    ['#run-adjust-chart', 'dafman-36-2905-2-page1-full.png', 'Run Altitude Adjustment'],
-    ['#walk-adjust-chart', 'dafman-36-2905-2-page2-full.png', 'Walk/Shuttle Altitude Adjustment'],
-    ['#shuttle-score-card', 'ShuttleLevels.jpeg', 'HAMR Shuttle Score Card'],
-  ]) {
-    if (await page.locator('#settings-hub-panel').isHidden()) {
-      await page.locator('#settings-hub-toggle').click();
+  if (await page.evaluate(() => matchMedia('(min-width: 980px)').matches)) {
+    assert.equal(
+      await page.locator('.settings-hub-section--references').evaluate((element) => getComputedStyle(element).display),
+      'none',
+      'desktop moves reference actions out of the settings hub',
+    );
+  } else {
+    for (const [selector, expectedSource, expectedTitle] of [
+      ['#run-adjust-chart', 'dafman-36-2905-2-page1-full.png', 'Run Altitude Adjustment'],
+      ['#walk-adjust-chart', 'dafman-36-2905-2-page2-full.png', 'Walk/Shuttle Altitude Adjustment'],
+      ['#shuttle-score-card', 'ShuttleLevels.jpeg', 'HAMR Shuttle Score Card'],
+    ]) {
+      if (await page.locator('#settings-hub-panel').isHidden()) {
+        await page.locator('#settings-hub-toggle').click();
+      }
+      await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+      await page.locator(selector).click();
+      await page.waitForFunction(
+        (source) => {
+          const modal = document.getElementById('modal');
+          const image = document.querySelector('#chart-content .chart-reference__image');
+          return modal?.dataset.chartMode === 'reference'
+            && !modal.hasAttribute('hidden')
+            && image?.getAttribute('src')?.includes(source);
+        },
+        expectedSource,
+      );
+      assert.equal(
+        await page.locator('#chart-drawer-title').evaluate((el) => el.textContent.trim()),
+        expectedTitle,
+        `${selector} sets reference drawer title`,
+      );
+      assert.equal(
+        await page.locator('.chart-reference-row').isHidden(),
+        true,
+        `${selector} hides score chart reference control`,
+      );
+      assert.equal(
+        await page.locator('.chart-ctrl-row').isHidden(),
+        true,
+        `${selector} hides score chart controls`,
+      );
+      assert.equal(
+        await page.locator('.chart-demo-row').isHidden(),
+        true,
+        `${selector} hides modal demographic controls`,
+      );
+      await page.locator('#close-btn').click();
+      await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
+      assert.equal(
+        await page.locator('#settings-hub-panel').isVisible(),
+        true,
+        `${selector} returns to still-open settings hub after closing reference`,
+      );
     }
-    await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
-    await page.locator(selector).click();
-    await page.waitForFunction(
-      (source) => {
-        const modal = document.getElementById('modal');
-        const image = document.querySelector('#chart-content .chart-reference__image');
-        return modal?.dataset.chartMode === 'reference'
-          && !modal.hasAttribute('hidden')
-          && image?.getAttribute('src')?.includes(source);
-      },
-      expectedSource,
-    );
-    assert.equal(
-      await page.locator('#chart-drawer-title').evaluate((el) => el.textContent.trim()),
-      expectedTitle,
-      `${selector} sets reference drawer title`,
-    );
-    assert.equal(
-      await page.locator('.chart-reference-row').isHidden(),
-      true,
-      `${selector} hides score chart reference control`,
-    );
-    assert.equal(
-      await page.locator('.chart-ctrl-row').isHidden(),
-      true,
-      `${selector} hides score chart controls`,
-    );
-    assert.equal(
-      await page.locator('.chart-demo-row').isHidden(),
-      true,
-      `${selector} hides modal demographic controls`,
-    );
-    await page.locator('#close-btn').click();
-    await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
-    assert.equal(
-      await page.locator('#settings-hub-panel').isVisible(),
-      true,
-      `${selector} returns to still-open settings hub after closing reference`,
-    );
+    await page.locator('#settings-hub-close').click();
+    await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
   }
-  await page.locator('#settings-hub-close').click();
-  await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
 
   // 9b. Cardio chart does not contain NaN:NaN
-  await page.locator('#summary-cardio').click();
-  await page.waitForFunction(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'cardio');
   const runBtn = page.locator('#run-btn');
   await runBtn.click();
   await page.waitForFunction(() => !document.getElementById('modal')?.hasAttribute('hidden'));
@@ -1631,8 +1651,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(cardioChartHasNaN, false, 'cardio chart does not contain NaN');
   await page.locator('#close-btn').click();
   await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
-  await page.locator('#summary-strength').click();
-  await page.waitForFunction(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));
+  await selectComponentForViewport(page, 'strength');
 
   // 10. PWA API accessible
   assert.equal(

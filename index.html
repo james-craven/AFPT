@@ -92,6 +92,21 @@
     </section>
   </div>
 
+  <!-- Desktop references drawer -->
+  <div id="desktop-references-modal" class="desktop-references-modal" hidden role="dialog" aria-modal="true" aria-labelledby="desktop-references-title">
+    <button id="desktop-references-scrim" class="desktop-references-modal__scrim" type="button" aria-label="Close references"></button>
+    <section class="desktop-references-modal__panel">
+      <header class="desktop-references-modal__header">
+        <div>
+          <span class="desktop-references-modal__eyebrow">References</span>
+          <h2 id="desktop-references-title">Official Charts & App Info</h2>
+        </div>
+        <button id="desktop-references-close" class="desktop-references-modal__close" type="button">Close</button>
+      </header>
+      <div id="desktop-references-content" class="desktop-references-modal__content"></div>
+    </section>
+  </div>
+
   <!-- App shell -->
   <div id="app-shell" class="app-shell">
 
@@ -111,7 +126,7 @@
             <h2 id="settings-hub-title">Controls</h2>
             <button id="settings-hub-close" class="settings-hub-close" type="button">Close</button>
           </div>
-          <section class="settings-hub-section">
+          <section class="settings-hub-section settings-hub-section--references">
             <h3>References</h3>
             <ul class="settings-menu" aria-label="Reference and offline controls">
               <li id="run-adjust-chart" role="button" tabindex="0">Run Altitude Adjustment</li>
@@ -202,6 +217,10 @@
           <option value="fitness">Gradiant</option>
         </select>
       </div>
+      <div class="demo-field demo-field--action">
+        <span class="demo-label" aria-hidden="true">REFERENCE</span>
+        <button id="desktop-references-open" class="desktop-reference-open" type="button">References</button>
+      </div>
     </section>
 
     <!-- Score header -->
@@ -256,6 +275,29 @@
         <span id="score-delta-max">+-- to max</span>
       </div>
       <div id="pfra-result" hidden></div>
+    </section>
+
+    <section class="desktop-score-breakdown" aria-label="Component score summary">
+      <article class="desktop-score-breakdown__item">
+        <span class="desktop-score-breakdown__name">Strength</span>
+        <strong id="desktop-strength-score">--</strong>
+        <span id="desktop-strength-value">--</span>
+      </article>
+      <article class="desktop-score-breakdown__item">
+        <span class="desktop-score-breakdown__name">Core</span>
+        <strong id="desktop-core-score">--</strong>
+        <span id="desktop-core-value">--</span>
+      </article>
+      <article class="desktop-score-breakdown__item">
+        <span class="desktop-score-breakdown__name">Cardio</span>
+        <strong id="desktop-cardio-score">--</strong>
+        <span id="desktop-cardio-value">--</span>
+      </article>
+      <article class="desktop-score-breakdown__item">
+        <span class="desktop-score-breakdown__name">Body</span>
+        <strong id="desktop-body-score">--</strong>
+        <span id="desktop-body-value">--</span>
+      </article>
     </section>
 
 

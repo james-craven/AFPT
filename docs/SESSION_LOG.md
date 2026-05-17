@@ -476,3 +476,14 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added concise in-app guidance for scoring at a glance, event variant selection, cardio strategy, WHtR, component minimums, and official-source disclaimers in the app's own voice.
 - Kept the desktop chart/reference panel, chart drawer, pace plan, settings hub, themes, and scoring logic intact.
 - Updated browser regression coverage to assert the calculator-page layout: desktop intro/guide visible, all four editors visible at wide widths, mobile intro/guide hidden, and one active editor on mobile.
+
+## Desktop Calculator Release Polish
+
+- Reworked desktop again around a calculator-first above-the-fold experience instead of a vertically rearranged mobile app.
+- Moved sex, age, theme, and References into a compact desktop profile bar directly under the header.
+- Hid the mobile component selector row on desktop and replaced it with a non-switching desktop score breakdown beside the total score.
+- Kept all four real editor panels visible on desktop and tightened the editor grid so Strength, Core, Cardio, and WHtR are usable without scrolling on normal laptop viewports.
+- Removed the clipped inline desktop score chart panel; charts now open from each editor's Chart button in the existing polished drawer.
+- Added a desktop References drawer with grouped official scoring charts, altitude references, HAMR resources, and app/offline actions, while preserving mobile settings-menu reference access.
+- Moved guide/intro content below the calculator so education supports the tool without pushing the primary controls down.
+- Updated browser regression coverage for the new desktop contract: hidden desktop component selector, visible desktop score breakdown, all editors in the initial desktop viewport, drawer-based chart access, and grouped desktop references.

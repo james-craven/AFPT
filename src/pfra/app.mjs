@@ -79,6 +79,10 @@ const desktopEditorQuery = window.matchMedia('(min-width: 980px)');
 function byId(id) { return document.getElementById(id); }
 function val(id) { return byId(id)?.value ?? ''; }
 function isDesktopEditorLayout() { return desktopEditorQuery.matches; }
+function setText(id, text) {
+  const element = byId(id);
+  if (element) element.textContent = text;
+}
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (char) => ({
     '&': '&amp;',
@@ -670,6 +674,116 @@ function renderOfficialReferenceSet(title, referenceKeys) {
 
   setChartDrawerTitle(title);
   contentEl.innerHTML = references.map(referenceFigure).join('');
+}
+
+function desktopReferenceGroup(title, description, references) {
+  return `<section class="desktop-reference-group">
+    <div class="desktop-reference-group__heading">
+      <h3>${title}</h3>
+      <p>${description}</p>
+    </div>
+    <div class="desktop-reference-stack">
+      ${references.map(referenceFigure).join('')}
+    </div>
+  </section>`;
+}
+
+function renderDesktopReferencesContent() {
+  const content = byId('desktop-references-content');
+  if (!content) return;
+
+  const scoringReferences = Object.values(SCORE_CHART_REFERENCES);
+  const altitudeReferences = [
+    OFFICIAL_REFERENCES.runAltitude,
+    OFFICIAL_REFERENCES.walkAltitude,
+  ];
+  const hamrReferences = [
+    SCORE_CHART_REFERENCES['hamr-20-meter'],
+    OFFICIAL_REFERENCES.shuttleScoreCard,
+  ];
+
+  content.innerHTML = [
+    desktopReferenceGroup(
+      'Official Scoring Charts',
+      'Source chart images for the PFRA component standards used by the calculator.',
+      scoringReferences,
+    ),
+    desktopReferenceGroup(
+      'Altitude Adjustments',
+      'Run, walk, and HAMR altitude references for locations where adjustments apply.',
+      altitudeReferences,
+    ),
+    desktopReferenceGroup(
+      'HAMR Resources',
+      'The HAMR score chart and shuttle level card used when comparing shuttle totals.',
+      hamrReferences,
+    ),
+    `<section class="desktop-reference-group desktop-reference-group--app">
+      <div class="desktop-reference-group__heading">
+        <h3>App & Offline</h3>
+        <p>Quick access to install help, update checks, and the current development build information.</p>
+      </div>
+      <div class="desktop-reference-actions">
+        <button type="button" data-desktop-reference-action="install">Install App</button>
+        <button type="button" data-desktop-reference-action="update">Check for Update</button>
+        <button type="button" data-desktop-reference-action="build">Build Info</button>
+      </div>
+    </section>`,
+  ].join('');
+}
+
+function openDesktopReferences() {
+  const modal = byId('desktop-references-modal');
+  if (!modal) return;
+  renderDesktopReferencesContent();
+  modal.removeAttribute('hidden');
+  document.body.classList.add('desktop-references-open');
+  byId('desktop-references-close')?.focus({ preventScroll: true });
+}
+
+function closeDesktopReferences() {
+  const modal = byId('desktop-references-modal');
+  if (!modal) return;
+  modal.setAttribute('hidden', '');
+  document.body.classList.remove('desktop-references-open');
+  byId('desktop-references-open')?.focus({ preventScroll: true });
+}
+
+function showInstallHelp() {
+  if (window.afptPwa?.showInstallHelp) {
+    window.afptPwa.showInstallHelp({ promptIfAvailable: true });
+    return;
+  }
+  byId('install-modal')?.removeAttribute('hidden');
+}
+
+function showDevelopmentBuildInfo() {
+  const modal = byId('dev-version-modal');
+  const textEl = byId('dev-version-text');
+  if (textEl) {
+    textEl.innerHTML = `<p>This is a developmental build for testing. It is not the final production release.</p>
+      <dl>
+        <dt>Status</dt><dd>Developmental build</dd>
+        <dt>Generated</dt><dd>Loading build metadata...</dd>
+      </dl>`;
+    fetch('./dev-build-info.json')
+      .then((r) => r.json())
+      .then((info) => {
+        const generatedAt = info.generatedAt
+          ? new Date(info.generatedAt).toLocaleString()
+          : 'Unavailable';
+        textEl.innerHTML = `<p>This is a developmental build for testing. It is not the final production release.</p>
+          <dl>
+            <dt>Status</dt><dd>Developmental build</dd>
+            <dt>Generated</dt><dd>${generatedAt}</dd>
+          </dl>`;
+      })
+      .catch(() => {
+        textEl.innerHTML = `<p>This is a developmental build for testing. Build metadata is unavailable.</p>
+          <dl><dt>Status</dt><dd>Developmental build</dd></dl>`;
+      });
+  }
+  if (modal) modal.removeAttribute('hidden');
 }
 
 function populateChartComponentSel(category) {
@@ -1442,29 +1556,37 @@ function renderScore(result) {
 
   const bodyScore = byId('pfra-body-score');
   if (bodyScore) bodyScore.textContent = String(scores.body);
+  setText('desktop-body-score', state.bodyExempt ? 'EXEMPT' : String(scores.body));
 
   const strScoreEl = byId('pfra-strength-score');
   if (strScoreEl) strScoreEl.textContent = state.strength.exempt ? 'EXEMPT' : String(scores.strength);
+  setText('desktop-strength-score', state.strength.exempt ? 'EXEMPT' : String(scores.strength));
 
   const coreScoreEl = byId('pfra-core-score');
   if (coreScoreEl) coreScoreEl.textContent = state.core.exempt ? 'EXEMPT' : String(scores.core);
+  setText('desktop-core-score', state.core.exempt ? 'EXEMPT' : String(scores.core));
 
   const cardioScoreEl = byId('pfra-cardio-score');
   if (cardioScoreEl) cardioScoreEl.textContent = state.cardio.exempt ? 'EXEMPT' : String(scores.cardio);
+  setText('desktop-cardio-score', state.cardio.exempt ? 'EXEMPT' : String(scores.cardio));
 }
 
 function renderChipValues() {
   const chipBody = byId('chip-body-value');
   if (chipBody) chipBody.textContent = state.whtr || '--';
+  setText('desktop-body-value', state.bodyExempt ? 'Exempt' : `WHtR ${state.whtr || '--'}`);
 
   const chipStr = byId('chip-strength-value');
   if (chipStr) chipStr.textContent = state.strength.exempt ? 'EX' : (state.strength.value || '--');
+  setText('desktop-strength-value', state.strength.exempt ? 'Exempt' : `${state.strength.value || '--'} reps`);
 
   const chipCore = byId('chip-core-value');
   if (chipCore) chipCore.textContent = state.core.exempt ? 'EX' : (state.core.value || '--');
+  setText('desktop-core-value', state.core.exempt ? 'Exempt' : state.core.value || '--');
 
   const chipCardio = byId('chip-cardio-value');
   if (chipCardio) chipCardio.textContent = state.cardio.exempt ? 'EX' : (state.cardio.value || '--');
+  setText('desktop-cardio-value', state.cardio.exempt ? 'Exempt' : state.cardio.value || '--');
 }
 
 function renderBodyEditor(scores) {
@@ -2407,6 +2529,31 @@ function bindEvents() {
     if (e.key === 'Escape' && !byId('modal')?.hasAttribute('hidden')) closeChart();
   });
 
+  // --- Desktop references drawer ---
+
+  byId('desktop-references-open')?.addEventListener('click', openDesktopReferences);
+  byId('desktop-references-close')?.addEventListener('click', closeDesktopReferences);
+  byId('desktop-references-scrim')?.addEventListener('click', closeDesktopReferences);
+  byId('desktop-references-content')?.addEventListener('click', (event) => {
+    const action = event.target instanceof Element
+      ? event.target.closest('[data-desktop-reference-action]')?.dataset.desktopReferenceAction
+      : null;
+    if (!action) return;
+    closeDesktopReferences();
+    if (action === 'install') {
+      showInstallHelp();
+    } else if (action === 'update') {
+      window.afptPwa?.checkForUpdates?.();
+    } else if (action === 'build') {
+      showDevelopmentBuildInfo();
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !byId('desktop-references-modal')?.hasAttribute('hidden')) {
+      closeDesktopReferences();
+    }
+  });
+
   // --- Settings menu items ---
 
   bindMenuClick('run-adjust-chart', () => {
@@ -2423,42 +2570,13 @@ function bindEvents() {
     if (player) player.removeAttribute('hidden');
   });
   bindMenuClick('install-app-menu', () => {
-    if (window.afptPwa?.showInstallHelp) {
-      window.afptPwa.showInstallHelp({ promptIfAvailable: true });
-      return;
-    }
-    byId('install-modal')?.removeAttribute('hidden');
+    showInstallHelp();
   });
   bindMenuClick('pwa-update-check', () => {
     window.afptPwa?.checkForUpdates?.();
   });
   bindMenuClick('dev-version-menu', () => {
-    const modal = byId('dev-version-modal');
-    const textEl = byId('dev-version-text');
-    if (textEl) {
-      textEl.innerHTML = `<p>This is a developmental build for testing. It is not the final production release.</p>
-        <dl>
-          <dt>Status</dt><dd>Developmental build</dd>
-          <dt>Generated</dt><dd>Loading build metadata...</dd>
-        </dl>`;
-      fetch('./dev-build-info.json')
-        .then((r) => r.json())
-        .then((info) => {
-          const generatedAt = info.generatedAt
-            ? new Date(info.generatedAt).toLocaleString()
-            : 'Unavailable';
-          textEl.innerHTML = `<p>This is a developmental build for testing. It is not the final production release.</p>
-            <dl>
-              <dt>Status</dt><dd>Developmental build</dd>
-              <dt>Generated</dt><dd>${generatedAt}</dd>
-            </dl>`;
-        })
-        .catch(() => {
-          textEl.innerHTML = `<p>This is a developmental build for testing. Build metadata is unavailable.</p>
-            <dl><dt>Status</dt><dd>Developmental build</dd></dl>`;
-        });
-    }
-    if (modal) modal.removeAttribute('hidden');
+    showDevelopmentBuildInfo();
   });
 
   byId('dev-version-close')?.addEventListener('click', () => {
