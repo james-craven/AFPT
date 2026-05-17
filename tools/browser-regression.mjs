@@ -424,7 +424,10 @@ async function assertResponsiveDashboardLayout(page, label) {
   assert.ok(result.controls.left > result.score.left, `${label} controls sit to the right of score header`);
   assert.ok(result.nav.right < result.editor.left, `${label} component summary rail sits left of editor`);
   assert.ok(result.editor.right < result.pace.left, `${label} active editor sits left of pace panel`);
-  assert.ok(Math.abs(result.pace.left - result.chart.left) <= 1, `${label} pace and chart share the right context column`);
+  assert.ok(Math.abs(result.editor.left - result.chart.left) <= 1, `${label} desktop chart belongs to the center workflow column`);
+  assert.ok(Math.abs(result.editor.width - result.chart.width) <= 1, `${label} desktop chart matches active editor width`);
+  assert.ok(result.chart.top > result.editor.bottom, `${label} desktop chart sits below the active editor`);
+  assert.ok(Math.abs(result.editor.top - result.pace.top) <= 1, `${label} pace panel aligns with the active editor top`);
 }
 
 async function assertDesktopChartPanel(page, label) {

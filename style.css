@@ -4019,7 +4019,7 @@ select {
 
 @media (min-width: 980px) {
   :root {
-    --afpt-app-max-width: 1360px;
+    --afpt-app-max-width: 1440px;
   }
 
   html,
@@ -4036,19 +4036,19 @@ select {
     max-width: var(--afpt-app-max-width);
     display: grid;
     grid-template-columns:
-      minmax(248px, 300px)
-      minmax(360px, 1fr)
-      minmax(290px, 392px);
+      minmax(216px, 0.82fr)
+      minmax(360px, 1.7fr)
+      minmax(300px, 1fr);
     grid-template-areas:
       "header header header"
       "score score controls"
       "nav editor pace"
-      "nav editor chart"
+      "nav chart pace"
       "status status status";
-    gap: 16px;
+    gap: 18px;
     align-items: start;
     margin: 0 auto;
-    padding: 0 0 24px;
+    padding: 0 0 28px;
     overflow: visible;
   }
 
@@ -4056,8 +4056,8 @@ select {
     grid-area: header;
     border-left: 1px solid var(--afpt-border);
     border-right: 1px solid var(--afpt-border);
-    border-radius: 0 0 14px 14px;
-    padding: 14px 18px;
+    border-radius: 0 0 16px 16px;
+    padding: 14px 20px;
   }
 
   .settings-hub-panel,
@@ -4080,27 +4080,33 @@ select {
   .lap-display,
   .desktop-chart-panel {
     border: 1px solid var(--afpt-border);
-    border-radius: 14px;
+    border-radius: 16px;
     background: color-mix(in srgb, var(--afpt-panel) 94%, transparent);
-    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.10);
     min-width: 0;
   }
 
   .score-section {
     grid-area: score;
+    align-self: stretch;
     margin: 0;
-    padding: 18px 20px 16px;
+    min-height: 186px;
+    padding: 22px 22px 18px;
     border-bottom: 1px solid var(--afpt-border);
+    display: grid;
+    align-content: center;
   }
 
   .demographics-row {
     grid-area: controls;
+    align-self: stretch;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 14px;
+    gap: 12px;
+    padding: 16px;
     border-bottom: 1px solid var(--afpt-border);
     background: color-mix(in srgb, var(--afpt-panel-2) 92%, transparent);
+    align-content: center;
   }
 
   .demo-field {
@@ -4118,12 +4124,14 @@ select {
 
   .component-strip {
     grid-area: nav;
+    align-self: start;
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
-    padding: 12px;
+    padding: 14px;
     background: color-mix(in srgb, var(--afpt-panel) 88%, transparent);
     border-bottom: 1px solid var(--afpt-border);
+    align-content: start;
   }
 
   .component-strip::after {
@@ -4139,7 +4147,7 @@ select {
     align-items: center;
     justify-items: start;
     gap: 4px 12px;
-    min-height: 76px;
+    min-height: 82px;
     padding: 14px;
     border: 1px solid var(--afpt-border);
     border-radius: 10px;
@@ -4178,8 +4186,8 @@ select {
   }
 
   .editor-panel {
-    padding: 18px;
-    gap: 16px;
+    padding: 20px;
+    gap: 18px;
   }
 
   .editor-header {
@@ -4243,11 +4251,12 @@ select {
     grid-area: pace;
     padding: 0;
     min-width: 0;
+    align-self: start;
   }
 
   .lap-display {
     margin: 0;
-    padding: 16px 14px;
+    padding: 16px;
     border-top: 1px solid var(--afpt-border);
   }
 
@@ -4262,10 +4271,11 @@ select {
 
   .desktop-chart-panel {
     grid-area: chart;
+    align-self: start;
     display: flex;
     flex-direction: column;
-    max-height: min(680px, calc(100vh - 96px));
-    overflow: auto;
+    max-height: min(420px, calc(100vh - 120px));
+    overflow: hidden;
     padding: 0;
   }
 
@@ -4277,10 +4287,10 @@ select {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 14px 16px;
+    padding: 13px 16px;
     background: color-mix(in srgb, var(--afpt-panel) 96%, transparent);
     border-bottom: 1px solid var(--afpt-border);
-    border-radius: 14px 14px 0 0;
+    border-radius: 16px 16px 0 0;
   }
 
   .desktop-chart-panel__eyebrow {
@@ -4325,7 +4335,10 @@ select {
   }
 
   .desktop-chart-content {
-    padding: 14px;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    padding: 14px 16px 16px;
     min-width: 0;
   }
 
@@ -4399,7 +4412,7 @@ select {
   :root[data-theme="blues"] .score-section,
   :root[data-theme="fitness"] .score-section {
     margin: 0;
-    padding: 16px 20px;
+    padding: 18px 22px;
   }
 
   :root[data-theme="light"] .score-section,
@@ -4412,7 +4425,7 @@ select {
   :root[data-theme="blues"] .component-strip,
   :root[data-theme="light"] .component-strip,
   :root[data-theme="fitness"] .component-strip {
-    padding: 12px;
+    padding: 14px;
   }
 
   :root[data-theme="fitness"] .score-section,
@@ -4436,5 +4449,28 @@ select {
 
   :root[data-theme="fitness"] .lap-display {
     margin-top: 0;
+  }
+
+  @media (min-width: 1200px) {
+    .app-shell {
+      grid-template-columns:
+        minmax(260px, 0.85fr)
+        minmax(500px, 1.65fr)
+        minmax(360px, 1fr);
+    }
+
+    .score-section {
+      min-height: 198px;
+    }
+
+    .desktop-chart-panel {
+      max-height: min(470px, calc(100vh - 120px));
+    }
+  }
+
+  @media (min-width: 1600px) {
+    .app-shell {
+      width: min(calc(100% - 72px), var(--afpt-app-max-width));
+    }
   }
 }

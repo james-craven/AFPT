@@ -460,3 +460,10 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Reflowed existing sections into a desktop grid: wide score header, right-side demographics/theme controls, left component summary rail, center active editor, and right pace/chart context panels.
 - Added a desktop score chart panel that reuses the existing generated chart table and current-performance marker, with mobile retaining the existing chart drawer flow.
 - Added browser coverage for desktop grid placement, hidden mobile desktop panel behavior, desktop chart panel updates, current-row highlighting, and body composition insight mode.
+
+## Desktop Dashboard Polish Pass
+
+- Reworked the first desktop draft so it reads less like rearranged mobile cards: the score/control band now stretches intentionally, the active editor owns the center workflow, the chart panel sits directly below that editor, and the pace plan stays as the right-side context console.
+- Increased the desktop max width to 1440px with wider-screen spacing guards, refined the 980px and 1200px grid tracks, and reduced the empty sidebar feel by keeping the component summary rail compact.
+- Tightened panel radii, shadows, padding, and chart scrolling so desktop charts are visible and useful without overwhelming the calculator.
+- Updated browser regression expectations to verify the polished desktop information architecture while preserving the mobile stacked layout.
