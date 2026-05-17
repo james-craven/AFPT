@@ -1,4 +1,5 @@
 const CLOSE_ON_ACTION_IDS = new Set([
+  'desktop-references-open',
   'dev-version-menu',
   'install-app-menu',
   'pwa-update-check',

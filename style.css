@@ -125,7 +125,7 @@ html, body {
 }
 
 /* ─── Collapse hidden elements (prevent phantom spacing) ──────── */
-[hidden] { display: none !important; }
+[hidden] { display: none; }
 
 /* ─── Custom dropdown arrows (all selects, all themes) ────────── */
 select {
@@ -253,6 +253,66 @@ header.app-header .score-section.app-header-score {
 .app-header .score-section.app-header-score .score-ring-wrap,
 .app-header .score-section.app-header-score .score-ring-deltas {
   display: none;
+}
+
+:root[data-theme="blues"] .app-header .score-section.app-header-score,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score {
+  display: grid;
+  grid-template-columns: 70px auto;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 70px;
+  padding: 5px 8px;
+}
+
+:root[data-theme="blues"] .app-header .score-section.app-header-score .score-main-row,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score .score-main-row {
+  display: contents;
+}
+
+:root[data-theme="blues"] .app-header .score-section.app-header-score .score-comp-label,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score .score-comp-label,
+:root[data-theme="blues"] .app-header .score-section.app-header-score .score-number,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score .score-number,
+:root[data-theme="blues"] .app-header .score-section.app-header-score .score-bar-wrap,
+:root[data-theme="blues"] .app-header .score-section.app-header-score .score-bar-labels,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score .score-bar-wrap,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score .score-bar-labels,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-deltas {
+  display: none;
+}
+
+:root[data-theme="blues"] .app-header .score-section.app-header-score .score-ring-wrap,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-wrap {
+  display: flex;
+  grid-column: 1;
+  justify-content: center;
+  padding: 0;
+}
+
+:root[data-theme="blues"] .app-header .score-section.app-header-score .score-ring-svg,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-svg {
+  width: 70px;
+  height: 70px;
+}
+
+:root[data-theme="blues"] .app-header .score-section.app-header-score .score-ring-num,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-num {
+  font-size: 44px;
+  font-weight: 800;
+}
+
+:root[data-theme="blues"] .app-header .score-section.app-header-score .score-ring-cat,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-cat {
+  display: none;
+}
+
+:root[data-theme="blues"] .app-header .score-section.app-header-score .score-badge,
+:root[data-theme="fitness"] .app-header .score-section.app-header-score .score-badge {
+  grid-column: 2;
+  justify-self: center;
+  margin-top: 0;
 }
 
 .settings-hub {
@@ -419,10 +479,10 @@ header.app-header .score-section.app-header-score {
   color: var(--afpt-accent);
 }
 
-.settings-audio-player {
-  padding: 8px 0 0 0 !important;
-  border: none !important;
-  background: transparent !important;
+.settings-menu li.settings-audio-player {
+  padding: 8px 0 0 0;
+  border: none;
+  background: transparent;
 }
 
 .settings-audio-player audio {
@@ -1875,6 +1935,12 @@ header.app-header .score-section.app-header-score {
   gap: 8px;
   padding: 8px 14px 0;
   flex-shrink: 0;
+}
+
+.chart-reference-row[hidden],
+.chart-ctrl-row[hidden],
+.chart-demo-row[hidden] {
+  display: none;
 }
 
 .chart-demo-sel {
@@ -4300,9 +4366,10 @@ header.app-header .score-section.app-header-score {
 
   .app-header {
     grid-area: header;
-    grid-template-columns: minmax(0, 1fr) minmax(170px, 220px) auto;
+    grid-template-columns: minmax(0, 1fr) clamp(190px, 22vw, 260px) minmax(44px, 1fr);
     align-items: center;
-    gap: 16px;
+    column-gap: 12px;
+    row-gap: 8px;
     border-left: 1px solid var(--afpt-border);
     border-right: 1px solid var(--afpt-border);
     border-radius: 0 0 16px 16px;
@@ -4310,8 +4377,11 @@ header.app-header .score-section.app-header-score {
   }
 
   .app-header-left {
+    grid-column: 1;
     align-items: flex-end;
-    gap: 16px;
+    gap: 12px;
+    justify-content: flex-start;
+    overflow: hidden;
   }
 
   .app-title {
@@ -4323,8 +4393,10 @@ header.app-header .score-section.app-header-score {
   .app-header-controls {
     display: flex;
     align-items: flex-end;
-    gap: 9px;
+    gap: 8px;
+    justify-content: flex-start;
     min-width: 0;
+    overflow: hidden;
   }
 
   .app-header-controls .demo-field {
@@ -4362,15 +4434,12 @@ header.app-header .score-section.app-header-score {
     width: 132px;
   }
 
-  .app-header-controls .desktop-reference-open {
-    align-self: end;
-    display: inline-flex;
-    min-height: 34px;
-  }
-
   .app-header-score {
+    grid-column: 2;
     align-self: center;
+    justify-self: center;
     width: 100%;
+    max-width: 260px;
     padding: 8px 12px;
   }
 
@@ -4381,6 +4450,10 @@ header.app-header .score-section.app-header-score {
 
   .app-header .score-section.app-header-score .score-comp-label {
     display: block;
+  }
+
+  .settings-hub {
+    grid-column: 3;
   }
 
   .settings-hub-panel,
@@ -4950,10 +5023,6 @@ header.app-header .score-section.app-header-score {
     background: color-mix(in srgb, var(--afpt-panel) 88%, transparent);
   }
 
-  .settings-hub-section--references {
-    display: none;
-  }
-
   :root[data-theme="tactical"] .component-chip.chip--active::after {
     top: 12px;
     right: 12px;
@@ -5039,6 +5108,97 @@ header.app-header .score-section.app-header-score {
     border-radius: 10px;
     min-height: 0;
     box-shadow: none;
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 76px minmax(0, 1fr);
+    align-items: center;
+    justify-items: center;
+    gap: 8px;
+    min-height: 72px;
+    padding: 6px 10px;
+    border: 1px solid var(--afpt-border);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--afpt-panel) 82%, transparent);
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-main-row,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-main-row {
+    display: contents;
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-comp-label,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-comp-label {
+    display: block;
+    grid-column: 1;
+    justify-self: center;
+    color: var(--afpt-ink-dim);
+    font-size: 7px;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal;
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-number,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-number {
+    display: none;
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-badge,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-badge {
+    grid-column: 3;
+    justify-self: center;
+    max-width: 100%;
+    padding: 3px 6px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-bar-wrap,
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-bar-labels,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-bar-wrap,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-bar-labels,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-deltas {
+    display: none;
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-ring-wrap,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-wrap {
+    display: flex;
+    grid-column: 2;
+    grid-row: 1;
+    justify-content: center;
+    padding: 0;
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-ring-svg,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-svg {
+    width: 76px;
+    height: 76px;
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-ring-num,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-num {
+    font-size: 44px;
+    font-weight: 800;
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-ring-num[data-len="4"],
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-num[data-len="4"] {
+    font-size: 38px;
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-ring-num[data-len="5"],
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-num[data-len="5"] {
+    font-size: 33px;
+  }
+
+  :root[data-theme="blues"] .app-header .score-section.app-header-score .score-ring-cat,
+  :root[data-theme="fitness"] .app-header .score-section.app-header-score .score-ring-cat {
+    display: none;
   }
 
   @media (max-width: 1120px) {

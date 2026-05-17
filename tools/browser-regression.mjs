@@ -423,7 +423,6 @@ async function assertResponsiveDashboardLayout(page, label) {
         .map((element) => element.id),
       profileControlSizes: {
         age: controlRect(matchMedia('(min-width: 980px)').matches ? '#header-age-sel' : '#age-sel'),
-        references: controlRect('#desktop-references-open'),
         sex: controlRect(matchMedia('(min-width: 980px)').matches ? '#header-sex-sel' : '#sex-sel'),
         theme: controlRect(matchMedia('(min-width: 980px)').matches ? '#header-theme-preset-select' : '#theme-preset-select'),
       },
@@ -437,6 +436,7 @@ async function assertResponsiveDashboardLayout(page, label) {
       guide: rectFor('.desktop-guide'),
       header: rectFor('.app-header'),
       headerControls: rectFor('.app-header-controls'),
+      headerReferenceButtonCount: document.querySelectorAll('.app-header-controls #desktop-references-open').length,
       headerScore: rectFor('.app-header-score'),
       intro: rectFor('.desktop-intro'),
       nav: rectFor('.component-strip'),
@@ -461,6 +461,7 @@ async function assertResponsiveDashboardLayout(page, label) {
   assert.equal(result.shell.display, 'grid', `${label} uses desktop calculator page grid shell`);
   assert.ok(result.shell.width >= 900, `${label} app shell expands beyond phone width: ${result.shell.width}px`);
   assert.notEqual(result.headerControls.display, 'none', `${label} shows compact header calculator controls`);
+  assert.equal(result.headerReferenceButtonCount, 0, `${label} keeps references out of the header controls`);
   assert.equal(result.controls.display, 'none', `${label} hides duplicated body profile controls on desktop`);
   assert.notEqual(result.intro.display, 'none', `${label} shows desktop intro content`);
   assert.notEqual(result.guide.display, 'none', `${label} shows desktop guide content`);
@@ -476,8 +477,7 @@ async function assertResponsiveDashboardLayout(page, label) {
   assert.ok(result.profileControlSizes.sex.width <= 180, `${label} sex control is compact: ${result.profileControlSizes.sex.width}px`);
   assert.ok(result.profileControlSizes.age.width <= 170, `${label} age control is compact: ${result.profileControlSizes.age.width}px`);
   assert.ok(result.profileControlSizes.theme.width <= 190, `${label} theme control stays secondary: ${result.profileControlSizes.theme.width}px`);
-  assert.ok(result.profileControlSizes.references.width <= 170, `${label} references action is compact: ${result.profileControlSizes.references.width}px`);
-  assert.ok(result.headerScore.width <= 240, `${label} total score stays compact in the header: ${result.headerScore.width}px`);
+  assert.ok(result.headerScore.width <= 270, `${label} total score stays compact in the header: ${result.headerScore.width}px`);
   assert.ok(result.intro.top >= result.header.bottom - 1, `${label} intro follows the header`);
   assert.ok(result.editor.top > result.intro.bottom, `${label} all editors sit below the planning intro`);
   assert.ok(result.editor.top <= result.viewportHeight, `${label} calculator editors begin in the initial desktop viewport`);
@@ -524,30 +524,28 @@ async function assertDesktopChartPanel(page, label) {
 }
 
 async function assertDesktopReferencesDrawer(page, label) {
-  const isDesktop = await page.evaluate(() => matchMedia('(min-width: 980px)').matches);
-  if (!isDesktop) {
-    assert.equal(
-      await page.locator('#desktop-references-open').evaluate((element) => getComputedStyle(element).display),
-      'none',
-      `${label} hides desktop references action on mobile`,
-    );
-    return;
-  }
-
+  assert.equal(
+    await page.locator('.app-header-controls #desktop-references-open').count(),
+    0,
+    `${label} does not show a references button in the header`,
+  );
+  await page.locator('#settings-hub-toggle').click();
+  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+  assert.equal(
+    await page.locator('#desktop-references-open').isVisible(),
+    true,
+    `${label} keeps official references available in the controls menu`,
+  );
   await page.locator('#desktop-references-open').click();
   await page.waitForFunction(() => !document.getElementById('desktop-references-modal')?.hasAttribute('hidden'));
+  await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
   const referenceState = await page.evaluate(() => ({
     groupCount: document.querySelectorAll('.desktop-reference-group').length,
     imageCount: document.querySelectorAll('#desktop-references-content .chart-reference__image').length,
-    settingsReferencesVisible: (() => {
-      const section = document.querySelector('.settings-hub-section--references');
-      return section ? getComputedStyle(section).display !== 'none' : false;
-    })(),
     text: document.getElementById('desktop-references-content')?.textContent ?? '',
   }));
   assert.ok(referenceState.groupCount >= 4, `${label} desktop references are grouped`);
   assert.ok(referenceState.imageCount >= 10, `${label} desktop references stack official chart images`);
-  assert.equal(referenceState.settingsReferencesVisible, false, `${label} desktop references are not buried in the settings hub`);
   assert.match(referenceState.text, /Official Scoring Charts/i, `${label} references include scoring charts`);
   assert.match(referenceState.text, /Altitude Adjustments/i, `${label} references include altitude adjustments`);
   assert.match(referenceState.text, /HAMR Resources/i, `${label} references include HAMR resources`);
@@ -1348,27 +1346,38 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       const numberRect = section?.querySelector('.score-number')?.getBoundingClientRect();
       const badgeRect = section?.querySelector('.score-badge')?.getBoundingClientRect();
       const labelStyle = label ? getComputedStyle(label) : null;
+      const numberStyle = section ? getComputedStyle(section.querySelector('.score-number')) : null;
       const ringStyle = getComputedStyle(document.querySelector('.app-header-score .score-ring-wrap'));
+      const ringRect = section?.querySelector('.score-ring-wrap')?.getBoundingClientRect();
       const style = section ? getComputedStyle(section) : null;
-      if (!section || !labelRect || !numberRect || !badgeRect || !labelStyle || !style) return { missing: true };
+      if (!section || !labelRect || !numberRect || !badgeRect || !labelStyle || !numberStyle || !style) return { missing: true };
       const rect = section.getBoundingClientRect();
       return {
         badgeAfterNumber: badgeRect.left >= numberRect.right - 1,
         height: rect.height,
         labelDisplay: labelStyle.display,
         labelBeforeNumber: labelRect.right <= numberRect.left + 1,
+        numberDisplay: numberStyle.display,
         ringDisplay: ringStyle.display,
+        ringHeight: ringRect?.height ?? 0,
+        ringWidth: ringRect?.width ?? 0,
         width: rect.width,
       };
     });
     assert.equal(headerScore.missing, undefined, `${preset} header score elements exist`);
-    assert.ok(
-      headerScore.labelDisplay === 'none' || headerScore.labelBeforeNumber,
-      `${preset} header score keeps label out of the compact score controls`,
-    );
-    assert.ok(headerScore.badgeAfterNumber, `${preset} header score keeps status after score`);
-    assert.equal(headerScore.ringDisplay, 'none', `${preset} header score keeps charts out of the compact header`);
-    assert.ok(headerScore.width <= 240, `${preset} header score remains compact: ${headerScore.width}px`);
+    if (preset === 'blues' || preset === 'fitness') {
+      assert.equal(headerScore.numberDisplay, 'none', `${preset} header score avoids a duplicate number outside the ring`);
+      assert.equal(headerScore.ringDisplay, 'flex', `${preset} header score keeps the score ring visible`);
+      assert.ok(headerScore.ringWidth >= 70 && headerScore.ringHeight >= 70, `${preset} header score ring stays legible`);
+    } else {
+      assert.ok(
+        headerScore.labelDisplay === 'none' || headerScore.labelBeforeNumber,
+        `${preset} header score keeps label out of the compact score controls`,
+      );
+      assert.ok(headerScore.badgeAfterNumber, `${preset} header score keeps status after score`);
+      assert.equal(headerScore.ringDisplay, 'none', `${preset} header score keeps charts out of the compact header`);
+    }
+    assert.ok(headerScore.width <= 270, `${preset} header score remains compact: ${headerScore.width}px`);
     assert.ok(headerScore.height <= 90, `${preset} header score avoids body-card sizing: ${headerScore.height}px`);
   }
   assert.equal(
@@ -1594,64 +1603,61 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await selectComponentForViewport(page, 'strength');
 
   // 9a. Settings reference actions open official source images in the themed drawer
-  if (await page.evaluate(() => matchMedia('(min-width: 980px)').matches)) {
-    assert.equal(
+  for (const [selector, expectedSource, expectedTitle] of [
+    ['#run-adjust-chart', 'dafman-36-2905-2-page1-full.png', 'Run Altitude Adjustment'],
+    ['#walk-adjust-chart', 'dafman-36-2905-2-page2-full.png', 'Walk/Shuttle Altitude Adjustment'],
+    ['#shuttle-score-card', 'ShuttleLevels.jpeg', 'HAMR Shuttle Score Card'],
+  ]) {
+    if (await page.locator('#settings-hub-panel').isHidden()) {
+      await page.locator('#settings-hub-toggle').click();
+    }
+    await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+    assert.notEqual(
       await page.locator('.settings-hub-section--references').evaluate((element) => getComputedStyle(element).display),
       'none',
-      'desktop moves reference actions out of the settings hub',
+      `${label} keeps reference actions available in the controls menu`,
     );
-  } else {
-    for (const [selector, expectedSource, expectedTitle] of [
-      ['#run-adjust-chart', 'dafman-36-2905-2-page1-full.png', 'Run Altitude Adjustment'],
-      ['#walk-adjust-chart', 'dafman-36-2905-2-page2-full.png', 'Walk/Shuttle Altitude Adjustment'],
-      ['#shuttle-score-card', 'ShuttleLevels.jpeg', 'HAMR Shuttle Score Card'],
-    ]) {
-      if (await page.locator('#settings-hub-panel').isHidden()) {
-        await page.locator('#settings-hub-toggle').click();
-      }
-      await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
-      await page.locator(selector).click();
-      await page.waitForFunction(
-        (source) => {
-          const modal = document.getElementById('modal');
-          const image = document.querySelector('#chart-content .chart-reference__image');
-          return modal?.dataset.chartMode === 'reference'
-            && !modal.hasAttribute('hidden')
-            && image?.getAttribute('src')?.includes(source);
-        },
-        expectedSource,
-      );
-      assert.equal(
-        await page.locator('#chart-drawer-title').evaluate((el) => el.textContent.trim()),
-        expectedTitle,
-        `${selector} sets reference drawer title`,
-      );
-      assert.equal(
-        await page.locator('.chart-reference-row').isHidden(),
-        true,
-        `${selector} hides score chart reference control`,
-      );
-      assert.equal(
-        await page.locator('.chart-ctrl-row').isHidden(),
-        true,
-        `${selector} hides score chart controls`,
-      );
-      assert.equal(
-        await page.locator('.chart-demo-row').isHidden(),
-        true,
-        `${selector} hides modal demographic controls`,
-      );
-      await page.locator('#close-btn').click();
-      await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
-      assert.equal(
-        await page.locator('#settings-hub-panel').isVisible(),
-        true,
-        `${selector} returns to still-open settings hub after closing reference`,
-      );
-    }
-    await page.locator('#settings-hub-close').click();
-    await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
+    await page.locator(selector).click();
+    await page.waitForFunction(
+      (source) => {
+        const modal = document.getElementById('modal');
+        const image = document.querySelector('#chart-content .chart-reference__image');
+        return modal?.dataset.chartMode === 'reference'
+          && !modal.hasAttribute('hidden')
+          && image?.getAttribute('src')?.includes(source);
+      },
+      expectedSource,
+    );
+    assert.equal(
+      await page.locator('#chart-drawer-title').evaluate((el) => el.textContent.trim()),
+      expectedTitle,
+      `${selector} sets reference drawer title`,
+    );
+    assert.equal(
+      await page.locator('.chart-reference-row').isHidden(),
+      true,
+      `${selector} hides score chart reference control`,
+    );
+    assert.equal(
+      await page.locator('.chart-ctrl-row').isHidden(),
+      true,
+      `${selector} hides score chart controls`,
+    );
+    assert.equal(
+      await page.locator('.chart-demo-row').isHidden(),
+      true,
+      `${selector} hides modal demographic controls`,
+    );
+    await page.locator('#close-btn').click();
+    await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
+    assert.equal(
+      await page.locator('#settings-hub-panel').isVisible(),
+      true,
+      `${selector} returns to still-open settings hub after closing reference`,
+    );
   }
+  await page.locator('#settings-hub-close').click();
+  await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
 
   // 9b. Cardio chart does not contain NaN:NaN
   await selectComponentForViewport(page, 'cardio');

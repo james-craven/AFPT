@@ -757,7 +757,12 @@ function closeDesktopReferences() {
   if (!modal) return;
   modal.setAttribute('hidden', '');
   document.body.classList.remove('desktop-references-open');
-  byId('desktop-references-open')?.focus({ preventScroll: true });
+  const trigger = byId('desktop-references-open');
+  if (trigger && trigger.getClientRects().length > 0) {
+    trigger.focus({ preventScroll: true });
+    return;
+  }
+  byId('settings-hub-toggle')?.focus({ preventScroll: true });
 }
 
 function showInstallHelp() {
