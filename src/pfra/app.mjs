@@ -1519,36 +1519,62 @@ function setTickPct(tickId, pct, minValue) {
 
 function renderScore(result) {
   const { total, category, scores } = result;
+  const scoreDisplay = Number.isInteger(total) ? String(total) : total.toFixed(1);
+  const shortCategory = category === 'Excellent' ? 'EXC' : category === 'Satisfactory' ? 'SAT' : 'UNSAT';
+  const categoryKey = category.toLowerCase();
 
   const scoreTxt = byId('score-txt');
-  if (scoreTxt) scoreTxt.textContent = Number.isInteger(total) ? String(total) : total.toFixed(1);
+  if (scoreTxt) scoreTxt.textContent = scoreDisplay;
 
   const badge = byId('score-category-badge');
   if (badge) {
-    const short = category === 'Excellent' ? 'EXC' : category === 'Satisfactory' ? 'SAT' : 'UNSAT';
-    badge.textContent = short;
-    badge.dataset.category = category.toLowerCase();
+    badge.textContent = shortCategory;
+    badge.dataset.category = categoryKey;
   }
 
   const barFill = byId('score-bar-fill');
-  if (barFill) barFill.style.width = `${Math.max(0, 100 - Math.min(100, total))}%`;
+  const remainingScoreWidth = `${Math.max(0, 100 - Math.min(100, total))}%`;
+  if (barFill) barFill.style.width = remainingScoreWidth;
+
+  const headerScore = byId('app-header-score-value');
+  if (headerScore) headerScore.textContent = scoreDisplay;
+
+  const headerBadge = byId('app-header-score-badge');
+  if (headerBadge) {
+    headerBadge.textContent = shortCategory;
+    headerBadge.dataset.category = categoryKey;
+  }
+
+  const headerFill = byId('app-header-score-fill');
+  if (headerFill) headerFill.style.width = remainingScoreWidth;
 
   // SVG ring (fitness + blues themes)
   const ringArc = byId('score-ring-arc');
+  const headerRingArc = byId('app-header-score-ring-arc');
   if (ringArc) {
     const C = 2 * Math.PI * 64; // circumference for r=64
     const filled = (Math.min(100, Math.max(0, total)) / 100) * C;
     ringArc.setAttribute('stroke-dasharray', `${filled.toFixed(1)} ${C.toFixed(1)}`);
+    if (headerRingArc) headerRingArc.setAttribute('stroke-dasharray', `${filled.toFixed(1)} ${C.toFixed(1)}`);
   }
   const ringNum = byId('score-ring-num');
   if (ringNum) {
-    const numTxt = Number.isInteger(total) ? String(total) : total.toFixed(1);
-    ringNum.textContent = numTxt;
-    ringNum.setAttribute('data-len', numTxt.length);
+    ringNum.textContent = scoreDisplay;
+    ringNum.setAttribute('data-len', scoreDisplay.length);
+  }
+  const headerRingNum = byId('app-header-score-ring-num');
+  if (headerRingNum) {
+    headerRingNum.textContent = scoreDisplay;
+    headerRingNum.setAttribute('data-len', scoreDisplay.length);
   }
   const ringCat = byId('score-ring-cat');
   if (ringCat) {
     ringCat.textContent = category === 'Excellent' ? 'EXCELLENT' : category === 'Satisfactory' ? 'SAT' : 'FAIL';
+  }
+  const headerRingCat = byId('app-header-score-ring-cat');
+  if (headerRingCat) {
+    headerRingCat.textContent = category === 'Excellent' ? 'EXCELLENT' : category === 'Satisfactory' ? 'SAT' : 'FAIL';
+    headerRingCat.dataset.category = categoryKey;
   }
 
   // Fitness: score deltas (above pass=75, to max=100)

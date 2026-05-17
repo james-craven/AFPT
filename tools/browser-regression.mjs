@@ -437,7 +437,7 @@ async function assertResponsiveDashboardLayout(page, label) {
       header: rectFor('.app-header'),
       headerControls: rectFor('.app-header-controls'),
       headerReferenceButtonCount: document.querySelectorAll('.app-header-controls #desktop-references-open').length,
-      headerScore: rectFor('.app-header-score'),
+      headerScore: rectFor('.app-header-score-pill'),
       intro: rectFor('.desktop-intro'),
       nav: rectFor('.component-strip'),
       pace: rectFor('.pace-plan-section'),
@@ -454,6 +454,8 @@ async function assertResponsiveDashboardLayout(page, label) {
     assert.equal(result.intro.display, 'none', `${label} hides desktop intro on mobile`);
     assert.equal(result.guide.display, 'none', `${label} hides desktop guide on mobile`);
     assert.equal(result.summary.display, 'none', `${label} hides desktop score breakdown on mobile`);
+    assert.equal(result.headerScore.display, 'none', `${label} keeps the desktop header score out of mobile`);
+    assert.notEqual(result.score.display, 'none', `${label} keeps the mobile total score card visible`);
     assert.equal(result.visibleEditors.length, 1, `${label} keeps one active mobile editor`);
     return;
   }
@@ -467,6 +469,7 @@ async function assertResponsiveDashboardLayout(page, label) {
   assert.notEqual(result.guide.display, 'none', `${label} shows desktop guide content`);
   assert.equal(result.nav.display, 'none', `${label} hides the mobile component selector row on desktop`);
   assert.equal(result.chart.display, 'none', `${label} avoids clipped inline desktop chart panels`);
+  assert.equal(result.score.display, 'none', `${label} keeps the body total score card out of desktop`);
   assert.equal(result.summary.display, 'none', `${label} removes the old body score summary band`);
   assert.doesNotMatch(result.visibleText, /Desktop keeps|Selected Component|Current implementation|Switching behavior|Component selector/i, `${label} visible desktop copy avoids implementation language`);
   assert.deepEqual(
@@ -1298,10 +1301,14 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.notEqual(contrastPacePlanStyle.borderWidth, '0px', `${label} contrast pace plan has card border`);
   assert.ok(contrastPacePlanStyle.radius >= 10, `${label} contrast pace plan card is rounded`);
 
+  const isDesktopViewport = await page.evaluate(() => matchMedia('(min-width: 980px)').matches);
+
   await setThemePreset(page, 'fitness');
-  const fitnessGlassStyle = await page.evaluate(() => {
+  const fitnessGlassStyle = await page.evaluate((isDesktop) => {
     const header = document.querySelector('.app-header');
-    const score = document.querySelector('.app-header-score');
+    const score = isDesktop
+      ? document.querySelector('.app-header-score-pill')
+      : document.querySelector('.app-shell > .score-section');
     if (!header || !score) return { missing: true };
     const headerStyle = getComputedStyle(header);
     const scoreStyle = getComputedStyle(score);
@@ -1312,15 +1319,17 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       scoreBackground: scoreStyle.backgroundColor,
       scoreRadius: parseFloat(scoreStyle.borderRadius),
       scoreBorder: scoreStyle.borderTopWidth,
+      scoreDisplay: scoreStyle.display,
     };
-  });
+  }, isDesktopViewport);
   assert.equal(fitnessGlassStyle.missing, undefined, `${label} gradiant glass elements exist`);
   assert.equal(fitnessGlassStyle.headerPosition, 'sticky', `${label} gradiant header stays sticky`);
   assert.notEqual(fitnessGlassStyle.headerBackground, 'rgba(0, 0, 0, 0)', `${label} gradiant header has glass background`);
   assert.match(fitnessGlassStyle.headerBackdrop, /blur/i, `${label} gradiant header has blur backdrop`);
-  assert.notEqual(fitnessGlassStyle.scoreBackground, 'rgba(0, 0, 0, 0)', `${label} gradiant header score has glass background`);
-  assert.notEqual(fitnessGlassStyle.scoreBorder, '0px', `${label} gradiant header score has glass border`);
-  assert.ok(fitnessGlassStyle.scoreRadius >= 8, `${label} gradiant header score is rounded`);
+  assert.notEqual(fitnessGlassStyle.scoreDisplay, 'none', `${label} gradiant score display is visible in its viewport`);
+  assert.notEqual(fitnessGlassStyle.scoreBackground, 'rgba(0, 0, 0, 0)', `${label} gradiant score has glass background`);
+  assert.notEqual(fitnessGlassStyle.scoreBorder, '0px', `${label} gradiant score has glass border`);
+  assert.ok(fitnessGlassStyle.scoreRadius >= 8, `${label} gradiant score is rounded`);
 
   await selectComponentForViewport(page, 'strength');
   await assertEventRowEdgeAlignment(page, 'strength-editor', `${label} strength`);
@@ -1337,48 +1346,51 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await assertEventRowEdgeAlignment(page, 'cardio-editor', `${label} cardio HAMR`);
   assert.equal(await page.locator('.value-unit').count(), 0, 'redundant value-unit labels are removed');
 
-  for (const preset of ['blues', 'fitness', 'light']) {
-    await setThemePreset(page, preset);
-    const headerScore = await page.evaluate(() => {
-      const section = document.querySelector('.app-header-score');
-      const label = section?.querySelector('.score-comp-label');
-      const labelRect = label?.getBoundingClientRect();
-      const numberRect = section?.querySelector('.score-number')?.getBoundingClientRect();
-      const badgeRect = section?.querySelector('.score-badge')?.getBoundingClientRect();
-      const labelStyle = label ? getComputedStyle(label) : null;
-      const numberStyle = section ? getComputedStyle(section.querySelector('.score-number')) : null;
-      const ringStyle = getComputedStyle(document.querySelector('.app-header-score .score-ring-wrap'));
-      const ringRect = section?.querySelector('.score-ring-wrap')?.getBoundingClientRect();
-      const style = section ? getComputedStyle(section) : null;
-      if (!section || !labelRect || !numberRect || !badgeRect || !labelStyle || !numberStyle || !style) return { missing: true };
-      const rect = section.getBoundingClientRect();
-      return {
-        badgeAfterNumber: badgeRect.left >= numberRect.right - 1,
-        height: rect.height,
-        labelDisplay: labelStyle.display,
-        labelBeforeNumber: labelRect.right <= numberRect.left + 1,
-        numberDisplay: numberStyle.display,
-        ringDisplay: ringStyle.display,
-        ringHeight: ringRect?.height ?? 0,
-        ringWidth: ringRect?.width ?? 0,
-        width: rect.width,
-      };
-    });
-    assert.equal(headerScore.missing, undefined, `${preset} header score elements exist`);
-    if (preset === 'blues' || preset === 'fitness') {
-      assert.equal(headerScore.numberDisplay, 'none', `${preset} header score avoids a duplicate number outside the ring`);
-      assert.equal(headerScore.ringDisplay, 'flex', `${preset} header score keeps the score ring visible`);
-      assert.ok(headerScore.ringWidth >= 70 && headerScore.ringHeight >= 70, `${preset} header score ring stays legible`);
-    } else {
-      assert.ok(
-        headerScore.labelDisplay === 'none' || headerScore.labelBeforeNumber,
-        `${preset} header score keeps label out of the compact score controls`,
-      );
-      assert.ok(headerScore.badgeAfterNumber, `${preset} header score keeps status after score`);
-      assert.equal(headerScore.ringDisplay, 'none', `${preset} header score keeps charts out of the compact header`);
+  if (isDesktopViewport) {
+    for (const preset of ['blues', 'fitness', 'light']) {
+      await setThemePreset(page, preset);
+      const headerScore = await page.evaluate(() => {
+        const section = document.querySelector('.app-header-score-pill');
+        const label = section?.querySelector('.app-header-score-mini__label');
+        const labelRect = label?.getBoundingClientRect();
+        const numberRect = section?.querySelector('.app-header-score-mini__number')?.getBoundingClientRect();
+        const badgeRect = section?.querySelector('.app-header-score-mini__badge')?.getBoundingClientRect();
+        const labelStyle = label ? getComputedStyle(label) : null;
+        const numberStyle = section ? getComputedStyle(section.querySelector('.app-header-score-mini__number')) : null;
+        const ring = section?.querySelector('.app-header-score-mini__ring');
+        const ringStyle = ring ? getComputedStyle(ring) : null;
+        const ringRect = ring?.getBoundingClientRect();
+        const style = section ? getComputedStyle(section) : null;
+        if (!section || !labelRect || !numberRect || !badgeRect || !labelStyle || !numberStyle || !ringStyle || !style) return { missing: true };
+        const rect = section.getBoundingClientRect();
+        return {
+          badgeAfterNumber: badgeRect.left >= numberRect.right - 1,
+          height: rect.height,
+          labelDisplay: labelStyle.display,
+          labelBeforeNumber: labelRect.right <= numberRect.left + 1,
+          numberDisplay: numberStyle.display,
+          ringDisplay: ringStyle.display,
+          ringHeight: ringRect?.height ?? 0,
+          ringWidth: ringRect?.width ?? 0,
+          width: rect.width,
+        };
+      });
+      assert.equal(headerScore.missing, undefined, `${preset} header score elements exist`);
+      if (preset === 'blues' || preset === 'fitness') {
+        assert.equal(headerScore.numberDisplay, 'none', `${preset} header score avoids a duplicate number outside the ring`);
+        assert.notEqual(headerScore.ringDisplay, 'none', `${preset} header score keeps the score ring visible`);
+        assert.ok(headerScore.ringWidth >= 70 && headerScore.ringHeight >= 70, `${preset} header score ring stays legible`);
+      } else {
+        assert.ok(
+          headerScore.labelDisplay === 'none' || headerScore.labelBeforeNumber,
+          `${preset} header score keeps label out of the compact score controls`,
+        );
+        assert.ok(headerScore.badgeAfterNumber, `${preset} header score keeps status after score`);
+        assert.equal(headerScore.ringDisplay, 'none', `${preset} header score keeps charts out of the compact header`);
+      }
+      assert.ok(headerScore.width <= 270, `${preset} header score remains compact: ${headerScore.width}px`);
+      assert.ok(headerScore.height <= 90, `${preset} header score avoids body-card sizing: ${headerScore.height}px`);
     }
-    assert.ok(headerScore.width <= 270, `${preset} header score remains compact: ${headerScore.width}px`);
-    assert.ok(headerScore.height <= 90, `${preset} header score avoids body-card sizing: ${headerScore.height}px`);
   }
   assert.equal(
     await page.locator('.app-title').evaluate((el) => el.textContent.trim()),
