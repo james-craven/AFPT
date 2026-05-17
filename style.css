@@ -3377,11 +3377,7 @@ select {
 .lap-fitness[data-course-transition="true"][data-course="route"] .pace-goal-display,
 .lap-fitness[data-course-transition="true"][data-course="out-back"] .pace-goal-display,
 .lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="route"] .pace-goal-display,
-.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="out-back"] .pace-goal-display,
-.lap-fitness[data-course-transition="true"][data-course="route"] .pace-pacer-control,
-.lap-fitness[data-course-transition="true"][data-course="out-back"] .pace-pacer-control,
-.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="route"] .pace-pacer-control,
-.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="out-back"] .pace-pacer-control {
+.lap-fitness[data-course-transition="true"][data-course="track"][data-prev-course="out-back"] .pace-goal-display {
   animation: pace-control-settle 0.32s ease-out both;
 }
 

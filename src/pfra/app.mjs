@@ -919,12 +919,12 @@ function formatPaceCourseEndpoints(courseMode) {
 
 function paceGoalLayout(courseMode) {
   if (courseMode === 'route') {
-    return { goalY: 29, timeY: 53, timeSize: 23, buttonCy: 52, buttonR: 13, startCx: 112, secondaryCx: 228 };
+    return { goalY: 36, timeY: 62, timeSize: 23, buttonCy: 56, buttonR: 13, startCx: 112, secondaryCx: 228 };
   }
   if (courseMode === 'out-back') {
-    return { goalY: 67, timeY: 91, timeSize: 23, buttonCy: 90, buttonR: 13, startCx: 112, secondaryCx: 228 };
+    return { goalY: 75, timeY: 103, timeSize: 23, buttonCy: 97, buttonR: 13, startCx: 112, secondaryCx: 228 };
   }
-  return { goalY: 65, timeY: 89, timeSize: 24, buttonCy: 88, buttonR: 13, startCx: 112, secondaryCx: 228 };
+  return { goalY: 73, timeY: 101, timeSize: 24, buttonCy: 95, buttonR: 13, startCx: 112, secondaryCx: 228 };
 }
 
 function formatPaceGoalButton(courseMode, totalStr) {

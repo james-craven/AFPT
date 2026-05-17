@@ -447,3 +447,9 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Kept the runner icon upright while moving around the track/course instead of rotating upside down.
 - Fixed cumulative lap split rendering so fractional per-lap goals finish at the exact goal time, including the 13:25 case.
 - Added browser coverage for play/pause/reset state changes, hidden initial pause/reset control, upright runner transform, reset distance, and exact finish split display.
+
+## Pace Plan Course Switch Control Fix
+
+- Re-centered the Track, Route, and Out/Back goal-time/play control placement so the controls sit visually inside the active course geometry.
+- Removed course-transition animation from pacer control groups so switching Route/Out-Back no longer makes the hidden pause/reset button appear before the pacer starts.
+- Added browser coverage for the computed hidden state of the secondary pause/reset control after Track, Route, and Out/Back course switches.
