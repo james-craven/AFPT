@@ -112,7 +112,94 @@
 
     <!-- Header -->
     <header class="app-header">
-      <span class="app-title">AF-PRT</span>
+      <div class="app-header-left">
+        <span class="app-title">PFRA.app</span>
+        <section class="app-header-controls" aria-label="Quick calculator controls">
+          <div class="demo-field">
+            <label class="demo-label" for="header-sex-sel">SEX</label>
+            <select id="header-sex-sel" class="demo-select" aria-label="Sex">
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+            </select>
+          </div>
+          <div class="demo-field">
+            <label class="demo-label" for="header-age-sel">AGE</label>
+            <select id="header-age-sel" class="demo-select" aria-label="Age group">
+              <option value="under-25">&lt; 25</option>
+              <option value="25-29">25–29</option>
+              <option value="30-34">30–34</option>
+              <option value="35-39">35–39</option>
+              <option value="40-44">40–44</option>
+              <option value="45-49">45–49</option>
+              <option value="50-54">50–54</option>
+              <option value="55-59">55–59</option>
+              <option value="60-and-over">60+</option>
+            </select>
+          </div>
+          <div class="demo-field demo-field--theme">
+            <label class="demo-label" for="header-theme-preset-select">THEME</label>
+            <select id="header-theme-preset-select" class="demo-select" aria-label="Theme preset">
+              <option value="tactical">Tactical</option>
+              <option value="stencil">Stencil</option>
+              <option value="blues">Dress Blues</option>
+              <option value="light">Contrast</option>
+              <option value="fitness">Gradient</option>
+            </select>
+          </div>
+          <button id="desktop-references-open" class="desktop-reference-open" type="button">References</button>
+        </section>
+      </div>
+
+      <section class="score-section app-header-score" aria-live="polite" aria-label="Total score">
+        <div class="score-main-row">
+          <span class="score-comp-label">TOTAL SCORE</span>
+          <span id="score-txt" class="score-number">--</span>
+          <span id="score-category-badge" class="score-badge">--</span>
+        </div>
+        <div class="score-bar-wrap">
+          <div class="score-bar-track" role="progressbar" aria-label="Score progress">
+            <div id="score-bar-fill" class="score-bar-fill" style="width:100%"></div>
+          </div>
+        </div>
+        <div class="score-bar-labels">
+          <span style="left:0"><strong>0</strong><em>FAIL</em></span>
+          <span style="left:75%"><strong>75</strong><em>SAT</em></span>
+          <span style="left:90%"><strong>90</strong><em>EXC</em></span>
+          <span style="left:100%"><strong>100</strong><em>MAX</em></span>
+        </div>
+        <div class="score-stencil-bar" aria-hidden="true">
+          <div class="score-stencil-segments">
+            <div class="score-stencil-seg score-stencil-seg--unsat" style="flex:75"></div>
+            <div class="score-stencil-seg score-stencil-seg--sat" style="flex:15"></div>
+            <div class="score-stencil-seg score-stencil-seg--exc" style="flex:10"></div>
+          </div>
+          <div id="score-stencil-marker" class="score-stencil-marker" style="left:50%">YOU</div>
+        </div>
+        <div class="score-ring-wrap" aria-hidden="true">
+          <svg id="score-ring-svg" class="score-ring-svg" viewBox="0 0 200 200" fill="none">
+            <defs>
+              <linearGradient id="fitness-ring-grad" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0%" stop-color="#ffb547"/>
+                <stop offset="50%" stop-color="#ff5dab"/>
+                <stop offset="100%" stop-color="#ff5d7c"/>
+              </linearGradient>
+            </defs>
+            <circle class="score-ring-track" cx="100" cy="100" r="64" stroke-width="10"/>
+            <circle id="score-ring-arc" class="score-ring-arc" cx="100" cy="100" r="64"
+              stroke-width="10" stroke-linecap="round"
+              transform="rotate(-90 100 100)" stroke-dasharray="0 440"/>
+            <text id="score-ring-num" class="score-ring-num" x="100" y="106" text-anchor="middle" dominant-baseline="middle">--</text>
+            <text id="score-ring-cat" class="score-ring-cat" x="100" y="124" text-anchor="middle">--</text>
+          </svg>
+        </div>
+        <div id="score-ring-deltas" class="score-ring-deltas" aria-hidden="true">
+          <span id="score-delta-pass">+-- above pass</span>
+          <span>·</span>
+          <span id="score-delta-max">+-- to max</span>
+        </div>
+        <div id="pfra-result" hidden></div>
+      </section>
+
       <div class="settings-hub" data-settings-hub>
         <button id="settings-hub-toggle" class="settings-hub-toggle" type="button"
           aria-label="Open controls" aria-expanded="false" aria-controls="settings-hub-panel">
@@ -217,64 +304,6 @@
           <option value="fitness">Gradient</option>
         </select>
       </div>
-      <div class="demo-field demo-field--action">
-        <span class="demo-label" aria-hidden="true">REFERENCE</span>
-        <button id="desktop-references-open" class="desktop-reference-open" type="button">References</button>
-      </div>
-    </section>
-
-    <!-- Score header -->
-    <section class="score-section" aria-live="polite">
-      <div class="score-main-row">
-        <span class="score-comp-label">TOTAL SCORE</span>
-        <span id="score-txt" class="score-number">--</span>
-        <span id="score-category-badge" class="score-badge">--</span>
-      </div>
-      <div class="score-bar-wrap">
-        <div class="score-bar-track" role="progressbar" aria-label="Score progress">
-          <div id="score-bar-fill" class="score-bar-fill" style="width:100%"></div>
-        </div>
-      </div>
-      <div class="score-bar-labels">
-        <span style="left:0"><strong>0</strong><em>FAIL</em></span>
-        <span style="left:75%"><strong>75</strong><em>SAT</em></span>
-        <span style="left:90%"><strong>90</strong><em>EXC</em></span>
-        <span style="left:100%"><strong>100</strong><em>MAX</em></span>
-      </div>
-      <!-- Stencil theme: segmented threshold bar with YOU marker -->
-      <div class="score-stencil-bar" aria-hidden="true">
-        <div class="score-stencil-segments">
-          <div class="score-stencil-seg score-stencil-seg--unsat" style="flex:75"></div>
-          <div class="score-stencil-seg score-stencil-seg--sat" style="flex:15"></div>
-          <div class="score-stencil-seg score-stencil-seg--exc" style="flex:10"></div>
-        </div>
-        <div id="score-stencil-marker" class="score-stencil-marker" style="left:50%">YOU</div>
-      </div>
-      <!-- Fitness/Blues themes: SVG ring -->
-      <div class="score-ring-wrap" aria-hidden="true">
-        <svg id="score-ring-svg" class="score-ring-svg" viewBox="0 0 200 200" fill="none">
-          <defs>
-            <linearGradient id="fitness-ring-grad" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0%" stop-color="#ffb547"/>
-              <stop offset="50%" stop-color="#ff5dab"/>
-              <stop offset="100%" stop-color="#ff5d7c"/>
-            </linearGradient>
-          </defs>
-          <circle class="score-ring-track" cx="100" cy="100" r="64" stroke-width="10"/>
-          <circle id="score-ring-arc" class="score-ring-arc" cx="100" cy="100" r="64"
-            stroke-width="10" stroke-linecap="round"
-            transform="rotate(-90 100 100)" stroke-dasharray="0 440"/>
-          <text id="score-ring-num" class="score-ring-num" x="100" y="106" text-anchor="middle" dominant-baseline="middle">--</text>
-          <text id="score-ring-cat" class="score-ring-cat" x="100" y="124" text-anchor="middle">--</text>
-        </svg>
-      </div>
-      <!-- Fitness: score deltas below ring -->
-      <div id="score-ring-deltas" class="score-ring-deltas" aria-hidden="true">
-        <span id="score-delta-pass">+-- above pass</span>
-        <span>·</span>
-        <span id="score-delta-max">+-- to max</span>
-      </div>
-      <div id="pfra-result" hidden></div>
     </section>
 
     <section class="desktop-score-breakdown" aria-label="Component score summary">

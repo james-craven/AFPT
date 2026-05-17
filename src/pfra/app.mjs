@@ -1889,6 +1889,26 @@ function bindMenuClick(id, handler) {
   });
 }
 
+function bindMirroredSelect(sourceId, mirrorId) {
+  const source = byId(sourceId);
+  const mirror = byId(mirrorId);
+  if (!source || !mirror) return;
+
+  mirror.value = source.value;
+
+  mirror.addEventListener('change', () => {
+    if (source.value === mirror.value) return;
+    source.value = mirror.value;
+    source.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+
+  const syncMirror = () => {
+    mirror.value = source.value;
+  };
+  source.addEventListener('change', syncMirror);
+  source.addEventListener('input', syncMirror);
+}
+
 function calculateWhtrFromMeasurements(heightFt, heightIn, waistIn) {
   const ft = Number(heightFt);
   const inches = Number(heightIn);
@@ -1938,6 +1958,10 @@ function updateWhtrFromMeasurements() {
 // --- Event bindings ---
 
 function bindEvents() {
+  bindMirroredSelect('sex-sel', 'header-sex-sel');
+  bindMirroredSelect('age-sel', 'header-age-sel');
+  bindMirroredSelect('theme-preset-select', 'header-theme-preset-select');
+
   // Demographics
   byId('sex-sel')?.addEventListener('change', () => {
     dispatch({ type: 'SET_SEX', sex: byId('sex-sel').value });

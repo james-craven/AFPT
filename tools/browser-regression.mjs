@@ -422,10 +422,10 @@ async function assertResponsiveDashboardLayout(page, label) {
         .filter((element) => !element.hasAttribute('hidden') && getComputedStyle(element).display !== 'none')
         .map((element) => element.id),
       profileControlSizes: {
-        age: controlRect('#age-sel'),
+        age: controlRect(matchMedia('(min-width: 980px)').matches ? '#header-age-sel' : '#age-sel'),
         references: controlRect('#desktop-references-open'),
-        sex: controlRect('#sex-sel'),
-        theme: controlRect('#theme-preset-select'),
+        sex: controlRect(matchMedia('(min-width: 980px)').matches ? '#header-sex-sel' : '#sex-sel'),
+        theme: controlRect(matchMedia('(min-width: 980px)').matches ? '#header-theme-preset-select' : '#theme-preset-select'),
       },
       shell: shellRect ? {
         display: shellStyle.display,
@@ -435,6 +435,9 @@ async function assertResponsiveDashboardLayout(page, label) {
       controls: rectFor('.demographics-row'),
       editor: rectFor('.editors-container'),
       guide: rectFor('.desktop-guide'),
+      header: rectFor('.app-header'),
+      headerControls: rectFor('.app-header-controls'),
+      headerScore: rectFor('.app-header-score'),
       intro: rectFor('.desktop-intro'),
       nav: rectFor('.component-strip'),
       pace: rectFor('.pace-plan-section'),
@@ -457,11 +460,13 @@ async function assertResponsiveDashboardLayout(page, label) {
 
   assert.equal(result.shell.display, 'grid', `${label} uses desktop calculator page grid shell`);
   assert.ok(result.shell.width >= 900, `${label} app shell expands beyond phone width: ${result.shell.width}px`);
+  assert.notEqual(result.headerControls.display, 'none', `${label} shows compact header calculator controls`);
+  assert.equal(result.controls.display, 'none', `${label} hides duplicated body profile controls on desktop`);
   assert.notEqual(result.intro.display, 'none', `${label} shows desktop intro content`);
   assert.notEqual(result.guide.display, 'none', `${label} shows desktop guide content`);
   assert.equal(result.nav.display, 'none', `${label} hides the mobile component selector row on desktop`);
   assert.equal(result.chart.display, 'none', `${label} avoids clipped inline desktop chart panels`);
-  assert.notEqual(result.summary.display, 'none', `${label} shows desktop component score breakdown`);
+  assert.equal(result.summary.display, 'none', `${label} removes the old body score summary band`);
   assert.doesNotMatch(result.visibleText, /Desktop keeps|Selected Component|Current implementation|Switching behavior|Component selector/i, `${label} visible desktop copy avoids implementation language`);
   assert.deepEqual(
     result.visibleEditors.sort(),
@@ -472,14 +477,12 @@ async function assertResponsiveDashboardLayout(page, label) {
   assert.ok(result.profileControlSizes.age.width <= 170, `${label} age control is compact: ${result.profileControlSizes.age.width}px`);
   assert.ok(result.profileControlSizes.theme.width <= 190, `${label} theme control stays secondary: ${result.profileControlSizes.theme.width}px`);
   assert.ok(result.profileControlSizes.references.width <= 170, `${label} references action is compact: ${result.profileControlSizes.references.width}px`);
-  assert.ok(result.controls.bottom <= result.score.top + 2, `${label} profile controls sit above the calculator`);
-  assert.ok(result.summary.left > result.score.left, `${label} component score breakdown sits beside the total score`);
-  assert.ok(Math.abs(result.summary.top - result.score.top) <= 1, `${label} total score and component breakdown align`);
-  assert.ok(result.editor.top > result.score.bottom, `${label} all editors sit immediately below the score band`);
-  assert.ok(result.editor.bottom <= result.viewportHeight + 8, `${label} calculator editors fit in the initial desktop viewport`);
+  assert.ok(result.headerScore.width <= 240, `${label} total score stays compact in the header: ${result.headerScore.width}px`);
+  assert.ok(result.intro.top >= result.header.bottom - 1, `${label} intro follows the header`);
+  assert.ok(result.editor.top > result.intro.bottom, `${label} all editors sit below the planning intro`);
+  assert.ok(result.editor.top <= result.viewportHeight, `${label} calculator editors begin in the initial desktop viewport`);
   assert.ok(result.pace.top > result.editor.bottom, `${label} pace/reference content follows the calculator controls`);
-  assert.ok(result.intro.top > result.editor.bottom, `${label} intro/help content no longer pushes calculator below the fold`);
-  assert.ok(result.guide.top > result.intro.top, `${label} guide content follows the calculator and intro`);
+  assert.ok(result.guide.top > result.pace.top, `${label} guide content follows the calculator and pace plan`);
 }
 
 async function assertDesktopChartPanel(page, label) {
@@ -571,31 +574,34 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const scoreTxt = await page.evaluate(() => document.getElementById('score-txt')?.textContent?.trim());
   assert.ok(scoreTxt && scoreTxt !== '--', `score-txt shows a value: ${scoreTxt}`);
 
+  const visibleSexSelector = await page.evaluate(() => (
+    matchMedia('(min-width: 980px)').matches ? '#header-sex-sel' : '#sex-sel'
+  ));
+  const visibleAgeSelector = await page.evaluate(() => (
+    matchMedia('(min-width: 980px)').matches ? '#header-age-sel' : '#age-sel'
+  ));
+
   // 4. Sex change triggers score update
   const scoreBefore = await page.evaluate(() => document.getElementById('score-txt')?.textContent?.trim());
-  await page.evaluate(() => {
-    const sel = document.getElementById('sex-sel');
-    sel.value = 'male';
-    sel.dispatchEvent(new Event('change', { bubbles: true }));
-  });
+  await page.locator(visibleSexSelector).selectOption('male');
   await page.waitForTimeout(100);
   const scoreAfterMale = await page.evaluate(() => document.getElementById('score-txt')?.textContent?.trim());
   assert.ok(scoreAfterMale !== '--', 'score updates after sex change');
+  assert.deepEqual(
+    await page.evaluate(() => ({
+      header: document.getElementById('header-sex-sel')?.value,
+      source: document.getElementById('sex-sel')?.value,
+    })),
+    { header: 'male', source: 'male' },
+    'visible sex selector stays mirrored with source state',
+  );
 
   // Restore
-  await page.evaluate(() => {
-    const sel = document.getElementById('sex-sel');
-    sel.value = 'female';
-    sel.dispatchEvent(new Event('change', { bubbles: true }));
-  });
+  await page.locator(visibleSexSelector).selectOption('female');
   await page.waitForTimeout(50);
 
   // 5. Age change triggers score update
-  await page.evaluate(() => {
-    const sel = document.getElementById('age-sel');
-    sel.value = '40-44';
-    sel.dispatchEvent(new Event('change', { bubbles: true }));
-  });
+  await page.locator(visibleAgeSelector).selectOption('40-44');
   await page.waitForTimeout(100);
   const scoreAfterAge = await page.evaluate(() => document.getElementById('score-txt')?.textContent?.trim());
   assert.ok(scoreAfterAge !== '--', 'score updates after age change');
@@ -604,13 +610,17 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     '40-44',
     'age change updates app state',
   );
+  assert.deepEqual(
+    await page.evaluate(() => ({
+      header: document.getElementById('header-age-sel')?.value,
+      source: document.getElementById('age-sel')?.value,
+    })),
+    { header: '40-44', source: '40-44' },
+    'visible age selector stays mirrored with source state',
+  );
 
   // Restore
-  await page.evaluate(() => {
-    const sel = document.getElementById('age-sel');
-    sel.value = 'under-25';
-    sel.dispatchEvent(new Event('change', { bubbles: true }));
-  });
+  await page.locator(visibleAgeSelector).selectOption('under-25');
   await page.waitForTimeout(50);
 
   // 6. Component tabs switch panels
@@ -1149,21 +1159,29 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.ok(cardioAlt4 !== null, 'altitude cardio score computes');
   assert.notEqual(cardioAlt4, cardioSeaLevel, 'altitude Group 4 changes cardio score for two-mile-run');
 
-  // 8. Theme switch changes data-theme-preset from the demographics row control
-  assert.equal(await page.locator('label[for="theme-preset-select"]').innerText(), 'THEME', 'theme control label is THEME');
-  assert.equal(await page.locator('#theme-preset-select.demo-select').isVisible(), true, 'theme selector is visible in demographics row');
+  // 8. Theme switch changes data-theme-preset from the visible theme control
+  const visibleThemeSelector = await page.evaluate(() => (
+    matchMedia('(min-width: 980px)').matches
+      ? '#header-theme-preset-select'
+      : '#theme-preset-select'
+  ));
+  const visibleThemeLabel = visibleThemeSelector === '#header-theme-preset-select'
+    ? 'label[for="header-theme-preset-select"]'
+    : 'label[for="theme-preset-select"]';
+  assert.equal(await page.locator(visibleThemeLabel).innerText(), 'THEME', 'theme control label is THEME');
+  assert.equal(await page.locator(`${visibleThemeSelector}.demo-select`).isVisible(), true, 'theme selector is visible in the active profile controls');
   assert.deepEqual(
-    await page.locator('#theme-preset-select option').evaluateAll((options) => options.map((option) => option.textContent.trim())),
+    await page.locator(`${visibleThemeSelector} option`).evaluateAll((options) => options.map((option) => option.textContent.trim())),
     ['Tactical', 'Stencil', 'Dress Blues', 'Contrast', 'Gradient'],
     'theme selector uses compact display names',
   );
-  await page.locator('#theme-preset-select').selectOption('blues');
+  await page.locator(visibleThemeSelector).selectOption('blues');
   await page.waitForFunction(() => document.documentElement.dataset.themePreset === 'blues');
   const themeApplied = await page.evaluate(() => document.documentElement.dataset.themePreset);
   assert.equal(themeApplied, 'blues', 'theme preset changed to blues');
 
   // Restore theme
-  await page.locator('#theme-preset-select').selectOption('tactical');
+  await page.locator(visibleThemeSelector).selectOption('tactical');
   await page.waitForFunction(() => document.documentElement.dataset.themePreset === 'tactical');
 
   for (const preset of ['tactical', 'stencil', 'blues', 'light', 'fitness']) {
@@ -1285,7 +1303,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await setThemePreset(page, 'fitness');
   const fitnessGlassStyle = await page.evaluate(() => {
     const header = document.querySelector('.app-header');
-    const score = document.querySelector('.score-section');
+    const score = document.querySelector('.app-header-score');
     if (!header || !score) return { missing: true };
     const headerStyle = getComputedStyle(header);
     const scoreStyle = getComputedStyle(score);
@@ -1302,9 +1320,9 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(fitnessGlassStyle.headerPosition, 'sticky', `${label} gradiant header stays sticky`);
   assert.notEqual(fitnessGlassStyle.headerBackground, 'rgba(0, 0, 0, 0)', `${label} gradiant header has glass background`);
   assert.match(fitnessGlassStyle.headerBackdrop, /blur/i, `${label} gradiant header has blur backdrop`);
-  assert.notEqual(fitnessGlassStyle.scoreBackground, 'rgba(0, 0, 0, 0)', `${label} gradiant score section has glass background`);
-  assert.notEqual(fitnessGlassStyle.scoreBorder, '0px', `${label} gradiant score section has glass border`);
-  assert.ok(fitnessGlassStyle.scoreRadius >= 16, `${label} gradiant score section is rounded`);
+  assert.notEqual(fitnessGlassStyle.scoreBackground, 'rgba(0, 0, 0, 0)', `${label} gradiant header score has glass background`);
+  assert.notEqual(fitnessGlassStyle.scoreBorder, '0px', `${label} gradiant header score has glass border`);
+  assert.ok(fitnessGlassStyle.scoreRadius >= 8, `${label} gradiant header score is rounded`);
 
   await selectComponentForViewport(page, 'strength');
   await assertEventRowEdgeAlignment(page, 'strength-editor', `${label} strength`);
@@ -1321,84 +1339,43 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await assertEventRowEdgeAlignment(page, 'cardio-editor', `${label} cardio HAMR`);
   assert.equal(await page.locator('.value-unit').count(), 0, 'redundant value-unit labels are removed');
 
-  await setThemePreset(page, 'blues');
-  const bluesRingWidth = await page.locator('.score-ring-svg').evaluate((element) => element.getBoundingClientRect().width);
-  assert.ok(bluesRingWidth <= 172, `blues score ring is tightened: ${bluesRingWidth}px`);
-  const bluesScoreOrder = await page.evaluate(() => {
-    const label = document.querySelector('.score-comp-label')?.getBoundingClientRect();
-    const ring = document.querySelector('.score-ring-wrap')?.getBoundingClientRect();
-    const badge = document.querySelector('.score-badge')?.getBoundingClientRect();
-    if (!label || !ring || !badge) return false;
-    const center = (rect) => rect.left + rect.width / 2;
-    return center(label) < center(ring) && center(ring) < center(badge);
-  });
-  assert.equal(bluesScoreOrder, true, 'blues score row orders label, ring, then status');
-
-  await setThemePreset(page, 'fitness');
-  const fitnessRingWidth = await page.locator('.score-ring-svg').evaluate((element) => element.getBoundingClientRect().width);
-  assert.ok(fitnessRingWidth <= 172, `fitness score ring is tightened: ${fitnessRingWidth}px`);
-  assert.ok(Math.abs(bluesRingWidth - fitnessRingWidth) <= 1, 'blues and fitness score rings match size');
-  const fitnessScoreOrder = await page.evaluate(() => {
-    const label = document.querySelector('.score-comp-label')?.getBoundingClientRect();
-    const ring = document.querySelector('.score-ring-wrap')?.getBoundingClientRect();
-    const badge = document.querySelector('.score-badge')?.getBoundingClientRect();
-    if (!label || !ring || !badge) return false;
-    const center = (rect) => rect.left + rect.width / 2;
-    return center(label) < center(ring) && center(ring) < center(badge);
-  });
-  assert.equal(fitnessScoreOrder, true, 'fitness score row orders label, ring, then status');
-  const fitnessScoreColumnAlignment = await page.evaluate(() => {
-    const section = document.querySelector('.score-section')?.getBoundingClientRect();
-    const labelRect = document.querySelector('.score-comp-label')?.getBoundingClientRect();
-    const ringRect = document.querySelector('.score-ring-wrap')?.getBoundingClientRect();
-    const badgeRect = document.querySelector('.score-badge')?.getBoundingClientRect();
-    if (!section || !labelRect || !ringRect || !badgeRect) return { missing: true };
-    const center = (rect) => rect.left + rect.width / 2;
-    return {
-      labelDelta: Math.abs(center(labelRect) - ((section.left + ringRect.left) / 2)),
-      badgeDelta: Math.abs(center(badgeRect) - ((ringRect.right + section.right) / 2)),
-    };
-  });
-  assert.equal(fitnessScoreColumnAlignment.missing, undefined, 'fitness score column elements exist');
-  assert.ok(fitnessScoreColumnAlignment.labelDelta <= 12, `fitness total label centered in left column: ${fitnessScoreColumnAlignment.labelDelta}px`);
-  assert.ok(fitnessScoreColumnAlignment.badgeDelta <= 12, `fitness status centered in right column: ${fitnessScoreColumnAlignment.badgeDelta}px`);
-  const fitnessRingTextDelta = await page.evaluate(() => {
-    const svg = document.getElementById('score-ring-svg');
-    const text = document.getElementById('score-ring-num');
-    if (!svg || !text || typeof text.getBBox !== 'function') return null;
-    const box = text.getBBox();
-    return Math.abs((box.y + box.height / 2) - 100);
-  });
-  assert.ok(fitnessRingTextDelta !== null && fitnessRingTextDelta <= 4, `fitness score number is centered in ring: ${fitnessRingTextDelta}px`);
-  const fitnessRingCategoryHidden = await page.evaluate(() => {
-    const cat = document.querySelector('.score-ring-cat');
-    return cat ? getComputedStyle(cat).display === 'none' : false;
-  });
-  assert.equal(fitnessRingCategoryHidden, true, 'fitness hides status text inside ring');
+  for (const preset of ['blues', 'fitness', 'light']) {
+    await setThemePreset(page, preset);
+    const headerScore = await page.evaluate(() => {
+      const section = document.querySelector('.app-header-score');
+      const label = section?.querySelector('.score-comp-label');
+      const labelRect = label?.getBoundingClientRect();
+      const numberRect = section?.querySelector('.score-number')?.getBoundingClientRect();
+      const badgeRect = section?.querySelector('.score-badge')?.getBoundingClientRect();
+      const labelStyle = label ? getComputedStyle(label) : null;
+      const ringStyle = getComputedStyle(document.querySelector('.app-header-score .score-ring-wrap'));
+      const style = section ? getComputedStyle(section) : null;
+      if (!section || !labelRect || !numberRect || !badgeRect || !labelStyle || !style) return { missing: true };
+      const rect = section.getBoundingClientRect();
+      return {
+        badgeAfterNumber: badgeRect.left >= numberRect.right - 1,
+        height: rect.height,
+        labelDisplay: labelStyle.display,
+        labelBeforeNumber: labelRect.right <= numberRect.left + 1,
+        ringDisplay: ringStyle.display,
+        width: rect.width,
+      };
+    });
+    assert.equal(headerScore.missing, undefined, `${preset} header score elements exist`);
+    assert.ok(
+      headerScore.labelDisplay === 'none' || headerScore.labelBeforeNumber,
+      `${preset} header score keeps label out of the compact score controls`,
+    );
+    assert.ok(headerScore.badgeAfterNumber, `${preset} header score keeps status after score`);
+    assert.equal(headerScore.ringDisplay, 'none', `${preset} header score keeps charts out of the compact header`);
+    assert.ok(headerScore.width <= 240, `${preset} header score remains compact: ${headerScore.width}px`);
+    assert.ok(headerScore.height <= 90, `${preset} header score avoids body-card sizing: ${headerScore.height}px`);
+  }
   assert.equal(
     await page.locator('.app-title').evaluate((el) => el.textContent.trim()),
-    'AF-PRT',
-    'fitness theme header keeps AF-PRT title',
+    'PFRA.app',
+    'header uses the PFRA.app title',
   );
-  await setThemePreset(page, 'light');
-  const contrastScoreColumnAlignment = await page.evaluate(() => {
-    const section = document.querySelector('.score-section')?.getBoundingClientRect();
-    const labelRect = document.querySelector('.score-comp-label')?.getBoundingClientRect();
-    const numberRect = document.querySelector('.score-number')?.getBoundingClientRect();
-    const badgeRect = document.querySelector('.score-badge')?.getBoundingClientRect();
-    if (!section || !labelRect || !numberRect || !badgeRect) return { missing: true };
-    const center = (rect) => rect.left + rect.width / 2;
-    const colWidth = section.width / 3;
-    return {
-      labelDelta: Math.abs(center(labelRect) - (section.left + colWidth / 2)),
-      numberDelta: Math.abs(center(numberRect) - (section.left + colWidth * 1.5)),
-      badgeDelta: Math.abs(center(badgeRect) - (section.left + colWidth * 2.5)),
-    };
-  });
-  assert.equal(contrastScoreColumnAlignment.missing, undefined, 'contrast score column elements exist');
-  assert.ok(contrastScoreColumnAlignment.labelDelta <= 12, `contrast total label centered in left column: ${contrastScoreColumnAlignment.labelDelta}px`);
-  assert.ok(contrastScoreColumnAlignment.numberDelta <= 12, `contrast score number centered in middle column: ${contrastScoreColumnAlignment.numberDelta}px`);
-  assert.ok(contrastScoreColumnAlignment.badgeDelta <= 12, `contrast status centered in right column: ${contrastScoreColumnAlignment.badgeDelta}px`);
   await setThemePreset(page, 'tactical');
   await selectComponentForViewport(page, 'strength');
 

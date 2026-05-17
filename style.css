@@ -150,9 +150,9 @@ select {
 
 /* ─── Header ───────────────────────────────────────────────────── */
 .app-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(118px, auto) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
   padding: 12px 16px;
   background: var(--afpt-panel);
@@ -162,14 +162,101 @@ select {
   z-index: 100;
 }
 
+.app-header-left {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
 .app-title {
   min-width: 0;
   font-size: 19px;
   font-weight: 700;
   letter-spacing: 3px;
   color: var(--afpt-accent);
-  text-transform: uppercase;
+  text-transform: none;
   white-space: nowrap;
+}
+
+.app-header-controls {
+  display: none;
+}
+
+.app-header-score {
+  display: block;
+  justify-self: center;
+  width: min(100%, 178px);
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 7px 10px 8px;
+  border: 1px solid var(--afpt-border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--afpt-panel-2) 84%, transparent);
+  box-shadow: none;
+}
+
+header.app-header .score-section.app-header-score {
+  display: block;
+  margin: 0;
+  min-height: 0;
+  padding: 7px 10px 8px;
+}
+
+.app-header .score-section.app-header-score .score-main-row {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: center;
+  justify-items: initial;
+  gap: 7px;
+  margin: 0 0 6px;
+}
+
+.app-header .score-section.app-header-score .score-comp-label {
+  color: var(--afpt-ink-dim);
+  display: none;
+  font-size: 8px;
+  grid-column: auto;
+  justify-self: start;
+  letter-spacing: 1.2px;
+  line-height: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-header .score-section.app-header-score .score-number {
+  display: block;
+  font-size: 26px;
+  line-height: 0.9;
+  grid-column: auto;
+}
+
+.app-header .score-section.app-header-score .score-badge {
+  font-size: 8px;
+  grid-column: auto;
+  justify-self: end;
+  letter-spacing: 0.8px;
+  margin-top: 0;
+  padding: 3px 6px;
+  white-space: nowrap;
+}
+
+.app-header-score .score-bar-wrap {
+  margin: 0;
+}
+
+.app-header .score-section.app-header-score .score-bar-labels,
+.app-header .score-section.app-header-score .score-stencil-bar,
+.app-header .score-section.app-header-score .score-ring-wrap,
+.app-header .score-section.app-header-score .score-ring-deltas {
+  display: none;
+}
+
+.settings-hub {
+  justify-self: end;
 }
 
 /* ─── Settings hub ─────────────────────────────────────────────── */
@@ -4199,11 +4286,9 @@ select {
     grid-template-columns: minmax(300px, 0.72fr) minmax(0, 1.28fr);
     grid-template-areas:
       "header header"
-      "controls controls"
-      "score summary"
+      "intro intro"
       "editors editors"
       "pace pace"
-      "intro intro"
       "guide guide"
       "status status";
     gap: 12px;
@@ -4215,10 +4300,87 @@ select {
 
   .app-header {
     grid-area: header;
+    grid-template-columns: minmax(0, 1fr) minmax(170px, 220px) auto;
+    align-items: center;
+    gap: 16px;
     border-left: 1px solid var(--afpt-border);
     border-right: 1px solid var(--afpt-border);
     border-radius: 0 0 16px 16px;
-    padding: 14px 20px;
+    padding: 11px 18px;
+  }
+
+  .app-header-left {
+    align-items: flex-end;
+    gap: 16px;
+  }
+
+  .app-title {
+    flex: 0 0 auto;
+    font-size: clamp(17px, 1.2vw, 19px);
+    letter-spacing: 2.2px;
+  }
+
+  .app-header-controls {
+    display: flex;
+    align-items: flex-end;
+    gap: 9px;
+    min-width: 0;
+  }
+
+  .app-header-controls .demo-field {
+    display: inline-grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+    align-items: start;
+    text-align: left;
+  }
+
+  .app-header-controls .demo-label {
+    color: var(--afpt-accent);
+    font-size: 8px;
+    letter-spacing: 1.7px;
+    line-height: 1;
+    text-align: left;
+  }
+
+  .app-header-controls .demo-select {
+    min-height: 34px;
+    width: auto;
+    text-align: left;
+    text-align-last: left;
+  }
+
+  .app-header-controls #header-sex-sel {
+    width: 96px;
+  }
+
+  .app-header-controls #header-age-sel {
+    width: 90px;
+  }
+
+  .app-header-controls #header-theme-preset-select {
+    width: 132px;
+  }
+
+  .app-header-controls .desktop-reference-open {
+    align-self: end;
+    display: inline-flex;
+    min-height: 34px;
+  }
+
+  .app-header-score {
+    align-self: center;
+    width: 100%;
+    padding: 8px 12px;
+  }
+
+  .app-header .score-section.app-header-score .score-main-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    justify-content: stretch;
+  }
+
+  .app-header .score-section.app-header-score .score-comp-label {
+    display: block;
   }
 
   .settings-hub-panel,
@@ -4235,7 +4397,6 @@ select {
   }
 
   .desktop-intro,
-  .score-section,
   .demographics-row,
   .desktop-score-breakdown,
   .editor-panel,
@@ -4323,14 +4484,7 @@ select {
   }
 
   .score-section {
-    grid-area: score;
-    align-self: stretch;
-    display: grid;
-    align-content: center;
-    min-height: 122px;
     margin: 0;
-    padding: 15px 18px 12px;
-    border-bottom: 1px solid var(--afpt-border);
   }
 
   .demographics-row {
@@ -4344,6 +4498,10 @@ select {
     padding: 10px 12px;
     border-bottom: 1px solid var(--afpt-border);
     background: color-mix(in srgb, var(--afpt-panel-2) 92%, transparent);
+  }
+
+  .app-shell > .demographics-row {
+    display: none;
   }
 
   .demo-field {
@@ -4411,8 +4569,8 @@ select {
 
   .desktop-score-breakdown {
     grid-area: summary;
+    display: none;
     align-self: stretch;
-    display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 10px;
     padding: 12px;
@@ -4871,6 +5029,16 @@ select {
 
   :root[data-theme="fitness"] .lap-display {
     margin-top: 0;
+  }
+
+  .app-header .app-header-score,
+  :root[data-theme="blues"] .app-header .app-header-score,
+  :root[data-theme="fitness"] .app-header .app-header-score {
+    margin: 0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    min-height: 0;
+    box-shadow: none;
   }
 
   @media (max-width: 1120px) {
