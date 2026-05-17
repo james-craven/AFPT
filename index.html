@@ -17,7 +17,7 @@
   <!-- Dev version modal -->
   <div id="dev-version-modal" class="modal-overlay" hidden>
     <div class="modal-panel">
-      <h2>Build Info</h2>
+      <h2>Version Info</h2>
       <div id="dev-version-text" class="build-info">Loading…</div>
       <button id="dev-version-close" type="button">Close</button>
     </div>
@@ -57,7 +57,7 @@
         <button id="close-btn" class="close-btn" type="button">Close ✕</button>
       </header>
       <div class="chart-reference-row">
-        <button id="chart-reference-btn" class="chart-reference-btn" type="button">Reference</button>
+        <button id="chart-reference-btn" class="chart-reference-btn" type="button">Score Reference</button>
       </div>
       <!-- Demographics row: sex + age (modal-local, reset on open) -->
       <div class="chart-demo-row">
@@ -99,7 +99,7 @@
       <header class="desktop-references-modal__header">
         <div>
           <span class="desktop-references-modal__eyebrow">References</span>
-          <h2 id="desktop-references-title">Official Charts & App Info</h2>
+          <h2 id="desktop-references-title">Official References</h2>
         </div>
         <button id="desktop-references-close" class="desktop-references-modal__close" type="button">Close</button>
       </header>
@@ -150,7 +150,7 @@
             <ul class="settings-menu" aria-label="App controls">
               <li id="install-app-menu" role="button" tabindex="0">Install App for Offline Use</li>
               <li id="pwa-update-check" role="button" tabindex="0">Check for Update</li>
-              <li id="dev-version-menu" role="button" tabindex="0">Build Info</li>
+              <li id="dev-version-menu" role="button" tabindex="0">Version Info</li>
             </ul>
           </section>
         </aside>
@@ -175,7 +175,7 @@
         </div>
         <div>
           <strong>2</strong>
-          <span>Enter each component below. Desktop keeps all editors visible.</span>
+          <span>Adjust each component and compare your options in one view.</span>
         </div>
         <div>
           <strong>3</strong>
@@ -207,14 +207,14 @@
           <option value="60-and-over">60+</option>
         </select>
       </div>
-      <div class="demo-field">
+      <div class="demo-field demo-field--theme">
         <label class="demo-label" for="theme-preset-select">THEME</label>
         <select id="theme-preset-select" class="demo-select" aria-label="Theme preset">
           <option value="tactical">Tactical</option>
           <option value="stencil">Stencil</option>
           <option value="blues">Dress Blues</option>
           <option value="light">Contrast</option>
-          <option value="fitness">Gradiant</option>
+          <option value="fitness">Gradient</option>
         </select>
       </div>
       <div class="demo-field demo-field--action">
@@ -302,7 +302,7 @@
 
 
     <!-- Component summary strip -->
-<div class="component-strip" role="tablist" aria-label="Component selector">
+<div class="component-strip" role="tablist" aria-label="Score components">
   <button id="summary-strength" class="component-chip chip--active" role="tab" aria-selected="true" data-component="strength">
     <span class="chip-name">STRENGTH</span>
     <span id="chip-strength-value" class="chip-value">--</span>
@@ -425,7 +425,10 @@
             <button class="minmax-btn" id="push-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="push-max-btn" type="button">MAX</button>
           </div>
-          <button id="push-btn" class="chart-btn" type="button" aria-label="View strength chart">CHART</button>
+          <button id="push-btn" class="chart-btn" type="button" aria-label="Open strength score chart">
+            <span class="chart-btn__short">Chart</span>
+            <span class="chart-btn__full">Score Chart</span>
+          </button>
         </div>
         <div class="slider-row">
           <button class="slider-step-btn" type="button" data-step="-1" data-target="push-slider" aria-label="Decrease reps">−</button>
@@ -475,7 +478,10 @@
             <button class="minmax-btn" id="sit-plank-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="sit-plank-max-btn" type="button">MAX</button>
           </div>
-          <button id="sit-btn" class="chart-btn" type="button" aria-label="View core chart">CHART</button>
+          <button id="sit-btn" class="chart-btn" type="button" aria-label="Open core score chart">
+            <span class="chart-btn__short">Chart</span>
+            <span class="chart-btn__full">Score Chart</span>
+          </button>
         </div>
         <div class="slider-row">
           <button class="slider-step-btn" type="button" data-step="-1" data-target="sit-slider" aria-label="Decrease reps">−</button>
@@ -525,7 +531,10 @@
             <button class="minmax-btn" id="run-shuttle-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="run-shuttle-max-btn" type="button">MAX</button>
           </div>
-          <button id="run-btn" class="chart-btn" type="button" aria-label="View cardio chart">CHART</button>
+          <button id="run-btn" class="chart-btn" type="button" aria-label="Open cardio score chart">
+            <span class="chart-btn__short">Chart</span>
+            <span class="chart-btn__full">Score Chart</span>
+          </button>
         </div>
         <p id="hamr-level-display" class="score-label-text hamr-level-txt" hidden></p>
         <div class="slider-row">
@@ -560,7 +569,7 @@
       <div class="desktop-chart-panel__header">
         <div>
           <span class="desktop-chart-panel__eyebrow">Score chart</span>
-          <h2 id="desktop-chart-title">Selected Component</h2>
+          <h2 id="desktop-chart-title">Score Chart</h2>
         </div>
         <button id="desktop-chart-open" class="desktop-chart-open" type="button">Open</button>
       </div>

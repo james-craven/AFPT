@@ -405,12 +405,28 @@ async function assertResponsiveDashboardLayout(page, label) {
     const shell = document.querySelector('.app-shell');
     const shellRect = shell?.getBoundingClientRect();
     const shellStyle = shell ? getComputedStyle(shell) : null;
+    const controlRect = (selector) => {
+      const element = document.querySelector(selector);
+      if (!element) return null;
+      const rect = element.getBoundingClientRect();
+      return {
+        height: rect.height,
+        width: rect.width,
+      };
+    };
     return {
       isDesktop: matchMedia('(min-width: 980px)').matches,
       viewportHeight: window.innerHeight,
+      visibleText: document.body.innerText,
       visibleEditors: [...document.querySelectorAll('.editor-panel')]
         .filter((element) => !element.hasAttribute('hidden') && getComputedStyle(element).display !== 'none')
         .map((element) => element.id),
+      profileControlSizes: {
+        age: controlRect('#age-sel'),
+        references: controlRect('#desktop-references-open'),
+        sex: controlRect('#sex-sel'),
+        theme: controlRect('#theme-preset-select'),
+      },
       shell: shellRect ? {
         display: shellStyle.display,
         width: shellRect.width,
@@ -446,11 +462,16 @@ async function assertResponsiveDashboardLayout(page, label) {
   assert.equal(result.nav.display, 'none', `${label} hides the mobile component selector row on desktop`);
   assert.equal(result.chart.display, 'none', `${label} avoids clipped inline desktop chart panels`);
   assert.notEqual(result.summary.display, 'none', `${label} shows desktop component score breakdown`);
+  assert.doesNotMatch(result.visibleText, /Desktop keeps|Selected Component|Current implementation|Switching behavior|Component selector/i, `${label} visible desktop copy avoids implementation language`);
   assert.deepEqual(
     result.visibleEditors.sort(),
     ['body-editor', 'cardio-editor', 'core-editor', 'strength-editor'].sort(),
     `${label} desktop shows all four component editors`,
   );
+  assert.ok(result.profileControlSizes.sex.width <= 180, `${label} sex control is compact: ${result.profileControlSizes.sex.width}px`);
+  assert.ok(result.profileControlSizes.age.width <= 170, `${label} age control is compact: ${result.profileControlSizes.age.width}px`);
+  assert.ok(result.profileControlSizes.theme.width <= 190, `${label} theme control stays secondary: ${result.profileControlSizes.theme.width}px`);
+  assert.ok(result.profileControlSizes.references.width <= 170, `${label} references action is compact: ${result.profileControlSizes.references.width}px`);
   assert.ok(result.controls.bottom <= result.score.top + 2, `${label} profile controls sit above the calculator`);
   assert.ok(result.summary.left > result.score.left, `${label} component score breakdown sits beside the total score`);
   assert.ok(Math.abs(result.summary.top - result.score.top) <= 1, `${label} total score and component breakdown align`);
@@ -473,15 +494,28 @@ async function assertDesktopChartPanel(page, label) {
   await page.locator('#push-btn').click();
   await page.waitForFunction(() => document.getElementById('modal')?.dataset.chartOpen === 'true');
   const drawerChart = await page.evaluate(() => ({
+    controlsInViewport: (() => {
+      const panel = document.querySelector('.chart-drawer__panel')?.getBoundingClientRect();
+      const reference = document.querySelector('.chart-reference-row')?.getBoundingClientRect();
+      const controls = document.querySelector('.chart-ctrl-row')?.getBoundingClientRect();
+      if (!panel || !reference || !controls) return false;
+      return reference.top >= panel.top
+        && reference.bottom <= window.innerHeight
+        && controls.top >= panel.top
+        && controls.bottom <= window.innerHeight;
+    })(),
     controlsVisible: !document.querySelector('.chart-ctrl-row')?.hidden,
     hasCurrentMarker: Boolean(document.querySelector('#chart-content .chart-row--you')),
     hasTable: Boolean(document.querySelector('#chart-content .chart-table')),
+    referenceLabel: document.getElementById('chart-reference-btn')?.textContent.trim(),
     title: document.getElementById('chart-drawer-title')?.textContent.trim(),
   }));
   assert.equal(drawerChart.title, 'Score Chart', `${label} desktop chart opens in the polished drawer`);
+  assert.equal(drawerChart.referenceLabel, 'Score Reference', `${label} drawer reference action has a clear label`);
   assert.equal(drawerChart.hasTable, true, `${label} drawer renders generated score table`);
   assert.equal(drawerChart.hasCurrentMarker, true, `${label} drawer highlights current performance`);
   assert.equal(drawerChart.controlsVisible, true, `${label} drawer keeps chart controls available`);
+  assert.equal(drawerChart.controlsInViewport, true, `${label} drawer keeps chart controls in view while centering the score row`);
   await page.locator('#close-btn').click();
   await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
 }
@@ -1120,7 +1154,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(await page.locator('#theme-preset-select.demo-select').isVisible(), true, 'theme selector is visible in demographics row');
   assert.deepEqual(
     await page.locator('#theme-preset-select option').evaluateAll((options) => options.map((option) => option.textContent.trim())),
-    ['Tactical', 'Stencil', 'Dress Blues', 'Contrast', 'Gradiant'],
+    ['Tactical', 'Stencil', 'Dress Blues', 'Contrast', 'Gradient'],
     'theme selector uses compact display names',
   );
   await page.locator('#theme-preset-select').selectOption('blues');
@@ -1403,28 +1437,30 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     const imageFrame = document.querySelector('.chart-drawer__image-frame');
     if (!panel || !header || !referenceRow || !imageFrame) return { missing: true };
     panel.scrollTop = 0;
+    imageFrame.scrollTop = 0;
     const beforeRefTop = referenceRow.getBoundingClientRect().top;
-    panel.scrollTop = Math.min(180, panel.scrollHeight - panel.clientHeight);
+    imageFrame.scrollTop = Math.min(180, imageFrame.scrollHeight - imageFrame.clientHeight);
     const afterRefTop = referenceRow.getBoundingClientRect().top;
     const panelRect = panel.getBoundingClientRect();
     const headerRect = header.getBoundingClientRect();
     const imageStyle = getComputedStyle(imageFrame);
     const result = {
-      canScroll: panel.scrollHeight > panel.clientHeight,
-      controlsMoved: afterRefTop < beforeRefTop - 20,
+      frameCanScroll: imageFrame.scrollHeight > imageFrame.clientHeight,
+      controlsMoved: Math.abs(afterRefTop - beforeRefTop) > 2,
       headerPinned: Math.abs(headerRect.top - panelRect.top) <= 1,
       imageOverflowY: imageStyle.overflowY,
       panelOverflowY: getComputedStyle(panel).overflowY,
     };
     panel.scrollTop = 0;
+    imageFrame.scrollTop = 0;
     return result;
   });
   assert.equal(chartScrollBehavior.missing, undefined, 'chart drawer scroll elements exist');
-  assert.equal(chartScrollBehavior.canScroll, true, 'chart drawer panel can scroll');
-  assert.equal(chartScrollBehavior.controlsMoved, true, 'chart controls scroll with chart content');
+  assert.equal(chartScrollBehavior.frameCanScroll, true, 'chart table area can scroll');
+  assert.equal(chartScrollBehavior.controlsMoved, false, 'chart controls stay available while chart content scrolls');
   assert.equal(chartScrollBehavior.headerPinned, true, 'chart title/close row stays pinned while drawer scrolls');
-  assert.equal(chartScrollBehavior.imageOverflowY, 'visible', 'chart image frame does not create a nested sticky-control scroll area');
-  assert.match(chartScrollBehavior.panelOverflowY, /auto|scroll/i, 'chart drawer panel owns vertical scrolling');
+  assert.match(chartScrollBehavior.imageOverflowY, /auto|scroll/i, 'chart table area owns vertical scrolling');
+  assert.equal(chartScrollBehavior.panelOverflowY, 'hidden', 'chart drawer panel keeps controls fixed in place');
   const segmentedBorderUsesStrong = await page.evaluate(() => {
     const strong = getComputedStyle(document.documentElement).getPropertyValue('--afpt-border-strong').trim();
     return ['body-seg-ctrl', 'push-seg-ctrl', 'sit-seg-ctrl', 'run-seg-ctrl']
@@ -1695,8 +1731,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForFunction(() => !document.getElementById('dev-version-modal')?.hasAttribute('hidden'));
   assert.match(
     await page.locator('#dev-version-text').innerText(),
-    /developmental build/i,
-    'build info identifies the app as a developmental build',
+    /preview version/i,
+    'version info identifies the app as a preview version',
   );
   await page.locator('#dev-version-close').click();
   await page.waitForFunction(() => document.getElementById('dev-version-modal')?.hasAttribute('hidden'));

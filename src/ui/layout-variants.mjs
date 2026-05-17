@@ -52,7 +52,7 @@ export const VARIANT_REGISTRY = Object.freeze({
   'stencil-score-block': defineVariant('stencil-score-block', 'scoreHeader', 'Stencil score block'),
   'blues-ring': defineVariant('blues-ring', 'scoreHeader', 'Blues score ring'),
   'light-card': defineVariant('light-card', 'scoreHeader', 'Contrast score card'),
-  'fitness-gradient-ring': defineVariant('fitness-gradient-ring', 'scoreHeader', 'Gradiant score ring'),
+  'fitness-gradient-ring': defineVariant('fitness-gradient-ring', 'scoreHeader', 'Gradient score ring'),
 
   'visible-compact-selects': defineVariant('visible-compact-selects', 'demographicsControls', 'Compact visible selects'),
   'visible-shared-row': defineVariant('visible-shared-row', 'demographicsControls', 'Shared visible row'),
@@ -70,7 +70,7 @@ export const VARIANT_REGISTRY = Object.freeze({
   'stencil-clipped': defineVariant('stencil-clipped', 'componentCard', 'Stencil clipped card', COMPONENT_CARD_SLOTS),
   'blues-polished': defineVariant('blues-polished', 'componentCard', 'Blues polished card', COMPONENT_CARD_SLOTS),
   'light-clean': defineVariant('light-clean', 'componentCard', 'Contrast clean card', COMPONENT_CARD_SLOTS),
-  'fitness-gradient-card': defineVariant('fitness-gradient-card', 'componentCard', 'Gradiant card', COMPONENT_CARD_SLOTS),
+  'fitness-gradient-card': defineVariant('fitness-gradient-card', 'componentCard', 'Gradient card', COMPONENT_CARD_SLOTS),
 
   'tactical-horizontal-bars': defineVariant('tactical-horizontal-bars', 'lapDisplay', 'Tactical horizontal bars'),
   'stencil-vertical-bars': defineVariant('stencil-vertical-bars', 'lapDisplay', 'Stencil vertical bars'),
@@ -93,13 +93,13 @@ export const VARIANT_REGISTRY = Object.freeze({
   'stencil-points': defineVariant('stencil-points', 'componentScoreDisplay', 'Stencil points'),
   'progress-strip': defineVariant('progress-strip', 'componentScoreDisplay', 'Progress strip'),
   'clean-chip': defineVariant('clean-chip', 'componentScoreDisplay', 'Clean score chip'),
-  'gradient-chip': defineVariant('gradient-chip', 'componentScoreDisplay', 'Gradiant score chip'),
+  'gradient-chip': defineVariant('gradient-chip', 'componentScoreDisplay', 'Gradient score chip'),
 
   'tactical-dense-strip': defineVariant('tactical-dense-strip', 'componentSummaryStrip', 'Tactical dense summary strip', SUMMARY_CARD_SLOTS),
   'stencil-clipped-strip': defineVariant('stencil-clipped-strip', 'componentSummaryStrip', 'Stencil clipped summary strip', SUMMARY_CARD_SLOTS),
   'blues-polished-strip': defineVariant('blues-polished-strip', 'componentSummaryStrip', 'Blues polished summary strip', SUMMARY_CARD_SLOTS),
   'light-clean-strip': defineVariant('light-clean-strip', 'componentSummaryStrip', 'Contrast clean summary strip', SUMMARY_CARD_SLOTS),
-  'fitness-gradient-strip': defineVariant('fitness-gradient-strip', 'componentSummaryStrip', 'Gradiant summary strip', SUMMARY_CARD_SLOTS),
+  'fitness-gradient-strip': defineVariant('fitness-gradient-strip', 'componentSummaryStrip', 'Gradient summary strip', SUMMARY_CARD_SLOTS),
 
   'tactical-editor-panel': defineVariant('tactical-editor-panel', 'activeComponentEditor', 'Tactical editor panel'),
   'stencil-editor-panel': defineVariant('stencil-editor-panel', 'activeComponentEditor', 'Stencil editor panel'),
@@ -195,7 +195,7 @@ export const THEME_PRESETS = Object.freeze({
     componentScoreDisplay: 'clean-chip',
     navigationPattern: 'current-navigation',
   }),
-  fitness: preset('fitness', 'Gradiant', {
+  fitness: preset('fitness', 'Gradient', {
     appShell: 'fitness-shell',
     scoreHeader: 'fitness-gradient-ring',
     demographicsControls: 'visible-glass-selects',

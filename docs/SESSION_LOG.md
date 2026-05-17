@@ -487,3 +487,13 @@ Stop only if scoring rules are ambiguous, source standards conflict, the app can
 - Added a desktop References drawer with grouped official scoring charts, altitude references, HAMR resources, and app/offline actions, while preserving mobile settings-menu reference access.
 - Moved guide/intro content below the calculator so education supports the tool without pushing the primary controls down.
 - Updated browser regression coverage for the new desktop contract: hidden desktop component selector, visible desktop score breakdown, all editors in the initial desktop viewport, drawer-based chart access, and grouped desktop references.
+
+## Desktop Final Polish and QA
+
+- Tightened the desktop profile bar so sex and age stay primary while theme and References sit as compact secondary controls.
+- Removed implementation-facing visible copy from the desktop guide flow and corrected the Gradient theme label.
+- Kept the mobile component chips hidden on desktop and preserved the approved mobile one-editor switching behavior below 980px.
+- Updated chart actions and the chart drawer so score references are clearly labeled, controls stay visible, and the chart table scrolls inside the drawer instead of pushing controls away.
+- Polished the desktop References drawer copy so official references remain the focus while app install/update/version actions stay secondary.
+- Expanded browser regression coverage for compact desktop controls, copy audit checks, clear chart reference labels, and the chart drawer scroll contract.
+- Verified visually at 390x844, 1280x720, 1366x768, 1440x900, and 1920x1080; spot-checked theme layout in Contrast and Gradient.

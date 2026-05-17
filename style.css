@@ -1144,6 +1144,14 @@ select {
   color: var(--afpt-accent);
 }
 
+.chart-btn__full {
+  display: none;
+}
+
+.chart-btn__short {
+  display: inline;
+}
+
 /* ─── Value row (input + unit) ──────────────────────────────────── */
 .editor-value-row {
   display: flex;
@@ -1662,7 +1670,7 @@ select {
   pointer-events: auto;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
   overflow-x: hidden;
 }
 
@@ -1726,11 +1734,12 @@ select {
 }
 
 .chart-ctrl-row {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(120px, max-content) minmax(0, 1fr);
 }
 
 .chart-reference-row {
-  grid-template-columns: minmax(0, 1fr);
+  display: flex;
+  justify-content: flex-end;
 }
 
 .chart-ctrl-sel,
@@ -1766,6 +1775,7 @@ select {
   padding: 7px 10px;
   text-transform: uppercase;
   white-space: nowrap;
+  width: auto;
 }
 
 .chart-reference-btn:hover {
@@ -1788,8 +1798,9 @@ select {
 }
 
 .chart-drawer__image-frame {
-  flex: none;
-  overflow: visible;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
   padding: 14px;
   display: flex;
   align-items: flex-start;
@@ -1805,7 +1816,7 @@ select {
 
 /* ─── Chart content (generated HTML tables) ───────────────────── */
 .chart-content {
-  padding: 14px;
+  padding: 0;
   width: 100%;
 }
 
@@ -4325,13 +4336,9 @@ select {
   .demographics-row {
     grid-area: controls;
     align-self: start;
-    display: grid;
-    grid-template-columns:
-      minmax(160px, 0.9fr)
-      minmax(160px, 0.9fr)
-      minmax(150px, 0.75fr)
-      auto;
-    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 14px;
     align-content: center;
     align-items: center;
     padding: 10px 12px;
@@ -4340,17 +4347,21 @@ select {
   }
 
   .demo-field {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    display: inline-grid;
+    grid-template-columns: auto auto;
     gap: 8px;
     align-items: center;
+    flex: 0 0 auto;
     text-align: left;
   }
 
+  .demo-field--theme {
+    margin-left: auto;
+  }
+
   .demo-field--action {
-    display: grid;
-    grid-template-columns: 1fr;
-    min-width: 138px;
+    display: inline-flex;
+    min-width: 0;
   }
 
   .demo-field--action .demo-label {
@@ -4366,6 +4377,20 @@ select {
     min-height: 34px;
     padding-top: 6px;
     padding-bottom: 6px;
+    text-align-last: left;
+    width: auto;
+  }
+
+  #sex-sel {
+    width: 132px;
+  }
+
+  #age-sel {
+    width: 118px;
+  }
+
+  #theme-preset-select {
+    width: 142px;
   }
 
   .desktop-reference-open {
@@ -4377,6 +4402,7 @@ select {
     background: color-mix(in srgb, var(--afpt-panel) 76%, transparent);
     font-size: 11px;
     padding: 7px 12px;
+    white-space: nowrap;
   }
 
   .component-strip {
@@ -4503,6 +4529,14 @@ select {
   #run-seg-ctrl {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #body-seg-ctrl,
+  #push-seg-ctrl {
+    justify-self: center;
+    margin-inline: auto;
+    max-width: 100%;
+    width: fit-content;
   }
 
   .editor-event-row {
@@ -4847,13 +4881,15 @@ select {
     }
 
     .demographics-row {
-      grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+      gap: 8px 10px;
+    }
+
+    .demo-field--theme {
+      margin-left: auto;
     }
 
     .demo-field--action {
-      grid-column: 3;
-      grid-row: 1 / span 2;
-      align-self: stretch;
+      align-self: center;
     }
 
     .desktop-score-breakdown {

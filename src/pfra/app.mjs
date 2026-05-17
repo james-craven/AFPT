@@ -468,6 +468,17 @@ function updateChartReferenceButton() {
     : reference ? `Open ${reference.title}` : 'No official reference is available for this event';
 }
 
+function scrollCurrentChartRowIntoFrame(contentEl) {
+  const currentRow = contentEl.querySelector('.chart-row--you');
+  const frame = contentEl.closest('.chart-drawer__image-frame');
+  if (!currentRow || !frame) return;
+
+  const rowRect = currentRow.getBoundingClientRect();
+  const frameRect = frame.getBoundingClientRect();
+  const centeredTop = rowRect.top - frameRect.top - ((frame.clientHeight - rowRect.height) / 2);
+  frame.scrollTop += centeredTop;
+}
+
 function currentPerformanceForChart(event, ageGroup, sex) {
   if (event === state.strength.event && !state.strength.exempt) {
     return String(state.strength.value).trim();
@@ -596,7 +607,7 @@ function refreshChartContent() {
       chartModalState.sex,
     );
     window.requestAnimationFrame(() => {
-      contentEl.querySelector('.chart-row--you')?.scrollIntoView({ block: 'center' });
+      scrollCurrentChartRowIntoFrame(contentEl);
     });
   }
 }
@@ -705,7 +716,7 @@ function renderDesktopReferencesContent() {
   content.innerHTML = [
     desktopReferenceGroup(
       'Official Scoring Charts',
-      'Source chart images for the PFRA component standards used by the calculator.',
+      'Official chart images for the component standards used here.',
       scoringReferences,
     ),
     desktopReferenceGroup(
@@ -721,12 +732,12 @@ function renderDesktopReferencesContent() {
     `<section class="desktop-reference-group desktop-reference-group--app">
       <div class="desktop-reference-group__heading">
         <h3>App & Offline</h3>
-        <p>Quick access to install help, update checks, and the current development build information.</p>
+        <p>Install the app, check for updates, or view the current app version details.</p>
       </div>
       <div class="desktop-reference-actions">
         <button type="button" data-desktop-reference-action="install">Install App</button>
         <button type="button" data-desktop-reference-action="update">Check for Update</button>
-        <button type="button" data-desktop-reference-action="build">Build Info</button>
+        <button type="button" data-desktop-reference-action="build">Version Info</button>
       </div>
     </section>`,
   ].join('');
@@ -761,9 +772,9 @@ function showDevelopmentBuildInfo() {
   const modal = byId('dev-version-modal');
   const textEl = byId('dev-version-text');
   if (textEl) {
-    textEl.innerHTML = `<p>This is a developmental build for testing. It is not the final production release.</p>
+    textEl.innerHTML = `<p>This app is still being tested before public release.</p>
       <dl>
-        <dt>Status</dt><dd>Developmental build</dd>
+        <dt>Status</dt><dd>Preview version</dd>
         <dt>Generated</dt><dd>Loading build metadata...</dd>
       </dl>`;
     fetch('./dev-build-info.json')
@@ -772,15 +783,15 @@ function showDevelopmentBuildInfo() {
         const generatedAt = info.generatedAt
           ? new Date(info.generatedAt).toLocaleString()
           : 'Unavailable';
-        textEl.innerHTML = `<p>This is a developmental build for testing. It is not the final production release.</p>
+        textEl.innerHTML = `<p>This app is still being tested before public release.</p>
           <dl>
-            <dt>Status</dt><dd>Developmental build</dd>
+            <dt>Status</dt><dd>Preview version</dd>
             <dt>Generated</dt><dd>${generatedAt}</dd>
           </dl>`;
       })
       .catch(() => {
-        textEl.innerHTML = `<p>This is a developmental build for testing. Build metadata is unavailable.</p>
-          <dl><dt>Status</dt><dd>Developmental build</dd></dl>`;
+        textEl.innerHTML = `<p>This app is still being tested before public release. Version details are unavailable.</p>
+          <dl><dt>Status</dt><dd>Preview version</dd></dl>`;
       });
   }
   if (modal) modal.removeAttribute('hidden');
