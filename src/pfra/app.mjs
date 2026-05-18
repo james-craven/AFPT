@@ -30,6 +30,9 @@ const PACE_ROUTE = { startX: 22, endX: 318, y: 128 };
 const PACE_OUT_BACK = { startX: 24, endX: 316, outY: 48, backY: 146 };
 const PACE_TRACK_CENTER_Y = PACE_TRACK.y + PACE_TRACK.h / 2;
 const PACE_TOTAL_MILES = 2;
+const PROFILE_STANDARD = 'standard';
+const PROFILE_AFSPECWAR_EOD = 'afspecwar-eod';
+const AFSPECWAR_PROFILE = { sex: 'male', ageGroup: 'under-25' };
 
 // Per-event value cache — preserves user input across event switches
 const savedEventValues = {
@@ -39,6 +42,7 @@ const savedEventValues = {
 };
 
 let state = {
+  profileStandard: PROFILE_STANDARD,
   sex: 'female',
   ageGroup: 'under-25',
   whtr: '0.49',
@@ -51,6 +55,11 @@ altitudeGroup: 0,
   core: { event: 'sit-up', value: '0', exempt: false },
   cardio: { event: 'two-mile-run', value: defaultCardioValue, exempt: false },
   selectedComponent: 'strength',
+};
+
+let lastStandardProfile = {
+  sex: state.sex,
+  ageGroup: state.ageGroup,
 };
 
 // --- Standards ---
@@ -79,6 +88,12 @@ const desktopEditorQuery = window.matchMedia('(min-width: 980px)');
 function byId(id) { return document.getElementById(id); }
 function val(id) { return byId(id)?.value ?? ''; }
 function isDesktopEditorLayout() { return desktopEditorQuery.matches; }
+function normalizeProfileStandard(value) {
+  return value === PROFILE_AFSPECWAR_EOD ? PROFILE_AFSPECWAR_EOD : PROFILE_STANDARD;
+}
+function usesAfspecwarProfile(profileStandard = state.profileStandard) {
+  return normalizeProfileStandard(profileStandard) === PROFILE_AFSPECWAR_EOD;
+}
 function setText(id, text) {
   const element = byId(id);
   if (element) element.textContent = text;
@@ -141,9 +156,22 @@ function refreshStateFromDom() {
   }
 
   const bodyModeSel = byId('body-mode-sel');
+  const profileStandard = normalizeProfileStandard(
+    document.querySelector('.profile-standard-option[aria-pressed="true"]')?.dataset.profileStandard
+      || state.profileStandard,
+  );
+  const forceAfspecwarProfile = usesAfspecwarProfile(profileStandard);
+  const sex = forceAfspecwarProfile
+    ? AFSPECWAR_PROFILE.sex
+    : (byId('sex-sel')?.value || state.sex || 'female');
+  const ageGroup = forceAfspecwarProfile
+    ? AFSPECWAR_PROFILE.ageGroup
+    : (byId('age-sel')?.value || state.ageGroup || 'under-25');
+
   state = {
-    sex: byId('sex-sel')?.value || 'female',
-    ageGroup: byId('age-sel')?.value || 'under-25',
+    profileStandard,
+    sex,
+    ageGroup,
     whtr: val('pfra-whtr') || '0.49',
 bodyHeightFt: val('height-ft-input') || state.bodyHeightFt || '5',
 bodyHeightIn: val('height-in-input') || state.bodyHeightIn || '10',
@@ -167,10 +195,23 @@ altitudeGroup: readAltitudeGroup(val('alt-select')),
     },
     selectedComponent: state.selectedComponent,
   };
+
+  if (!forceAfspecwarProfile) {
+    lastStandardProfile = { sex, ageGroup };
+  }
 }
 
 function dispatch(action) {
   switch (action.type) {
+    case 'SET_PROFILE_STANDARD': {
+      const profileStandard = normalizeProfileStandard(action.profileStandard);
+      state = {
+        ...state,
+        profileStandard,
+        ...(usesAfspecwarProfile(profileStandard) ? AFSPECWAR_PROFILE : {}),
+      };
+      break;
+    }
     case 'SET_SEX': state = { ...state, sex: action.sex }; break;
     case 'SET_AGE_GROUP': state = { ...state, ageGroup: action.ageGroup }; break;
     case 'SET_WHTR': state = { ...state, whtr: action.value }; break;
@@ -261,6 +302,56 @@ function resetCurrentEventDefaults() {
   savedEventValues.cardio[state.cardio.event] = cardioDef;
 
   syncCurrentInputsFromState();
+}
+
+function syncProfileStandardControls() {
+  const profileStandard = normalizeProfileStandard(state.profileStandard);
+  const locked = usesAfspecwarProfile(profileStandard);
+
+  document.documentElement.dataset.profileStandard = profileStandard;
+
+  document.querySelectorAll('.profile-standard-option').forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.dataset.profileStandard === profileStandard));
+  });
+
+  ['sex-sel', 'header-sex-sel'].forEach((id) => {
+    const select = byId(id);
+    if (!select) return;
+    select.value = state.sex;
+    select.disabled = locked;
+  });
+
+  ['age-sel', 'header-age-sel'].forEach((id) => {
+    const select = byId(id);
+    if (!select) return;
+    select.value = state.ageGroup;
+    select.disabled = locked;
+  });
+}
+
+function applyProfileStandard(profileStandard) {
+  const next = normalizeProfileStandard(profileStandard);
+  const previous = normalizeProfileStandard(state.profileStandard);
+
+  if (previous === PROFILE_STANDARD) {
+    lastStandardProfile = { sex: state.sex, ageGroup: state.ageGroup };
+  }
+
+  const nextProfile = usesAfspecwarProfile(next)
+    ? AFSPECWAR_PROFILE
+    : lastStandardProfile;
+
+  state = {
+    ...state,
+    profileStandard: next,
+    sex: nextProfile.sex,
+    ageGroup: nextProfile.ageGroup,
+  };
+
+  syncProfileStandardControls();
+  clearSavedEventValues();
+  if (ready) resetCurrentEventDefaults();
+  render();
 }
 
 // --- Scoring ---
@@ -1888,6 +1979,8 @@ function renderEditorVisibility() {
 function render() {
   if (!ready) return;
 
+  syncProfileStandardControls();
+
   const result = computeScoreFromState(state);
   if (!result) return;
 
@@ -1993,9 +2086,16 @@ function bindEvents() {
   bindMirroredSelect('age-sel', 'header-age-sel');
   bindMirroredSelect('theme-preset-select', 'header-theme-preset-select');
 
+  document.querySelectorAll('.profile-standard-option').forEach((button) => {
+    button.addEventListener('click', () => {
+      applyProfileStandard(button.dataset.profileStandard);
+    });
+  });
+
   // Demographics
   byId('sex-sel')?.addEventListener('change', () => {
     dispatch({ type: 'SET_SEX', sex: byId('sex-sel').value });
+    lastStandardProfile = { sex: state.sex, ageGroup: state.ageGroup };
     clearSavedEventValues();
     resetCurrentEventDefaults();
     render();
@@ -2003,6 +2103,7 @@ function bindEvents() {
 
   byId('age-sel')?.addEventListener('change', () => {
     dispatch({ type: 'SET_AGE_GROUP', ageGroup: byId('age-sel').value });
+    lastStandardProfile = { sex: state.sex, ageGroup: state.ageGroup };
     clearSavedEventValues();
     resetCurrentEventDefaults();
     render();
@@ -2684,6 +2785,7 @@ async function loadData() {
 
 function init() {
   refreshStateFromDom();
+  syncProfileStandardControls();
   bindEvents();
   loadData().then(() => {
     // After tables load, set initial defaults to the lowest valid scoring values

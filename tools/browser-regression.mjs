@@ -180,6 +180,7 @@ async function assertControlsStayInsideApp(page, label) {
       '.component-strip',
       '.score-section',
       '.demographics-row',
+      '.profile-standard-toggle',
       '#theme-preset-select',
       '.settings-hub-toggle',
     ].join(',');
@@ -631,6 +632,81 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   // Restore
   await page.locator(visibleAgeSelector).selectOption('under-25');
   await page.waitForTimeout(50);
+
+  // 5a. AFSPECWAR/EOD locks the app profile without locking chart drawer controls
+  await page.locator('#profile-standard-afspecwar').click();
+  await page.waitForFunction(() => window.afptApp?.getState()?.profileStandard === 'afspecwar-eod');
+  const lockedProfile = await page.evaluate(() => ({
+    age: window.afptApp?.getState()?.ageGroup,
+    chartAgeDisabled: document.getElementById('chart-age-sel')?.disabled,
+    chartSexDisabled: document.getElementById('chart-sex-sel')?.disabled,
+    headerAgeDisabled: document.getElementById('header-age-sel')?.disabled,
+    headerAgeDisplay: getComputedStyle(document.getElementById('header-age-sel')?.closest('.demo-field')).display,
+    headerSexDisabled: document.getElementById('header-sex-sel')?.disabled,
+    headerSexDisplay: getComputedStyle(document.getElementById('header-sex-sel')?.closest('.demo-field')).display,
+    profileStandard: window.afptApp?.getState()?.profileStandard,
+    sex: window.afptApp?.getState()?.sex,
+    sourceAgeDisabled: document.getElementById('age-sel')?.disabled,
+    sourceSexDisabled: document.getElementById('sex-sel')?.disabled,
+  }));
+  assert.deepEqual(
+    lockedProfile,
+    {
+      age: 'under-25',
+      chartAgeDisabled: false,
+      chartSexDisabled: false,
+      headerAgeDisabled: true,
+      headerAgeDisplay: 'none',
+      headerSexDisabled: true,
+      headerSexDisplay: 'none',
+      profileStandard: 'afspecwar-eod',
+      sex: 'male',
+      sourceAgeDisabled: true,
+      sourceSexDisabled: true,
+    },
+    'AFSPECWAR/EOD locks only app profile controls to Male under 25',
+  );
+
+  await page.locator('#push-btn').click();
+  await page.waitForFunction(() => !document.getElementById('modal')?.hasAttribute('hidden'));
+  assert.deepEqual(
+    await page.evaluate(() => ({
+      chartAge: document.getElementById('chart-age-sel')?.value,
+      chartAgeDisabled: document.getElementById('chart-age-sel')?.disabled,
+      chartSex: document.getElementById('chart-sex-sel')?.value,
+      chartSexDisabled: document.getElementById('chart-sex-sel')?.disabled,
+    })),
+    {
+      chartAge: 'under-25',
+      chartAgeDisabled: false,
+      chartSex: 'male',
+      chartSexDisabled: false,
+    },
+    'chart drawer stays adjustable while opening on the active AFSPECWAR/EOD profile',
+  );
+  await page.locator('#close-btn').click();
+
+  await page.locator('#profile-standard-standard').click();
+  await page.waitForFunction(() => window.afptApp?.getState()?.profileStandard === 'standard');
+  assert.deepEqual(
+    await page.evaluate(() => ({
+      age: window.afptApp?.getState()?.ageGroup,
+      headerAgeDisabled: document.getElementById('header-age-sel')?.disabled,
+      headerSexDisabled: document.getElementById('header-sex-sel')?.disabled,
+      sex: window.afptApp?.getState()?.sex,
+      sourceAgeDisabled: document.getElementById('age-sel')?.disabled,
+      sourceSexDisabled: document.getElementById('sex-sel')?.disabled,
+    })),
+    {
+      age: 'under-25',
+      headerAgeDisabled: false,
+      headerSexDisabled: false,
+      sex: 'female',
+      sourceAgeDisabled: false,
+      sourceSexDisabled: false,
+    },
+    'STANDARD restores the previous app profile and unlocks app controls',
+  );
 
   // 6. Component tabs switch panels
   const strengthVisible = await page.evaluate(() => !document.getElementById('strength-editor')?.hasAttribute('hidden'));

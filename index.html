@@ -115,14 +115,14 @@
       <div class="app-header-left">
         <span class="app-title">PFRA.app</span>
         <section class="app-header-controls" aria-label="Quick calculator controls">
-          <div class="demo-field">
+          <div class="demo-field demo-field--profile">
             <label class="demo-label" for="header-sex-sel">SEX</label>
             <select id="header-sex-sel" class="demo-select" aria-label="Sex">
               <option value="female">Female</option>
               <option value="male">Male</option>
             </select>
           </div>
-          <div class="demo-field">
+          <div class="demo-field demo-field--profile">
             <label class="demo-label" for="header-age-sel">AGE</label>
             <select id="header-age-sel" class="demo-select" aria-label="Age group">
               <option value="under-25">&lt; 25</option>
@@ -181,15 +181,23 @@
         </svg>
       </div>
 
-      <div class="settings-hub" data-settings-hub>
-        <button id="settings-hub-toggle" class="settings-hub-toggle" type="button"
-          aria-label="Open controls" aria-expanded="false" aria-controls="settings-hub-panel">
-          <span class="settings-hub-icon" aria-hidden="true">
-            <span></span><span></span><span></span>
-          </span>
-        </button>
-        <button id="settings-hub-scrim" class="settings-hub-scrim" type="button" aria-label="Close controls" hidden></button>
-        <aside id="settings-hub-panel" class="settings-hub-panel" role="dialog" aria-labelledby="settings-hub-title" hidden>
+      <div class="app-header-right">
+        <div class="profile-standard-toggle" role="group" aria-label="Profile standard">
+          <button id="profile-standard-standard" class="profile-standard-option" type="button"
+            data-profile-standard="standard" aria-pressed="true">STANDARD</button>
+          <button id="profile-standard-afspecwar" class="profile-standard-option" type="button"
+            data-profile-standard="afspecwar-eod" aria-pressed="false">AFSPECWAR/EOD</button>
+        </div>
+
+        <div class="settings-hub" data-settings-hub>
+          <button id="settings-hub-toggle" class="settings-hub-toggle" type="button"
+            aria-label="Open controls" aria-expanded="false" aria-controls="settings-hub-panel">
+            <span class="settings-hub-icon" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </span>
+          </button>
+          <button id="settings-hub-scrim" class="settings-hub-scrim" type="button" aria-label="Close controls" hidden></button>
+          <aside id="settings-hub-panel" class="settings-hub-panel" role="dialog" aria-labelledby="settings-hub-title" hidden>
           <div class="settings-hub-header">
             <h2 id="settings-hub-title">Controls</h2>
             <button id="settings-hub-close" class="settings-hub-close" type="button">Close</button>
@@ -222,7 +230,8 @@
               <li id="dev-version-menu" role="button" tabindex="0">Version Info</li>
             </ul>
           </section>
-        </aside>
+          </aside>
+        </div>
       </div>
     </header>
 
@@ -240,7 +249,7 @@
       <div class="desktop-intro__steps" aria-label="How to use the calculator">
         <div>
           <strong>1</strong>
-          <span>Set sex, age group, and theme.</span>
+          <span>Choose your standard, profile, and theme.</span>
         </div>
         <div>
           <strong>2</strong>
@@ -255,14 +264,14 @@
 
     <!-- Demographics -->
     <section class="demographics-row" aria-label="Demographic controls">
-      <div class="demo-field">
+      <div class="demo-field demo-field--profile">
         <label class="demo-label" for="sex-sel">SEX</label>
         <select id="sex-sel" class="demo-select">
           <option value="female">Female</option>
           <option value="male">Male</option>
         </select>
       </div>
-      <div class="demo-field">
+      <div class="demo-field demo-field--profile">
         <label class="demo-label" for="age-sel">AGE</label>
         <select id="age-sel" class="demo-select">
           <option value="under-25">&lt; 25</option>

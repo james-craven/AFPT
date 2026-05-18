@@ -186,6 +186,61 @@ select {
   display: none;
 }
 
+.app-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.profile-standard-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 2px;
+  border: 1px solid var(--afpt-border-strong);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--afpt-panel-2) 86%, transparent);
+}
+
+.profile-standard-option {
+  min-height: 30px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--afpt-ink-dim);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.45px;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.profile-standard-option[aria-pressed="true"] {
+  background: var(--afpt-accent);
+  color: var(--afpt-bg);
+}
+
+.profile-standard-option:focus-visible {
+  outline: 2px solid var(--afpt-accent-2);
+  outline-offset: 2px;
+}
+
+:root[data-profile-standard="afspecwar-eod"] .demo-field--profile {
+  display: none;
+}
+
+:root[data-profile-standard="afspecwar-eod"] .demographics-row {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 /* ─── Settings hub ─────────────────────────────────────────────── */
 .settings-hub {
   position: relative;
@@ -4450,6 +4505,28 @@ select {
     pointer-events: none;
   }
 
+  .app-header-right {
+    grid-column: 3;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    justify-self: stretch;
+    gap: 10px;
+    margin-left: 0;
+    min-width: 0;
+  }
+
+  .profile-standard-toggle {
+    justify-self: center;
+  }
+
+  .profile-standard-option {
+    min-height: 32px;
+    padding: 0 8px;
+    font-size: 9px;
+    letter-spacing: 0.7px;
+  }
+
   .app-header-score-mini__row {
     display: grid;
     grid-template-columns: minmax(0, auto) auto auto;
@@ -4642,7 +4719,7 @@ select {
   }
 
   .settings-hub {
-    grid-column: 3;
+    grid-column: 2;
     justify-self:end;
   }
 
