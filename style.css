@@ -4962,12 +4962,8 @@ select {
 
   .editor-event-row {
     grid-template-columns:
-      minmax(84px, 1.25fr) repeat(3, minmax(46px, 0.75fr));
+      max-content 1fr 1fr 1fr;
     gap: 5px;
-  }
-
-  .editor-event-row .value-group {
-    justify-content: flex-start;
   }
 
   .editor-event-row .value-group .value-input,

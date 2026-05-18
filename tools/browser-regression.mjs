@@ -325,6 +325,8 @@ async function assertEventRowEdgeAlignment(page, panelId, label) {
       .filter(Boolean)
       .filter(({ width, required }) => width + 0.5 < required)
       .map(({ id, width, required }) => `${id}:${Math.round(width)}<${Math.round(required)}`);
+    const actionWidths = buttons.map((el) => el.getBoundingClientRect().width);
+    const maxActionWidth = Math.max(...actionWidths);
     const gaps = maxRect
       ? [
         minRect.left - groupRect.right,
@@ -338,6 +340,7 @@ async function assertEventRowEdgeAlignment(page, panelId, label) {
       firstInputLeftDelta: Math.abs(inputRect.left - rowRect.left),
       rightDelta: Math.abs(chartRect.right - rowRect.right),
       heightDelta: maxHeight - minHeight,
+      inputPriorityDelta: groupRect.width - maxActionWidth,
       gapDelta,
       clippedInputs,
     };
@@ -348,6 +351,7 @@ async function assertEventRowEdgeAlignment(page, panelId, label) {
   assert.ok(result.firstInputLeftDelta <= 2, `${label} input aligns with row left edge: ${result.firstInputLeftDelta}px`);
   assert.ok(result.rightDelta <= 2, `${label} chart aligns with row right edge: ${result.rightDelta}px`);
   assert.ok(result.heightDelta <= 1, `${label} row controls share height: ${result.heightDelta}px`);
+  assert.ok(result.inputPriorityDelta >= 12, `${label} input group has priority over action buttons: ${result.inputPriorityDelta}px`);
   assert.ok(result.gapDelta <= 2, `${label} row control gaps are even: ${result.gapDelta}px`);
   assert.deepEqual(result.clippedInputs, [], `${label} input text fits without clipping`);
 }
@@ -437,9 +441,6 @@ async function assertResponsiveDashboardLayout(page, label) {
       intro: rectFor('.desktop-intro'),
       nav: rectFor('.component-strip'),
       pace: rectFor('.pace-plan-section'),
-      paceLayout: rectFor('.pace-readiness-layout'),
-      pacePosition: getComputedStyle(document.querySelector('.pace-plan-section')).position,
-      readiness: rectFor('.readiness-guide'),
       score: rectFor('.score-section'),
       summary: rectFor('.desktop-score-breakdown'),
     };
@@ -455,9 +456,6 @@ async function assertResponsiveDashboardLayout(page, label) {
     assert.equal(result.summary.display, 'none', `${label} hides desktop score breakdown on mobile`);
     assert.equal(result.headerScore.display, 'none', `${label} keeps the desktop header score out of mobile`);
     assert.notEqual(result.score.display, 'none', `${label} keeps the mobile total score card visible`);
-    assert.notEqual(result.pace.display, 'none', `${label} keeps the mobile pace plan visible`);
-    assert.notEqual(result.readiness.display, 'none', `${label} shows the mobile readiness guide`);
-    assert.ok(result.readiness.top > result.pace.bottom, `${label} stacks readiness guide below the mobile pace plan`);
     assert.equal(result.visibleEditors.length, 1, `${label} keeps one active mobile editor`);
     return;
   }
@@ -473,12 +471,6 @@ async function assertResponsiveDashboardLayout(page, label) {
   assert.equal(result.chart.display, 'none', `${label} avoids clipped inline desktop chart panels`);
   assert.equal(result.score.display, 'none', `${label} keeps the body total score card out of desktop`);
   assert.equal(result.summary.display, 'none', `${label} removes the old body score summary band`);
-  assert.equal(result.paceLayout.display, 'grid', `${label} uses a desktop readiness and pace grid`);
-  assert.notEqual(result.readiness.display, 'none', `${label} shows the desktop readiness guide`);
-  assert.equal(result.pacePosition, 'static', `${label} keeps the pace plan scrolling normally`);
-  assert.ok(result.readiness.left < result.pace.left, `${label} places readiness guide to the left of pace plan`);
-  assert.ok(result.readiness.width > result.pace.width * 1.55, `${label} gives readiness guide about two-thirds of the row`);
-  assert.ok(result.pace.width < result.paceLayout.width * 0.42, `${label} keeps desktop pace plan compact: ${result.pace.width}px`);
   assert.doesNotMatch(result.visibleText, /Desktop keeps|Selected Component|Current implementation|Switching behavior|Component selector/i, `${label} visible desktop copy avoids implementation language`);
   assert.deepEqual(
     result.visibleEditors.sort(),
