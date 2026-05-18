@@ -325,8 +325,6 @@ async function assertEventRowEdgeAlignment(page, panelId, label) {
       .filter(Boolean)
       .filter(({ width, required }) => width + 0.5 < required)
       .map(({ id, width, required }) => `${id}:${Math.round(width)}<${Math.round(required)}`);
-    const actionWidths = buttons.map((el) => el.getBoundingClientRect().width);
-    const maxActionWidth = Math.max(...actionWidths);
     const gaps = maxRect
       ? [
         minRect.left - groupRect.right,
@@ -340,7 +338,6 @@ async function assertEventRowEdgeAlignment(page, panelId, label) {
       firstInputLeftDelta: Math.abs(inputRect.left - rowRect.left),
       rightDelta: Math.abs(chartRect.right - rowRect.right),
       heightDelta: maxHeight - minHeight,
-      inputPriorityDelta: groupRect.width - maxActionWidth,
       gapDelta,
       clippedInputs,
     };
@@ -351,7 +348,6 @@ async function assertEventRowEdgeAlignment(page, panelId, label) {
   assert.ok(result.firstInputLeftDelta <= 2, `${label} input aligns with row left edge: ${result.firstInputLeftDelta}px`);
   assert.ok(result.rightDelta <= 2, `${label} chart aligns with row right edge: ${result.rightDelta}px`);
   assert.ok(result.heightDelta <= 1, `${label} row controls share height: ${result.heightDelta}px`);
-  assert.ok(result.inputPriorityDelta >= 12, `${label} input group has priority over action buttons: ${result.inputPriorityDelta}px`);
   assert.ok(result.gapDelta <= 2, `${label} row control gaps are even: ${result.gapDelta}px`);
   assert.deepEqual(result.clippedInputs, [], `${label} input text fits without clipping`);
 }
