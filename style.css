@@ -957,6 +957,9 @@ select {
   cursor: pointer;
   padding: 0;
   touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .body-input-stepper > .body-step-btn--minus {
