@@ -736,7 +736,7 @@ select {
 /* ─── Event row: inputs get priority; MIN/MAX/Chart adapt to fit ─── */
 .editor-event-row {
   display: grid;
-  grid-template-columns: max-content 1fr 1fr 1fr;
+  grid-template-columns: minmax(112px, 1.25fr) repeat(3, minmax(50px, 0.75fr));
   gap: 8px;
   align-items: center;
   justify-items: stretch;
@@ -753,7 +753,7 @@ select {
 .editor-event-row .value-group {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 6px;
   min-width: 0;
   grid-column:1;
@@ -1019,7 +1019,7 @@ select {
   }
 
   .editor-event-row {
-    grid-template-columns: max-content 1fr 1fr 1fr;
+    grid-template-columns: minmax(112px, 1.25fr) repeat(3, minmax(50px, 0.75fr));
     gap: 6px;
   }
 
@@ -1101,7 +1101,7 @@ select {
 
 @media (max-width: 350px) {
   .editor-event-row {
-    grid-template-columns: max-content 1fr 1fr 1fr;
+    grid-template-columns: minmax(104px, 1.25fr) repeat(3, minmax(48px, 0.75fr));
     gap: 4px;
   }
 
@@ -3278,6 +3278,125 @@ select {
   padding: 0px 16px 0px;
 }
 
+.pace-readiness-layout {
+  display: grid;
+  gap: 16px;
+}
+
+.readiness-guide {
+  margin: 0 16px 16px;
+  padding: 16px;
+  background: color-mix(in srgb, var(--afpt-panel) 94%, transparent);
+  border: 1px solid var(--afpt-border);
+  border-radius: 14px;
+}
+
+.readiness-guide__header {
+  margin-bottom: 14px;
+}
+
+.readiness-guide__eyebrow {
+  color: var(--afpt-accent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  line-height: 1;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.readiness-guide h2 {
+  color: var(--afpt-ink);
+  font-size: clamp(22px, 6vw, 30px);
+  letter-spacing: 0;
+  line-height: 1.02;
+  margin: 0;
+  text-transform: none;
+}
+
+.readiness-guide__header p {
+  color: var(--afpt-ink-dim);
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 9px 0 0;
+}
+
+.readiness-guide__grid {
+  display: grid;
+  gap: 10px;
+}
+
+.readiness-card {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--afpt-panel-2) 78%, transparent);
+  border: 1px solid var(--afpt-border);
+  border-radius: 10px;
+}
+
+.readiness-card h3 {
+  color: var(--afpt-ink);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  line-height: 1.2;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.readiness-card p {
+  color: var(--afpt-ink-dim);
+  font-size: 12px;
+  line-height: 1.42;
+  margin: 0;
+}
+
+.readiness-card strong {
+  color: var(--afpt-ink);
+}
+
+.readiness-list {
+  display: grid;
+  gap: 7px;
+}
+
+.readiness-steps {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: readiness-step;
+}
+
+.readiness-steps li {
+  position: relative;
+  min-height: 24px;
+  padding-left: 30px;
+  color: var(--afpt-ink);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.readiness-steps li::before {
+  position: absolute;
+  left: 0;
+  top: -2px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--afpt-border-strong);
+  border-radius: 50%;
+  color: var(--afpt-accent);
+  content: counter(readiness-step);
+  counter-increment: readiness-step;
+  font-size: 10px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
 .pace-plan-empty {
   font-size: 12px;
   color: var(--afpt-ink-dim);
@@ -4545,6 +4664,7 @@ select {
   .desktop-score-breakdown,
   .editor-panel,
   .lap-display,
+  .readiness-guide,
   .desktop-guide {
     border: 1px solid var(--afpt-border);
     border-radius: 16px;
@@ -4842,8 +4962,12 @@ select {
 
   .editor-event-row {
     grid-template-columns:
-      max-content 1fr 1fr 1fr;
+      minmax(84px, 1.25fr) repeat(3, minmax(46px, 0.75fr));
     gap: 5px;
+  }
+
+  .editor-event-row .value-group {
+    justify-content: flex-start;
   }
 
   .editor-event-row .value-group .value-input,
@@ -4877,10 +5001,70 @@ select {
     font-size: 19px;
   }
 
-  .pace-plan-section {
+  .pace-readiness-layout {
     grid-area: pace;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+    grid-template-areas: "readiness pace-plan";
+    gap: 12px;
+    align-items: start;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .pace-plan-section {
+    grid-area: pace-plan;
+    align-self: start;
     padding: 0;
     min-width: 0;
+  }
+
+  .readiness-guide {
+    grid-area: readiness;
+    margin: 0;
+    padding: 18px;
+    min-width: 0;
+  }
+
+  .readiness-guide__header {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    margin-bottom: 14px;
+  }
+
+  .readiness-guide__eyebrow {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+
+  .readiness-guide h2 {
+    font-size: clamp(24px, 2.1vw, 34px);
+  }
+
+  .readiness-guide__header p {
+    grid-column: 1 / -1;
+    max-width: 64rem;
+    margin-top: 0;
+  }
+
+  .readiness-guide__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .readiness-card {
+    min-height: 118px;
+    padding: 13px;
+  }
+
+  .readiness-card--wide {
+    grid-column: span 2;
+  }
+
+  .readiness-card--execution {
+    align-content: start;
   }
 
   .lap-display {
@@ -5101,6 +5285,8 @@ select {
   :root[data-theme="stencil"] .desktop-score-breakdown,
   :root[data-theme="stencil"] .editor-panel,
   :root[data-theme="stencil"] .lap-display,
+  :root[data-theme="stencil"] .readiness-guide,
+  :root[data-theme="stencil"] .readiness-card,
   :root[data-theme="stencil"] .desktop-chart-panel,
   :root[data-theme="stencil"] .desktop-guide,
   :root[data-theme="stencil"] .desktop-guide-card,
@@ -5120,6 +5306,7 @@ select {
   :root[data-theme="light"] .desktop-score-breakdown,
   :root[data-theme="light"] .editor-panel,
   :root[data-theme="light"] .lap-display,
+  :root[data-theme="light"] .readiness-guide,
   :root[data-theme="light"] .desktop-intro,
   :root[data-theme="light"] .desktop-guide {
     margin: 0;
@@ -5137,8 +5324,10 @@ select {
   :root[data-theme="fitness"] .desktop-score-breakdown,
   :root[data-theme="fitness"] .editor-panel,
   :root[data-theme="fitness"] .lap-display,
+  :root[data-theme="fitness"] .readiness-guide,
   :root[data-theme="fitness"] .desktop-chart-panel,
   :root[data-theme="fitness"] .desktop-guide,
+  :root[data-theme="fitness"] .readiness-card,
   :root[data-theme="fitness"] .desktop-guide-card,
   :root[data-theme="fitness"] .desktop-faq details,
   :root[data-theme="fitness"] .desktop-references-modal__panel,
@@ -5157,6 +5346,7 @@ select {
   }
 
   :root[data-theme="fitness"] .desktop-intro__steps div,
+  :root[data-theme="fitness"] .readiness-card,
   :root[data-theme="fitness"] .desktop-guide-card,
   :root[data-theme="fitness"] .desktop-faq details,
   :root[data-theme="fitness"] .desktop-reference-group {
@@ -5207,7 +5397,7 @@ select {
     }
 
     .editor-event-row {
-      grid-template-columns:max-content 1fr 1fr 1fr;
+      grid-template-columns: minmax(84px, 1.25fr) repeat(3, minmax(46px, 0.75fr));
       gap: 7px;
     }
   }
