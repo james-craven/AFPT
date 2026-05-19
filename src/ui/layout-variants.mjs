@@ -1,4 +1,4 @@
-export const DEFAULT_THEME_PRESET = 'tactical';
+export const DEFAULT_THEME_PRESET = 'blues';
 export const THEME_STORAGE_KEY = 'afpt.themePreset';
 
 export const LAYOUT_SLOTS = Object.freeze([

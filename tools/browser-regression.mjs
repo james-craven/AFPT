@@ -605,6 +605,11 @@ async function assertDesktopReferencesDrawer(page, label) {
   const referenceState = await page.evaluate(() => ({
     groupCount: document.querySelectorAll('.desktop-reference-group').length,
     imageCount: document.querySelectorAll('#desktop-references-content .chart-reference__image').length,
+    sourceLinks: Array.from(document.querySelectorAll('#desktop-references-content .desktop-reference-link'))
+      .map((link) => ({
+        href: link.getAttribute('href'),
+        text: link.textContent,
+      })),
     text: document.getElementById('desktop-references-content')?.textContent ?? '',
   }));
   assert.ok(referenceState.groupCount >= 4, `${label} desktop references are grouped`);
@@ -612,6 +617,41 @@ async function assertDesktopReferencesDrawer(page, label) {
   assert.match(referenceState.text, /Official Scoring Charts/i, `${label} references include scoring charts`);
   assert.match(referenceState.text, /Altitude Adjustments/i, `${label} references include altitude adjustments`);
   assert.match(referenceState.text, /HAMR Resources/i, `${label} references include HAMR resources`);
+  assert.match(referenceState.text, /Official Source Links/i, `${label} references include outbound official source links`);
+  assert.doesNotMatch(referenceState.text, /App & Offline/i, `${label} references do not include app/offline controls`);
+  assert.deepEqual(
+    referenceState.sourceLinks.map(({ href }) => href),
+    [
+      'https://www.afpc.af.mil/Portals/70/documents/FITNESS/PFRA%20Scoring%20Charts.pdf',
+      'https://www.afpc.af.mil/Career-Management/Fitness-Program/',
+      'https://www.afpc.af.mil/Career-Management/Fitness-Program/UnitFA/',
+      'https://www.afpc.af.mil/Portals/70/documents/FITNESS/afman36-2905.pdf',
+    ],
+    `${label} source links point to official AFPC pages and documents`,
+  );
+  assert.ok(
+    referenceState.sourceLinks.some(({ text }) => /PFRA Scoring Charts/i.test(text)),
+    `${label} source links include PFRA scoring charts`,
+  );
+
+  const beforeUrl = page.url();
+  const dialogPromise = page.waitForEvent('dialog').then(async (dialog) => {
+    const message = dialog.message();
+    await dialog.dismiss();
+    return message;
+  });
+  await page.locator('.desktop-reference-link').first().click({ noWaitAfter: true });
+  assert.match(
+    await dialogPromise,
+    /Open this official source outside PFRA\.app/i,
+    `${label} confirms before leaving the app`,
+  );
+  assert.equal(page.url(), beforeUrl, `${label} canceling outbound source link keeps the user in the app`);
+  assert.equal(
+    await page.locator('#desktop-references-modal').isVisible(),
+    true,
+    `${label} canceling outbound source link keeps references open`,
+  );
   await page.locator('#desktop-references-close').click();
   await page.waitForFunction(() => document.getElementById('desktop-references-modal')?.hasAttribute('hidden'));
 }
@@ -630,6 +670,11 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   const initialResult = await page.evaluate(() => window.afptApp?.getScoreResult());
   assert.ok(initialResult !== null, 'getScoreResult returns a result');
   assert.ok(typeof initialResult?.total === 'number', 'score result has a numeric total');
+  assert.equal(
+    await page.evaluate(() => document.documentElement.dataset.themePreset),
+    'blues',
+    'Dress Blues is the default theme on first load',
+  );
 
   // 3. Score header shows a value
   const scoreTxt = await page.evaluate(() => document.getElementById('score-txt')?.textContent?.trim());

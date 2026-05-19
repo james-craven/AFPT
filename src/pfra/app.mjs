@@ -463,6 +463,29 @@ const OFFICIAL_REFERENCES = {
   },
 };
 
+const OFFICIAL_SOURCE_LINKS = [
+  {
+    label: 'PFRA Scoring Charts',
+    description: 'Official AFPC PDF for the component score charts shown here.',
+    url: 'https://www.afpc.af.mil/Portals/70/documents/FITNESS/PFRA%20Scoring%20Charts.pdf',
+  },
+  {
+    label: 'Fitness Program',
+    description: 'AFPC fitness program page for current program information.',
+    url: 'https://www.afpc.af.mil/Career-Management/Fitness-Program/',
+  },
+  {
+    label: 'Unit Fitness Program',
+    description: 'AFPC unit fitness program page for local administration guidance.',
+    url: 'https://www.afpc.af.mil/Career-Management/Fitness-Program/UnitFA/',
+  },
+  {
+    label: 'DAFMAN 36-2905',
+    description: 'Official fitness program PDF used for policy and altitude reference tables.',
+    url: 'https://www.afpc.af.mil/Portals/70/documents/FITNESS/afman36-2905.pdf',
+  },
+];
+
 const SCORE_CHART_REFERENCES = {
   'push-up': {
     title: 'Push-Up Official Score Chart',
@@ -790,6 +813,23 @@ function desktopReferenceGroup(title, description, references) {
   </section>`;
 }
 
+function desktopReferenceLinksGroup() {
+  const links = OFFICIAL_SOURCE_LINKS.map((link) => `<a class="desktop-reference-link" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" data-external-reference-url="${escapeHtml(link.url)}">
+    <strong>${escapeHtml(link.label)}</strong>
+    <span>${escapeHtml(link.description)}</span>
+  </a>`).join('');
+
+  return `<section class="desktop-reference-group desktop-reference-group--links">
+    <div class="desktop-reference-group__heading">
+      <h3>Official Source Links</h3>
+      <p>Open the source pages and documents behind these references.</p>
+    </div>
+    <div class="desktop-reference-links">
+      ${links}
+    </div>
+  </section>`;
+}
+
 function renderDesktopReferencesContent() {
   const content = byId('desktop-references-content');
   if (!content) return;
@@ -820,18 +860,12 @@ function renderDesktopReferencesContent() {
       'The HAMR score chart and shuttle level card used when comparing shuttle totals.',
       hamrReferences,
     ),
-    `<section class="desktop-reference-group desktop-reference-group--app">
-      <div class="desktop-reference-group__heading">
-        <h3>App & Offline</h3>
-        <p>Install the app, check for updates, or view the current app version details.</p>
-      </div>
-      <div class="desktop-reference-actions">
-        <button type="button" data-desktop-reference-action="install">Install App</button>
-        <button type="button" data-desktop-reference-action="update">Check for Update</button>
-        <button type="button" data-desktop-reference-action="build">Version Info</button>
-      </div>
-    </section>`,
+    desktopReferenceLinksGroup(),
   ].join('');
+}
+
+function confirmExternalReference(url) {
+  return window.confirm(`Open this official source outside PFRA.app?\n\n${url}`);
 }
 
 function openDesktopReferences() {
@@ -2707,17 +2741,17 @@ function bindEvents() {
   byId('desktop-references-close')?.addEventListener('click', closeDesktopReferences);
   byId('desktop-references-scrim')?.addEventListener('click', closeDesktopReferences);
   byId('desktop-references-content')?.addEventListener('click', (event) => {
-    const action = event.target instanceof Element
-      ? event.target.closest('[data-desktop-reference-action]')?.dataset.desktopReferenceAction
+    const externalLink = event.target instanceof Element
+      ? event.target.closest('[data-external-reference-url]')
       : null;
-    if (!action) return;
-    closeDesktopReferences();
-    if (action === 'install') {
-      showInstallHelp();
-    } else if (action === 'update') {
-      window.afptPwa?.checkForUpdates?.();
-    } else if (action === 'build') {
-      showDevelopmentBuildInfo();
+    if (externalLink) {
+      event.preventDefault();
+      const url = externalLink.dataset.externalReferenceUrl || externalLink.href;
+      if (!url || !confirmExternalReference(url)) return;
+      const opened = window.open(url, '_blank');
+      if (opened) opened.opener = null;
+      if (!opened) window.location.href = url;
+      return;
     }
   });
   document.addEventListener('keydown', (e) => {
