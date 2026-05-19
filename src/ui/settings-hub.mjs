@@ -20,6 +20,7 @@ function setHubOpen(open, elements) {
   panel.hidden = !open;
   scrim.hidden = !open;
   toggle.setAttribute('aria-expanded', String(open));
+  document.documentElement.classList.toggle('settings-hub-open', open);
   document.body.classList.toggle('settings-hub-open', open);
 
   if (open) {

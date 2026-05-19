@@ -246,6 +246,12 @@ select {
   position: relative;
 }
 
+html.settings-hub-open,
+body.settings-hub-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 .settings-hub-toggle {
   background: transparent;
   border: 1px solid var(--afpt-border-strong);
@@ -300,6 +306,7 @@ select {
   border-left: 1px solid var(--afpt-border-strong);
   z-index: 910;
   overflow-y: auto;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
 }

@@ -271,8 +271,47 @@ async function assertStickyHeaderAndSettingsLayer(page, preset, label) {
   assert.ok(Math.abs(layerResult.panelTop) <= 1, `${label} ${preset} settings panel starts at viewport top`);
   assert.ok(Math.abs(layerResult.panelRight - layerResult.expectedRight) <= 1, `${label} ${preset} settings panel reaches app right edge`);
 
+  const lockedState = await page.evaluate(() => ({
+    bodyLocked: document.body.classList.contains('settings-hub-open'),
+    bodyOverflow: getComputedStyle(document.body).overflow,
+    htmlLocked: document.documentElement.classList.contains('settings-hub-open'),
+    htmlOverflow: getComputedStyle(document.documentElement).overflow,
+    scrollY: window.scrollY,
+  }));
+  assert.deepEqual(
+    {
+      bodyLocked: lockedState.bodyLocked,
+      bodyOverflow: lockedState.bodyOverflow,
+      htmlLocked: lockedState.htmlLocked,
+      htmlOverflow: lockedState.htmlOverflow,
+    },
+    {
+      bodyLocked: true,
+      bodyOverflow: 'hidden',
+      htmlLocked: true,
+      htmlOverflow: 'hidden',
+    },
+    `${label} ${preset} settings drawer locks page scrolling`,
+  );
+  await page.locator('#settings-hub-panel').hover();
+  await page.mouse.wheel(0, 700);
+  await page.waitForTimeout(50);
+  assert.equal(
+    await page.evaluate(() => window.scrollY),
+    lockedState.scrollY,
+    `${label} ${preset} settings drawer scroll does not move the app behind it`,
+  );
+
   await page.locator('#settings-hub-close').click();
   await page.waitForFunction(() => document.getElementById('settings-hub-panel')?.hidden);
+  assert.deepEqual(
+    await page.evaluate(() => ({
+      bodyLocked: document.body.classList.contains('settings-hub-open'),
+      htmlLocked: document.documentElement.classList.contains('settings-hub-open'),
+    })),
+    { bodyLocked: false, htmlLocked: false },
+    `${label} ${preset} closing settings drawer releases scroll lock`,
+  );
   await page.evaluate(() => window.scrollTo(0, 0));
 }
 
