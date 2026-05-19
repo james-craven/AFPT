@@ -1717,10 +1717,16 @@ select {
   inset: 0;
   z-index: 1000;
   pointer-events: none;
+  overscroll-behavior: none;
 }
 
 .chart-drawer[hidden] {
   display: none;
+}
+
+body.chart-drawer-open {
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 .chart-drawer__scrim {
@@ -1746,6 +1752,7 @@ select {
   flex-direction: column;
   overflow: hidden;
   overflow-x: hidden;
+  overscroll-behavior: contain;
 }
 
 :root[data-theme="fitness"] .chart-drawer__panel {
@@ -1812,8 +1819,8 @@ select {
 }
 
 .chart-reference-row {
-  display: flex;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .chart-ctrl-sel,
@@ -1849,7 +1856,7 @@ select {
   padding: 7px 10px;
   text-transform: uppercase;
   white-space: nowrap;
-  width: auto;
+  width: 100%;
 }
 
 .chart-reference-btn:hover {
@@ -1885,6 +1892,7 @@ select {
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  overscroll-behavior: contain;
 }
 
 .chart-drawer__image-frame img {

@@ -905,6 +905,7 @@ function populateChartComponentSel(category) {
 function openChart(component, _title) {
   const modal = byId('modal');
   if (!modal) return;
+  document.body.classList.add('chart-drawer-open');
   modal.dataset.chartMode = 'score';
   setChartControlsVisible(true);
 
@@ -947,6 +948,7 @@ function openChart(component, _title) {
 function openOfficialReference(referenceKey) {
   const modal = byId('modal');
   if (!modal) return;
+  document.body.classList.add('chart-drawer-open');
   modal.dataset.chartMode = 'reference';
   delete modal.dataset.returnToChart;
   setChartControlsVisible(false);
@@ -960,6 +962,7 @@ function openCurrentScoreReference() {
   if (!reference) return;
   const modal = byId('modal');
   if (!modal) return;
+  document.body.classList.add('chart-drawer-open');
   modal.dataset.chartMode = 'reference';
   modal.dataset.returnToChart = 'true';
   setChartControlsVisible(false);
@@ -981,12 +984,14 @@ function closeChart() {
     delete modal.dataset.returnToChart;
     setChartControlsVisible(true);
     refreshChartContent();
+    document.body.classList.add('chart-drawer-open');
     return;
   }
 
   modal.setAttribute('hidden', '');
   delete modal.dataset.chartOpen;
   delete modal.dataset.returnToChart;
+  document.body.classList.remove('chart-drawer-open');
 }
 
 // PACE PLAN LOCKED: User approved this visual. Do not redesign. Only move/retheme.

@@ -520,13 +520,25 @@ async function assertDesktopChartPanel(page, label) {
         && controls.bottom <= window.innerHeight;
     })(),
     controlsVisible: !document.querySelector('.chart-ctrl-row')?.hidden,
+    referenceButtonFillsRow: (() => {
+      const row = document.querySelector('.chart-reference-row');
+      const button = document.getElementById('chart-reference-btn');
+      if (!row || !button) return false;
+      const rowRect = row.getBoundingClientRect();
+      const buttonRect = button.getBoundingClientRect();
+      const rowStyle = getComputedStyle(row);
+      const left = rowRect.left + (parseFloat(rowStyle.paddingLeft) || 0);
+      const right = rowRect.right - (parseFloat(rowStyle.paddingRight) || 0);
+      return buttonRect.left <= left + 1 && buttonRect.right >= right - 1;
+    })(),
     hasCurrentMarker: Boolean(document.querySelector('#chart-content .chart-row--you')),
     hasTable: Boolean(document.querySelector('#chart-content .chart-table')),
     referenceLabel: document.getElementById('chart-reference-btn')?.textContent.trim(),
     title: document.getElementById('chart-drawer-title')?.textContent.trim(),
   }));
   assert.equal(drawerChart.title, 'Score Chart', `${label} desktop chart opens in the polished drawer`);
-  assert.equal(drawerChart.referenceLabel, 'Score Reference', `${label} drawer reference action has a clear label`);
+  assert.equal(drawerChart.referenceLabel, 'See Reference', `${label} drawer reference action has a clear label`);
+  assert.equal(drawerChart.referenceButtonFillsRow, true, `${label} drawer reference action stretches across the row`);
   assert.equal(drawerChart.hasTable, true, `${label} drawer renders generated score table`);
   assert.equal(drawerChart.hasCurrentMarker, true, `${label} drawer highlights current performance`);
   assert.equal(drawerChart.controlsVisible, true, `${label} drawer keeps chart controls available`);
@@ -1627,10 +1639,29 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     'Score Chart',
     'closing chart reference returns to score chart data',
   );
+  assert.equal(
+    await page.evaluate(() => document.body.classList.contains('chart-drawer-open')),
+    true,
+    'returning from chart reference keeps the page scroll lock active',
+  );
+  const pageScrollBeforeDrawerWheel = await page.evaluate(() => window.scrollY);
+  await page.locator('.chart-drawer__image-frame').hover();
+  await page.mouse.wheel(0, 700);
+  await page.waitForTimeout(50);
+  assert.equal(
+    await page.evaluate(() => window.scrollY),
+    pageScrollBeforeDrawerWheel,
+    'scrolling the returned chart drawer does not scroll the main page',
+  );
   await page.locator('#close-btn').click();
   await page.waitForFunction(() => document.getElementById('modal')?.hasAttribute('hidden'));
   const chartClosed = await page.evaluate(() => document.getElementById('modal')?.hasAttribute('hidden'));
   assert.equal(chartClosed, true, 'chart drawer closes on close-btn click');
+  assert.equal(
+    await page.evaluate(() => document.body.classList.contains('chart-drawer-open')),
+    false,
+    'closing chart drawer releases the page scroll lock',
+  );
 
   await selectComponentForViewport(page, 'cardio');
   await page.evaluate(() => {
