@@ -174,6 +174,7 @@ select {
   font-weight: 700;
   letter-spacing: 3px;
   color: var(--afpt-accent);
+  margin: 0;
   text-transform: none;
   white-space: nowrap;
 }
@@ -1506,9 +1507,9 @@ body.settings-hub-open {
 }
 
 .lap-display:empty {
-  display: none;
-  padding-top: 0;
-  border-top: none;
+  display: block;
+  min-height: 520px;
+  visibility: hidden;
 }
 
 .lap-plan {
@@ -2794,6 +2795,12 @@ body.chart-drawer-open {
   text-align: center;
 }
 
+:root[data-theme="blues"] .score-badge[data-category="unsatisfactory"],
+:root[data-theme="blues"] .app-header-score-mini__badge[data-category="unsatisfactory"] {
+  color: #d16666;
+  border-color: #d16666;
+}
+
 /* ALT selector row: panel background card, vertically centered */
 :root[data-theme="blues"] .altitude-row,
 :root[data-theme="tactical"] .altitude-row {
@@ -3295,7 +3302,7 @@ body.chart-drawer-open {
 }
 
 :root[data-theme="fitness"] .lap-display:empty {
-  display: none;
+  display: block;
 }
 
 /* ─── Fitness lap fitness inner elements ──────────────────────── */
@@ -4809,7 +4816,7 @@ body.chart-drawer-open {
     text-transform: uppercase;
   }
 
-  .desktop-intro h1 {
+  .desktop-intro h2 {
     color: var(--afpt-ink);
     font-size: clamp(30px, 3.45vw, 48px);
     letter-spacing: 0;
@@ -5184,7 +5191,9 @@ body.chart-drawer-open {
   }
 
   .lap-display:empty {
-    display: none;
+    display: block;
+    min-height: 376px;
+    visibility: hidden;
   }
 
   .lap-fitness__svg-wrap {

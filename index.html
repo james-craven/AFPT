@@ -29,19 +29,52 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "PFRA.app",
-    "alternateName": "Air Force PT Calculator",
-    "url": "https://pfra.app/",
-    "description": "Calculate Air Force PFRA/PT scores with 2026 standards, altitude adjustments, alternate components, exemptions, score charts, and a 2-mile pace plan.",
-    "applicationCategory": "HealthApplication",
-    "operatingSystem": "Any",
-    "isAccessibleForFree": true,
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "PFRA.app",
+        "alternateName": "Air Force PT Calculator",
+        "url": "https://pfra.app/",
+        "description": "Calculate Air Force PFRA/PT scores with 2026 standards, altitude adjustments, alternate components, exemptions, score charts, and a 2-mile pace plan.",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Can a high total score make up for failing one component?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The total matters, but component minimums matter too. If one component is below its required minimum, confirm the result with your UFPM before assuming the test is good."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why should I compare alternate events?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The best event is the one that matches your current fitness, your profile, and what your testing location supports. The calculator makes it easier to compare without rebuilding the whole score by hand."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is this an official scoring source?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. It is a reference calculator built around the standards data in the app. Use it to plan, then verify anything important against official guidance and your unit's process."
+            }
+          }
+        ]
+      }
+    ]
   }
   </script>
 </head>
@@ -141,12 +174,12 @@
   </div>
 
   <!-- App shell -->
-  <div id="app-shell" class="app-shell">
+  <main id="app-shell" class="app-shell">
 
     <!-- Header -->
     <header class="app-header">
       <div class="app-header-left">
-        <span class="app-title">PFRA.app</span>
+        <h1 class="app-title">PFRA.app</h1>
         <section class="app-header-controls" aria-label="Quick calculator controls">
           <div class="demo-field demo-field--profile">
             <label class="demo-label" for="header-sex-sel">SEX</label>
@@ -272,7 +305,7 @@
     <section class="desktop-intro" aria-labelledby="desktop-intro-title">
       <div class="desktop-intro__copy">
         <p class="desktop-intro__eyebrow">PFRA 2026 calculator</p>
-        <h1 id="desktop-intro-title">Plan your Air Force fitness score before test day.</h1>
+        <h2 id="desktop-intro-title">Plan your Air Force fitness score before test day.</h2>
         <p>
           Estimate your total score across strength, core, cardio, and body composition.
           Try alternate events, check component minimums, and use the pace plan when you
@@ -337,7 +370,7 @@
         <span id="score-category-badge" class="score-badge">--</span>
       </div>
       <div class="score-bar-wrap">
-        <div class="score-bar-track" role="progressbar" aria-label="Score progress">
+        <div class="score-bar-track" role="progressbar" aria-label="Score progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="Score not calculated">
           <div id="score-bar-fill" class="score-bar-fill" style="width:100%"></div>
         </div>
       </div>
@@ -801,11 +834,11 @@
 
     <div id="pfra-status" class="pfra-status" aria-live="polite">Loading standards…</div>
 
-  </div><!-- app-shell -->
+  </main><!-- app-shell -->
 
   <script type="module" src="./src/ui/theme-controller.mjs"></script>
   <script type="module" src="./src/ui/settings-hub.mjs"></script>
   <script type="module" src="./src/pfra/app.mjs"></script>
-  <script src="./pwa.js"></script>
+  <script src="./pwa.js" defer></script>
 </body>
 </html>

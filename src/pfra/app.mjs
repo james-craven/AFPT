@@ -770,7 +770,7 @@ function renderDesktopChartPanel(result) {
 function referenceFigure(reference) {
   return `<figure class="chart-reference">
     <div class="chart-reference__frame">
-      <img class="chart-reference__image" src="${reference.src}" alt="${reference.alt}">
+      <img class="chart-reference__image" src="${reference.src}" alt="${reference.alt}" loading="lazy" decoding="async">
     </div>
     <figcaption class="chart-reference__caption">${reference.caption}</figcaption>
   </figure>`;
@@ -1664,7 +1664,14 @@ function renderScore(result) {
 
   const barFill = byId('score-bar-fill');
   const remainingScoreWidth = `${Math.max(0, 100 - Math.min(100, total))}%`;
-  if (barFill) barFill.style.width = remainingScoreWidth;
+  if (barFill) {
+    barFill.style.width = remainingScoreWidth;
+    const scoreProgress = barFill.closest('[role="progressbar"]');
+    if (scoreProgress) {
+      scoreProgress.setAttribute('aria-valuenow', String(Math.min(100, Math.max(0, total))));
+      scoreProgress.setAttribute('aria-valuetext', `${scoreDisplay} points, ${category}`);
+    }
+  }
 
   const headerScore = byId('app-header-score-value');
   if (headerScore) headerScore.textContent = scoreDisplay;
