@@ -1,32 +1,40 @@
 {
     "background_color": "#003a6d",
-    "description": "Calculates PT Scores for Air Force",
+    "description": "Calculate Air Force PFRA/PT scores with 2026 standards, altitude adjustments, alternate components, exemptions, score charts, and a 2-mile pace plan.",
     "display": "standalone",
     "theme_color": "#025981",
+    "lang": "en-US",
+    "dir": "ltr",
     "icons": [
       {
-        "src": "icon-144x144.png",
+        "src": "/icon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any"
+      },
+      {
+        "src": "/icon-144x144.png",
         "sizes": "144x144",
         "type": "image/png",
         "purpose": "any"
       },
       {
-        "src": "icon-384x384.png",
+        "src": "/icon-384x384.png",
         "sizes": "384x384",
         "type": "image/png",
-        "purpose": "maskable"
+        "purpose": "any maskable"
       },
       {
-        "src": "icon-512x512.png",
+        "src": "/icon-512x512.png",
         "sizes": "512x512",
         "type": "image/png",
-        "purpose": "maskable"
+        "purpose": "any maskable"
       }
     ],
-    "name": "Air Force PT Calculator",
-    "short_name": "AFPTCalc",
-    "start_url": "./index.html",
-    "scope": "./",
-    "id": "./",
+    "name": "PFRA.app | Air Force PT Calculator",
+    "short_name": "PFRA.app",
+    "start_url": "/",
+    "scope": "/",
+    "id": "https://pfra.app/",
     "categories": ["health", "fitness", "utilities"]
   }
