@@ -75,6 +75,20 @@ Local Lighthouse was run against `http://127.0.0.1:4181/` with Chrome headless.
 | FCP | 2.6 s | 2.6 s |
 | Speed Index | 2.6 s | 2.6 s |
 
+Production Lighthouse was also run against `https://pfra.app/` after deployment:
+
+| Metric | Production |
+| --- | ---: |
+| Performance | 98 |
+| Accessibility | 100 |
+| Best Practices | 100 |
+| SEO | 100 |
+| LCP | 1.9 s |
+| CLS | 0 |
+| TBT | 0 ms |
+| FCP | 1.2 s |
+| Speed Index | 3.7 s |
+
 Performance still has room to improve, but the remaining Lighthouse warnings are mostly from raw, unbundled static assets:
 
 - Minify CSS.
