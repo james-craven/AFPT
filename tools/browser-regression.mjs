@@ -7,6 +7,7 @@ import { chromium } from 'playwright-core';
 
 const rootDir = process.cwd();
 const chromePath = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const shuttleAudioSize = fs.statSync(path.join(rootDir, 'shuttle.mp3')).size;
 
 const contentTypes = {
   '.css': 'text/css; charset=utf-8',
@@ -1704,7 +1705,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     const image = document.querySelector('#chart-content .chart-reference__image');
     return modal?.dataset.chartMode === 'reference'
       && !modal.hasAttribute('hidden')
-      && image?.getAttribute('src')?.includes('pfra-scoring-page-02.jpg');
+      && image?.getAttribute('src')?.includes('pfra-scoring-page-02.webp');
   });
   assert.equal(
     await page.locator('#chart-drawer-title').evaluate((el) => el.textContent.trim()),
@@ -1784,8 +1785,8 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForFunction(() => {
     const sources = Array.from(document.querySelectorAll('#chart-content .chart-reference__image'))
       .map((image) => image.getAttribute('src') || '');
-    return sources.some((source) => source.includes('pfra-scoring-page-08.jpg'))
-      && sources.some((source) => source.includes('ShuttleLevels.jpeg'));
+    return sources.some((source) => source.includes('pfra-scoring-page-08.webp'))
+      && sources.some((source) => source.includes('ShuttleLevels.webp'));
   });
   assert.equal(
     await page.locator('#chart-drawer-title').evaluate((el) => el.textContent.trim()),
@@ -1815,9 +1816,9 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
 
   // 9a. Settings reference actions open official source images in the themed drawer
   for (const [selector, expectedSource, expectedTitle] of [
-    ['#run-adjust-chart', 'dafman-36-2905-2-page1-full.png', 'Run Altitude Adjustment'],
-    ['#walk-adjust-chart', 'dafman-36-2905-2-page2-full.png', 'Walk/Shuttle Altitude Adjustment'],
-    ['#shuttle-score-card', 'ShuttleLevels.jpeg', 'HAMR Shuttle Score Card'],
+    ['#run-adjust-chart', 'dafman-36-2905-2-page1-full.webp', 'Run Altitude Adjustment'],
+    ['#walk-adjust-chart', 'dafman-36-2905-2-page2-full.webp', 'Walk/Shuttle Altitude Adjustment'],
+    ['#shuttle-score-card', 'ShuttleLevels.webp', 'HAMR Shuttle Score Card'],
   ]) {
     if (await page.locator('#settings-hub-panel').isHidden()) {
       await page.locator('#settings-hub-toggle').click();
@@ -1942,6 +1943,28 @@ async function runOfflineSmoke(browser, baseUrl) {
   await page.reload({ waitUntil: 'load' });
   await page.evaluate(async () => { await navigator.serviceWorker.ready; });
 
+  const audioPrecacheState = await page.evaluate(async () => {
+    const audioUrl = new URL('./shuttle.mp3', window.location.href).href;
+    return Boolean(await caches.match(audioUrl));
+  });
+  assert.equal(audioPrecacheState, false, 'shuttle audio is not cached before the offline download action');
+
+  await page.locator('#settings-hub-toggle').click();
+  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+  await page.locator('#shuttle-audio-download').click();
+  await page.waitForFunction(
+    () => /saved for offline/i.test(document.getElementById('shuttle-audio-download-status')?.textContent || ''),
+    undefined,
+    { timeout: 10000 },
+  );
+
+  const audioDownloadState = await page.evaluate(async () => {
+    const audioUrl = new URL('./shuttle.mp3', window.location.href).href;
+    const audioCache = await caches.open('afpt-audio-v1');
+    return Boolean(await audioCache.match(audioUrl));
+  });
+  assert.equal(audioDownloadState, true, 'shuttle audio downloads into the audio-only offline cache');
+
   await context.setOffline(true);
   await page.goto(`${baseUrl}/?sw=1&qa=offline-reload`, { waitUntil: 'load' });
   await page.waitForFunction(
@@ -1952,6 +1975,21 @@ async function runOfflineSmoke(browser, baseUrl) {
 
   const result = await page.evaluate(() => window.afptApp?.getScoreResult());
   assert.ok(result !== null, 'app scores while offline');
+
+  const offlineAudioState = await page.evaluate(async () => {
+    const response = await fetch('./shuttle.mp3', { headers: { Range: 'bytes=0-99' } });
+    const body = await response.arrayBuffer();
+    return {
+      status: response.status,
+      contentRange: response.headers.get('content-range') || '',
+      bodyLength: body.byteLength,
+    };
+  });
+  assert.deepEqual(
+    offlineAudioState,
+    { status: 206, contentRange: `bytes 0-99/${shuttleAudioSize}`, bodyLength: 100 },
+    'downloaded shuttle audio is playable offline with range requests',
+  );
 
   await context.setOffline(false);
   await assertNoBrowserFailures(failures, 'offline smoke');

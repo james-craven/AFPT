@@ -415,6 +415,19 @@ body.settings-hub-open {
   background: transparent;
 }
 
+.settings-menu li.settings-menu-status {
+  color: var(--afpt-ink-dim);
+  cursor: default;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.settings-menu li.settings-menu-status:hover {
+  background: transparent;
+  border-color: transparent;
+  color: var(--afpt-ink-dim);
+}
+
 .settings-audio-player audio {
   width: 100%;
   max-width: 260px;

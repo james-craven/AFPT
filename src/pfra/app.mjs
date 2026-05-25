@@ -33,6 +33,8 @@ const PACE_TOTAL_MILES = 2;
 const PROFILE_STANDARD = 'standard';
 const PROFILE_AFSPECWAR_EOD = 'afspecwar-eod';
 const AFSPECWAR_PROFILE = { sex: 'male', ageGroup: 'under-25' };
+const AUDIO_CACHE_NAME = 'afpt-audio-v1';
+const SHUTTLE_AUDIO_URL = './shuttle.mp3';
 
 // Per-event value cache — preserves user input across event switches
 const savedEventValues = {
@@ -445,19 +447,19 @@ const CHART_CATEGORY_EVENTS = {
 const OFFICIAL_REFERENCES = {
   runAltitude: {
     title: 'Run Altitude Adjustment',
-    src: './standards/sources/a31-crops/dafman-36-2905-2-page1-full.png',
+    src: './standards/sources/a31-crops/dafman-36-2905-2-page1-full.webp',
     alt: 'Official DAFMAN 36-2905 Table A3.1 altitude time correction for the 2.0 mile run',
     caption: 'DAFMAN 36-2905, Attachment 3, Table A3.1',
   },
   walkAltitude: {
     title: 'Walk/Shuttle Altitude Adjustment',
-    src: './standards/sources/a31-crops/dafman-36-2905-2-page2-full.png',
+    src: './standards/sources/a31-crops/dafman-36-2905-2-page2-full.webp',
     alt: 'Official DAFMAN 36-2905 Tables A3.2, A3.3, and A3.4 for walk and HAMR altitude adjustment',
     caption: 'DAFMAN 36-2905, Attachment 3, Tables A3.2-A3.4',
   },
   shuttleScoreCard: {
     title: 'HAMR Shuttle Score Card',
-    src: './standards/sources/ShuttleLevels.jpeg',
+    src: './standards/sources/ShuttleLevels.webp',
     alt: 'Official 20 meter high aerobic multi-shuttle run level and shuttle score card',
     caption: '20M High Aerobic Multi-Shuttle Run score card',
   },
@@ -489,49 +491,49 @@ const OFFICIAL_SOURCE_LINKS = [
 const SCORE_CHART_REFERENCES = {
   'push-up': {
     title: 'Push-Up Official Score Chart',
-    src: './standards/sources/pfra-score-pages/pfra-scoring-page-02.jpg',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-02.webp',
     alt: 'Official PFRA push-up scoring standards page',
     caption: 'AFPC PFRA Scoring Charts, Push-Up Scoring Standards',
   },
   'hand-release-push-up': {
     title: 'Hand Release Push-Up Official Score Chart',
-    src: './standards/sources/pfra-score-pages/pfra-scoring-page-03.jpg',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-03.webp',
     alt: 'Official PFRA hand release push-up scoring standards page',
     caption: 'AFPC PFRA Scoring Charts, Hand Release Push-Up Scoring Standards',
   },
   'sit-up': {
     title: 'Sit-Up Official Score Chart',
-    src: './standards/sources/pfra-score-pages/pfra-scoring-page-04.jpg',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-04.webp',
     alt: 'Official PFRA sit-up scoring standards page',
     caption: 'AFPC PFRA Scoring Charts, Sit-Up Scoring Standards',
   },
   'cross-leg-reverse-crunch': {
     title: 'Cross-Leg Reverse Crunch Official Score Chart',
-    src: './standards/sources/pfra-score-pages/pfra-scoring-page-05.jpg',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-05.webp',
     alt: 'Official PFRA cross-leg reverse crunch scoring standards page',
     caption: 'AFPC PFRA Scoring Charts, Cross-Leg Reverse Crunch Scoring Standards',
   },
   'forearm-plank': {
     title: 'Forearm Plank Official Score Chart',
-    src: './standards/sources/pfra-score-pages/pfra-scoring-page-06.jpg',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-06.webp',
     alt: 'Official PFRA forearm plank scoring standards page',
     caption: 'AFPC PFRA Scoring Charts, Forearm Plank Scoring Standards',
   },
   'two-mile-run': {
     title: '2 Mile Run Official Score Chart',
-    src: './standards/sources/pfra-score-pages/pfra-scoring-page-07.jpg',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-07.webp',
     alt: 'Official PFRA 2 mile run scoring standards page',
     caption: 'AFPC PFRA Scoring Charts, 2 Mile Run Scoring Standards',
   },
   'hamr-20-meter': {
     title: '20m HAMR Official Score Chart',
-    src: './standards/sources/pfra-score-pages/pfra-scoring-page-08.jpg',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-08.webp',
     alt: 'Official PFRA 20 meter HAMR scoring standards page',
     caption: 'AFPC PFRA Scoring Charts, 20-Meter HAMR Scoring Standards',
   },
   'two-kilometer-walk': {
     title: '2 km Walk Official Reference',
-    src: './standards/sources/pfra-score-pages/pfra-scoring-page-10.jpg',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-10.webp',
     alt: 'Official PFRA 2 kilometer walk male and female maximum times page',
     caption: 'AFPC PFRA Scoring Charts, 2.0 Kilometer Walk Male and Female',
   },
@@ -2059,6 +2061,70 @@ function bindMenuClick(id, handler) {
   });
 }
 
+function shuttleAudioUrl() {
+  return new URL(SHUTTLE_AUDIO_URL, window.location.href).href;
+}
+
+function shuttleAudioRequest() {
+  return new Request(shuttleAudioUrl(), {
+    cache: 'reload',
+    credentials: 'same-origin',
+  });
+}
+
+function setShuttleAudioDownloadStatus(message) {
+  const status = byId('shuttle-audio-download-status');
+  if (status) status.textContent = message;
+}
+
+function setShuttleAudioDownloadBusy(isBusy) {
+  const control = byId('shuttle-audio-download');
+  if (!control) return;
+  control.setAttribute('aria-disabled', isBusy ? 'true' : 'false');
+  control.textContent = isBusy ? 'Downloading Audio...' : 'Download Audio for Offline Use';
+}
+
+async function hasCachedShuttleAudio() {
+  if (!('caches' in window)) return false;
+  const cache = await caches.open(AUDIO_CACHE_NAME);
+  return Boolean(await cache.match(shuttleAudioUrl()));
+}
+
+async function updateShuttleAudioDownloadState() {
+  if (!('caches' in window)) {
+    setShuttleAudioDownloadStatus('Audio downloads require a browser with offline cache support.');
+    return;
+  }
+  setShuttleAudioDownloadStatus(
+    await hasCachedShuttleAudio()
+      ? 'Audio is saved for offline use.'
+      : 'Audio is streamed unless downloaded.',
+  );
+}
+
+async function downloadShuttleAudioForOffline() {
+  const control = byId('shuttle-audio-download');
+  if (control?.getAttribute('aria-disabled') === 'true') return;
+
+  if (!('caches' in window)) {
+    setShuttleAudioDownloadStatus('This browser cannot save audio for offline use.');
+    return;
+  }
+
+  setShuttleAudioDownloadBusy(true);
+  setShuttleAudioDownloadStatus('Downloading shuttle audio...');
+
+  try {
+    const cache = await caches.open(AUDIO_CACHE_NAME);
+    await cache.add(shuttleAudioRequest());
+    setShuttleAudioDownloadStatus('Audio is saved for offline use.');
+  } catch {
+    setShuttleAudioDownloadStatus('Audio could not be downloaded. Check your connection and try again.');
+  } finally {
+    setShuttleAudioDownloadBusy(false);
+  }
+}
+
 function bindMirroredSelect(sourceId, mirrorId) {
   const source = byId(sourceId);
   const mirror = byId(mirrorId);
@@ -2782,6 +2848,9 @@ function bindEvents() {
     const player = byId('shuttle-audio-player');
     if (player) player.removeAttribute('hidden');
   });
+  bindMenuClick('shuttle-audio-download', () => {
+    void downloadShuttleAudioForOffline();
+  });
   bindMenuClick('install-app-menu', () => {
     showInstallHelp();
   });
@@ -2803,6 +2872,7 @@ function bindEvents() {
   byId('pwa-update-later')?.addEventListener('click', () => {
     byId('pwa-update-modal')?.setAttribute('hidden', '');
   });
+  void updateShuttleAudioDownloadState();
 }
 
 // --- Standards loading ---

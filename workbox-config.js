@@ -6,21 +6,18 @@ module.exports = {
 		'src/pfra/*.mjs',
 		'src/ui/*.mjs',
 		'pwa.js',
+		'sw-audio-cache.js',
 		'dev-build-info.json',
 		'manifest.webmanifest',
 		'icon-*.png',
 		'maskable_icon.png',
-		'arrow.png',
-		'pushups.png',
-		'running.png',
-		'situps.png',
-		'shuttle.mp3',
+		'*.webp',
 		'standards/af-pfra-2026.json',
 		'standards/extracted/tables/*.json',
-		'standards/sources/pfra-score-pages/*.jpg',
-		'standards/sources/ShuttleLevels.jpeg',
-		'standards/sources/a31-crops/dafman-36-2905-2-page1-full.png',
-		'standards/sources/a31-crops/dafman-36-2905-2-page2-full.png'
+		'standards/sources/pfra-score-pages/*.webp',
+		'standards/sources/ShuttleLevels.webp',
+		'standards/sources/a31-crops/dafman-36-2905-2-page1-full.webp',
+		'standards/sources/a31-crops/dafman-36-2905-2-page2-full.webp'
 	],
 	globIgnores: [
 		'node_modules/**/*',
@@ -38,6 +35,7 @@ module.exports = {
 	inlineWorkboxRuntime: true,
 	sourcemap: false,
 	cleanupOutdatedCaches: true,
+	importScripts: ['sw-audio-cache.js'],
 	ignoreURLParametersMatching: [
 		/^utm_/,
 		/^fbclid$/,
@@ -60,12 +58,11 @@ module.exports = {
 			  urlPattern: ({request}) => {
 				const {destination} = request;
 			
-				return destination === 'video' || destination === 'audio' || destination === 'image'
+				return destination === 'image';
 			  },
 			  handler: 'CacheFirst',
 			  options: {
-				  cacheName: 'afpt-media-v1',
-				  rangeRequests: true,
+				  cacheName: 'afpt-images-v1',
 				  cacheableResponse: {
 					statuses: [0, 200]
 				  },
