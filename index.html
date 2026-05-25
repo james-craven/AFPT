@@ -237,12 +237,12 @@
       <div id="app-header-score-pill" class="app-header-score-pill app-header-score-mini" aria-hidden="true">
         <div class="app-header-score-mini__row">
           <span class="app-header-score-mini__label">Total Score</span>
-          <strong id="app-header-score-value" class="app-header-score-mini__number">--</strong>
-          <em id="app-header-score-badge" class="app-header-score-mini__badge">--</em>
+          <strong id="app-header-score-value" class="app-header-score-mini__number">60</strong>
+          <em id="app-header-score-badge" class="app-header-score-mini__badge" data-category="unsatisfactory">UNSAT</em>
         </div>
         <div class="app-header-score-mini__bar" aria-hidden="true">
           <div class="app-header-score-mini__track">
-            <div id="app-header-score-fill" class="app-header-score-mini__fill" style="width:100%"></div>
+            <div id="app-header-score-fill" class="app-header-score-mini__fill" style="width:40%"></div>
           </div>
           <div class="app-header-score-mini__ticks">
             <span>75</span>
@@ -260,9 +260,9 @@
           <circle class="app-header-score-mini__ring-track" cx="100" cy="100" r="64" stroke-width="10"/>
           <circle id="app-header-score-ring-arc" class="app-header-score-mini__ring-arc" cx="100" cy="100" r="64"
             stroke-width="10" stroke-linecap="round"
-            transform="rotate(-90 100 100)" stroke-dasharray="0 440"/>
-          <text id="app-header-score-ring-num" class="app-header-score-mini__ring-num" x="100" y="106" text-anchor="middle" dominant-baseline="middle">--</text>
-          <text id="app-header-score-ring-cat" class="app-header-score-mini__ring-cat" x="100" y="124" text-anchor="middle">--</text>
+            transform="rotate(-90 100 100)" stroke-dasharray="241.3 402.1"/>
+          <text id="app-header-score-ring-num" class="app-header-score-mini__ring-num" x="100" y="106" text-anchor="middle" dominant-baseline="middle" data-len="2">60</text>
+          <text id="app-header-score-ring-cat" class="app-header-score-mini__ring-cat" x="100" y="124" text-anchor="middle" data-category="unsatisfactory">FAIL</text>
         </svg>
       </div>
 
@@ -387,12 +387,12 @@
     <section class="score-section" aria-live="polite">
       <div class="score-main-row">
         <span class="score-comp-label">TOTAL SCORE</span>
-        <span id="score-txt" class="score-number">--</span>
-        <span id="score-category-badge" class="score-badge">--</span>
+        <span id="score-txt" class="score-number">60</span>
+        <span id="score-category-badge" class="score-badge" data-category="unsatisfactory">UNSAT</span>
       </div>
       <div class="score-bar-wrap">
-        <div class="score-bar-track" role="progressbar" aria-label="Score progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="Score not calculated">
-          <div id="score-bar-fill" class="score-bar-fill" style="width:100%"></div>
+        <div class="score-bar-track" role="progressbar" aria-label="Score progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60" aria-valuetext="60 points, Unsatisfactory">
+          <div id="score-bar-fill" class="score-bar-fill" style="width:40%"></div>
         </div>
       </div>
       <div class="score-bar-labels">
@@ -407,7 +407,7 @@
           <div class="score-stencil-seg score-stencil-seg--sat" style="flex:15"></div>
           <div class="score-stencil-seg score-stencil-seg--exc" style="flex:10"></div>
         </div>
-        <div id="score-stencil-marker" class="score-stencil-marker" style="left:50%">YOU</div>
+        <div id="score-stencil-marker" class="score-stencil-marker" style="left:60%">YOU</div>
       </div>
       <div class="score-ring-wrap" aria-hidden="true">
         <svg id="score-ring-svg" class="score-ring-svg" viewBox="0 0 200 200" fill="none">
@@ -421,15 +421,15 @@
           <circle class="score-ring-track" cx="100" cy="100" r="64" stroke-width="10"/>
           <circle id="score-ring-arc" class="score-ring-arc" cx="100" cy="100" r="64"
             stroke-width="10" stroke-linecap="round"
-            transform="rotate(-90 100 100)" stroke-dasharray="0 440"/>
-          <text id="score-ring-num" class="score-ring-num" x="100" y="106" text-anchor="middle" dominant-baseline="middle">--</text>
-          <text id="score-ring-cat" class="score-ring-cat" x="100" y="124" text-anchor="middle">--</text>
+            transform="rotate(-90 100 100)" stroke-dasharray="241.3 402.1"/>
+          <text id="score-ring-num" class="score-ring-num" x="100" y="106" text-anchor="middle" dominant-baseline="middle" data-len="2">60</text>
+          <text id="score-ring-cat" class="score-ring-cat" x="100" y="124" text-anchor="middle">FAIL</text>
         </svg>
       </div>
       <div id="score-ring-deltas" class="score-ring-deltas" aria-hidden="true">
-        <span id="score-delta-pass">+-- above pass</span>
+        <span id="score-delta-pass">+0 above pass</span>
         <span>·</span>
-        <span id="score-delta-max">+-- to max</span>
+        <span id="score-delta-max">+40 to max</span>
       </div>
       <div id="pfra-result" hidden></div>
     </section>
@@ -437,23 +437,23 @@
     <section class="desktop-score-breakdown" aria-label="Component score summary">
       <article class="desktop-score-breakdown__item">
         <span class="desktop-score-breakdown__name">Strength</span>
-        <strong id="desktop-strength-score">--</strong>
-        <span id="desktop-strength-value">--</span>
+        <strong id="desktop-strength-score">2.5</strong>
+        <span id="desktop-strength-value">15 reps</span>
       </article>
       <article class="desktop-score-breakdown__item">
         <span class="desktop-score-breakdown__name">Core</span>
-        <strong id="desktop-core-score">--</strong>
-        <span id="desktop-core-value">--</span>
+        <strong id="desktop-core-score">2.5</strong>
+        <span id="desktop-core-value">29</span>
       </article>
       <article class="desktop-score-breakdown__item">
         <span class="desktop-score-breakdown__name">Cardio</span>
-        <strong id="desktop-cardio-score">--</strong>
-        <span id="desktop-cardio-value">--</span>
+        <strong id="desktop-cardio-score">35</strong>
+        <span id="desktop-cardio-value">25:23</span>
       </article>
       <article class="desktop-score-breakdown__item">
         <span class="desktop-score-breakdown__name">Body</span>
-        <strong id="desktop-body-score">--</strong>
-        <span id="desktop-body-value">--</span>
+        <strong id="desktop-body-score">20</strong>
+        <span id="desktop-body-value">WHtR 0.49</span>
       </article>
     </section>
 
@@ -462,23 +462,23 @@
 <div class="component-strip" role="tablist" aria-label="Score components">
   <button id="summary-strength" class="component-chip chip--active" role="tab" aria-selected="true" data-component="strength">
     <span class="chip-name">STRENGTH</span>
-    <span id="chip-strength-value" class="chip-value">--</span>
-    <span id="pfra-strength-score" class="chip-score">--</span>
+    <span id="chip-strength-value" class="chip-value">15</span>
+    <span id="pfra-strength-score" class="chip-score">2.5</span>
   </button>
   <button id="summary-core" class="component-chip" role="tab" aria-selected="false" data-component="core">
     <span class="chip-name">CORE</span>
-    <span id="chip-core-value" class="chip-value">--</span>
-    <span id="pfra-core-score" class="chip-score">--</span>
+    <span id="chip-core-value" class="chip-value">29</span>
+    <span id="pfra-core-score" class="chip-score">2.5</span>
   </button>
   <button id="summary-cardio" class="component-chip" role="tab" aria-selected="false" data-component="cardio">
     <span class="chip-name">CARDIO</span>
-    <span id="chip-cardio-value" class="chip-value">--</span>
-    <span id="pfra-cardio-score" class="chip-score">--</span>
+    <span id="chip-cardio-value" class="chip-value">25:23</span>
+    <span id="pfra-cardio-score" class="chip-score">35</span>
   </button>
   <button id="summary-body" class="component-chip" role="tab" aria-selected="false" data-component="body">
     <span class="chip-name">WHtR</span>
-    <span id="chip-body-value" class="chip-value">--</span>
-    <span id="pfra-body-score" class="chip-score">--</span>
+    <span id="chip-body-value" class="chip-value">0.49</span>
+    <span id="pfra-body-score" class="chip-score">20</span>
   </button>
 </div>
 
@@ -489,7 +489,7 @@
 <section id="body-editor" class="editor-panel" role="tabpanel" aria-label="Waist-to-height ratio" hidden>
   <div class="editor-header">
     <span class="editor-title">WHtR</span>
-    <p id="body-txt-p" class="score-label-text">Score: -- | Pass ≤ 0.55</p>
+    <p id="body-txt-p" class="score-label-text">Score: 20 | Pass ≤ 0.55</p>
     <p class="desktop-editor-note">20 points. Enter WHtR directly or use height and waist to calculate it.</p>
   </div>
 
@@ -560,7 +560,7 @@
       <section id="strength-editor" class="editor-panel" role="tabpanel" aria-label="Strength">
         <div class="editor-header">
           <span class="editor-title">STRENGTH</span>
-          <p id="push-txt-p" class="score-label-text">Score: 0 | Min: -- | Max: --</p>
+          <p id="push-txt-p" class="score-label-text">Score: 2.5 | Min: 15 | Max: 50</p>
           <p class="desktop-editor-note">15 points. Compare standard push-ups with hand-release push-ups before you settle on an event.</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
@@ -577,7 +577,7 @@
           </select>
           <div id="push-reps-row" class="editor-value-row">
             <div class="value-group">
-              <input id="push-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Strength reps">
+              <input id="push-txt" type="text" inputmode="numeric" class="value-input" value="15" aria-label="Strength reps">
             </div>
             <button class="minmax-btn" id="push-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="push-max-btn" type="button">MAX</button>
@@ -590,7 +590,7 @@
         <div class="slider-row">
           <button class="slider-step-btn" type="button" data-step="-1" data-target="push-slider" aria-label="Decrease reps">−</button>
           <div class="slider-container">
-            <input id="push-slider" type="range" class="value-slider" min="0" max="100" value="0" aria-label="Strength slider">
+            <input id="push-slider" type="range" class="value-slider" min="0" max="100" value="15" aria-label="Strength slider">
           </div>
           <button class="slider-step-btn" type="button" data-step="1" data-target="push-slider" aria-label="Increase reps">+</button>
         </div>
@@ -601,7 +601,7 @@
       <section id="core-editor" class="editor-panel" role="tabpanel" aria-label="Core" hidden>
         <div class="editor-header">
           <span class="editor-title">CORE</span>
-          <p id="sit-txt-p" class="score-label-text">Score: 0 | Min: -- | Max: --</p>
+          <p id="sit-txt-p" class="score-label-text">Score: 2.5 | Min: 29 | Max: 54</p>
           <p class="desktop-editor-note">15 points. Reps and plank time use separate tables, so check the variant that matches your strengths.</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
@@ -620,7 +620,7 @@
           </select>
           <div id="sit-reps-row" class="editor-value-row">
             <div class="value-group">
-              <input id="sit-txt" type="text" inputmode="numeric" class="value-input" value="0" aria-label="Core reps">
+              <input id="sit-txt" type="text" inputmode="numeric" class="value-input" value="29" aria-label="Core reps">
             </div>
             <button class="minmax-btn" id="sit-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="sit-max-btn" type="button">MAX</button>
@@ -643,7 +643,7 @@
         <div class="slider-row">
           <button class="slider-step-btn" type="button" data-step="-1" data-target="sit-slider" aria-label="Decrease reps">−</button>
           <div class="slider-container">
-            <input id="sit-slider" type="range" class="value-slider" min="0" max="100" value="0" aria-label="Core slider">
+            <input id="sit-slider" type="range" class="value-slider" min="0" max="100" value="29" aria-label="Core slider">
           </div>
           <button class="slider-step-btn" type="button" data-step="1" data-target="sit-slider" aria-label="Increase reps">+</button>
         </div>
@@ -654,7 +654,7 @@
       <section id="cardio-editor" class="editor-panel" role="tabpanel" aria-label="Cardio" hidden>
         <div class="editor-header">
           <span class="editor-title">CARDIO</span>
-          <p id="run-txt-p" class="score-label-text">Score: -- | Min: -- | Max: --</p>
+          <p id="run-txt-p" class="score-label-text">Score: 35 | Min: 25:23 | Max: 15:30</p>
           <p class="desktop-editor-note">50 points. Small changes in run time can move the total score quickly.</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
@@ -674,9 +674,9 @@
           <div id="run-time-row" class="editor-value-row">
             <div class="value-group">
               <label class="time-label" for="run-mintxt">MIN</label>
-              <input id="run-mintxt" type="text" inputmode="numeric" class="time-input" value="20" placeholder="MM" aria-label="Cardio minutes">
+              <input id="run-mintxt" type="text" inputmode="numeric" class="time-input" value="25" placeholder="MM" aria-label="Cardio minutes">
               <span class="time-sep">:</span>
-              <input id="run-sectxt" type="text" inputmode="numeric" class="time-input" value="00" placeholder="SS" aria-label="Cardio seconds">
+              <input id="run-sectxt" type="text" inputmode="numeric" class="time-input" value="23" placeholder="SS" aria-label="Cardio seconds">
             </div>
             <button class="minmax-btn" id="run-min-btn" type="button">MIN</button>
             <button class="minmax-btn" id="run-max-btn" type="button">MAX</button>
