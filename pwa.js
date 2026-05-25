@@ -9,7 +9,8 @@
   let reloadOnControllerChange = false;
   let activeRegistration = null;
   let updateRegistration = null;
-  let deferredInstallPrompt = null;
+  const bootstrap = window.afptPwaBootstrap;
+  let deferredInstallPrompt = bootstrap?.consumeInstallPrompt?.() || null;
 
   function isStandalone() {
     return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
@@ -374,6 +375,7 @@
 
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
+    bootstrap?.clearInstallPrompt?.();
     deferredInstallPrompt = event;
   });
 
@@ -391,10 +393,19 @@
     });
   }
 
-  window.addEventListener('load', () => {
+  function startPwa() {
     showPendingUpdateCompletion();
     registerServiceWorker().catch((error) => {
       console.warn('Service worker setup failed:', error);
     });
-  });
+    if (bootstrap?.wasInstalledBeforeLoad?.()) {
+      showInstallHelp();
+    }
+  }
+
+  if (document.readyState === 'complete') {
+    window.setTimeout(startPwa, 0);
+  } else {
+    window.addEventListener('load', startPwa, { once: true });
+  }
 })();

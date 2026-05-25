@@ -5,6 +5,7 @@ module.exports = {
 		'style.css',
 		'src/pfra/*.mjs',
 		'src/ui/*.mjs',
+		'pwa-loader.js',
 		'pwa.js',
 		'sw-audio-cache.js',
 		'dev-build-info.json',
