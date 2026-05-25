@@ -26,6 +26,25 @@
   <link rel="icon" href="/icon-144x144.png">
   <link rel="stylesheet" href="./style.css">
   <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="modulepreload" href="./src/ui/theme-controller.mjs">
+  <link rel="modulepreload" href="./src/ui/settings-hub.mjs">
+  <link rel="modulepreload" href="./src/pfra/app.mjs">
+  <link rel="modulepreload" href="./src/pfra/state.mjs">
+  <link rel="modulepreload" href="./src/pfra/scoring.mjs">
+  <link rel="modulepreload" href="./src/pfra/standards.mjs">
+  <link rel="modulepreload" href="./src/pfra/pacer-audio.mjs">
+  <link rel="modulepreload" href="./src/ui/layout-variants.mjs">
+  <link rel="preload" href="./standards/af-pfra-2026.json" as="fetch" type="application/json" crossorigin="anonymous">
+  <link rel="preload" href="./standards/extracted/tables/push-up.json" as="fetch" type="application/json" crossorigin="anonymous">
+  <link rel="preload" href="./standards/extracted/tables/hand-release-push-up.json" as="fetch" type="application/json" crossorigin="anonymous">
+  <link rel="preload" href="./standards/extracted/tables/sit-up.json" as="fetch" type="application/json" crossorigin="anonymous">
+  <link rel="preload" href="./standards/extracted/tables/cross-leg-reverse-crunch.json" as="fetch" type="application/json" crossorigin="anonymous">
+  <link rel="preload" href="./standards/extracted/tables/forearm-plank.json" as="fetch" type="application/json" crossorigin="anonymous">
+  <link rel="preload" href="./standards/extracted/tables/two-mile-run.json" as="fetch" type="application/json" crossorigin="anonymous">
+  <link rel="preload" href="./standards/extracted/tables/hamr-20-meter.json" as="fetch" type="application/json" crossorigin="anonymous">
+  <link rel="preload" href="./standards/extracted/tables/altitude-run-2-mile.json" as="fetch" type="application/json" crossorigin="anonymous">
+  <link rel="preload" href="./standards/extracted/tables/altitude-walk-2km-male.json" as="fetch" type="application/json" crossorigin="anonymous">
+  <link rel="preload" href="./standards/extracted/tables/altitude-walk-2km-female.json" as="fetch" type="application/json" crossorigin="anonymous">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
