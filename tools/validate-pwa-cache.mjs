@@ -12,6 +12,7 @@ const requiredAssets = [
   'src/pfra/standards.mjs',
   'src/pfra/state.mjs',
   'src/ui/layout-variants.mjs',
+  'src/ui/guided-tour.mjs',
   'src/ui/settings-hub.mjs',
   'src/ui/theme-controller.mjs',
   'pwa-loader.js',

@@ -1732,6 +1732,212 @@ body.settings-hub-open {
   color: var(--afpt-accent);
 }
 
+/* ─── Guided tour ─────────────────────────────────────────────── */
+.guided-tour-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  color: var(--afpt-ink);
+  font-family: inherit;
+  pointer-events: auto;
+}
+
+.guided-tour-root[hidden],
+.guided-tour-card[hidden],
+.guided-tour-prompt[hidden] {
+  display: none;
+}
+
+.guided-tour-root--prompt {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.56);
+}
+
+.guided-tour-highlight {
+  position: fixed;
+  top: var(--tour-top, 16px);
+  left: var(--tour-left, 16px);
+  width: var(--tour-width, 120px);
+  height: var(--tour-height, 80px);
+  border: 2px solid var(--afpt-accent);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 9999px rgba(0, 0, 0, 0.66),
+    0 0 26px rgba(29, 233, 255, 0.32);
+  pointer-events: none;
+  transition:
+    top 180ms ease,
+    left 180ms ease,
+    width 180ms ease,
+    height 180ms ease;
+}
+
+:root[data-theme="blues"] .guided-tour-highlight {
+  box-shadow:
+    0 0 0 9999px rgba(3, 8, 18, 0.7),
+    0 0 28px rgba(226, 194, 117, 0.26);
+}
+
+:root[data-theme="fitness"] .guided-tour-highlight {
+  box-shadow:
+    0 0 0 9999px rgba(12, 5, 22, 0.72),
+    0 0 30px rgba(255, 93, 171, 0.36);
+}
+
+.guided-tour-card,
+.guided-tour-prompt-card {
+  background: var(--afpt-panel);
+  border: 1px solid var(--afpt-border-strong);
+  border-radius: 10px;
+  color: var(--afpt-ink);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
+}
+
+:root[data-theme="fitness"] .guided-tour-card,
+:root[data-theme="fitness"] .guided-tour-prompt-card {
+  background: rgba(27, 13, 42, 0.97);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.guided-tour-card {
+  position: fixed;
+  top: var(--tour-card-top, 18px);
+  left: var(--tour-card-left, 18px);
+  width: min(360px, calc(100vw - 28px));
+  padding: 18px;
+  transition:
+    top 180ms ease,
+    left 180ms ease;
+}
+
+.guided-tour-prompt-card {
+  width: min(390px, calc(100vw - 28px));
+  padding: 20px;
+}
+
+.guided-tour-progress {
+  margin: 0 0 8px 0;
+  color: var(--afpt-accent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.guided-tour-card h2,
+.guided-tour-prompt-card h2 {
+  margin: 0 0 10px 0;
+  color: var(--afpt-ink);
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+.guided-tour-card p,
+.guided-tour-prompt-card p {
+  margin: 0;
+  color: var(--afpt-ink-dim);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.guided-tour-check {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 16px 0 0 0;
+  color: var(--afpt-ink);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.35;
+  user-select: none;
+}
+
+.guided-tour-check input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--afpt-accent);
+}
+
+.guided-tour-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.guided-tour-actions button {
+  min-height: 38px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.guided-tour-actions button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.guided-tour-secondary {
+  background: transparent;
+  border: 1px solid var(--afpt-border);
+  color: var(--afpt-ink);
+  padding: 0 12px;
+}
+
+.guided-tour-primary {
+  background: var(--afpt-accent);
+  border: 1px solid var(--afpt-accent);
+  color: var(--afpt-bg);
+  padding: 0 16px;
+}
+
+.guided-tour-secondary:not(:disabled):hover {
+  border-color: var(--afpt-accent);
+  color: var(--afpt-accent);
+}
+
+.guided-tour-primary:hover {
+  filter: brightness(1.05);
+}
+
+.guided-tour-actions button:focus-visible,
+.guided-tour-check input:focus-visible {
+  outline: 2px solid var(--afpt-accent-2);
+  outline-offset: 3px;
+}
+
+@media (max-width: 520px) {
+  .guided-tour-card,
+  .guided-tour-prompt-card {
+    padding: 16px;
+  }
+
+  .guided-tour-actions {
+    justify-content: stretch;
+  }
+
+  .guided-tour-actions button {
+    flex: 1 1 0;
+    padding-inline: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guided-tour-highlight,
+  .guided-tour-card {
+    transition: none;
+  }
+}
+
 /* ─── Chart drawer ─────────────────────────────────────────────── */
 .chart-drawer {
   position: fixed;

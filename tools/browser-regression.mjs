@@ -105,6 +105,9 @@ function createStaticServer() {
 
 async function newPage(browser, baseUrl, query, contextOptions = {}) {
   const context = await browser.newContext(contextOptions);
+  await context.addInitScript(() => {
+    window.localStorage.setItem('pfra.guidedTour.dismissed.v1', 'true');
+  });
   const page = await context.newPage();
   const failures = [];
 
@@ -135,6 +138,36 @@ async function newPage(browser, baseUrl, query, contextOptions = {}) {
 
 async function assertNoBrowserFailures(failures, label) {
   assert.deepEqual(failures, [], `${label} browser errors`);
+}
+
+async function assertGuidedTourStarts(page, label) {
+  await page.waitForFunction(() => typeof window.pfraGuidedTour?.start === 'function');
+  await page.evaluate(() => window.pfraGuidedTour?.start());
+  await page.waitForFunction(() => {
+    const root = document.getElementById('guided-tour-root');
+    return root && !root.hidden && document.getElementById('guided-tour-title')?.textContent?.length;
+  });
+  const firstStep = await page.evaluate(() => ({
+    cardVisible: !document.querySelector('.guided-tour-card')?.hidden,
+    highlightVisible: !document.querySelector('.guided-tour-highlight')?.hidden,
+    progress: document.getElementById('guided-tour-progress')?.textContent,
+    title: document.getElementById('guided-tour-title')?.textContent,
+  }));
+  assert.equal(firstStep.cardVisible, true, `${label} guided tour card is visible`);
+  assert.equal(firstStep.highlightVisible, true, `${label} guided tour highlight is visible`);
+  assert.match(firstStep.progress ?? '', /Step 1 of/i, `${label} guided tour shows progress`);
+  assert.equal(firstStep.title, 'Choose your standard', `${label} guided tour starts at first step`);
+
+  await page.locator('#guided-tour-next').click();
+  await page.waitForFunction(() => document.getElementById('guided-tour-progress')?.textContent?.startsWith('Step 2'));
+  assert.equal(
+    await page.locator('#guided-tour-title').innerText(),
+    'Set your profile',
+    `${label} guided tour advances`,
+  );
+
+  await page.locator('#guided-tour-skip').click();
+  await page.waitForFunction(() => document.getElementById('guided-tour-root')?.hidden);
 }
 
 async function setThemePreset(page, preset) {
@@ -676,6 +709,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     'blues',
     'Dress Blues is the default theme on first load',
   );
+  await assertGuidedTourStarts(page, label);
 
   // 3. Score header shows a value
   const scoreTxt = await page.evaluate(() => document.getElementById('score-txt')?.textContent?.trim());
