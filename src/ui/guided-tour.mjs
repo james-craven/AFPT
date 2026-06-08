@@ -134,6 +134,35 @@ function activateComponent(component) {
   }
 }
 
+function closeBlockingOverlays() {
+  document.querySelectorAll('.modal-overlay:not([hidden])').forEach((modal) => {
+    modal.hidden = true;
+  });
+
+  const chartDrawer = byId('modal');
+  if (chartDrawer) {
+    chartDrawer.hidden = true;
+    delete chartDrawer.dataset.chartOpen;
+    delete chartDrawer.dataset.returnToChart;
+  }
+  document.body.classList.remove('chart-drawer-open');
+
+  const referencesDrawer = byId('desktop-references-modal');
+  if (referencesDrawer) {
+    referencesDrawer.hidden = true;
+  }
+  document.body.classList.remove('desktop-references-open');
+
+  const settingsPanel = byId('settings-hub-panel');
+  const settingsScrim = byId('settings-hub-scrim');
+  const settingsToggle = byId('settings-hub-toggle');
+  if (settingsPanel) settingsPanel.hidden = true;
+  if (settingsScrim) settingsScrim.hidden = true;
+  settingsToggle?.setAttribute('aria-expanded', 'false');
+  document.documentElement.classList.remove('settings-hub-open');
+  document.body.classList.remove('settings-hub-open');
+}
+
 function preventBackgroundScroll(event) {
   if (!elements || elements.root.hidden) return;
   if (event.target.closest('.guided-tour-card, .guided-tour-prompt-card')) return;
@@ -340,6 +369,8 @@ function updatePosition() {
 function startTour() {
   const ui = ensureElements();
   const focusedElement = document.activeElement;
+
+  closeBlockingOverlays();
 
   active = true;
   safeStorage(window.sessionStorage, PROMPT_SESSION_KEY, 'true');

@@ -142,6 +142,14 @@ async function assertNoBrowserFailures(failures, label) {
 
 async function assertGuidedTourStarts(page, label) {
   await page.waitForFunction(() => typeof window.pfraGuidedTour?.start === 'function');
+  await page.evaluate(() => {
+    const updateModal = document.getElementById('pwa-update-modal');
+    const updateTitle = document.getElementById('pwa-update-title');
+    const updateMessage = document.getElementById('pwa-update-message');
+    if (updateTitle) updateTitle.textContent = 'Update Status';
+    if (updateMessage) updateMessage.textContent = 'Update completed successfully.';
+    if (updateModal) updateModal.hidden = false;
+  });
   await page.evaluate(() => window.pfraGuidedTour?.start());
   await page.waitForFunction(() => {
     const root = document.getElementById('guided-tour-root');
@@ -152,11 +160,13 @@ async function assertGuidedTourStarts(page, label) {
     highlightVisible: !document.querySelector('.guided-tour-highlight')?.hidden,
     progress: document.getElementById('guided-tour-progress')?.textContent,
     title: document.getElementById('guided-tour-title')?.textContent,
+    updateModalHidden: document.getElementById('pwa-update-modal')?.hidden,
   }));
   assert.equal(firstStep.cardVisible, true, `${label} guided tour card is visible`);
   assert.equal(firstStep.highlightVisible, true, `${label} guided tour highlight is visible`);
   assert.match(firstStep.progress ?? '', /Step 1 of/i, `${label} guided tour shows progress`);
   assert.equal(firstStep.title, 'Choose your standard', `${label} guided tour starts at first step`);
+  assert.equal(firstStep.updateModalHidden, true, `${label} guided tour closes update messages`);
 
   await page.locator('#guided-tour-next').click();
   await page.waitForFunction(() => document.getElementById('guided-tour-progress')?.textContent?.startsWith('Step 2'));
