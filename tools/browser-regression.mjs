@@ -659,6 +659,7 @@ async function assertDesktopReferencesDrawer(page, label) {
   assert.ok(referenceState.groupCount >= 4, `${label} desktop references are grouped`);
   assert.ok(referenceState.imageCount >= 10, `${label} desktop references stack official chart images`);
   assert.match(referenceState.text, /Official Scoring Charts/i, `${label} references include scoring charts`);
+  assert.match(referenceState.text, /Waist to Height Ratio/i, `${label} references include the WHtR scoring chart`);
   assert.match(referenceState.text, /Altitude Adjustments/i, `${label} references include altitude adjustments`);
   assert.match(referenceState.text, /HAMR Resources/i, `${label} references include HAMR resources`);
   assert.match(referenceState.text, /Official Source Links/i, `${label} references include outbound official source links`);
@@ -873,6 +874,45 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
       .every((id) => !!document.getElementById(id))
   ));
   assert.equal(bodyInputsExist, true, 'body editor exposes ratio, height, and waist inputs');
+  const whtrMeasurementState = await page.evaluate(async () => {
+    const setInput = (id, value) => {
+      const input = document.getElementById(id);
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    };
+
+    setInput('height-ft-input', '6');
+    setInput('height-in-input', '0');
+    setInput('waist-input', '39.5');
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    const sourceExample = {
+      badgePass: document.getElementById('fit-body-badge')?.dataset.pass,
+      score: document.getElementById('pfra-body-score')?.textContent?.trim(),
+      whtr: document.getElementById('pfra-whtr')?.value,
+    };
+
+    setInput('height-ft-input', '5');
+    setInput('height-in-input', '1.5');
+    setInput('waist-input', '32');
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    const fractionalInches = {
+      score: document.getElementById('pfra-body-score')?.textContent?.trim(),
+      whtr: document.getElementById('pfra-whtr')?.value,
+    };
+
+    setInput('pfra-whtr', '0.49');
+    return { fractionalInches, sourceExample };
+  });
+  assert.deepEqual(
+    whtrMeasurementState.sourceExample,
+    { badgePass: 'true', score: '15', whtr: '0.54' },
+    'WHtR uses official truncation for 39.5 / 72',
+  );
+  assert.deepEqual(
+    whtrMeasurementState.fractionalInches,
+    { score: '17', whtr: '0.52' },
+    'WHtR calculation accepts fractional height inches',
+  );
   await selectComponentForViewport(page, 'strength');
 
   await assertResponsiveDashboardLayout(page, label);

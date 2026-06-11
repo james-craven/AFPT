@@ -17,6 +17,17 @@ export function formatScore(score) {
   return Number.isInteger(score) ? score.toFixed(0) : score.toFixed(1);
 }
 
+export function truncateWhtr(value) {
+  const ratio = Number(value);
+  if (!Number.isFinite(ratio)) return NaN;
+  return Math.trunc((ratio + Number.EPSILON) * 100) / 100;
+}
+
+export function formatWhtr(value) {
+  const truncated = truncateWhtr(value);
+  return Number.isFinite(truncated) ? truncated.toFixed(2) : '';
+}
+
 export function categoryForTotal(total) {
   if (total < 75) return 'Unsatisfactory';
   if (total < 90) return 'Satisfactory';
@@ -82,12 +93,12 @@ export function scoreWhtr(value, standards) {
   if (!Number.isFinite(ratio)) return 0;
 
   const rules = standards?.components?.bodyComposition?.events?.waistToHeightRatio?.scoring || [];
-  const rounded = Math.round(ratio * 100) / 100;
+  const truncated = truncateWhtr(ratio);
 
   for (const rule of rules) {
-    if (rule.maxInclusive !== undefined && rounded <= rule.maxInclusive) return rule.points;
-    if (rule.minInclusive !== undefined && rounded >= rule.minInclusive) return rule.points;
-    if (rule.exact !== undefined && rounded === rule.exact) return rule.points;
+    if (rule.maxInclusive !== undefined && truncated <= rule.maxInclusive) return rule.points;
+    if (rule.minInclusive !== undefined && truncated >= rule.minInclusive) return rule.points;
+    if (rule.exact !== undefined && truncated === rule.exact) return rule.points;
   }
 
   return 0;
@@ -225,4 +236,3 @@ export function scorePfraAssessment({
     },
   };
 }
-

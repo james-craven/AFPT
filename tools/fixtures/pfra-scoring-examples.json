@@ -711,13 +711,28 @@
       "expectedPoints": 15
     },
     {
+      "id": "whtr-truncates-source-example",
+      "value": "0.5486",
+      "expectedPoints": 15
+    },
+    {
       "id": "previous-whtr-midpoint",
       "value": "0.55",
       "expectedPoints": 12.5
     },
     {
+      "id": "whtr-truncates-pass-boundary",
+      "value": "0.559",
+      "expectedPoints": 12.5
+    },
+    {
       "id": "whtr-last-scoring-step",
       "value": "0.59",
+      "expectedPoints": 2.5
+    },
+    {
+      "id": "whtr-truncates-final-scoring-step",
+      "value": "0.599",
       "expectedPoints": 2.5
     },
     {

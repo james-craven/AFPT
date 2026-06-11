@@ -25,27 +25,69 @@ const steps = [
     selectors: ['.desktop-score-breakdown', '.component-strip'],
   },
   {
-    title: 'Adjust strength',
-    body: 'Switch between push-ups, hand-release push-ups, or exempt status. Use the field, slider, min/max buttons, or chart to compare options.',
-    selectors: ['#strength-editor', '#summary-strength'],
+    title: 'Choose strength event',
+    body: 'Use these choices to switch between standard push-ups, hand-release push-ups, or an authorized exemption.',
+    selectors: ['#push-seg-ctrl', '#strength-editor', '#summary-strength'],
     component: 'strength',
   },
   {
-    title: 'Adjust core',
-    body: 'Choose the core event you plan to test. Reps and plank time use different tables, so the chart is useful when comparing variants.',
-    selectors: ['#core-editor', '#summary-core'],
+    title: 'Enter reps or jump',
+    body: 'Type your score in the box, or use MIN and MAX to jump straight to the profile minimum or maximum.',
+    selectors: ['#push-reps-row', '#push-txt', '#strength-editor'],
+    component: 'strength',
+  },
+  {
+    title: 'Fine tune with the slider',
+    body: 'The slider and side buttons let you nudge the value one step at a time without retyping.',
+    selectors: ['#strength-editor .slider-row', '#push-slider'],
+    component: 'strength',
+  },
+  {
+    title: 'Open the score chart',
+    body: 'Use Score Chart when you want to see the full scoring table and where your current result lands.',
+    selectors: ['#push-btn', '#desktop-chart-open'],
+    component: 'strength',
+  },
+  {
+    title: 'Choose core event',
+    body: 'Core has separate options for sit-ups, reverse crunches, plank, and exemption. Reps and plank time use different tables.',
+    selectors: ['#sit-seg-ctrl', '#core-editor', '#summary-core'],
     component: 'core',
   },
   {
-    title: 'Plan cardio',
-    body: 'Set your run time, HAMR shuttles, walk option, or exemption. Cardio carries the most points, so small improvements can matter.',
-    selectors: ['#cardio-editor', '#summary-cardio'],
+    title: 'Use core controls',
+    body: 'The same pattern appears here: score box or time fields, MIN/MAX buttons, slider, and Score Chart.',
+    selectors: ['#core-editor .editor-event-row', '#sit-btn'],
+    component: 'core',
+  },
+  {
+    title: 'Choose cardio event',
+    body: 'Switch between 2-mile run, HAMR, 2 km walk, or exemption before comparing cardio scores.',
+    selectors: ['#run-seg-ctrl', '#cardio-editor', '#summary-cardio'],
     component: 'cardio',
   },
   {
-    title: 'Check WHtR',
-    body: 'Enter waist-to-height ratio directly or calculate it from height and waist. The step buttons make small measurement changes easier to test.',
-    selectors: ['#body-editor', '#summary-body'],
+    title: 'Set cardio performance',
+    body: 'Use the time or shuttle input, MIN/MAX buttons, and Score Chart to see how the largest component affects the total.',
+    selectors: ['#cardio-editor .editor-event-row', '#run-btn'],
+    component: 'cardio',
+  },
+  {
+    title: 'Adjust cardio details',
+    body: 'The slider handles small changes, and the altitude selector applies the official adjustment group when needed.',
+    selectors: ['#cardio-editor .slider-row', '.altitude-row'],
+    component: 'cardio',
+  },
+  {
+    title: 'Enter WHtR directly',
+    body: 'If you already know the official ratio, enter it here and use the step buttons for small changes.',
+    selectors: ['#pfra-whtr', '.body-input-stepper--ratio', '#body-editor'],
+    component: 'body',
+  },
+  {
+    title: 'Calculate WHtR',
+    body: 'Use feet, decimal inches, and waist inches to calculate the ratio. The app truncates the result to two decimals for scoring.',
+    selectors: ['.body-whtr-control--pair', '.body-input-stepper--waist', '#body-editor'],
     component: 'body',
   },
   {
@@ -55,9 +97,15 @@ const steps = [
     component: 'cardio',
   },
   {
-    title: 'Open charts and references',
-    body: 'Use score charts when you want the full table, and use Controls for official references, altitude adjustments, audio, updates, and this tour.',
+    title: 'Open controls',
+    body: 'The hamburger menu holds official references, altitude references, audio, install/update tools, and this tour.',
     selectors: ['#settings-hub-toggle', '#push-btn', '#run-btn'],
+  },
+  {
+    title: 'Official references',
+    body: 'Open Official References here for the source chart images, including the WHtR scoring chart.',
+    selectors: ['.settings-hub-section--references', '#desktop-references-open'],
+    openSettings: true,
   },
 ];
 
@@ -134,6 +182,19 @@ function activateComponent(component) {
   }
 }
 
+function setSettingsHubOpen(open) {
+  const settingsPanel = byId('settings-hub-panel');
+  const settingsScrim = byId('settings-hub-scrim');
+  const settingsToggle = byId('settings-hub-toggle');
+  if (!settingsPanel || !settingsScrim || !settingsToggle) return;
+
+  settingsPanel.hidden = !open;
+  settingsScrim.hidden = !open;
+  settingsToggle.setAttribute('aria-expanded', String(open));
+  document.documentElement.classList.toggle('settings-hub-open', open);
+  document.body.classList.toggle('settings-hub-open', open);
+}
+
 function closeBlockingOverlays() {
   document.querySelectorAll('.modal-overlay:not([hidden])').forEach((modal) => {
     modal.hidden = true;
@@ -153,14 +214,7 @@ function closeBlockingOverlays() {
   }
   document.body.classList.remove('desktop-references-open');
 
-  const settingsPanel = byId('settings-hub-panel');
-  const settingsScrim = byId('settings-hub-scrim');
-  const settingsToggle = byId('settings-hub-toggle');
-  if (settingsPanel) settingsPanel.hidden = true;
-  if (settingsScrim) settingsScrim.hidden = true;
-  settingsToggle?.setAttribute('aria-expanded', 'false');
-  document.documentElement.classList.remove('settings-hub-open');
-  document.body.classList.remove('settings-hub-open');
+  setSettingsHubOpen(false);
 }
 
 function preventBackgroundScroll(event) {
@@ -295,6 +349,7 @@ async function showStep(index) {
   const step = steps[currentIndex];
 
   activateComponent(step.component);
+  setSettingsHubOpen(step.openSettings === true);
   await waitForFrame();
   if (!active || requestId !== stepRequest) return;
 
@@ -409,6 +464,7 @@ function finishTour() {
   resizeObserver?.disconnect();
   resizeObserver = null;
   stepRequest += 1;
+  closeBlockingOverlays();
 
   if (lastFocusedElement instanceof HTMLElement) {
     lastFocusedElement.focus({ preventScroll: true });

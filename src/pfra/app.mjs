@@ -5,6 +5,7 @@ import {
   applyWalkAltitudeAdjustment,
   categoryForTotal,
   firstScoringCellValue,
+  formatWhtr,
   pfraAgeToWalkAgeGroup,
   scoreFromTable,
   scorePfraAssessment,
@@ -12,6 +13,7 @@ import {
   secondsToTimeString,
   toSeconds,
   topCellValue,
+  truncateWhtr,
 } from './scoring.mjs';
 import { eventDefaults } from './state.mjs';
 import {
@@ -489,6 +491,12 @@ const OFFICIAL_SOURCE_LINKS = [
 ];
 
 const SCORE_CHART_REFERENCES = {
+  'waist-to-height-ratio': {
+    title: 'WHtR Official Score Chart',
+    src: './standards/sources/pfra-score-pages/pfra-scoring-page-01.webp',
+    alt: 'Official PFRA waist to height ratio scoring standards page',
+    caption: 'AFPC PFRA Scoring Charts, Waist to Height Ratio Scoring Standards',
+  },
   'push-up': {
     title: 'Push-Up Official Score Chart',
     src: './standards/sources/pfra-score-pages/pfra-scoring-page-02.webp',
@@ -738,7 +746,12 @@ function selectedDesktopChartContext() {
   if (state.selectedComponent === 'cardio') {
     return { category: 'cardio', event: state.cardio.event, title: 'Cardio Score Chart' };
   }
-  return null;
+  return {
+    category: 'body',
+    event: 'waist-to-height-ratio',
+    referenceKey: 'waist-to-height-ratio',
+    title: 'Body Composition',
+  };
 }
 
 function renderDesktopChartPanel(result) {
@@ -749,12 +762,14 @@ function renderDesktopChartPanel(result) {
   if (!panel || !title || !content || !openButton) return;
 
   const context = selectedDesktopChartContext();
-  if (!context) {
+  if (context.referenceKey) {
     const bodyScore = result?.scores?.body ?? '--';
     const bodyDisplay = state.bodyExempt ? 'EXEMPT' : escapeHtml(state.whtr);
     const scoreDisplay = state.bodyExempt ? 'EXEMPT' : escapeHtml(bodyScore);
-    title.textContent = 'Body Composition';
-    openButton.hidden = true;
+    title.textContent = context.title;
+    openButton.hidden = false;
+    openButton.dataset.chartCategory = context.category;
+    openButton.dataset.referenceKey = context.referenceKey;
     content.innerHTML = `<div class="desktop-chart-empty">
       <p class="desktop-chart-empty__label">Current WHtR</p>
       <strong>${bodyDisplay}</strong>
@@ -766,6 +781,7 @@ function renderDesktopChartPanel(result) {
   title.textContent = context.title;
   openButton.hidden = false;
   openButton.dataset.chartCategory = context.category;
+  delete openButton.dataset.referenceKey;
   content.innerHTML = generateScoreChartFor(context.event, state.ageGroup, state.sex);
 }
 
@@ -780,7 +796,7 @@ function referenceFigure(reference) {
 
 function resolveOfficialReference(referenceKey) {
   return typeof referenceKey === 'string'
-    ? OFFICIAL_REFERENCES[referenceKey]
+    ? OFFICIAL_REFERENCES[referenceKey] || SCORE_CHART_REFERENCES[referenceKey]
     : referenceKey;
 }
 
@@ -1725,7 +1741,7 @@ function renderScore(result) {
   // Fitness: body comp pass/fail badge (WHtR ≤ 0.55 = PASS)
   const fitBodyBadge = byId('fit-body-badge');
   if (fitBodyBadge) {
-    const whtrNum = parseFloat(state.whtr);
+    const whtrNum = truncateWhtr(state.whtr);
     const pass = !Number.isNaN(whtrNum) && whtrNum <= 0.55;
     fitBodyBadge.textContent = pass ? 'PASS' : 'FAIL';
     fitBodyBadge.dataset.pass = String(pass);
@@ -2155,7 +2171,7 @@ function calculateWhtrFromMeasurements(heightFt, heightIn, waistIn) {
   const totalHeight = (ft * 12) + inches;
   if (totalHeight <= 0 || waist <= 0) return null;
 
-  return (waist / totalHeight).toFixed(2);
+  return formatWhtr(waist / totalHeight);
 }
 
 function syncWhtrMeasurementInputs() {
@@ -2263,19 +2279,26 @@ function bindEvents() {
     if (ftEl && ftEl.value !== '') updateWhtrFromMeasurements();
   });
 
-  // Height inches: rollover at 11/0 boundary
+  // Height inches: rollover at 12/0 boundary while preserving tenths.
   byId('height-in-input')?.addEventListener('input', () => {
     const inEl = byId('height-in-input');
     const ftEl = byId('height-ft-input');
     if (!inEl || inEl.value === '') return;
     const inVal = Number(inEl.value);
     const ftVal = Number(ftEl?.value || state.bodyHeightFt || 5);
-    if (inVal > 11) {
-      inEl.value = '0';
-      if (ftEl) { ftEl.value = String(ftVal + 1); }
+    if (!Number.isFinite(inVal)) return;
+    if (inVal >= 12) {
+      const feetToAdd = Math.floor(inVal / 12);
+      const remainingInches = inVal - (feetToAdd * 12);
+      inEl.value = remainingInches.toFixed(1).replace(/\.0$/, '');
+      if (ftEl) { ftEl.value = String(Math.min(8, ftVal + feetToAdd)); }
     } else if (inVal < 0) {
-      inEl.value = '11';
-      if (ftEl) { ftEl.value = String(Math.max(3, ftVal - 1)); }
+      if (ftVal > 3) {
+        inEl.value = (12 + inVal).toFixed(1).replace(/\.0$/, '');
+        if (ftEl) { ftEl.value = String(ftVal - 1); }
+      } else {
+        inEl.value = '0';
+      }
     }
     updateWhtrFromMeasurements();
   });
@@ -2298,7 +2321,9 @@ function bindEvents() {
       const max = input.max === '' ? Infinity : Number(input.max);
       if (!Number.isFinite(step) || !Number.isFinite(current)) return;
       const decimals = String(step).includes('.') ? String(step).split('.')[1].length : 0;
-      const next = Math.min(max, Math.max(min, current + step));
+      const next = input.id === 'height-in-input'
+        ? current + step
+        : Math.min(max, Math.max(min, current + step));
       input.value = decimals > 0 ? next.toFixed(decimals) : String(Math.round(next));
       input.dispatchEvent(new Event('input', { bubbles: true }));
     } else {
@@ -2771,7 +2796,11 @@ function bindEvents() {
   });
   byId('desktop-chart-open')?.addEventListener('click', () => {
     const context = selectedDesktopChartContext();
-    if (context) openChart(context.category, context.title);
+    if (context?.referenceKey) {
+      openOfficialReference(context.referenceKey);
+    } else if (context) {
+      openChart(context.category, context.title);
+    }
   });
 
   // --- Chart modal controls ---
