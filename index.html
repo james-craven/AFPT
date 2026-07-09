@@ -72,7 +72,7 @@
             "name": "Can a high total score make up for failing one component?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. The total matters, but component minimums matter too. If one component is below its required minimum, confirm the result with your UFPM before assuming the test is good."
+              "text": "No. Each component has a minimum that must be met in addition to the composite score. If any component falls below its minimum, the attempt does not pass regardless of the total. Confirm any result with your UFPM."
             }
           },
           {
@@ -80,7 +80,7 @@
             "name": "Why should I compare alternate events?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "The best event is the one that matches your current fitness, your profile, and what your testing location supports. The calculator makes it easier to compare without rebuilding the whole score by hand."
+              "text": "Authorized events are scored on different tables, so the best choice depends on your current fitness, any medical profile, and what your testing location supports. The calculator lets you compare projected scores side by side before you commit to an event."
             }
           },
           {
@@ -88,7 +88,7 @@
             "name": "Is this an official scoring source?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. It is a reference calculator built around the standards data in the app. Use it to plan, then verify anything important against official guidance and your unit's process."
+              "text": "No. PFRA.app is an independent planning tool built from published scoring tables. Verify anything that affects your record against DAFMAN 36-2905, the official AFPC scoring charts, and your unit's guidance."
             }
           }
         ]
@@ -327,25 +327,25 @@
     <section class="desktop-intro" aria-labelledby="desktop-intro-title">
       <div class="desktop-intro__copy">
         <p class="desktop-intro__eyebrow">PFRA 2026 calculator</p>
-        <h2 id="desktop-intro-title">Plan your Air Force fitness score before test day.</h2>
+        <h2 id="desktop-intro-title">Project your Air Force fitness score before test day.</h2>
         <p>
-          Estimate your total score across strength, core, cardio, and body composition.
-          Try alternate events, check component minimums, and use the pace plan when you
-          want a practical run target.
+          Estimate your composite score across strength, core, cardio, and body composition.
+          Compare authorized component options, verify component minimums, and build a
+          2-mile pace plan around your goal time.
         </p>
       </div>
       <div class="desktop-intro__steps" aria-label="How to use the calculator">
         <div>
           <strong>1</strong>
-          <span>Choose your standard, profile, and theme.</span>
+          <span>Select your scoring standard, sex, and age group.</span>
         </div>
         <div>
           <strong>2</strong>
-          <span>Adjust each component and compare your options in one view.</span>
+          <span>Enter your numbers for each component and compare authorized options side by side.</span>
         </div>
         <div>
           <strong>3</strong>
-          <span>Use charts and notes as a reference, then confirm official guidance with your UFPM.</span>
+          <span>Review the score charts, then confirm official guidance with your UFPM before test day.</span>
         </div>
       </div>
     </section>
@@ -491,7 +491,7 @@
   <div class="editor-header">
     <span class="editor-title">WHtR</span>
     <p id="body-txt-p" class="score-label-text">Score: 20 | Pass ≤ 0.55</p>
-    <p class="desktop-editor-note">20 points. Enter WHtR directly or use height and waist to calculate it.</p>
+    <p class="desktop-editor-note">20 points. Enter your waist-to-height ratio directly, or calculate it from your height and waist measurements.</p>
   </div>
 
   <div id="body-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Body mode">
@@ -562,7 +562,7 @@
         <div class="editor-header">
           <span class="editor-title">STRENGTH</span>
           <p id="push-txt-p" class="score-label-text">Score: 2.5 | Min: 15 | Max: 50</p>
-          <p class="desktop-editor-note">15 points. Compare standard push-ups with hand-release push-ups before you settle on an event.</p>
+          <p class="desktop-editor-note">15 points. Score both push-up variants against your recent numbers before selecting an event.</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
         <div id="push-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Strength event">
@@ -603,7 +603,7 @@
         <div class="editor-header">
           <span class="editor-title">CORE</span>
           <p id="sit-txt-p" class="score-label-text">Score: 2.5 | Min: 29 | Max: 54</p>
-          <p class="desktop-editor-note">15 points. Reps and plank time use separate tables, so check the variant that matches your strengths.</p>
+          <p class="desktop-editor-note">15 points. Rep events and the plank are scored on separate tables, so compare each option against your recent performance.</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
         <div id="sit-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Core event">
@@ -656,7 +656,7 @@
         <div class="editor-header">
           <span class="editor-title">CARDIO</span>
           <p id="run-txt-p" class="score-label-text">Score: 35 | Min: 25:23 | Max: 15:30</p>
-          <p class="desktop-editor-note">50 points. Small changes in run time can move the total score quickly.</p>
+          <p class="desktop-editor-note">50 points. Cardio is half the composite score, so small time improvements produce the largest point gains.</p>
         </div>
         <!-- Fitness theme: segmented event selector -->
         <div id="run-seg-ctrl" class="fit-seg-ctrl" role="group" aria-label="Cardio event">
@@ -725,11 +725,11 @@
 
       <section class="readiness-guide" aria-labelledby="readiness-guide-title">
         <div class="readiness-guide__header">
-          <p class="readiness-guide__eyebrow">Cardio prep</p>
+          <p class="readiness-guide__eyebrow">Cardio preparation</p>
           <h2 id="readiness-guide-title">2-Mile Readiness Guide</h2>
           <p>
-            The longer run rewards steady pacing, aerobic endurance, and the ability to finish strong.
-            Use this as a quick planning guide while you build readiness, health, and performance.
+            The 2-mile run rewards aerobic endurance and disciplined pacing. Use this guide to
+            structure your training and plan your execution on test day.
           </p>
         </div>
 
@@ -737,46 +737,48 @@
           <article class="readiness-card">
             <h3>Why it matters</h3>
             <p>
-              The 2-mile run places more emphasis on sustained cardiovascular fitness. Passing matters,
-              but the bigger goal is a durable engine you can rely on.
+              At 50 points, cardio is the largest component of the composite score. The 2-mile
+              distance measures sustained aerobic fitness, which responds to consistent training
+              over weeks — not to a hard effort the week of the test.
             </p>
           </article>
           <article class="readiness-card">
             <h3>What changed</h3>
             <p>
-              The previous 1.5-mile run has been updated to a 2-mile run as the main run option. HAMR
-              remains another cardio option where authorized.
+              The 2-mile run replaces the previous 1.5-mile run as the primary cardio event.
+              The 20-meter HAMR and 2 km walk remain alternatives where authorized.
             </p>
           </article>
           <article class="readiness-card">
             <h3>Use the pace plan</h3>
             <p>
-              Pick a goal time, review each split, practice that rhythm, and use the plan on test day
-              to avoid starting too fast.
+              Set a goal time and review the lap splits, then rehearse that pace in training.
+              An even effort across all laps is consistently faster than starting fast and fading.
             </p>
           </article>
           <article class="readiness-card">
-            <h3>Prepare the right systems</h3>
+            <h3>Train specifically</h3>
             <p>
-              Build with easy runs or steady cardio, add intervals or tempo work, and strengthen calves,
-              hamstrings, hips, glutes, and core.
+              Build an aerobic base with easy runs, add one weekly interval or tempo session at or
+              near goal pace, and strengthen the calves, hamstrings, hips, and core to support
+              consistent stride mechanics.
             </p>
           </article>
           <article class="readiness-card readiness-card--wide">
             <h3>Fuel, hydrate, warm up</h3>
             <div class="readiness-list">
-              <p><strong>Fuel:</strong> use a light carb-focused snack 30–60 minutes before if needed. Avoid heavy, greasy, or high-fiber meals right before running.</p>
-              <p><strong>Hydration:</strong> drink steadily earlier and avoid chugging right before the test. Consider electrolytes or sodium if you sweat heavily or cramp easily.</p>
-              <p><strong>Warmup:</strong> use easy jogging, leg swings, ankle bounces, high knees, butt kicks, and short strides. Save longer static stretching for after the run.</p>
+              <p><strong>Fuel:</strong> if you eat before the test, keep it a light, carbohydrate-focused snack 30–60 minutes out. Avoid heavy, high-fat, or high-fiber meals close to the run.</p>
+              <p><strong>Hydration:</strong> drink steadily in the hours before the test rather than large amounts at the last minute. Add electrolytes if you sweat heavily or are prone to cramping.</p>
+              <p><strong>Warmup:</strong> complete 5–10 minutes of easy jogging, dynamic drills such as leg swings and high knees, and two or three short strides at goal pace. Save static stretching for after the run.</p>
             </div>
           </article>
           <article class="readiness-card readiness-card--execution">
             <h3>Test-day execution</h3>
             <ol class="readiness-steps">
-              <li>Start controlled.</li>
-              <li>Settle into rhythm.</li>
-              <li>Increase effort in the final 800m.</li>
-              <li>Finish hard in the final 400m.</li>
+              <li>Run the first lap at your planned split — no faster.</li>
+              <li>Hold an even rhythm through the middle laps.</li>
+              <li>Increase effort over the final 800m.</li>
+              <li>Commit to a sustained push over the last 400m.</li>
             </ol>
           </article>
         </div>
@@ -800,8 +802,8 @@
         <p class="desktop-guide__eyebrow">Guide</p>
         <h2 id="desktop-guide-title">How to read the numbers</h2>
         <p>
-          This calculator is a planning tool. It helps you see the score impact of different events and goals,
-          but your unit guidance and current official standards are still the authority.
+          This calculator is a planning tool. Use it to understand how each event and goal affects
+          your score; current official standards and your unit's guidance remain the authority.
         </p>
       </div>
 
@@ -809,30 +811,33 @@
         <article class="desktop-guide-card">
           <h3>Scoring at a glance</h3>
           <p>
-            The composite score is out of 100 points: strength 15, core 15, cardio 50,
-            and body composition 20. A 75 total is the usual pass line, but each component
-            still has its own floor.
+            The composite score totals 100 points: strength 15, core 15, cardio 50, and body
+            composition 20. A composite of 75 is the standard passing score, and each component
+            also has a minimum that must be met.
           </p>
         </article>
         <article class="desktop-guide-card">
           <h3>Choosing event variants</h3>
           <p>
-            Alternate events can change the tradeoff. A lower rep standard does not always
-            mean an easier score, so run your real numbers for each authorized option.
+            Authorized events are scored on different tables, and a lower rep requirement does not
+            necessarily produce a higher score. Enter your actual recent numbers for each option
+            and compare the results.
           </p>
         </article>
         <article class="desktop-guide-card">
           <h3>Cardio strategy</h3>
           <p>
-            Cardio carries half the test. Use the pace plan to see what each lap should feel
-            like, then check whether shaving 20 or 30 seconds changes your score enough to matter.
+            Cardio accounts for half of the composite score. Use the pace plan to translate a goal
+            time into lap splits, and check how a 20–30 second improvement would change your score
+            before deciding where to focus your training.
           </p>
         </article>
         <article class="desktop-guide-card">
           <h3>Understanding WHtR</h3>
           <p>
-            WHtR compares waist to height. It is a ratio, so a small measurement change can
-            move the score. Measure consistently and avoid treating one quick tape reading as final.
+            Waist-to-height ratio divides waist circumference by height. Because it is a ratio,
+            small measurement differences can shift the score. Measure consistently, and rely on
+            an official measurement for anything that affects your record.
           </p>
         </article>
       </div>
@@ -841,15 +846,15 @@
         <h3>Common questions</h3>
         <details>
           <summary>Can a high total score make up for failing one component?</summary>
-          <p>No. The total matters, but component minimums matter too. If one component is below its required minimum, confirm the result with your UFPM before assuming the test is good.</p>
+          <p>No. Each component has a minimum that must be met in addition to the composite score. If any component falls below its minimum, the attempt does not pass regardless of the total. Confirm any result with your UFPM.</p>
         </details>
         <details>
           <summary>Why should I compare alternate events?</summary>
-          <p>The best event is the one that matches your current fitness, your profile, and what your testing location supports. The calculator makes it easier to compare without rebuilding the whole score by hand.</p>
+          <p>Authorized events are scored on different tables, so the best choice depends on your current fitness, any medical profile, and what your testing location supports. The calculator lets you compare projected scores side by side before you commit to an event.</p>
         </details>
         <details>
           <summary>Is this an official scoring source?</summary>
-          <p>No. It is a reference calculator built around the standards data in the app. Use it to plan, then verify anything important against official guidance and your unit’s process.</p>
+          <p>No. PFRA.app is an independent planning tool built from published scoring tables. Verify anything that affects your record against DAFMAN 36-2905, the official AFPC scoring charts, and your unit's guidance.</p>
         </details>
       </div>
     </section>

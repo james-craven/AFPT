@@ -1326,7 +1326,7 @@ function formatPaceAudioControls(settings) {
         </span>
       </label>
     </div>
-    <p class="pace-audio-note">Audio pacer uses voice cues and requests ducking behavior when supported. Test with your headphones or music before running.</p>
+    <p class="pace-audio-note">The pacer announces splits with voice cues and lowers other audio during announcements when the device supports it. Test the volume with your headphones before you run.</p>
     <div class="pace-audio-actions">
       <button type="button" data-pacer-audio-test>Test cue</button>
       <span class="pace-audio-status" data-pacer-audio-status>${normalized.enabled ? 'Audio cues ready.' : 'Audio cues off.'}</span>
@@ -1547,14 +1547,14 @@ function updatePacePacerDisplay(now = performance.now()) {
   secondaryControl.setAttribute('tabindex', stateName === 'idle' ? '-1' : '0');
 
   if (pacePacer.finished) {
-    status.textContent = `Goal reached at ${secondsToTimeString(goalSeconds)}. Tap play to restart or reset to start.`;
+    status.textContent = `Goal time of ${secondsToTimeString(goalSeconds)} reached. Tap play to run it again, or reset to clear.`;
     paceAudioController.stop({ cancelSpeech: false });
   } else if (pacePacer.active) {
     status.textContent = `Pacer ${secondsToTimeString(elapsedSeconds)} / ${secondsToTimeString(goalSeconds)} · Lap ${currentLap} of ${lapCount}`;
   } else if (pacePacer.elapsedMs > 0) {
     status.textContent = `Paused at ${secondsToTimeString(elapsedSeconds)} · Lap ${currentLap} of ${lapCount}. Tap play to resume or reset.`;
   } else {
-    status.textContent = 'Tap play to start pacer.';
+    status.textContent = 'Tap play to start the pacer.';
   }
 
   if (pacePacer.active && !pacePacer.rafId) {

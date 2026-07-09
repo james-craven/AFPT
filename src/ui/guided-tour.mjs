@@ -11,17 +11,17 @@ const steps = [
   },
   {
     title: 'Set your profile',
-    body: 'Pick sex and age group before comparing scores. The app updates the standards, minimums, and charts around that profile.',
+    body: 'Select sex and age group before comparing scores. Standards, minimums, and charts all update to match that profile.',
     selectors: ['.app-header-controls', '.demographics-row'],
   },
   {
-    title: 'Watch the total',
-    body: 'Your total score and category update as each event changes. Use the pass and excellent markers to see how much room you have.',
+    title: 'Track the total',
+    body: 'Your composite score and category update as each event changes. The markers show the passing and excellent thresholds so you can see your margin.',
     selectors: ['#app-header-score-pill', '.score-section'],
   },
   {
     title: 'Compare each area',
-    body: 'These score summaries show strength, core, cardio, and body composition together so you can spot the area that moves your total fastest.',
+    body: 'These summaries show strength, core, cardio, and body composition together so you can identify where additional points are most available.',
     selectors: ['.desktop-score-breakdown', '.component-strip'],
   },
   {
@@ -31,14 +31,14 @@ const steps = [
     component: 'strength',
   },
   {
-    title: 'Enter reps or jump',
-    body: 'Type your score in the box, or use MIN and MAX to jump straight to the profile minimum or maximum.',
+    title: 'Enter your reps',
+    body: 'Type your score in the box, or use MIN and MAX to jump straight to the minimum or maximum for your profile.',
     selectors: ['#push-reps-row', '#push-txt', '#strength-editor'],
     component: 'strength',
   },
   {
-    title: 'Fine tune with the slider',
-    body: 'The slider and side buttons let you nudge the value one step at a time without retyping.',
+    title: 'Fine-tune with the slider',
+    body: 'The slider and step buttons adjust the value one increment at a time without retyping.',
     selectors: ['#strength-editor .slider-row', '#push-slider'],
     component: 'strength',
   },
@@ -56,7 +56,7 @@ const steps = [
   },
   {
     title: 'Use core controls',
-    body: 'The same pattern appears here: score box or time fields, MIN/MAX buttons, slider, and Score Chart.',
+    body: 'The controls follow the same pattern: value or time fields, MIN/MAX buttons, the slider, and the Score Chart.',
     selectors: ['#core-editor .editor-event-row', '#sit-btn'],
     component: 'core',
   },
@@ -92,13 +92,13 @@ const steps = [
   },
   {
     title: 'Use the pace plan',
-    body: 'Pick a goal run time and review the lap-by-lap splits. Practicing the pace helps you start controlled and finish with intent.',
+    body: 'Set a goal run time and review the lap-by-lap splits. Rehearsing these splits in training helps you hold an even pace on test day.',
     selectors: ['.pace-plan-section', '#run-lap-times'],
     component: 'cardio',
   },
   {
     title: 'Open controls',
-    body: 'The hamburger menu holds official references, altitude references, audio, install/update tools, and this tour.',
+    body: 'This menu holds the official references, altitude adjustments, shuttle audio, install and update tools, and this tour.',
     selectors: ['#settings-hub-toggle', '#push-btn', '#run-btn'],
   },
   {

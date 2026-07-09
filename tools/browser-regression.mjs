@@ -1032,7 +1032,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   assert.equal(await page.locator('[data-pacer-audio-field="courseMode"] option[value="percent"]').count(), 0, 'pacer audio no longer exposes percent course mode');
   assert.match(
     await page.locator('.pace-audio-note').innerText(),
-    /voice cues.*ducking/i,
+    /voice cues.*lowers other audio/i,
     'pacer audio explains simplified voice cue behavior',
   );
 
