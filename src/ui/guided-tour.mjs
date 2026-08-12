@@ -98,7 +98,7 @@ const steps = [
   },
   {
     title: 'Open controls',
-    body: 'This menu holds the official references, altitude adjustments, shuttle audio, install and update tools, and this tour.',
+    body: 'This menu holds the official references, altitude adjustments, install and update tools, and this tour.',
     selectors: ['#settings-hub-toggle', '#push-btn', '#run-btn'],
   },
   {

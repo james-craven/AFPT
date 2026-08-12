@@ -218,6 +218,7 @@ async function assertControlsStayInsideApp(page, label) {
       '.editor-panel:not([hidden]) .chart-btn',
       '.editor-panel:not([hidden]) .altitude-row',
       '.editor-panel:not([hidden]) .slider-row',
+      '.editor-panel:not([hidden]) .hamr-audio-panel:not([hidden])',
       '.editor-panel:not([hidden]) .body-whtr-row',
       '.editor-panel:not([hidden]) .body-input-stepper',
       '.editor-panel:not([hidden]) .body-measure-input',
@@ -664,6 +665,16 @@ async function assertDesktopReferencesDrawer(page, label) {
   assert.match(referenceState.text, /HAMR Resources/i, `${label} references include HAMR resources`);
   assert.match(referenceState.text, /Official Source Links/i, `${label} references include outbound official source links`);
   assert.doesNotMatch(referenceState.text, /App & Offline/i, `${label} references do not include app/offline controls`);
+  assert.equal(
+    await page.locator('#settings-hub-panel #shuttle-audio-menu').count(),
+    0,
+    `${label} removes the show-shuttle-audio action from the hamburger menu`,
+  );
+  assert.equal(
+    await page.locator('#settings-hub-panel #shuttle-audio-download').count(),
+    1,
+    `${label} keeps the offline audio download action in the hamburger menu`,
+  );
   assert.deepEqual(
     referenceState.sourceLinks.map(({ href }) => href),
     [
@@ -1505,6 +1516,16 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     await page.waitForTimeout(50);
     await assertControlsStayInsideApp(page, `${label} ${preset} HAMR`);
     await assertEventRowEdgeAlignment(page, 'cardio-editor', `${label} ${preset} cardio HAMR`);
+    const hamrAudioState = await page.evaluate(() => ({
+      panelVisible: !document.getElementById('hamr-audio-panel')?.hidden,
+      playerPresent: Boolean(document.querySelector('#hamr-audio-panel #shuttle-audio-control')),
+      downloadPresent: Boolean(document.querySelector('#hamr-audio-panel #hamr-shuttle-audio-download')),
+    }));
+    assert.deepEqual(
+      hamrAudioState,
+      { panelVisible: true, playerPresent: true, downloadPresent: true },
+      `${label} ${preset} shows shuttle audio directly in the HAMR controls`,
+    );
   }
 
   await setThemePreset(page, 'tactical');
@@ -2033,9 +2054,13 @@ async function runOfflineSmoke(browser, baseUrl) {
   });
   assert.equal(audioPrecacheState, false, 'shuttle audio is not cached before the offline download action');
 
-  await page.locator('#settings-hub-toggle').click();
-  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
-  await page.locator('#shuttle-audio-download').click();
+  await page.evaluate(() => {
+    const sel = document.getElementById('cardio-sel');
+    sel.value = 'hamr-20-meter';
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForFunction(() => !document.getElementById('hamr-audio-panel')?.hidden);
+  await page.locator('#hamr-shuttle-audio-download').click();
   await page.waitForFunction(
     () => /saved for offline/i.test(document.getElementById('shuttle-audio-download-status')?.textContent || ''),
     undefined,
@@ -2048,6 +2073,14 @@ async function runOfflineSmoke(browser, baseUrl) {
     return Boolean(await audioCache.match(audioUrl));
   });
   assert.equal(audioDownloadState, true, 'shuttle audio downloads into the audio-only offline cache');
+  await page.locator('#settings-hub-toggle').click();
+  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+  await page.locator('#shuttle-audio-download').click();
+  await page.waitForFunction(
+    () => /already saved|saved for offline/i.test(document.getElementById('shuttle-audio-download-status')?.textContent || ''),
+    undefined,
+    { timeout: 10000 },
+  );
 
   await context.setOffline(true);
   await page.goto(`${baseUrl}/?sw=1&qa=offline-reload`, { waitUntil: 'load' });

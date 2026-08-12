@@ -299,14 +299,8 @@
           <section class="settings-hub-section">
             <h3>Audio</h3>
             <ul class="settings-menu" aria-label="Audio controls">
-              <li id="shuttle-audio-menu" role="button" tabindex="0">Shuttle Run Audio</li>
-              <li id="shuttle-audio-download" role="button" tabindex="0">Download Audio for Offline Use</li>
-              <li id="shuttle-audio-download-status" class="settings-menu-status" aria-live="polite">Audio is streamed unless downloaded.</li>
-              <li id="shuttle-audio-player" class="settings-audio-player" hidden>
-                <audio crossorigin="anonymous" preload="none" src="./shuttle.mp3" controls id="shuttle-audio-control">
-                  Your browser does not support the audio element.
-                </audio>
-              </li>
+              <li id="shuttle-audio-download" role="button" tabindex="0" data-shuttle-audio-download>Download Audio for Offline Use</li>
+              <li id="shuttle-audio-download-status" class="settings-menu-status" aria-live="polite" data-shuttle-audio-download-status>Audio is streamed unless downloaded.</li>
             </ul>
           </section>
           <section class="settings-hub-section">
@@ -701,6 +695,16 @@
             <input id="run-slider" type="range" class="value-slider" min="0" max="1523" value="1523" aria-label="Cardio slider">
           </div>
           <button class="slider-step-btn" type="button" data-step="1" data-target="run-slider" aria-label="Increase value">+</button>
+        </div>
+        <div id="hamr-audio-panel" class="hamr-audio-panel" hidden>
+          <div class="hamr-audio-panel__header">
+            <span>HAMR Audio</span>
+            <span class="hamr-audio-status" aria-live="polite" data-shuttle-audio-download-status>Audio is streamed unless downloaded.</span>
+          </div>
+          <audio crossorigin="anonymous" preload="none" src="./shuttle.mp3" controls id="shuttle-audio-control">
+            Your browser does not support the audio element.
+          </audio>
+          <button id="hamr-shuttle-audio-download" class="hamr-audio-download" type="button" data-shuttle-audio-download>Download Audio for Offline Use</button>
         </div>
         <div class="altitude-row">
           <label class="altitude-label" for="alt-select">⛰ ALT</label>

@@ -2007,8 +2007,10 @@ function renderEditorVisibility() {
   const isHamr = state.cardio.event === 'hamr-20-meter';
   const runTimeRow = byId('run-time-row');
   const runShuttleRow = byId('run-shuttle-row');
+  const hamrAudioPanel = byId('hamr-audio-panel');
   if (runTimeRow) runTimeRow.hidden = isHamr;
   if (runShuttleRow) runShuttleRow.hidden = !isHamr;
+  if (hamrAudioPanel) hamrAudioPanel.hidden = !isHamr || state.cardio.exempt;
 
   const editors = ['body', 'strength', 'core', 'cardio'];
   const showAllEditors = isDesktopEditorLayout();
@@ -2072,6 +2074,7 @@ function bindMenuClick(id, handler) {
   const el = byId(id);
   if (!el) return;
   el.addEventListener('click', handler);
+  if (el instanceof HTMLButtonElement) return;
   el.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); }
   });
@@ -2088,16 +2091,20 @@ function shuttleAudioRequest() {
   });
 }
 
+let shuttleAudioDownloadInFlight = false;
+
 function setShuttleAudioDownloadStatus(message) {
-  const status = byId('shuttle-audio-download-status');
-  if (status) status.textContent = message;
+  document.querySelectorAll('[data-shuttle-audio-download-status]').forEach((status) => {
+    status.textContent = message;
+  });
 }
 
 function setShuttleAudioDownloadBusy(isBusy) {
-  const control = byId('shuttle-audio-download');
-  if (!control) return;
-  control.setAttribute('aria-disabled', isBusy ? 'true' : 'false');
-  control.textContent = isBusy ? 'Downloading Audio...' : 'Download Audio for Offline Use';
+  document.querySelectorAll('[data-shuttle-audio-download]').forEach((control) => {
+    control.setAttribute('aria-disabled', isBusy ? 'true' : 'false');
+    if ('disabled' in control) control.disabled = isBusy;
+    control.textContent = isBusy ? 'Downloading Audio...' : 'Download Audio for Offline Use';
+  });
 }
 
 async function hasCachedShuttleAudio() {
@@ -2119,24 +2126,32 @@ async function updateShuttleAudioDownloadState() {
 }
 
 async function downloadShuttleAudioForOffline() {
-  const control = byId('shuttle-audio-download');
-  if (control?.getAttribute('aria-disabled') === 'true') return;
+  const controls = [...document.querySelectorAll('[data-shuttle-audio-download]')];
+  if (shuttleAudioDownloadInFlight || controls.some((control) => control.getAttribute('aria-disabled') === 'true')) return;
 
   if (!('caches' in window)) {
     setShuttleAudioDownloadStatus('This browser cannot save audio for offline use.');
     return;
   }
 
+  shuttleAudioDownloadInFlight = true;
   setShuttleAudioDownloadBusy(true);
-  setShuttleAudioDownloadStatus('Downloading shuttle audio...');
+  setShuttleAudioDownloadStatus('Checking shuttle audio...');
 
   try {
+    if (await hasCachedShuttleAudio()) {
+      setShuttleAudioDownloadStatus('Audio is already saved for offline use.');
+      return;
+    }
+
+    setShuttleAudioDownloadStatus('Downloading shuttle audio...');
     const cache = await caches.open(AUDIO_CACHE_NAME);
     await cache.add(shuttleAudioRequest());
     setShuttleAudioDownloadStatus('Audio is saved for offline use.');
   } catch {
     setShuttleAudioDownloadStatus('Audio could not be downloaded. Check your connection and try again.');
   } finally {
+    shuttleAudioDownloadInFlight = false;
     setShuttleAudioDownloadBusy(false);
   }
 }
@@ -2873,11 +2888,10 @@ function bindEvents() {
   bindMenuClick('shuttle-score-card', () => {
     openOfficialReference('shuttleScoreCard');
   });
-  bindMenuClick('shuttle-audio-menu', () => {
-    const player = byId('shuttle-audio-player');
-    if (player) player.removeAttribute('hidden');
-  });
   bindMenuClick('shuttle-audio-download', () => {
+    void downloadShuttleAudioForOffline();
+  });
+  bindMenuClick('hamr-shuttle-audio-download', () => {
     void downloadShuttleAudioForOffline();
   });
   bindMenuClick('install-app-menu', () => {
