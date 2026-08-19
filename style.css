@@ -745,17 +745,22 @@ body.settings-hub-open {
 }
 
 .chip-value {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: 0;
   line-height: 1.1;
+  white-space: nowrap;
 }
 
 .chip-unit {
-  font-size: 0.55em;
+  font-size: 0.7em;
   font-weight: 700;
   letter-spacing: 0;
   white-space: nowrap;
+}
+
+#chip-body-value {
+  font-size: 14px;
 }
 
 .chip-score {

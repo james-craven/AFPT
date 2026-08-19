@@ -916,12 +916,12 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   });
   assert.deepEqual(
     whtrMeasurementState.sourceExample,
-    { badgePass: 'true', score: '15', whtr: '0.54' },
+    { badgePass: 'true', score: 'Pts: 15', whtr: '0.54' },
     'WHtR uses official truncation for 39.5 / 72',
   );
   assert.deepEqual(
     whtrMeasurementState.fractionalInches,
-    { score: '17', whtr: '0.52' },
+    { score: 'Pts: 17', whtr: '0.52' },
     'WHtR calculation accepts fractional height inches',
   );
   await selectComponentForViewport(page, 'strength');

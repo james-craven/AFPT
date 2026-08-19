@@ -1752,24 +1752,25 @@ function renderScore(result) {
   if (stencilMarker) stencilMarker.style.left = `${Math.min(100, Math.max(0, total))}%`;
 
   const bodyScore = byId('pfra-body-score');
-  if (bodyScore) bodyScore.textContent = String(scores.body);
+  if (bodyScore) bodyScore.textContent = state.bodyExempt ? 'Pts: EXEMPT' : `Pts: ${scores.body}`;
   setText('desktop-body-score', state.bodyExempt ? 'EXEMPT' : String(scores.body));
 
   const strScoreEl = byId('pfra-strength-score');
-  if (strScoreEl) strScoreEl.textContent = state.strength.exempt ? 'EXEMPT' : String(scores.strength);
+  if (strScoreEl) strScoreEl.textContent = state.strength.exempt ? 'Pts: EXEMPT' : `Pts: ${scores.strength}`;
   setText('desktop-strength-score', state.strength.exempt ? 'EXEMPT' : String(scores.strength));
 
   const coreScoreEl = byId('pfra-core-score');
-  if (coreScoreEl) coreScoreEl.textContent = state.core.exempt ? 'EXEMPT' : String(scores.core);
+  if (coreScoreEl) coreScoreEl.textContent = state.core.exempt ? 'Pts: EXEMPT' : `Pts: ${scores.core}`;
   setText('desktop-core-score', state.core.exempt ? 'EXEMPT' : String(scores.core));
 
   const cardioScoreEl = byId('pfra-cardio-score');
-  if (cardioScoreEl) cardioScoreEl.textContent = state.cardio.exempt ? 'EXEMPT' : String(scores.cardio);
+  if (cardioScoreEl) cardioScoreEl.textContent = state.cardio.exempt ? 'Pts: EXEMPT' : `Pts: ${scores.cardio}`;
   setText('desktop-cardio-score', state.cardio.exempt ? 'EXEMPT' : String(scores.cardio));
 }
 
 function renderChipValues() {
-  const formatRepValue = (value) => `${escapeHtml(value || '--')}<span class="chip-unit"> reps</span>`;
+  const formatChipValue = (label, value) => `<span class="chip-unit">${label}:</span> ${escapeHtml(value || '--')}`;
+  const formatRepValue = (value) => formatChipValue('Reps', value);
   const coreUsesReps = state.core.event !== 'forearm-plank';
   const cardioUsesReps = state.cardio.event === 'hamr-20-meter';
 
@@ -1777,7 +1778,7 @@ function renderChipValues() {
   if (chipBody) {
     chipBody.innerHTML = state.bodyExempt
       ? 'EX'
-      : `${escapeHtml(state.whtr || '--')}<span class="chip-unit"> W ÷ Ht</span>`;
+      : formatChipValue('W ÷ Ht', state.whtr);
   }
   setText('desktop-body-value', state.bodyExempt ? 'Exempt' : `${state.whtr || '--'} W ÷ Ht`);
 
