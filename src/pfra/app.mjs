@@ -1771,9 +1771,15 @@ function renderScore(result) {
 function renderChipValues() {
   const formatChipValue = (label, value) => `<span class="chip-unit">${label}:</span> ${escapeHtml(value || '--')}`;
   const formatRepValue = (value) => formatChipValue('Reps', value);
+  const selectedSegLabel = (ctrlId, value) => {
+    const btn = Array.from(byId(ctrlId)?.querySelectorAll('.fit-seg-btn') || [])
+      .find((segBtn) => segBtn.dataset.segValue === value);
+    return btn?.textContent?.trim() || value;
+  };
   const coreUsesReps = state.core.event !== 'forearm-plank';
   const cardioUsesReps = state.cardio.event === 'hamr-20-meter';
 
+  setText('chip-body-event', selectedSegLabel('body-seg-ctrl', state.bodyExempt ? 'exempt' : 'whtr'));
   const chipBody = byId('chip-body-value');
   if (chipBody) {
     chipBody.innerHTML = state.bodyExempt
@@ -1782,10 +1788,12 @@ function renderChipValues() {
   }
   setText('desktop-body-value', state.bodyExempt ? 'Exempt' : `${state.whtr || '--'} W÷H`);
 
+  setText('chip-strength-event', selectedSegLabel('push-seg-ctrl', state.strength.exempt ? 'exempt' : state.strength.event));
   const chipStr = byId('chip-strength-value');
   if (chipStr) chipStr.innerHTML = state.strength.exempt ? 'EX' : formatRepValue(state.strength.value);
   setText('desktop-strength-value', state.strength.exempt ? 'Exempt' : `${state.strength.value || '--'} reps`);
 
+  setText('chip-core-event', selectedSegLabel('sit-seg-ctrl', state.core.exempt ? 'exempt' : state.core.event));
   const chipCore = byId('chip-core-value');
   if (chipCore) {
     chipCore.innerHTML = state.core.exempt
@@ -1797,6 +1805,7 @@ function renderChipValues() {
     state.core.exempt ? 'Exempt' : coreUsesReps ? `${state.core.value || '--'} reps` : state.core.value || '--',
   );
 
+  setText('chip-cardio-event', selectedSegLabel('run-seg-ctrl', state.cardio.exempt ? 'exempt' : state.cardio.event));
   const chipCardio = byId('chip-cardio-value');
   if (chipCardio) {
     chipCardio.innerHTML = state.cardio.exempt

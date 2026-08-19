@@ -204,6 +204,20 @@ async function selectComponentForViewport(page, component) {
   );
 }
 
+async function assertChipEventLabel(page, component, expectedLabel) {
+  const state = await page.evaluate((selectedComponent) => {
+    const event = document.querySelector(`#summary-${selectedComponent} .chip-event`);
+    const strip = document.querySelector('.component-strip');
+    const stripVisible = strip ? getComputedStyle(strip).display !== 'none' : false;
+    return {
+      label: event?.textContent?.trim() || '',
+      fits: !stripVisible || !event || event.scrollWidth <= event.clientWidth,
+    };
+  }, component);
+  assert.equal(state.label, expectedLabel, `${component} chip shows selected event label`);
+  assert.equal(state.fits, true, `${component} chip event label fits`);
+}
+
 async function assertControlsStayInsideApp(page, label) {
   const result = await page.evaluate(() => {
     const shell = document.querySelector('.app-shell')?.getBoundingClientRect();
@@ -869,6 +883,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await selectComponentForViewport(page, 'body');
   const bodyVisible = await page.evaluate(() => !document.getElementById('body-editor')?.hasAttribute('hidden'));
   assert.equal(bodyVisible, true, 'body editor visible after clicking BODY chip');
+  await assertChipEventLabel(page, 'body', 'WHtR');
   const strHiddenAfterBody = await page.evaluate(() => ({
     isDesktop: matchMedia('(min-width: 980px)').matches,
     hidden: document.getElementById('strength-editor')?.hasAttribute('hidden'),
@@ -925,6 +940,9 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     'WHtR calculation accepts fractional height inches',
   );
   await selectComponentForViewport(page, 'strength');
+  await assertChipEventLabel(page, 'strength', 'Push-ups');
+  await assertChipEventLabel(page, 'core', 'Sit-ups');
+  await assertChipEventLabel(page, 'cardio', '2-mile');
 
   await assertResponsiveDashboardLayout(page, label);
   await assertDesktopChartPanel(page, label);
@@ -942,6 +960,27 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     !strHidden.isDesktop,
     'strength editor hides only in mobile switching layout after selecting core',
   );
+  await page.evaluate(() => {
+    const sel = document.getElementById('sit-sel');
+    sel.value = 'cross-leg-reverse-crunch';
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForTimeout(50);
+  await assertChipEventLabel(page, 'core', 'Rev-Crunch');
+  await page.evaluate(() => {
+    const sel = document.getElementById('sit-sel');
+    sel.value = 'forearm-plank';
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForTimeout(50);
+  await assertChipEventLabel(page, 'core', 'Plank');
+  await page.evaluate(() => {
+    const sel = document.getElementById('sit-sel');
+    sel.value = 'sit-up';
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  await page.waitForTimeout(50);
+  await assertChipEventLabel(page, 'core', 'Sit-ups');
 
   await selectComponentForViewport(page, 'cardio');
   const cardioVisible = await page.evaluate(() => !document.getElementById('cardio-editor')?.hasAttribute('hidden'));
@@ -972,12 +1011,14 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     sel.dispatchEvent(new Event('change', { bubbles: true }));
   });
   await page.waitForTimeout(50);
+  await assertChipEventLabel(page, 'strength', 'HRPU');
   await page.evaluate(() => {
     const sel = document.getElementById('push-sel');
     sel.value = 'push-up';
     sel.dispatchEvent(new Event('change', { bubbles: true }));
   });
   await page.waitForTimeout(50);
+  await assertChipEventLabel(page, 'strength', 'Push-ups');
   const strengthAfterRoundTrip = await page.evaluate(() => window.afptApp.getState().strength.value);
   assert.equal(strengthAfterRoundTrip, '27', 'push-up value preserved after HRPU round-trip');
 
@@ -996,6 +1037,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     sel.dispatchEvent(new Event('change', { bubbles: true }));
   });
   await page.waitForTimeout(50);
+  await assertChipEventLabel(page, 'cardio', 'HAMR');
   const hamrFirstTime = await page.evaluate(() => window.afptApp.getState().cardio.value);
   assert.ok(Number(hamrFirstTime) >= 1, `HAMR initializes in-range on first switch: ${hamrFirstTime}`);
 
@@ -1024,6 +1066,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
     sel.dispatchEvent(new Event('change', { bubbles: true }));
   });
   await page.waitForTimeout(50);
+  await assertChipEventLabel(page, 'cardio', '2-mile');
   const runAfterHamrRoundTrip = await page.evaluate(() => window.afptApp.getState().cardio.value);
   assert.equal(runAfterHamrRoundTrip, '14:00', '2-mile run value preserved after HAMR round-trip');
 

@@ -744,6 +744,22 @@ body.settings-hub-open {
   font-weight: 700;
 }
 
+.chip-event {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--afpt-ink-dim);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.component-chip.chip--active .chip-event {
+  color: var(--afpt-accent-2);
+}
+
 .chip-value {
   font-size: 16px;
   font-weight: 700;
@@ -2969,6 +2985,7 @@ body.chart-drawer-open {
   clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
 }
 :root[data-theme="stencil"] .component-chip.chip--active .chip-name,
+:root[data-theme="stencil"] .component-chip.chip--active .chip-event,
 :root[data-theme="stencil"] .component-chip.chip--active .chip-value {
   color: var(--afpt-bg);
 }
@@ -3438,6 +3455,10 @@ body.chart-drawer-open {
 
 :root[data-theme="fitness"] .component-chip.chip--active .chip-score {
   color: rgba(58, 15, 77, 0.7);
+}
+
+:root[data-theme="fitness"] .component-chip.chip--active .chip-event {
+  color: rgba(58, 15, 77, 0.72);
 }
 
 :root[data-theme="fitness"] .chip-name {
