@@ -751,6 +751,13 @@ body.settings-hub-open {
   line-height: 1.1;
 }
 
+.chip-unit {
+  font-size: 0.55em;
+  font-weight: 700;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
 .chip-score {
   font-size: 12px;
   color: var(--afpt-ink);

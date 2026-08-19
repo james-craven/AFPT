@@ -1769,21 +1769,43 @@ function renderScore(result) {
 }
 
 function renderChipValues() {
+  const formatRepValue = (value) => `${escapeHtml(value || '--')}<span class="chip-unit"> reps</span>`;
+  const coreUsesReps = state.core.event !== 'forearm-plank';
+  const cardioUsesReps = state.cardio.event === 'hamr-20-meter';
+
   const chipBody = byId('chip-body-value');
-  if (chipBody) chipBody.textContent = state.whtr || '--';
-  setText('desktop-body-value', state.bodyExempt ? 'Exempt' : `WHtR ${state.whtr || '--'}`);
+  if (chipBody) {
+    chipBody.innerHTML = state.bodyExempt
+      ? 'EX'
+      : `${escapeHtml(state.whtr || '--')}<span class="chip-unit"> W ÷ Ht</span>`;
+  }
+  setText('desktop-body-value', state.bodyExempt ? 'Exempt' : `${state.whtr || '--'} W ÷ Ht`);
 
   const chipStr = byId('chip-strength-value');
-  if (chipStr) chipStr.textContent = state.strength.exempt ? 'EX' : (state.strength.value || '--');
+  if (chipStr) chipStr.innerHTML = state.strength.exempt ? 'EX' : formatRepValue(state.strength.value);
   setText('desktop-strength-value', state.strength.exempt ? 'Exempt' : `${state.strength.value || '--'} reps`);
 
   const chipCore = byId('chip-core-value');
-  if (chipCore) chipCore.textContent = state.core.exempt ? 'EX' : (state.core.value || '--');
-  setText('desktop-core-value', state.core.exempt ? 'Exempt' : state.core.value || '--');
+  if (chipCore) {
+    chipCore.innerHTML = state.core.exempt
+      ? 'EX'
+      : coreUsesReps ? formatRepValue(state.core.value) : escapeHtml(state.core.value || '--');
+  }
+  setText(
+    'desktop-core-value',
+    state.core.exempt ? 'Exempt' : coreUsesReps ? `${state.core.value || '--'} reps` : state.core.value || '--',
+  );
 
   const chipCardio = byId('chip-cardio-value');
-  if (chipCardio) chipCardio.textContent = state.cardio.exempt ? 'EX' : (state.cardio.value || '--');
-  setText('desktop-cardio-value', state.cardio.exempt ? 'Exempt' : state.cardio.value || '--');
+  if (chipCardio) {
+    chipCardio.innerHTML = state.cardio.exempt
+      ? 'EX'
+      : cardioUsesReps ? formatRepValue(state.cardio.value) : escapeHtml(state.cardio.value || '--');
+  }
+  setText(
+    'desktop-cardio-value',
+    state.cardio.exempt ? 'Exempt' : cardioUsesReps ? `${state.cardio.value || '--'} reps` : state.cardio.value || '--',
+  );
 }
 
 function renderBodyEditor(scores) {
