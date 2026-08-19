@@ -1778,9 +1778,9 @@ function renderChipValues() {
   if (chipBody) {
     chipBody.innerHTML = state.bodyExempt
       ? 'EX'
-      : formatChipValue('W ÷ Ht', state.whtr);
+      : formatChipValue('W÷H', state.whtr);
   }
-  setText('desktop-body-value', state.bodyExempt ? 'Exempt' : `${state.whtr || '--'} W ÷ Ht`);
+  setText('desktop-body-value', state.bodyExempt ? 'Exempt' : `${state.whtr || '--'} W÷H`);
 
   const chipStr = byId('chip-strength-value');
   if (chipStr) chipStr.innerHTML = state.strength.exempt ? 'EX' : formatRepValue(state.strength.value);
