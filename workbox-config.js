@@ -52,6 +52,7 @@ module.exports = {
 	navigateFallback: 'index.html',
 	navigateFallbackDenylist: [
 		/^\/_/,
+		/^\/14WS-500(?:\/|$)/,
 		/\/[^/?]+\.[^/]+$/
 	],
 	runtimeCaching: [

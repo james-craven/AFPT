@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101820">
+  <link rel="canonical" href="https://pfra.app/14WS-500">
+  <title>14WS 500-Mile Challenge</title>
+  <meta name="description" content="Live mileage tracker for the 14WS September 500-mile Nike Run Club challenge.">
+  <link rel="apple-touch-icon" href="/icon-192x192.png">
+  <link rel="icon" href="/icon-144x144.png">
+  <link rel="stylesheet" href="/14WS-500/challenge.css">
+</head>
+<body>
+  <main class="challenge-shell" data-loading="true">
+    <section class="challenge-hero" aria-labelledby="challenge-title">
+      <div class="challenge-photo" aria-hidden="true"></div>
+      <div class="challenge-panel">
+        <header class="challenge-header">
+          <a class="brand-link" href="/">PFRA</a>
+          <p class="challenge-kicker">September unit challenge</p>
+          <h1 id="challenge-title">14WS 500-Mile Challenge</h1>
+          <p id="challenge-date-range" class="date-range">September 1-30, 2026</p>
+        </header>
+
+        <section class="total-board" aria-label="Challenge progress">
+          <div class="total-copy">
+            <p class="metric-label">Miles Logged</p>
+            <p class="total-mileage"><span id="total-miles">0.0</span><span class="unit">mi</span></p>
+            <p id="status-note" class="status-note">September unit mileage</p>
+          </div>
+          <div
+            id="progress-ring"
+            class="progress-ring"
+            role="progressbar"
+            aria-label="Progress toward 500 miles"
+            aria-valuemin="0"
+            aria-valuemax="500"
+            aria-valuenow="0"
+          >
+            <span id="progress-percent">0%</span>
+          </div>
+        </section>
+
+        <div class="progress-track" aria-hidden="true">
+          <span id="progress-fill"></span>
+        </div>
+
+        <section class="stat-grid" aria-label="Challenge stats">
+          <article class="stat-card">
+            <span class="stat-label">Goal</span>
+            <strong id="goal-miles">500</strong>
+            <span>miles</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Remaining</span>
+            <strong id="remaining-miles">500.0</strong>
+            <span>miles</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Needed Pace</span>
+            <strong id="needed-pace">16.7</strong>
+            <span id="pace-label">mi/day</span>
+          </article>
+        </section>
+
+        <footer class="challenge-footer">
+          <p id="updated-at">Updated Aug 20, 2026</p>
+          <p id="data-status" role="status" aria-live="polite">Loading latest total...</p>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/14WS-500/challenge.mjs"></script>
+</body>
+</html>

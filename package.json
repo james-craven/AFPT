@@ -9,7 +9,8 @@
     "extract:standards": "node tools/extract-pfra-tables.mjs",
     "stamp:dev": "node tools/write-dev-build-info.mjs",
     "test": "node tools/validate-pfra-tables.mjs && node tools/validate-pacer-audio.mjs && npm run build:sw && node tools/validate-pwa-cache.mjs && npm run test:browser",
-    "test:browser": "node tools/browser-regression.mjs"
+    "test:browser": "node tools/browser-regression.mjs",
+    "update:14ws-500": "node tools/update-14ws-500.mjs"
   },
   "keywords": [],
   "author": "",

@@ -42,7 +42,7 @@ function createStaticServer() {
       const requestUrl = new URL(request.url, 'http://127.0.0.1');
       const decodedPath = decodeURIComponent(requestUrl.pathname);
       const relativePath = decodedPath === '/' ? 'index.html' : decodedPath.replace(/^\/+/, '');
-      const filePath = path.resolve(rootDir, relativePath);
+      let filePath = path.resolve(rootDir, relativePath);
 
       if (!filePath.startsWith(rootDir)) {
         response.writeHead(403);
@@ -50,7 +50,11 @@ function createStaticServer() {
         return;
       }
 
-      const stat = await fsp.stat(filePath);
+      let stat = await fsp.stat(filePath);
+      if (stat.isDirectory()) {
+        filePath = path.join(filePath, 'index.html');
+        stat = await fsp.stat(filePath);
+      }
       if (!stat.isFile()) {
         response.writeHead(404);
         response.end('Not found');
@@ -2156,6 +2160,68 @@ async function runOfflineSmoke(browser, baseUrl) {
   await context.close();
 }
 
+async function runChallengePageSmoke(browser, baseUrl) {
+  const context = await browser.newContext({
+    deviceScaleFactor: 3,
+    hasTouch: true,
+    isMobile: true,
+    viewport: { width: 390, height: 844 },
+  });
+  const page = await context.newPage();
+  const failures = [];
+
+  page.on('console', (message) => {
+    if (message.type() === 'error') failures.push(`console error: ${message.text()}`);
+  });
+  page.on('pageerror', (error) => {
+    failures.push(`page error: ${error.message}`);
+  });
+
+  await page.goto(`${baseUrl}/14WS-500`, { waitUntil: 'load' });
+  await page.waitForFunction(
+    () => document.getElementById('data-status')?.textContent === 'Latest total loaded',
+    undefined,
+    { timeout: 10000 },
+  );
+
+  const state = await page.evaluate(() => {
+    const overflow = Array.from(document.querySelectorAll(
+      '.challenge-panel, .total-board, .stat-grid, .stat-card, .total-mileage',
+    ))
+      .filter((element) => element.scrollWidth > element.clientWidth + 1)
+      .map((element) => element.className || element.tagName);
+
+    return {
+      title: document.getElementById('challenge-title')?.textContent?.trim(),
+      total: document.getElementById('total-miles')?.textContent?.trim(),
+      goal: document.getElementById('goal-miles')?.textContent?.trim(),
+      remaining: document.getElementById('remaining-miles')?.textContent?.trim(),
+      percent: document.getElementById('progress-percent')?.textContent?.trim(),
+      progressMax: document.getElementById('progress-ring')?.getAttribute('aria-valuemax'),
+      progressNow: document.getElementById('progress-ring')?.getAttribute('aria-valuenow'),
+      overflow,
+    };
+  });
+
+  assert.deepEqual(
+    state,
+    {
+      title: '14WS 500-Mile Challenge',
+      total: '0.0',
+      goal: '500',
+      remaining: '500.0',
+      percent: '0%',
+      progressMax: '500',
+      progressNow: '0',
+      overflow: [],
+    },
+    '14WS challenge page renders current totals',
+  );
+
+  await assertNoBrowserFailures(failures, '14WS challenge page');
+  await context.close();
+}
+
 if (!(await fileExists(chromePath))) {
   throw new Error(`Chrome executable not found at ${chromePath}. Set CHROME_PATH to run browser regressions.`);
 }
@@ -2171,6 +2237,7 @@ try {
     isMobile: true,
     viewport: { width: 390, height: 844 },
   });
+  await runChallengePageSmoke(browser, server.baseUrl);
   await runOfflineSmoke(browser, server.baseUrl);
   console.log('Browser smoke tests passed');
 } finally {
