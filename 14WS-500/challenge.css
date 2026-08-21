@@ -257,12 +257,12 @@ h1 {
   }
 
   .challenge-photo {
-    min-height: 176px;
+    min-height: 248px;
   }
 
   .challenge-photo::before {
-    mask-size: 240px;
-    -webkit-mask-size: 240px;
+    mask-size: 228px;
+    -webkit-mask-size: 228px;
   }
 
   .challenge-panel {
@@ -295,6 +295,15 @@ h1 {
 }
 
 @media (max-width: 390px) {
+  .challenge-photo {
+    min-height: 232px;
+  }
+
+  .challenge-photo::before {
+    mask-size: 214px;
+    -webkit-mask-size: 214px;
+  }
+
   .challenge-panel {
     padding: 20px;
   }

@@ -1,5 +1,5 @@
 (function () {
-  const pwaSrc = './pwa.js';
+  const pwaSrc = '/pwa.js';
   const pwaIdleDelayMs = 5500;
   const pwaIdleTimeoutMs = 3000;
   let loadPromise = null;

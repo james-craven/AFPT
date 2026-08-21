@@ -2,6 +2,13 @@
 <html lang="en" data-theme="blues">
 <head>
   <meta charset="UTF-8">
+  <script>
+    (() => {
+      if (/^\/14ws-500\/?$/i.test(window.location.pathname)) {
+        window.location.replace(`/14ws-500/index.html${window.location.search}${window.location.hash}`);
+      }
+    })();
+  </script>
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta name="theme-color" content="#040b12">
   <link rel="canonical" href="https://pfra.app/">

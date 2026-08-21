@@ -1,5 +1,6 @@
-const DATA_URL = '/14WS-500/data.json';
+const DATA_URL = '/14ws-500/data.json';
 const REFRESH_MS = 60_000;
+const SERVICE_WORKER_URL = '/sw.js';
 
 const els = {
   shell: document.querySelector('.challenge-shell'),
@@ -95,6 +96,21 @@ function challengeTiming(data) {
   return { label: 'final pace', daysForPace: 1, status: 'Challenge complete' };
 }
 
+async function refreshServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  const params = new URLSearchParams(window.location.search);
+  const canRegister = window.location.protocol === 'https:' || params.get('sw') === '1';
+  if (!canRegister) return;
+
+  try {
+    const registration = await navigator.serviceWorker.register(SERVICE_WORKER_URL, { updateViaCache: 'none' });
+    await registration.update();
+    registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
+  } catch {
+    // Challenge totals should still load even if service-worker update checks fail.
+  }
+}
+
 function render(data) {
   const total = Math.max(0, toFiniteNumber(data.totalMiles));
   const goal = Math.max(1, toFiniteNumber(data.goalMiles, 500));
@@ -148,5 +164,6 @@ async function loadData() {
   }
 }
 
+void refreshServiceWorker();
 await loadData();
 window.setInterval(loadData, REFRESH_MS);

@@ -1,5 +1,5 @@
 (function () {
-  const swPath = './sw.js';
+  const swPath = '/sw.js';
   const params = new URLSearchParams(window.location.search);
   const localHosts = new Set(['localhost', '127.0.0.1', '[::1]', '']);
   const isLocal = localHosts.has(window.location.hostname);
@@ -161,7 +161,7 @@
       return;
     }
 
-    const registration = await navigator.serviceWorker.register(swPath);
+    const registration = await navigator.serviceWorker.register(swPath, { updateViaCache: 'none' });
     activeRegistration = registration;
     watchForWaitingWorker(registration);
 

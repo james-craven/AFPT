@@ -2,7 +2,7 @@
   const AUDIO_CACHE_NAME = 'afpt-audio-v1';
   const LEGACY_MEDIA_CACHE_NAME = 'afpt-media-v1';
   const CHALLENGE_PATH_RE = /^\/14ws-500\/?$/i;
-  const CHALLENGE_ENTRY_URL = new URL('14WS-500/index.html', self.registration.scope).href;
+  const CHALLENGE_ENTRY_URL = new URL('14ws-500/index.html', self.registration.scope).href;
   const SHUTTLE_AUDIO_URL = new URL('shuttle.mp3', self.registration.scope).href;
 
   function parseRange(rangeHeader, size) {

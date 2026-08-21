@@ -2096,6 +2096,25 @@ async function runOfflineSmoke(browser, baseUrl) {
   await page.reload({ waitUntil: 'load' });
   await page.evaluate(async () => { await navigator.serviceWorker.ready; });
 
+  await page.goto(`${baseUrl}/14ws-500`, { waitUntil: 'load' });
+  await page.waitForFunction(
+    () => document.getElementById('data-status')?.textContent === 'Latest total loaded',
+    undefined,
+    { timeout: 10000 },
+  );
+  assert.equal(
+    await page.locator('#challenge-title').innerText(),
+    '14WS 500-Mile Challenge',
+    'service-worker-controlled challenge route renders the challenge page',
+  );
+
+  await page.goto(`${baseUrl}/?sw=1&qa=offline-smoke`, { waitUntil: 'load' });
+  await page.waitForFunction(
+    () => document.querySelector('#pfra-status')?.textContent.includes('Standards loaded'),
+    undefined,
+    { timeout: 10000 },
+  );
+
   const audioPrecacheState = await page.evaluate(async () => {
     const audioUrl = new URL('./shuttle.mp3', window.location.href).href;
     return Boolean(await caches.match(audioUrl));

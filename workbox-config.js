@@ -50,6 +50,9 @@ module.exports = {
 	clientsClaim: true,
 	skipWaiting: true,
 	navigateFallback: 'index.html',
+	navigateFallbackAllowlist: [
+		/^\/(?:\?.*)?$/
+	],
 	navigateFallbackDenylist: [
 		/^\/_/,
 		/^\/14ws-500(?:\/|$)/i,
