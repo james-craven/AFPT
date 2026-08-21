@@ -4,6 +4,14 @@
   "outputDirectory": ".",
   "rewrites": [
     {
+      "source": "/14ws-500/admin",
+      "destination": "/14WS-500/admin/index.html"
+    },
+    {
+      "source": "/14ws-500/admin/",
+      "destination": "/14WS-500/admin/index.html"
+    },
+    {
       "source": "/14ws-500",
       "destination": "/14WS-500"
     },
@@ -54,6 +62,24 @@
         {
           "key": "Content-Type",
           "value": "application/json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/14ws-500/admin",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/14ws-500/admin/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0, must-revalidate"
         }
       ]
     },
