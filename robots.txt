@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /14ws-500/admin/
+Disallow: /14WS-500/admin/
 
 Sitemap: https://pfra.app/sitemap.xml

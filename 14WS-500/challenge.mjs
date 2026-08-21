@@ -1,5 +1,4 @@
 const DATA_URL = '/14ws-500/data.json';
-const REFRESH_MS = 60_000;
 const SERVICE_WORKER_URL = '/sw.js';
 
 const els = {
@@ -166,4 +165,3 @@ async function loadData() {
 
 void refreshServiceWorker();
 await loadData();
-window.setInterval(loadData, REFRESH_MS);

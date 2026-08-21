@@ -2926,6 +2926,9 @@ function bindEvents() {
   bindMenuClick('hamr-shuttle-audio-download', () => {
     void downloadShuttleAudioForOffline();
   });
+  bindMenuClick('run-challenge-menu', () => {
+    window.location.assign('/14ws-500');
+  });
   bindMenuClick('install-app-menu', () => {
     showInstallHelp();
   });

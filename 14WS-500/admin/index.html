@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#101820">
+  <title>14WS Mileage Admin</title>
+  <link rel="icon" href="/icon-144x144.png">
+  <link rel="stylesheet" href="/14ws-500/admin/admin.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <section class="admin-panel" aria-labelledby="admin-title">
+      <header class="admin-header">
+        <a class="brand-link" href="/14ws-500">14WS Challenge</a>
+        <p class="admin-kicker">Direct update</p>
+        <h1 id="admin-title">Mileage Admin</h1>
+      </header>
+
+      <section class="current-strip" aria-label="Current challenge total">
+        <div>
+          <span class="metric-label">Current Total</span>
+          <strong><span id="current-total">--</span> mi</strong>
+        </div>
+        <div>
+          <span class="metric-label">Last Updated</span>
+          <strong id="current-updated">--</strong>
+        </div>
+      </section>
+
+      <form id="mileage-form" class="admin-form">
+        <label class="field">
+          <span>GitHub Token</span>
+          <input id="github-token" name="github-token" type="password" autocomplete="off" spellcheck="false" required>
+        </label>
+
+        <label class="remember-row">
+          <input id="remember-token" type="checkbox">
+          <span>Remember on this device</span>
+        </label>
+
+        <label class="field">
+          <span>Miles Logged</span>
+          <input id="miles-input" name="miles" type="number" inputmode="decimal" min="0" step="0.1" required>
+        </label>
+
+        <label class="field">
+          <span>Status Note</span>
+          <input id="status-note-input" name="status-note" type="text" maxlength="80">
+        </label>
+
+        <div class="admin-actions">
+          <button id="refresh-current" class="secondary-button" type="button">Refresh Current</button>
+          <button id="submit-update" class="primary-button" type="submit">Update Miles</button>
+        </div>
+      </form>
+
+      <p id="admin-status" class="admin-status" role="status" aria-live="polite">Loading current total...</p>
+      <a id="commit-link" class="commit-link" href="#" target="_blank" rel="noreferrer" hidden>View commit</a>
+    </section>
+  </main>
+
+  <script type="module" src="/14ws-500/admin/admin.mjs"></script>
+</body>
+</html>

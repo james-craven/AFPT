@@ -3,6 +3,7 @@ const CLOSE_ON_ACTION_IDS = new Set([
   'dev-version-menu',
   'install-app-menu',
   'pwa-update-check',
+  'run-challenge-menu',
   'start-app-tour-menu',
 ]);
 

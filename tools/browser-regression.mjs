@@ -2051,6 +2051,33 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
 
   await page.locator('#settings-hub-toggle').click();
   await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
+  await page.waitForFunction(() => Boolean(document.getElementById('run-challenge-menu')));
+  assert.equal(
+    await page.locator('#run-challenge-menu').innerText(),
+    '14WS 500-Mile Challenge',
+    'settings menu includes the 14WS challenge link',
+  );
+  await page.locator('#run-challenge-menu').click();
+  await page.waitForFunction(
+    () => document.getElementById('data-status')?.textContent === 'Latest total loaded',
+    undefined,
+    { timeout: 10000 },
+  );
+  assert.equal(
+    await page.locator('#challenge-title').innerText(),
+    '14WS 500-Mile Challenge',
+    'settings menu challenge link opens the challenge page',
+  );
+
+  await page.goto(`${baseUrl}/?qa=${label}`, { waitUntil: 'load' });
+  await page.waitForFunction(
+    () => document.querySelector('#pfra-status')?.textContent.includes('Standards loaded'),
+    undefined,
+    { timeout: 10000 },
+  );
+
+  await page.locator('#settings-hub-toggle').click();
+  await page.waitForFunction(() => !document.getElementById('settings-hub-panel')?.hidden);
   await page.locator('#install-app-menu').click();
   await page.waitForFunction(() => !document.getElementById('install-modal')?.hasAttribute('hidden'));
   assert.match(
@@ -2248,6 +2275,31 @@ async function runChallengePageSmoke(browser, baseUrl) {
     await page.locator('#challenge-title').innerText(),
     '14WS 500-Mile Challenge',
     'lowercase 14WS challenge index URL renders',
+  );
+
+  await page.goto(`${baseUrl}/14ws-500/admin/`, { waitUntil: 'load' });
+  await page.waitForFunction(
+    () => /Current total loaded|Unable to load current total/i.test(document.getElementById('admin-status')?.textContent || ''),
+    undefined,
+    { timeout: 10000 },
+  );
+  const adminState = await page.evaluate(() => ({
+    title: document.getElementById('admin-title')?.textContent?.trim(),
+    milesValue: document.getElementById('miles-input')?.value,
+    tokenType: document.getElementById('github-token')?.getAttribute('type'),
+    robots: document.querySelector('meta[name="robots"]')?.getAttribute('content'),
+    status: document.getElementById('admin-status')?.textContent?.trim(),
+  }));
+  assert.deepEqual(
+    adminState,
+    {
+      title: 'Mileage Admin',
+      milesValue: '0',
+      tokenType: 'password',
+      robots: 'noindex,nofollow,noarchive',
+      status: 'Current total loaded.',
+    },
+    'hidden mileage admin page loads current challenge data without exposing a token',
   );
 
   await assertNoBrowserFailures(failures, '14WS challenge page');

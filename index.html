@@ -6,6 +6,13 @@
     (() => {
       if (/^\/14ws-500\/?$/i.test(window.location.pathname)) {
         window.location.replace(`/14ws-500/index.html${window.location.search}${window.location.hash}`);
+        return;
+      }
+
+      const nestedChallengeRoute = /^\/14ws-500(\/.+)$/i.exec(window.location.pathname);
+      if (nestedChallengeRoute && !/\.[^/]+$/.test(nestedChallengeRoute[1])) {
+        const nestedPath = nestedChallengeRoute[1].replace(/\/?$/, '/index.html');
+        window.location.replace(`/14ws-500${nestedPath}${window.location.search}${window.location.hash}`);
       }
     })();
   </script>
@@ -313,6 +320,7 @@
           <section class="settings-hub-section">
             <h3>App</h3>
             <ul class="settings-menu" aria-label="App controls">
+              <li id="run-challenge-menu" role="button" tabindex="0">14WS 500-Mile Challenge</li>
               <li id="start-app-tour-menu" role="button" tabindex="0">App Tour</li>
               <li id="install-app-menu" role="button" tabindex="0">Install App for Offline Use</li>
               <li id="pwa-update-check" role="button" tabindex="0">Check for Update</li>
