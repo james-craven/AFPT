@@ -48,7 +48,7 @@ module.exports = {
 	],
 	maximumFileSizeToCacheInBytes: 20000000,
 	clientsClaim: true,
-	skipWaiting: false,
+	skipWaiting: true,
 	navigateFallback: 'index.html',
 	navigateFallbackDenylist: [
 		/^\/_/,

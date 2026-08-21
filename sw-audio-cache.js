@@ -1,5 +1,8 @@
 (() => {
   const AUDIO_CACHE_NAME = 'afpt-audio-v1';
+  const LEGACY_MEDIA_CACHE_NAME = 'afpt-media-v1';
+  const CHALLENGE_PATH_RE = /^\/14WS-500\/?$/;
+  const CHALLENGE_ENTRY_URL = new URL('14WS-500/index.html', self.registration.scope).href;
   const SHUTTLE_AUDIO_URL = new URL('shuttle.mp3', self.registration.scope).href;
 
   function parseRange(rangeHeader, size) {
@@ -49,8 +52,21 @@
     });
   }
 
+  async function repairChallengeClients() {
+    if (!self.clients?.matchAll) return;
+    const clients = await self.clients.matchAll({ includeUncontrolled: true, type: 'window' });
+    await Promise.all(clients.map((client) => {
+      const url = new URL(client.url);
+      if (url.origin !== self.location.origin || !CHALLENGE_PATH_RE.test(url.pathname)) return null;
+      return client.navigate(CHALLENGE_ENTRY_URL).catch(() => null);
+    }));
+  }
+
   self.addEventListener('activate', (event) => {
-    event.waitUntil(caches.delete('afpt-media-v1'));
+    event.waitUntil(Promise.all([
+      caches.delete(LEGACY_MEDIA_CACHE_NAME),
+      repairChallengeClients(),
+    ]));
   });
 
   self.addEventListener('fetch', (event) => {
