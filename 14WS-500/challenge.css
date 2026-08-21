@@ -48,11 +48,21 @@ body {
 }
 
 .challenge-photo {
+  position: relative;
+  overflow: hidden;
   min-height: 100%;
   background:
     linear-gradient(180deg, rgba(16, 24, 32, 0.2), rgba(16, 24, 32, 0.86)),
-    url("/running.webp") center / min(66vw, 560px) no-repeat,
     linear-gradient(150deg, #21384a 0%, #172536 48%, #162b24 100%);
+}
+
+.challenge-photo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.9);
+  mask: url("/running.webp") center / min(66vw, 560px) no-repeat;
+  -webkit-mask: url("/running.webp") center / min(66vw, 560px) no-repeat;
 }
 
 .challenge-panel {
@@ -248,7 +258,11 @@ h1 {
 
   .challenge-photo {
     min-height: 176px;
-    background-size: auto, 240px, auto;
+  }
+
+  .challenge-photo::before {
+    mask-size: 240px;
+    -webkit-mask-size: 240px;
   }
 
   .challenge-panel {

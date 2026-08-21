@@ -2,6 +2,16 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build:sw",
   "outputDirectory": ".",
+  "rewrites": [
+    {
+      "source": "/14ws-500",
+      "destination": "/14WS-500"
+    },
+    {
+      "source": "/14ws-500/:path*",
+      "destination": "/14WS-500/:path*"
+    }
+  ],
   "headers": [
     {
       "source": "/sw.js",
@@ -23,6 +33,19 @@
     },
     {
       "source": "/14WS-500/data.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/14ws-500/data.json",
       "headers": [
         {
           "key": "Cache-Control",

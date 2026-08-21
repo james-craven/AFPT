@@ -52,7 +52,7 @@ module.exports = {
 	navigateFallback: 'index.html',
 	navigateFallbackDenylist: [
 		/^\/_/,
-		/^\/14WS-500(?:\/|$)/,
+		/^\/14ws-500(?:\/|$)/i,
 		/\/[^/?]+\.[^/]+$/
 	],
 	runtimeCaching: [

@@ -41,7 +41,8 @@ function createStaticServer() {
     try {
       const requestUrl = new URL(request.url, 'http://127.0.0.1');
       const decodedPath = decodeURIComponent(requestUrl.pathname);
-      const relativePath = decodedPath === '/' ? 'index.html' : decodedPath.replace(/^\/+/, '');
+      const rewrittenPath = decodedPath.replace(/^\/14ws-500(?=\/|$)/i, '/14WS-500');
+      const relativePath = rewrittenPath === '/' ? 'index.html' : rewrittenPath.replace(/^\/+/, '');
       let filePath = path.resolve(rootDir, relativePath);
 
       if (!filePath.startsWith(rootDir)) {
@@ -2177,7 +2178,7 @@ async function runChallengePageSmoke(browser, baseUrl) {
     failures.push(`page error: ${error.message}`);
   });
 
-  await page.goto(`${baseUrl}/14WS-500`, { waitUntil: 'load' });
+  await page.goto(`${baseUrl}/14ws-500`, { waitUntil: 'load' });
   await page.waitForFunction(
     () => document.getElementById('data-status')?.textContent === 'Latest total loaded',
     undefined,
@@ -2216,6 +2217,18 @@ async function runChallengePageSmoke(browser, baseUrl) {
       overflow: [],
     },
     '14WS challenge page renders current totals',
+  );
+
+  await page.goto(`${baseUrl}/14ws-500/index.html`, { waitUntil: 'load' });
+  await page.waitForFunction(
+    () => document.getElementById('data-status')?.textContent === 'Latest total loaded',
+    undefined,
+    { timeout: 10000 },
+  );
+  assert.equal(
+    await page.locator('#challenge-title').innerText(),
+    '14WS 500-Mile Challenge',
+    'lowercase 14WS challenge index URL renders',
   );
 
   await assertNoBrowserFailures(failures, '14WS challenge page');
