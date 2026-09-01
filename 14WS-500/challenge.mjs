@@ -16,11 +16,13 @@ const els = {
   paceLabel: document.getElementById('pace-label'),
   updatedAt: document.getElementById('updated-at'),
   dataStatus: document.getElementById('data-status'),
+  leaderboardList: document.getElementById('leaderboard-list'),
+  leaderboardCount: document.getElementById('leaderboard-count'),
 };
 
 const milesFormatter = new Intl.NumberFormat('en-US', {
-  maximumFractionDigits: 1,
-  minimumFractionDigits: 1,
+  maximumFractionDigits: 2,
+  minimumFractionDigits: 2,
 });
 
 const wholeFormatter = new Intl.NumberFormat('en-US', {
@@ -50,6 +52,10 @@ function clamp(value, min, max) {
 }
 
 function formatMiles(value) {
+  return milesFormatter.format(toFiniteNumber(value));
+}
+
+function formatLeaderboardMiles(value) {
   return milesFormatter.format(toFiniteNumber(value));
 }
 
@@ -95,6 +101,85 @@ function challengeTiming(data) {
   return { label: 'final pace', daysForPace: 1, status: 'Challenge complete' };
 }
 
+function normalizeParticipants(participants) {
+  if (!Array.isArray(participants)) return [];
+
+  return participants
+    .map((participant, index) => ({
+      index,
+      miles: Math.max(0, toFiniteNumber(participant?.miles)),
+      name: String(participant?.name || '').trim(),
+    }))
+    .filter((participant) => participant.name && participant.miles > 0)
+    .sort((left, right) => {
+      if (right.miles !== left.miles) return right.miles - left.miles;
+      return left.index - right.index;
+    });
+}
+
+function participantInitials(name) {
+  const parts = name.split(/\s+/).filter(Boolean);
+  const first = parts[0]?.[0] || '';
+  const last = parts.length > 1 ? parts[parts.length - 1][0] : '';
+  return `${first}${last}`.toUpperCase() || '?';
+}
+
+function renderLeaderboard(participants) {
+  if (!els.leaderboardList) return;
+
+  els.leaderboardList.textContent = '';
+  if (els.leaderboardCount) {
+    els.leaderboardCount.textContent = `${participants.length} runner${participants.length === 1 ? '' : 's'} with miles logged`;
+  }
+
+  if (!participants.length) {
+    const emptyRow = document.createElement('li');
+    emptyRow.className = 'leaderboard-empty';
+    emptyRow.textContent = 'No mileage logged yet.';
+    els.leaderboardList.append(emptyRow);
+    return;
+  }
+
+  const leaderMiles = Math.max(1, participants[0].miles);
+
+  participants.forEach((participant, index) => {
+    const row = document.createElement('li');
+    row.className = 'leaderboard-row';
+    row.dataset.rank = String(index + 1);
+
+    const rank = document.createElement('span');
+    rank.className = 'leaderboard-rank';
+    rank.textContent = String(index + 1);
+
+    const avatar = document.createElement('span');
+    avatar.className = 'leaderboard-avatar';
+    avatar.textContent = participantInitials(participant.name);
+    avatar.setAttribute('aria-hidden', 'true');
+
+    const runner = document.createElement('div');
+    runner.className = 'leaderboard-runner';
+
+    const name = document.createElement('strong');
+    name.textContent = participant.name;
+
+    const track = document.createElement('span');
+    track.className = 'leaderboard-track';
+
+    const fill = document.createElement('span');
+    fill.style.width = `${clamp((participant.miles / leaderMiles) * 100, 0, 100)}%`;
+    track.append(fill);
+
+    runner.append(name, track);
+
+    const miles = document.createElement('span');
+    miles.className = 'leaderboard-miles';
+    miles.textContent = `${formatLeaderboardMiles(participant.miles)} mi`;
+
+    row.append(rank, avatar, runner, miles);
+    els.leaderboardList.append(row);
+  });
+}
+
 async function refreshServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
   const params = new URLSearchParams(window.location.search);
@@ -111,7 +196,10 @@ async function refreshServiceWorker() {
 }
 
 function render(data) {
-  const total = Math.max(0, toFiniteNumber(data.totalMiles));
+  const participants = normalizeParticipants(data.participants);
+  const participantTotal = participants.reduce((sum, participant) => sum + participant.miles, 0);
+  const totalSource = participants.length ? participantTotal : data.totalMiles;
+  const total = Math.round(Math.max(0, toFiniteNumber(totalSource)) * 100) / 100;
   const goal = Math.max(1, toFiniteNumber(data.goalMiles, 500));
   const remaining = Math.max(0, goal - total);
   const percent = clamp((total / goal) * 100, 0, 100);
@@ -134,12 +222,13 @@ function render(data) {
     els.progressRing.setAttribute('aria-valuemax', String(goal));
     els.progressRing.setAttribute('aria-valuenow', String(total));
   }
+  renderLeaderboard(participants);
 
   const updated = data.updatedAt ? new Date(data.updatedAt) : null;
   if (els.updatedAt) {
     els.updatedAt.textContent = updated && !Number.isNaN(updated.getTime())
-      ? `Updated ${dateTimeFormatter.format(updated)}`
-      : 'Updated recently';
+      ? `Last updated ${dateTimeFormatter.format(updated)}`
+      : 'Last updated recently';
   }
 }
 
@@ -153,7 +242,7 @@ async function loadData() {
       els.shell.dataset.loading = 'false';
       delete els.shell.dataset.error;
     }
-    if (els.dataStatus) els.dataStatus.textContent = 'Latest total loaded';
+    if (els.dataStatus) els.dataStatus.textContent = 'Latest leaderboard loaded';
   } catch (error) {
     if (els.shell) {
       els.shell.dataset.loading = 'false';

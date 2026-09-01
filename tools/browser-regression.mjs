@@ -2059,7 +2059,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   );
   await page.locator('#run-challenge-menu').click();
   await page.waitForFunction(
-    () => document.getElementById('data-status')?.textContent === 'Latest total loaded',
+    () => document.getElementById('data-status')?.textContent === 'Latest leaderboard loaded',
     undefined,
     { timeout: 10000 },
   );
@@ -2125,7 +2125,7 @@ async function runOfflineSmoke(browser, baseUrl) {
 
   await page.goto(`${baseUrl}/14ws-500`, { waitUntil: 'load' });
   await page.waitForFunction(
-    () => document.getElementById('data-status')?.textContent === 'Latest total loaded',
+    () => document.getElementById('data-status')?.textContent === 'Latest leaderboard loaded',
     undefined,
     { timeout: 10000 },
   );
@@ -2226,14 +2226,14 @@ async function runChallengePageSmoke(browser, baseUrl) {
 
   await page.goto(`${baseUrl}/14ws-500`, { waitUntil: 'load' });
   await page.waitForFunction(
-    () => document.getElementById('data-status')?.textContent === 'Latest total loaded',
+    () => document.getElementById('data-status')?.textContent === 'Latest leaderboard loaded',
     undefined,
     { timeout: 10000 },
   );
 
   const state = await page.evaluate(() => {
     const overflow = Array.from(document.querySelectorAll(
-      '.challenge-panel, .total-board, .stat-grid, .stat-card, .total-mileage',
+      '.challenge-panel, .total-board, .stat-grid, .stat-card, .total-mileage, .leaderboard-row, .leaderboard-runner',
     ))
       .filter((element) => element.scrollWidth > element.clientWidth + 1)
       .map((element) => element.className || element.tagName);
@@ -2246,28 +2246,41 @@ async function runChallengePageSmoke(browser, baseUrl) {
       percent: document.getElementById('progress-percent')?.textContent?.trim(),
       progressMax: document.getElementById('progress-ring')?.getAttribute('aria-valuemax'),
       progressNow: document.getElementById('progress-ring')?.getAttribute('aria-valuenow'),
+      leaderboardCount: document.getElementById('leaderboard-count')?.textContent?.trim(),
+      firstRunner: document.querySelector('.leaderboard-row:first-child .leaderboard-runner strong')?.textContent?.trim(),
+      firstMiles: document.querySelector('.leaderboard-row:first-child .leaderboard-miles')?.textContent?.trim(),
+      lastRunner: document.querySelector('.leaderboard-row:last-child .leaderboard-runner strong')?.textContent?.trim(),
+      lastMiles: document.querySelector('.leaderboard-row:last-child .leaderboard-miles')?.textContent?.trim(),
+      stamp: document.getElementById('updated-at')?.textContent?.trim(),
       overflow,
     };
   });
 
+  assert.match(state.stamp, /^Last updated /, '14WS challenge page shows update stamp');
   assert.deepEqual(
-    state,
+    { ...state, stamp: 'matched' },
     {
       title: '14WS 500-Mile Challenge',
-      total: '0.0',
+      total: '21.39',
       goal: '500',
-      remaining: '500.0',
-      percent: '0%',
+      remaining: '478.61',
+      percent: '4.3%',
       progressMax: '500',
-      progressNow: '0',
+      progressNow: '21.39',
+      leaderboardCount: '6 runners with miles logged',
+      firstRunner: 'James Craven',
+      firstMiles: '6.50 mi',
+      lastRunner: 'Jeanette Jimenez',
+      lastMiles: '1.15 mi',
+      stamp: 'matched',
       overflow: [],
     },
-    '14WS challenge page renders current totals',
+    '14WS challenge page renders current leaderboard',
   );
 
   await page.goto(`${baseUrl}/14ws-500/index.html`, { waitUntil: 'load' });
   await page.waitForFunction(
-    () => document.getElementById('data-status')?.textContent === 'Latest total loaded',
+    () => document.getElementById('data-status')?.textContent === 'Latest leaderboard loaded',
     undefined,
     { timeout: 10000 },
   );
@@ -2294,7 +2307,7 @@ async function runChallengePageSmoke(browser, baseUrl) {
     adminState,
     {
       title: 'Mileage Admin',
-      milesValue: '0',
+      milesValue: '21.4',
       tokenType: 'password',
       robots: 'noindex,nofollow,noarchive',
       status: 'Current total loaded.',

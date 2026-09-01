@@ -2,9 +2,35 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 0,
+  "totalMiles": 21.39,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-08-20T11:16:18.809Z",
-  "statusNote": "September unit mileage"
+  "updatedAt": "2026-09-01T23:03:29.000Z",
+  "statusNote": "6 runners have logged miles",
+  "participants": [
+    {
+      "name": "James Craven",
+      "miles": 6.5
+    },
+    {
+      "name": "Jose Santaloci",
+      "miles": 6.09
+    },
+    {
+      "name": "Charles Buckler",
+      "miles": 2.58
+    },
+    {
+      "name": "Josh Baker",
+      "miles": 2.57
+    },
+    {
+      "name": "Stephanie Smith",
+      "miles": 2.5
+    },
+    {
+      "name": "Jeanette Jimenez",
+      "miles": 1.15
+    }
+  ]
 }

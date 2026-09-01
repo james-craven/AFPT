@@ -18,15 +18,20 @@
       <div class="challenge-panel">
         <header class="challenge-header">
           <a class="brand-link" href="/">PFRA</a>
-          <p class="challenge-kicker">September unit challenge</p>
-          <h1 id="challenge-title">14WS 500-Mile Challenge</h1>
-          <p id="challenge-date-range" class="date-range">September 1-30, 2026</p>
+          <div class="challenge-heading-row">
+            <div>
+              <p class="challenge-kicker">September unit challenge</p>
+              <h1 id="challenge-title">14WS 500-Mile Challenge</h1>
+              <p id="challenge-date-range" class="date-range">September 1-30, 2026</p>
+            </div>
+            <p id="updated-at" class="updated-stamp">Last updated --</p>
+          </div>
         </header>
 
         <section class="total-board" aria-label="Challenge progress">
           <div class="total-copy">
             <p class="metric-label">Miles Logged</p>
-            <p class="total-mileage"><span id="total-miles">0.0</span><span class="unit">mi</span></p>
+            <p class="total-mileage"><span id="total-miles">0.00</span><span class="unit">mi</span></p>
             <p id="status-note" class="status-note">September unit mileage</p>
           </div>
           <div
@@ -54,18 +59,25 @@
           </article>
           <article class="stat-card">
             <span class="stat-label">Remaining</span>
-            <strong id="remaining-miles">500.0</strong>
+            <strong id="remaining-miles">500.00</strong>
             <span>miles</span>
           </article>
           <article class="stat-card">
             <span class="stat-label">Needed Pace</span>
-            <strong id="needed-pace">16.7</strong>
+            <strong id="needed-pace">16.67</strong>
             <span id="pace-label">mi/day</span>
           </article>
         </section>
 
+        <section class="leaderboard-section" aria-labelledby="leaderboard-title">
+          <div class="leaderboard-heading">
+            <h2 id="leaderboard-title">Leaderboard</h2>
+            <p id="leaderboard-count">Runners with miles logged</p>
+          </div>
+          <ol id="leaderboard-list" class="leaderboard-list"></ol>
+        </section>
+
         <footer class="challenge-footer">
-          <p id="updated-at">Updated Aug 20, 2026</p>
           <p id="data-status" role="status" aria-live="polite">Loading latest total...</p>
         </footer>
       </div>
