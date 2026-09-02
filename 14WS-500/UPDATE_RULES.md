@@ -21,7 +21,9 @@ is what marks a runner as needing ADD-not-REPLACE handling.
 ## Applying a Nike screenshot
 
 1. For each runner in the screenshot with a **non-zero** value, set `nikeMiles`
-   to that value (or `miles`, if the runner has no manual adjustments).
+   to that value (or `miles`, if the runner has no manual adjustments). The
+   screenshot value always REPLACES `nikeMiles`; it never touches
+   `manualAdjustments`.
 2. Runners showing **0.00** are not added to the file. Exception: a runner who
    already exists because of a manual adjustment stays, with `nikeMiles: 0`.
 3. Runners absent from the screenshot are left untouched — never removed,
@@ -30,14 +32,22 @@ is what marks a runner as needing ADD-not-REPLACE handling.
 
 ## Applying a manual add
 
-Append an entry to that runner's `manualAdjustments` (creating the array and
-`nikeMiles` if this is their first one), then recompute `miles`.
+Input looks like `manual update: name: John Doe, miles: 2.34` — bare name and
+miles, nothing else required.
 
-    { "date": "YYYY-MM-DD", "miles": 1.15, "note": "why this was logged by hand" }
+- **Name already in the file** → append an entry to that runner's
+  `manualAdjustments` (creating the array and `nikeMiles: <their current miles>`
+  if this is their first one), then recompute `miles`.
+- **Name not in the file** → add a new participant with `nikeMiles: 0`, one
+  manual entry, and `miles` equal to that entry.
 
-Caveat: this assumes the manual miles will *never* show up in NRC. If a manual
-add was only covering a stale screenshot and the run later lands in Nike, drop
-that entry when it does — otherwise it double-counts.
+Entry shape (`note` optional — omit it if the user gave no reason):
+
+    { "date": "YYYY-MM-DD", "miles": 2.34, "note": "why this was logged by hand" }
+
+Manual miles never double-count. Nike Run Club challenges only count live GPS
+runs, so a hand-logged run will never appear in a later screenshot. Manual
+entries are permanent and are never removed by a snapshot.
 
 ## Every update
 

@@ -12,6 +12,19 @@ standards data → pure scoring functions → app state → slot variant rendere
 
 One calculator engine. Shared state/actions. Named layout slots. Registered variants. Theme presets. Future user overrides.
 
+## 14WS 500-Mile Challenge (separate workstream)
+
+`14WS-500/` is the unit mileage tracker at https://pfra.app/14ws-500. It is
+independent of the calculator redesign below.
+
+**If the user drops a Nike Run Club leaderboard screenshot, or a line like
+`manual update: name: John Doe, miles: 2.34`, that is a mileage update. Read
+`14WS-500/UPDATE_RULES.md` and follow it before touching anything.**
+
+Mileage updates change `14WS-500/data.json` only — no HTML/CSS/JS, no
+`npm test`, no service-worker rebuild. The Required Gate below does not apply
+to them; `data.json` is not precached and the page fetches it live.
+
 ## Design Reference
 
 Mock files live in `design-reference/`:
