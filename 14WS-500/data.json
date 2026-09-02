@@ -2,15 +2,23 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 42.56,
+  "totalMiles": 74.45,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-02T12:29:09.000Z",
-  "statusNote": "8 runners have logged miles",
+  "updatedAt": "2026-09-02T21:23:20.000Z",
+  "statusNote": "11 runners have logged miles",
   "participants": [
     {
       "name": "Samat Siwek",
-      "miles": 14.01
+      "miles": 18.03
+    },
+    {
+      "name": "James Craven",
+      "miles": 13.64
+    },
+    {
+      "name": "Jose Santaloci",
+      "miles": 12.18
     },
     {
       "name": "Jeannette Hilliard",
@@ -24,24 +32,28 @@
       ]
     },
     {
-      "name": "James Craven",
-      "miles": 6.5
-    },
-    {
-      "name": "Jose Santaloci",
-      "miles": 6.09
-    },
-    {
       "name": "Charles Buckler",
-      "miles": 2.58
+      "miles": 5.18
     },
     {
       "name": "Josh Baker",
-      "miles": 2.57
+      "miles": 5.17
     },
     {
       "name": "Stephanie Smith",
-      "miles": 2.5
+      "miles": 4.79
+    },
+    {
+      "name": "Zac Skiba",
+      "miles": 2.39
+    },
+    {
+      "name": "Jeremy Knighton",
+      "miles": 2.38
+    },
+    {
+      "name": "Kaleb Heidrick",
+      "miles": 2.38
     },
     {
       "name": "Jeanette Jimenez",
