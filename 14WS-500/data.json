@@ -34,7 +34,15 @@
     },
     {
       "name": "Jeanette Jimenez",
-      "miles": 1.15
+      "miles": 1.15,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-01",
+          "miles": 1.15,
+          "note": "NRC app failed to start; run logged manually. Not reflected in Nike totals."
+        }
+      ]
     }
   ]
 }
