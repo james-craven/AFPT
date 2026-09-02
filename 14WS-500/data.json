@@ -2,12 +2,16 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 21.39,
+  "totalMiles": 35.4,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-01T23:03:29.000Z",
-  "statusNote": "6 runners have logged miles",
+  "updatedAt": "2026-09-02T01:23:39.000Z",
+  "statusNote": "7 runners have logged miles",
   "participants": [
+    {
+      "name": "Samat Siwek",
+      "miles": 14.01
+    },
     {
       "name": "James Craven",
       "miles": 6.5
