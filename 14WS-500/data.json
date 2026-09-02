@@ -2,15 +2,26 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 35.4,
+  "totalMiles": 42.56,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-02T01:23:39.000Z",
-  "statusNote": "7 runners have logged miles",
+  "updatedAt": "2026-09-02T12:29:09.000Z",
+  "statusNote": "8 runners have logged miles",
   "participants": [
     {
       "name": "Samat Siwek",
       "miles": 14.01
+    },
+    {
+      "name": "Jeannette Hilliard",
+      "miles": 7.16,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-02",
+          "miles": 7.16
+        }
+      ]
     },
     {
       "name": "James Craven",
