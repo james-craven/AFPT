@@ -2,11 +2,11 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 82.86,
+  "totalMiles": 91.16,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-03T16:12:03.000Z",
-  "statusNote": "12 runners have logged miles",
+  "updatedAt": "2026-09-03T20:44:53.000Z",
+  "statusNote": "13 runners have logged miles",
   "participants": [
     {
       "name": "Samat Siwek",
@@ -29,6 +29,17 @@
         {
           "date": "2026-09-03",
           "miles": 8.41
+        }
+      ]
+    },
+    {
+      "name": "Shaun McCool",
+      "miles": 8.3,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-03",
+          "miles": 8.3
         }
       ]
     },
