@@ -2,11 +2,11 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 91.16,
+  "totalMiles": 92.16,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-03T20:44:53.000Z",
-  "statusNote": "13 runners have logged miles",
+  "updatedAt": "2026-09-03T20:48:32.000Z",
+  "statusNote": "14 runners have logged miles",
   "participants": [
     {
       "name": "Samat Siwek",
@@ -87,6 +87,17 @@
           "date": "2026-09-01",
           "miles": 1.15,
           "note": "NRC app failed to start; run logged manually. Not reflected in Nike totals."
+        }
+      ]
+    },
+    {
+      "name": "David Kofron",
+      "miles": 1.0,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-03",
+          "miles": 1.0
         }
       ]
     }
