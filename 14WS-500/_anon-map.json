@@ -1,0 +1,6 @@
+{
+  "_comment": "Real name -> leaderboard alias. The challenge page never fetches this file; it reads only data.json, which holds the alias. Leading underscore keeps Jekyll from publishing it to pfra.app.",
+  "aliases": {
+    "Jeffrey Budal": "Anonymous1"
+  }
+}

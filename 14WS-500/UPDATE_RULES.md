@@ -51,21 +51,29 @@ entries are permanent and are never removed by a snapshot.
 
 ## Anonymous runners
 
-Some runners ask to be shown as `Anonymous1`, `Anonymous2`, ... instead of their
-real name. Their participant entry carries `"anonymous": true`, and `name` holds
-only the alias.
+Some runners ask to be shown as `Anonymous1`, `Anonymous2`, ... on the public
+leaderboard. Their entry in `data.json` carries `"anonymous": true`, and `name`
+holds only the alias. Everything else works the same — a runner can be anonymous
+and still have `nikeMiles` and `manualAdjustments`.
 
-**This repository is public. A real name must never appear in it** — not in
-`data.json`, not in a mapping file, not in a commit message, not in a note field.
-Committing one is not undoable: it stays in git history even after a later edit.
+**Never put a real name in `data.json`.** Every visitor to the page downloads
+that file, so a name there is one devtools tab away even though the rendered
+leaderboard shows only the alias.
 
-The user supplies the real name in chat when logging miles and states which
-alias it belongs to. Ask which alias if they don't say — never guess, and never
-infer a mapping from mileage, timing, or ordering.
+Real names live in `14WS-500/_anon-map.json`. The page never fetches it —
+`challenge.mjs` reads only `data.json` — and the leading underscore keeps Jekyll
+from publishing it to pfra.app.
 
-Aliases are assigned in order of first request: the next new anonymous runner
-gets the lowest unused `AnonymousN`. `anonymous: true` is what marks an entry as
-alias-only; treat it as permanent unless the user says the runner opted back in.
+When the user gives a real name for a mileage update, look it up in
+`_anon-map.json` and apply the miles to that alias. A name that is not in the map
+is an ordinary runner; use it as-is. Add a mapping only when the user says that
+runner wants to be anonymous, assigning the lowest unused `AnonymousN`.
+
+`anonymous: true` is permanent unless the user says the runner opted back in.
+Never infer a mapping from mileage, timing, or ordering — ask.
+
+If an anonymous runner shows up in a Nike screenshot under their real name, set
+`nikeMiles` on their alias entry. The real name still never enters `data.json`.
 
 ## Every update
 
