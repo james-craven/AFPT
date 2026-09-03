@@ -26,6 +26,11 @@ Only `14WS-500/data.json` changes. Do not edit HTML/CSS/JS, do not run
 `npm test`, do not rebuild `sw.js` — `data.json` is not precached, and
 `challenge.mjs` reads only `name` and `miles` (extra fields are inert).
 
+Some runners are shown as `Anonymous1`, `Anonymous2`, ... — their entry carries
+`"anonymous": true`. This repo is public: never write a real name into any file
+or commit message for those runners. The user gives the real name in chat and
+says which alias it maps to; ask if they don't say, and never guess.
+
 Name matching is by exact display name. If a screenshot name is close to but not
 identical to an existing entry (nickname, middle initial, spelling), ask rather
 than guessing — a wrong match silently overwrites someone's total.

@@ -49,6 +49,24 @@ Manual miles never double-count. Nike Run Club challenges only count live GPS
 runs, so a hand-logged run will never appear in a later screenshot. Manual
 entries are permanent and are never removed by a snapshot.
 
+## Anonymous runners
+
+Some runners ask to be shown as `Anonymous1`, `Anonymous2`, ... instead of their
+real name. Their participant entry carries `"anonymous": true`, and `name` holds
+only the alias.
+
+**This repository is public. A real name must never appear in it** — not in
+`data.json`, not in a mapping file, not in a commit message, not in a note field.
+Committing one is not undoable: it stays in git history even after a later edit.
+
+The user supplies the real name in chat when logging miles and states which
+alias it belongs to. Ask which alias if they don't say — never guess, and never
+infer a mapping from mileage, timing, or ordering.
+
+Aliases are assigned in order of first request: the next new anonymous runner
+gets the lowest unused `AnonymousN`. `anonymous: true` is what marks an entry as
+alias-only; treat it as permanent unless the user says the runner opted back in.
+
 ## Every update
 
 - Round all mileage to 2 decimals.

@@ -2,11 +2,11 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 74.45,
+  "totalMiles": 82.86,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-02T21:23:20.000Z",
-  "statusNote": "11 runners have logged miles",
+  "updatedAt": "2026-09-03T16:12:03.000Z",
+  "statusNote": "12 runners have logged miles",
   "participants": [
     {
       "name": "Samat Siwek",
@@ -19,6 +19,18 @@
     {
       "name": "Jose Santaloci",
       "miles": 12.18
+    },
+    {
+      "name": "Anonymous1",
+      "miles": 8.41,
+      "nikeMiles": 0,
+      "anonymous": true,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-03",
+          "miles": 8.41
+        }
+      ]
     },
     {
       "name": "Jeannette Hilliard",
