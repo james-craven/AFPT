@@ -2,19 +2,19 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 98.77,
+  "totalMiles": 125.89,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-03T20:50:59.000Z",
-  "statusNote": "16 runners have logged miles",
+  "updatedAt": "2026-09-05T15:19:28.000Z",
+  "statusNote": "17 runners have logged miles",
   "participants": [
     {
       "name": "Samat Siwek",
-      "miles": 18.03
+      "miles": 29.08
     },
     {
       "name": "James Craven",
-      "miles": 13.64
+      "miles": 20.47
     },
     {
       "name": "Jose Santaloci",
@@ -44,6 +44,10 @@
       ]
     },
     {
+      "name": "Stephanie Smith",
+      "miles": 7.32
+    },
+    {
       "name": "Jeannette Hilliard",
       "miles": 7.16,
       "nikeMiles": 0,
@@ -55,6 +59,10 @@
       ]
     },
     {
+      "name": "Justyn Jackson",
+      "miles": 7.08
+    },
+    {
       "name": "Charles Buckler",
       "miles": 5.18
     },
@@ -63,16 +71,8 @@
       "miles": 5.17
     },
     {
-      "name": "Stephanie Smith",
-      "miles": 4.79
-    },
-    {
       "name": "Zac Skiba",
       "miles": 3.85
-    },
-    {
-      "name": "Justyn Jackson",
-      "miles": 2.7
     },
     {
       "name": "Jeanette Jimenez",
@@ -93,6 +93,10 @@
     {
       "name": "Kaleb Heidrick",
       "miles": 2.38
+    },
+    {
+      "name": "Corie Capalbo",
+      "miles": 2.33
     },
     {
       "name": "David Kofron",
