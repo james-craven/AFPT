@@ -2,10 +2,10 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 227.81,
+  "totalMiles": 244.91,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-08T17:07:55.000Z",
+  "updatedAt": "2026-09-08T17:20:10.000Z",
   "statusNote": "17 runners have logged miles",
   "participants": [
     {
@@ -33,6 +33,21 @@
         {
           "date": "2026-09-08",
           "miles": 6.64
+        }
+      ]
+    },
+    {
+      "name": "Jeannette Hilliard",
+      "miles": 24.26,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-02",
+          "miles": 7.16
+        },
+        {
+          "date": "2026-09-08",
+          "miles": 17.1
         }
       ]
     },
@@ -66,17 +81,6 @@
     {
       "name": "Charles Buckler",
       "miles": 10.78
-    },
-    {
-      "name": "Jeannette Hilliard",
-      "miles": 7.16,
-      "nikeMiles": 0,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-02",
-          "miles": 7.16
-        }
-      ]
     },
     {
       "name": "Zac Skiba",
