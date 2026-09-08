@@ -2,23 +2,50 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 125.89,
+  "totalMiles": 205.73,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-05T15:19:28.000Z",
+  "updatedAt": "2026-09-08T10:37:56.000Z",
   "statusNote": "17 runners have logged miles",
   "participants": [
     {
       "name": "Samat Siwek",
-      "miles": 29.08
+      "miles": 54.55
     },
     {
       "name": "James Craven",
-      "miles": 20.47
+      "miles": 38.7
+    },
+    {
+      "name": "Josh Baker",
+      "miles": 16.94
+    },
+    {
+      "name": "Stephanie Smith",
+      "miles": 15.92
+    },
+    {
+      "name": "Shaun McCool",
+      "miles": 13.7,
+      "nikeMiles": 5.4,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-03",
+          "miles": 8.3
+        }
+      ]
     },
     {
       "name": "Jose Santaloci",
       "miles": 12.18
+    },
+    {
+      "name": "Justyn Jackson",
+      "miles": 10.94
+    },
+    {
+      "name": "Charles Buckler",
+      "miles": 10.78
     },
     {
       "name": "Anonymous1",
@@ -33,21 +60,6 @@
       ]
     },
     {
-      "name": "Shaun McCool",
-      "miles": 8.3,
-      "nikeMiles": 0,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-03",
-          "miles": 8.3
-        }
-      ]
-    },
-    {
-      "name": "Stephanie Smith",
-      "miles": 7.32
-    },
-    {
       "name": "Jeannette Hilliard",
       "miles": 7.16,
       "nikeMiles": 0,
@@ -59,20 +71,12 @@
       ]
     },
     {
-      "name": "Justyn Jackson",
-      "miles": 7.08
-    },
-    {
-      "name": "Charles Buckler",
-      "miles": 5.18
-    },
-    {
-      "name": "Josh Baker",
-      "miles": 5.17
-    },
-    {
       "name": "Zac Skiba",
       "miles": 3.85
+    },
+    {
+      "name": "Corie Capalbo",
+      "miles": 3.24
     },
     {
       "name": "Jeanette Jimenez",
@@ -93,10 +97,6 @@
     {
       "name": "Kaleb Heidrick",
       "miles": 2.38
-    },
-    {
-      "name": "Corie Capalbo",
-      "miles": 2.33
     },
     {
       "name": "David Kofron",
