@@ -65,9 +65,19 @@ Real names live in `14WS-500/_anon-map.json`. The page never fetches it —
 from publishing it to pfra.app.
 
 When the user gives a real name for a mileage update, look it up in
-`_anon-map.json` and apply the miles to that alias. A name that is not in the map
-is an ordinary runner; use it as-is. Add a mapping only when the user says that
-runner wants to be anonymous, assigning the lowest unused `AnonymousN`.
+`_anon-map.json` and apply the miles to that alias. Add a mapping only when the
+user says that runner wants to be anonymous, assigning the lowest unused
+`AnonymousN`.
+
+**The lookup must fail closed.** Do not treat "not an exact key in the map" as
+proof the runner is public — compare the given name against every mapped name and
+stop to ask if it is a near miss (a changed letter, a nickname, a middle initial,
+a transposition). A one-letter typo like `Jane Smitn` for a mapped `Jane Smith`
+is exactly this case: an exact-match miss would create a *new participant under
+the real name* and publish it to the leaderboard. Adding a wrong runner's miles is a number you can correct;
+publishing a name someone asked you to hide cannot be taken back once the page
+is live. When a near miss turns out to be the same person, add the variant
+spelling to the map as another key for that alias, so it resolves next time.
 
 `anonymous: true` is permanent unless the user says the runner opted back in.
 Never infer a mapping from mileage, timing, or ordering — ask.

@@ -31,6 +31,12 @@ entry carries `"anonymous": true` and holds only the alias. Real names live in
 `14WS-500/_anon-map.json`; check it whenever the user gives a name, and never
 write a real name into `data.json` (the page downloads that file).
 
+That lookup fails CLOSED. A name that is not an exact key in the map is not
+automatically public — compare it against every mapped name first, and ask when
+it is a near miss (changed letter, nickname, middle initial). Creating a new
+participant under a real name that was meant to be hidden is the one error here
+that cannot be undone once the page is live.
+
 Name matching is by exact display name. If a screenshot name is close to but not
 identical to an existing entry (nickname, middle initial, spelling), ask rather
 than guessing — a wrong match silently overwrites someone's total.
