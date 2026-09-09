@@ -2,11 +2,11 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 253.15,
+  "totalMiles": 273.51,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-09T12:49:10.000Z",
-  "statusNote": "17 runners have logged miles",
+  "updatedAt": "2026-09-09T12:58:27.000Z",
+  "statusNote": "18 runners have logged miles",
   "participants": [
     {
       "name": "Samat Siwek",
@@ -56,17 +56,17 @@
       ]
     },
     {
+      "name": "Jose Santaloci",
+      "miles": 21.2
+    },
+    {
       "name": "Josh Baker",
       "miles": 16.94
     },
     {
-      "name": "Stephanie Smith",
-      "miles": 15.92
-    },
-    {
       "name": "Shaun McCool",
-      "miles": 13.7,
-      "nikeMiles": 5.4,
+      "miles": 16.05,
+      "nikeMiles": 7.75,
       "manualAdjustments": [
         {
           "date": "2026-09-03",
@@ -75,29 +75,29 @@
       ]
     },
     {
-      "name": "Jose Santaloci",
-      "miles": 12.18
+      "name": "Stephanie Smith",
+      "miles": 15.92
     },
     {
       "name": "Justyn Jackson",
-      "miles": 10.94
+      "miles": 13.31
     },
     {
       "name": "Charles Buckler",
       "miles": 10.78
     },
     {
+      "name": "Corie Capalbo",
+      "miles": 5.23
+    },
+    {
       "name": "Zac Skiba",
       "miles": 3.85
     },
     {
-      "name": "Corie Capalbo",
-      "miles": 3.24
-    },
-    {
       "name": "Jeanette Jimenez",
-      "miles": 2.6,
-      "nikeMiles": 1.45,
+      "miles": 3.76,
+      "nikeMiles": 2.61,
       "manualAdjustments": [
         {
           "date": "2026-09-01",
@@ -105,6 +105,10 @@
           "note": "NRC app failed to start; run logged manually. Not reflected in Nike totals."
         }
       ]
+    },
+    {
+      "name": "Athon Arant",
+      "miles": 3.47
     },
     {
       "name": "Jeremy Knighton",
