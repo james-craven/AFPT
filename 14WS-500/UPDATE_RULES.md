@@ -69,6 +69,9 @@ When the user gives a real name for a mileage update, look it up in
 user says that runner wants to be anonymous, assigning the lowest unused
 `AnonymousN`.
 
+Alias lookup is case-insensitive: `jeffrey budai` resolves the same as
+`Jeffrey Budai`.
+
 **The lookup must fail closed.** Do not treat "not an exact key in the map" as
 proof the runner is public — compare the given name against every mapped name and
 stop to ask if it is a near miss (a changed letter, a nickname, a middle initial,

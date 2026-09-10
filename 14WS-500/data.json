@@ -2,10 +2,10 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 273.51,
+  "totalMiles": 294.61,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-09T12:58:27.000Z",
+  "updatedAt": "2026-09-10T16:09:45.000Z",
   "statusNote": "18 runners have logged miles",
   "participants": [
     {
@@ -13,31 +13,8 @@
       "miles": 54.55
     },
     {
-      "name": "James Craven",
-      "miles": 38.7
-    },
-    {
-      "name": "Jeannette Hilliard",
-      "miles": 32.5,
-      "nikeMiles": 0,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-02",
-          "miles": 7.16
-        },
-        {
-          "date": "2026-09-08",
-          "miles": 17.1
-        },
-        {
-          "date": "2026-09-09",
-          "miles": 8.24
-        }
-      ]
-    },
-    {
       "name": "Anonymous1",
-      "miles": 30.49,
+      "miles": 49.54,
       "nikeMiles": 0,
       "anonymous": true,
       "manualAdjustments": [
@@ -52,6 +29,37 @@
         {
           "date": "2026-09-08",
           "miles": 6.64
+        },
+        {
+          "date": "2026-09-10",
+          "miles": 19.05
+        }
+      ]
+    },
+    {
+      "name": "James Craven",
+      "miles": 38.7
+    },
+    {
+      "name": "Jeannette Hilliard",
+      "miles": 34.55,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-02",
+          "miles": 7.16
+        },
+        {
+          "date": "2026-09-08",
+          "miles": 17.1
+        },
+        {
+          "date": "2026-09-09",
+          "miles": 8.24
+        },
+        {
+          "date": "2026-09-10",
+          "miles": 2.05
         }
       ]
     },
