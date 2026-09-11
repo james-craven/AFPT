@@ -2,15 +2,15 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 294.61,
+  "totalMiles": 344.62,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-10T16:09:45.000Z",
-  "statusNote": "18 runners have logged miles",
+  "updatedAt": "2026-09-11T13:18:48.000Z",
+  "statusNote": "19 runners have logged miles",
   "participants": [
     {
       "name": "Samat Siwek",
-      "miles": 54.55
+      "miles": 58.08
     },
     {
       "name": "Anonymous1",
@@ -38,11 +38,11 @@
     },
     {
       "name": "James Craven",
-      "miles": 38.7
+      "miles": 44.68
     },
     {
       "name": "Jeannette Hilliard",
-      "miles": 34.55,
+      "miles": 39.57,
       "nikeMiles": 0,
       "manualAdjustments": [
         {
@@ -60,12 +60,28 @@
         {
           "date": "2026-09-10",
           "miles": 2.05
+        },
+        {
+          "date": "2026-09-11",
+          "miles": 5.02
         }
       ]
     },
     {
       "name": "Jose Santaloci",
-      "miles": 21.2
+      "miles": 31.79
+    },
+    {
+      "name": "Stephanie Smith",
+      "miles": 18.16
+    },
+    {
+      "name": "Charles Buckler",
+      "miles": 18.13
+    },
+    {
+      "name": "Justyn Jackson",
+      "miles": 17.13
     },
     {
       "name": "Josh Baker",
@@ -83,29 +99,17 @@
       ]
     },
     {
-      "name": "Stephanie Smith",
-      "miles": 15.92
-    },
-    {
-      "name": "Justyn Jackson",
-      "miles": 13.31
-    },
-    {
-      "name": "Charles Buckler",
-      "miles": 10.78
-    },
-    {
-      "name": "Corie Capalbo",
-      "miles": 5.23
+      "name": "Athon Arant",
+      "miles": 7.59
     },
     {
       "name": "Zac Skiba",
-      "miles": 3.85
+      "miles": 5.94
     },
     {
       "name": "Jeanette Jimenez",
-      "miles": 3.76,
-      "nikeMiles": 2.61,
+      "miles": 5.76,
+      "nikeMiles": 4.61,
       "manualAdjustments": [
         {
           "date": "2026-09-01",
@@ -115,8 +119,12 @@
       ]
     },
     {
-      "name": "Athon Arant",
-      "miles": 3.47
+      "name": "Corie Capalbo",
+      "miles": 5.23
+    },
+    {
+      "name": "Jason Patla",
+      "miles": 3.27
     },
     {
       "name": "Jeremy Knighton",
