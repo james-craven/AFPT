@@ -206,8 +206,8 @@ function render(data) {
   const timing = challengeTiming(data);
   const neededPace = remaining > 0 ? remaining / Math.max(1, timing.daysForPace) : 0;
 
-  document.title = data.challengeName || '14WS 1,000-Mile Challenge';
-  if (els.title) els.title.textContent = data.challengeName || '14WS 1,000-Mile Challenge';
+  document.title = data.challengeName || '14WS 1K-Mile Challenge';
+  if (els.title) els.title.textContent = data.challengeName || '14WS 1K-Mile Challenge';
   if (els.dateRange) els.dateRange.textContent = formatDateRange(data.startDate, data.endDate) || 'September unit challenge';
   if (els.totalMiles) els.totalMiles.textContent = formatMiles(total);
   if (els.statusNote) els.statusNote.textContent = data.statusNote || timing.status || 'Unit mileage total';

@@ -28,4 +28,4 @@ if (note) data.statusNote = note;
 
 await fs.writeFile(dataPath, `${JSON.stringify(data, null, 2)}\n`);
 
-console.log(`Updated 14WS 1,000-Mile Challenge total to ${data.totalMiles} miles.`);
+console.log(`Updated 14WS 1K-Mile Challenge total to ${data.totalMiles} miles.`);

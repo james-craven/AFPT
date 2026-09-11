@@ -2054,7 +2054,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForFunction(() => Boolean(document.getElementById('run-challenge-menu')));
   assert.equal(
     await page.locator('#run-challenge-menu').innerText(),
-    '14WS 1,000-Mile Challenge',
+    '14WS 1K-Mile Challenge',
     'settings menu includes the 14WS challenge link',
   );
   await page.locator('#run-challenge-menu').click();
@@ -2065,7 +2065,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   );
   assert.equal(
     await page.locator('#challenge-title').innerText(),
-    '14WS 1,000-Mile Challenge',
+    '14WS 1K-Mile Challenge',
     'settings menu challenge link opens the challenge page',
   );
 
@@ -2131,7 +2131,7 @@ async function runOfflineSmoke(browser, baseUrl) {
   );
   assert.equal(
     await page.locator('#challenge-title').innerText(),
-    '14WS 1,000-Mile Challenge',
+    '14WS 1K-Mile Challenge',
     'service-worker-controlled challenge route renders the challenge page',
   );
 
@@ -2300,7 +2300,7 @@ async function runChallengePageSmoke(browser, baseUrl) {
   );
   assert.equal(
     await page.locator('#challenge-title').innerText(),
-    '14WS 1,000-Mile Challenge',
+    '14WS 1K-Mile Challenge',
     'lowercase 14WS challenge index URL renders',
   );
 
