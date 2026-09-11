@@ -2,11 +2,11 @@
   "challengeName": "14WS 500-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 500,
-  "totalMiles": 344.62,
+  "totalMiles": 388.32,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-11T13:18:48.000Z",
-  "statusNote": "19 runners have logged miles",
+  "updatedAt": "2026-09-11T16:13:22.000Z",
+  "statusNote": "21 runners have logged miles",
   "participants": [
     {
       "name": "Samat Siwek",
@@ -72,6 +72,17 @@
       "miles": 31.79
     },
     {
+      "name": "Ryan Dernick",
+      "miles": 30.0,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-11",
+          "miles": 30.0
+        }
+      ]
+    },
+    {
       "name": "Stephanie Smith",
       "miles": 18.16
     },
@@ -99,8 +110,30 @@
       ]
     },
     {
+      "name": "Jason Patla",
+      "miles": 10.97,
+      "nikeMiles": 3.27,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-11",
+          "miles": 7.7
+        }
+      ]
+    },
+    {
       "name": "Athon Arant",
       "miles": 7.59
+    },
+    {
+      "name": "Ross Stark",
+      "miles": 6.0,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-11",
+          "miles": 6.0
+        }
+      ]
     },
     {
       "name": "Zac Skiba",
@@ -121,10 +154,6 @@
     {
       "name": "Corie Capalbo",
       "miles": 5.23
-    },
-    {
-      "name": "Jason Patla",
-      "miles": 3.27
     },
     {
       "name": "Jeremy Knighton",
