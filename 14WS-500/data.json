@@ -1,11 +1,11 @@
 {
-  "challengeName": "14WS 500-Mile Challenge",
+  "challengeName": "14WS 1,000-Mile Challenge",
   "unitName": "14WS",
-  "goalMiles": 500,
+  "goalMiles": 1000,
   "totalMiles": 399.32,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-11T17:20:11.000Z",
+  "updatedAt": "2026-09-11T17:36:26.000Z",
   "statusNote": "21 runners have logged miles",
   "participants": [
     {

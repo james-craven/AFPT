@@ -2054,7 +2054,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForFunction(() => Boolean(document.getElementById('run-challenge-menu')));
   assert.equal(
     await page.locator('#run-challenge-menu').innerText(),
-    '14WS 500-Mile Challenge',
+    '14WS 1,000-Mile Challenge',
     'settings menu includes the 14WS challenge link',
   );
   await page.locator('#run-challenge-menu').click();
@@ -2065,7 +2065,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   );
   assert.equal(
     await page.locator('#challenge-title').innerText(),
-    '14WS 500-Mile Challenge',
+    '14WS 1,000-Mile Challenge',
     'settings menu challenge link opens the challenge page',
   );
 
@@ -2131,7 +2131,7 @@ async function runOfflineSmoke(browser, baseUrl) {
   );
   assert.equal(
     await page.locator('#challenge-title').innerText(),
-    '14WS 500-Mile Challenge',
+    '14WS 1,000-Mile Challenge',
     'service-worker-controlled challenge route renders the challenge page',
   );
 
@@ -2256,22 +2256,36 @@ async function runChallengePageSmoke(browser, baseUrl) {
     };
   });
 
+  // Mileage changes whenever the unit logs runs, so derive the expectation from
+  // data.json rather than pinning literals that go stale on every update.
+  const challengeData = JSON.parse(
+    await fsp.readFile(new URL('../14WS-500/data.json', import.meta.url), 'utf8'),
+  );
+  const ranked = challengeData.participants
+    .filter((participant) => participant.miles > 0)
+    .sort((left, right) => right.miles - left.miles);
+  const miles2 = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const whole = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+  const oneDp = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
+  const expectedTotal = Math.round(ranked.reduce((sum, p) => sum + p.miles, 0) * 100) / 100;
+  const expectedGoal = challengeData.goalMiles;
+
   assert.match(state.stamp, /^Last updated /, '14WS challenge page shows update stamp');
   assert.deepEqual(
     { ...state, stamp: 'matched' },
     {
-      title: '14WS 500-Mile Challenge',
-      total: '21.39',
-      goal: '500',
-      remaining: '478.61',
-      percent: '4.3%',
-      progressMax: '500',
-      progressNow: '21.39',
-      leaderboardCount: '6 runners with miles logged',
-      firstRunner: 'James Craven',
-      firstMiles: '6.50 mi',
-      lastRunner: 'Jeanette Jimenez',
-      lastMiles: '1.15 mi',
+      title: challengeData.challengeName,
+      total: miles2.format(expectedTotal),
+      goal: whole.format(expectedGoal),
+      remaining: miles2.format(Math.max(0, expectedGoal - expectedTotal)),
+      percent: `${oneDp.format(Math.min(100, (expectedTotal / expectedGoal) * 100))}%`,
+      progressMax: String(expectedGoal),
+      progressNow: String(expectedTotal),
+      leaderboardCount: `${ranked.length} runners with miles logged`,
+      firstRunner: ranked[0].name,
+      firstMiles: `${miles2.format(ranked[0].miles)} mi`,
+      lastRunner: ranked[ranked.length - 1].name,
+      lastMiles: `${miles2.format(ranked[ranked.length - 1].miles)} mi`,
       stamp: 'matched',
       overflow: [],
     },
@@ -2286,7 +2300,7 @@ async function runChallengePageSmoke(browser, baseUrl) {
   );
   assert.equal(
     await page.locator('#challenge-title').innerText(),
-    '14WS 500-Mile Challenge',
+    '14WS 1,000-Mile Challenge',
     'lowercase 14WS challenge index URL renders',
   );
 
@@ -2307,7 +2321,7 @@ async function runChallengePageSmoke(browser, baseUrl) {
     adminState,
     {
       title: 'Mileage Admin',
-      milesValue: '21.4',
+      milesValue: String(Math.round(expectedTotal * 10) / 10),
       tokenType: 'password',
       robots: 'noindex,nofollow,noarchive',
       status: 'Current total loaded.',

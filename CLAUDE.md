@@ -12,7 +12,7 @@ standards data → pure scoring functions → app state → slot variant rendere
 
 One calculator engine. Shared state/actions. Named layout slots. Registered variants. Theme presets. Future user overrides.
 
-## 14WS 500-Mile Challenge (separate workstream)
+## 14WS 1,000-Mile Challenge (separate workstream)
 
 `14WS-500/` is the unit mileage tracker at https://pfra.app/14ws-500. It is
 independent of the calculator redesign below.

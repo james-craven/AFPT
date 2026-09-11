@@ -1,6 +1,6 @@
 ---
 name: mileage-update
-description: Update the 14WS 500-Mile Challenge leaderboard at 14WS-500/data.json. Use whenever the user drops a Nike Run Club leaderboard screenshot, or a manual mileage line like "manual update: name: John Doe, miles: 2.34", or otherwise asks to add/update runner miles for the 14WS challenge or pfra.app/14ws-500.
+description: Update the 14WS 1,000-Mile Challenge leaderboard at 14WS-500/data.json. Use whenever the user drops a Nike Run Club leaderboard screenshot, or a manual mileage line like "manual update: name: John Doe, miles: 2.34", or otherwise asks to add/update runner miles for the 14WS challenge or pfra.app/14ws-500.
 ---
 
 # 14WS mileage update

@@ -1,4 +1,4 @@
-# 14WS 500-Mile Challenge — data update rules
+# 14WS 1,000-Mile Challenge — data update rules
 
 Only `14WS-500/data.json` changes for mileage updates. No HTML/CSS/JS edits, no
 regression suite, no service-worker rebuild (`data.json` is not precached).
