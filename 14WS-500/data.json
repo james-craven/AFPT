@@ -2,15 +2,19 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 399.32,
+  "totalMiles": 460.85,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-11T17:36:26.000Z",
+  "updatedAt": "2026-09-15T10:08:26.000Z",
   "statusNote": "21 runners have logged miles",
   "participants": [
     {
       "name": "Samat Siwek",
-      "miles": 58.08
+      "miles": 70.54
+    },
+    {
+      "name": "James Craven",
+      "miles": 49.83
     },
     {
       "name": "Anonymous1",
@@ -37,8 +41,8 @@
       ]
     },
     {
-      "name": "James Craven",
-      "miles": 44.68
+      "name": "Jose Santaloci",
+      "miles": 47.31
     },
     {
       "name": "Jeannette Hilliard",
@@ -68,8 +72,19 @@
       ]
     },
     {
-      "name": "Jose Santaloci",
-      "miles": 31.79
+      "name": "Shaun McCool",
+      "miles": 30.06,
+      "nikeMiles": 10.76,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-03",
+          "miles": 8.3
+        },
+        {
+          "date": "2026-09-11",
+          "miles": 11.0
+        }
+      ]
     },
     {
       "name": "Ryan Dernick",
@@ -83,40 +98,25 @@
       ]
     },
     {
-      "name": "Shaun McCool",
-      "miles": 27.05,
-      "nikeMiles": 7.75,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-03",
-          "miles": 8.3
-        },
-        {
-          "date": "2026-09-11",
-          "miles": 11.0
-        }
-      ]
-    },
-    {
-      "name": "Stephanie Smith",
-      "miles": 18.16
-    },
-    {
       "name": "Charles Buckler",
-      "miles": 18.13
-    },
-    {
-      "name": "Justyn Jackson",
-      "miles": 17.13
+      "miles": 23.34
     },
     {
       "name": "Josh Baker",
-      "miles": 16.94
+      "miles": 22.15
+    },
+    {
+      "name": "Stephanie Smith",
+      "miles": 21.16
+    },
+    {
+      "name": "Justyn Jackson",
+      "miles": 20.94
     },
     {
       "name": "Jason Patla",
-      "miles": 10.97,
-      "nikeMiles": 3.27,
+      "miles": 14.4,
+      "nikeMiles": 6.7,
       "manualAdjustments": [
         {
           "date": "2026-09-11",
@@ -126,7 +126,7 @@
     },
     {
       "name": "Athon Arant",
-      "miles": 7.59
+      "miles": 12.32
     },
     {
       "name": "Ross Stark",
