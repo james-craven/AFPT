@@ -2,10 +2,10 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 547.61,
+  "totalMiles": 558.78,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-17T13:48:59.000Z",
+  "updatedAt": "2026-09-17T13:58:06.000Z",
   "statusNote": "22 runners have logged miles",
   "participants": [
     {
@@ -103,6 +103,17 @@
       ]
     },
     {
+      "name": "Athon Arant",
+      "miles": 30.5,
+      "nikeMiles": 19.33,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-17",
+          "miles": 11.17
+        }
+      ]
+    },
+    {
       "name": "Ryan Dernick",
       "miles": 30.0,
       "nikeMiles": 0,
@@ -128,10 +139,6 @@
     {
       "name": "Stephanie Smith",
       "miles": 23.67
-    },
-    {
-      "name": "Athon Arant",
-      "miles": 19.33
     },
     {
       "name": "Jason Patla",
