@@ -2,15 +2,15 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 506.25,
+  "totalMiles": 547.61,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-16T13:14:11.000Z",
+  "updatedAt": "2026-09-17T13:48:59.000Z",
   "statusNote": "22 runners have logged miles",
   "participants": [
     {
       "name": "Anonymous1",
-      "miles": 73.82,
+      "miles": 83.58,
       "nikeMiles": 0,
       "anonymous": true,
       "manualAdjustments": [
@@ -37,12 +37,20 @@
         {
           "date": "2026-09-16",
           "miles": 13.68
+        },
+        {
+          "date": "2026-09-17",
+          "miles": 9.76
         }
       ]
     },
     {
       "name": "Samat Siwek",
-      "miles": 70.54
+      "miles": 73.06
+    },
+    {
+      "name": "James Craven",
+      "miles": 52.33
     },
     {
       "name": "Jeannette Hilliard",
@@ -76,17 +84,13 @@
       ]
     },
     {
-      "name": "James Craven",
-      "miles": 49.83
-    },
-    {
       "name": "Jose Santaloci",
-      "miles": 47.31
+      "miles": 49.91
     },
     {
       "name": "Shaun McCool",
-      "miles": 30.06,
-      "nikeMiles": 10.76,
+      "miles": 32.89,
+      "nikeMiles": 13.59,
       "manualAdjustments": [
         {
           "date": "2026-09-03",
@@ -111,19 +115,23 @@
     },
     {
       "name": "Charles Buckler",
-      "miles": 23.34
-    },
-    {
-      "name": "Josh Baker",
-      "miles": 22.15
+      "miles": 26.95
     },
     {
       "name": "Justyn Jackson",
-      "miles": 21.99
+      "miles": 25.83
+    },
+    {
+      "name": "Josh Baker",
+      "miles": 24.7
     },
     {
       "name": "Stephanie Smith",
-      "miles": 21.16
+      "miles": 23.67
+    },
+    {
+      "name": "Athon Arant",
+      "miles": 19.33
     },
     {
       "name": "Jason Patla",
@@ -135,10 +143,6 @@
           "miles": 7.7
         }
       ]
-    },
-    {
-      "name": "Athon Arant",
-      "miles": 15.83
     },
     {
       "name": "Ross Stark",
@@ -173,11 +177,11 @@
     },
     {
       "name": "Jeremy Knighton",
-      "miles": 2.38
+      "miles": 4.98
     },
     {
       "name": "Kaleb Heidrick",
-      "miles": 2.38
+      "miles": 4.92
     },
     {
       "name": "Linda Gilbert",
