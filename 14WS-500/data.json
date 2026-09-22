@@ -2,11 +2,11 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 705.93,
+  "totalMiles": 726.82,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-22T12:33:01.000Z",
-  "statusNote": "23 runners have logged miles",
+  "updatedAt": "2026-09-22T12:47:48.000Z",
+  "statusNote": "24 runners have logged miles",
   "participants": [
     {
       "name": "Anonymous1",
@@ -155,6 +155,17 @@
     {
       "name": "Stephanie Smith",
       "miles": 27.02
+    },
+    {
+      "name": "Austin Gibbons",
+      "miles": 20.89,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-22",
+          "miles": 20.89
+        }
+      ]
     },
     {
       "name": "Jason Patla",
