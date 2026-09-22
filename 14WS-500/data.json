@@ -2,19 +2,15 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 658.11,
+  "totalMiles": 705.93,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-21T03:12:43.000Z",
-  "statusNote": "22 runners have logged miles",
+  "updatedAt": "2026-09-22T12:33:01.000Z",
+  "statusNote": "23 runners have logged miles",
   "participants": [
     {
-      "name": "Samat Siwek",
-      "miles": 102.3
-    },
-    {
       "name": "Anonymous1",
-      "miles": 83.58,
+      "miles": 109.41,
       "nikeMiles": 0,
       "anonymous": true,
       "manualAdjustments": [
@@ -45,20 +41,28 @@
         {
           "date": "2026-09-17",
           "miles": 9.76
+        },
+        {
+          "date": "2026-09-22",
+          "miles": 14.37
+        },
+        {
+          "date": "2026-09-22",
+          "miles": 11.46
         }
       ]
+    },
+    {
+      "name": "Samat Siwek",
+      "miles": 102.3
     },
     {
       "name": "Jose Santaloci",
       "miles": 76.42
     },
     {
-      "name": "James Craven",
-      "miles": 52.33
-    },
-    {
       "name": "Jeannette Hilliard",
-      "miles": 51.94,
+      "miles": 66.93,
       "nikeMiles": 0,
       "manualAdjustments": [
         {
@@ -84,8 +88,20 @@
         {
           "date": "2026-09-16",
           "miles": 12.37
+        },
+        {
+          "date": "2026-09-22",
+          "miles": 8.36
+        },
+        {
+          "date": "2026-09-22",
+          "miles": 6.63
         }
       ]
+    },
+    {
+      "name": "James Craven",
+      "miles": 52.33
     },
     {
       "name": "Josh Baker",
@@ -148,6 +164,17 @@
         {
           "date": "2026-09-11",
           "miles": 7.7
+        }
+      ]
+    },
+    {
+      "name": "Jonas Card",
+      "miles": 7.0,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-22",
+          "miles": 7.0
         }
       ]
     },
