@@ -2,10 +2,10 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 726.82,
+  "totalMiles": 734.09,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-22T12:47:48.000Z",
+  "updatedAt": "2026-09-22T12:51:04.000Z",
   "statusNote": "24 runners have logged miles",
   "participants": [
     {
@@ -104,13 +104,24 @@
       "miles": 52.33
     },
     {
+      "name": "Athon Arant",
+      "miles": 40.32,
+      "nikeMiles": 29.15,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-17",
+          "miles": 11.17
+        }
+      ]
+    },
+    {
       "name": "Josh Baker",
       "miles": 38.28
     },
     {
       "name": "Shaun McCool",
-      "miles": 36.12,
-      "nikeMiles": 16.82,
+      "miles": 37.66,
+      "nikeMiles": 18.36,
       "manualAdjustments": [
         {
           "date": "2026-09-03",
@@ -123,23 +134,12 @@
       ]
     },
     {
-      "name": "Athon Arant",
-      "miles": 36.07,
-      "nikeMiles": 24.9,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-17",
-          "miles": 11.17
-        }
-      ]
-    },
-    {
       "name": "Charles Buckler",
       "miles": 35.32
     },
     {
       "name": "Justyn Jackson",
-      "miles": 31.96
+      "miles": 32.57
     },
     {
       "name": "Ryan Dernick",
@@ -190,6 +190,10 @@
       ]
     },
     {
+      "name": "Zac Skiba",
+      "miles": 6.81
+    },
+    {
       "name": "Ross Stark",
       "miles": 6.0,
       "nikeMiles": 0,
@@ -199,10 +203,6 @@
           "miles": 6.0
         }
       ]
-    },
-    {
-      "name": "Zac Skiba",
-      "miles": 5.94
     },
     {
       "name": "Jeanette Jimenez",
