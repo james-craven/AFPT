@@ -2,10 +2,10 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 734.09,
+  "totalMiles": 777.79,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-22T12:51:04.000Z",
+  "updatedAt": "2026-09-23T14:49:00.000Z",
   "statusNote": "24 runners have logged miles",
   "participants": [
     {
@@ -138,6 +138,17 @@
       "miles": 35.32
     },
     {
+      "name": "Jon",
+      "miles": 33.0,
+      "nikeMiles": 1.0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-23",
+          "miles": 32.0
+        }
+      ]
+    },
+    {
       "name": "Justyn Jackson",
       "miles": 32.57
     },
@@ -180,29 +191,37 @@
     },
     {
       "name": "Jonas Card",
-      "miles": 7.0,
+      "miles": 10.5,
       "nikeMiles": 0,
       "manualAdjustments": [
         {
           "date": "2026-09-22",
           "miles": 7.0
+        },
+        {
+          "date": "2026-09-23",
+          "miles": 3.5
+        }
+      ]
+    },
+    {
+      "name": "Ross Stark",
+      "miles": 10.4,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-11",
+          "miles": 6.0
+        },
+        {
+          "date": "2026-09-23",
+          "miles": 4.4
         }
       ]
     },
     {
       "name": "Zac Skiba",
       "miles": 6.81
-    },
-    {
-      "name": "Ross Stark",
-      "miles": 6.0,
-      "nikeMiles": 0,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-11",
-          "miles": 6.0
-        }
-      ]
     },
     {
       "name": "Jeanette Jimenez",
@@ -213,6 +232,21 @@
           "date": "2026-09-01",
           "miles": 1.15,
           "note": "NRC app failed to start; run logged manually. Not reflected in Nike totals."
+        }
+      ]
+    },
+    {
+      "name": "Linda Gilbert",
+      "miles": 5.28,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-16",
+          "miles": 1.48
+        },
+        {
+          "date": "2026-09-23",
+          "miles": 3.8
         }
       ]
     },
@@ -229,17 +263,6 @@
       "miles": 4.92
     },
     {
-      "name": "Linda Gilbert",
-      "miles": 1.48,
-      "nikeMiles": 0,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-16",
-          "miles": 1.48
-        }
-      ]
-    },
-    {
       "name": "David Kofron",
       "miles": 1.0,
       "nikeMiles": 0,
@@ -249,10 +272,6 @@
           "miles": 1.0
         }
       ]
-    },
-    {
-      "name": "Jon",
-      "miles": 1.0
     }
   ]
 }
