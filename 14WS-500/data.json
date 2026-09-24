@@ -2,10 +2,10 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 835.9,
+  "totalMiles": 841.9,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-24T18:46:48.000Z",
+  "updatedAt": "2026-09-24T18:47:59.000Z",
   "statusNote": "26 runners have logged miles",
   "participants": [
     {
@@ -58,7 +58,15 @@
     },
     {
       "name": "Jose Santaloci",
-      "miles": 84.03
+      "miles": 90.03,
+      "nikeMiles": 84.03,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-24",
+          "miles": 6.0,
+          "note": "Logged as Joseph Santaloci; confirmed same runner as Jose Santaloci."
+        }
+      ]
     },
     {
       "name": "Jeannette Hilliard",
