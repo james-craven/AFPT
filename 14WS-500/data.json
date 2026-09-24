@@ -2,11 +2,11 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 800.14,
+  "totalMiles": 835.9,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-23T14:51:33.000Z",
-  "statusNote": "25 runners have logged miles",
+  "updatedAt": "2026-09-24T18:46:48.000Z",
+  "statusNote": "26 runners have logged miles",
   "participants": [
     {
       "name": "Anonymous1",
@@ -58,7 +58,7 @@
     },
     {
       "name": "Jose Santaloci",
-      "miles": 78.0
+      "miles": 84.03
     },
     {
       "name": "Jeannette Hilliard",
@@ -101,12 +101,12 @@
     },
     {
       "name": "James Craven",
-      "miles": 52.33
+      "miles": 54.9
     },
     {
       "name": "Athon Arant",
-      "miles": 43.08,
-      "nikeMiles": 31.91,
+      "miles": 49.53,
+      "nikeMiles": 38.36,
       "manualAdjustments": [
         {
           "date": "2026-09-17",
@@ -116,12 +116,12 @@
     },
     {
       "name": "Josh Baker",
-      "miles": 38.28
+      "miles": 40.93
     },
     {
       "name": "Shaun McCool",
-      "miles": 37.66,
-      "nikeMiles": 18.36,
+      "miles": 40.3,
+      "nikeMiles": 21.0,
       "manualAdjustments": [
         {
           "date": "2026-09-03",
@@ -135,16 +135,16 @@
     },
     {
       "name": "Charles Buckler",
-      "miles": 35.32
+      "miles": 37.89
     },
     {
       "name": "Justyn Jackson",
-      "miles": 34.58
+      "miles": 36.52
     },
     {
       "name": "Jon",
-      "miles": 33.0,
-      "nikeMiles": 1.0,
+      "miles": 35.53,
+      "nikeMiles": 3.53,
       "manualAdjustments": [
         {
           "date": "2026-09-23",
@@ -202,7 +202,7 @@
     },
     {
       "name": "Jonas Card",
-      "miles": 10.5,
+      "miles": 14.0,
       "nikeMiles": 0,
       "manualAdjustments": [
         {
@@ -211,6 +211,10 @@
         },
         {
           "date": "2026-09-23",
+          "miles": 3.5
+        },
+        {
+          "date": "2026-09-24",
           "miles": 3.5
         }
       ]
@@ -229,6 +233,10 @@
           "miles": 4.4
         }
       ]
+    },
+    {
+      "name": "Jeremy Knighton",
+      "miles": 7.34
     },
     {
       "name": "Zac Skiba",
@@ -266,12 +274,12 @@
       "miles": 5.23
     },
     {
-      "name": "Jeremy Knighton",
-      "miles": 4.98
-    },
-    {
       "name": "Kaleb Heidrick",
       "miles": 4.92
+    },
+    {
+      "name": "Mark Dunlop",
+      "miles": 2.52
     },
     {
       "name": "David Kofron",
