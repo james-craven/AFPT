@@ -2,15 +2,15 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 841.9,
+  "totalMiles": 882.73,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-24T18:47:59.000Z",
+  "updatedAt": "2026-09-28T14:01:14.000Z",
   "statusNote": "26 runners have logged miles",
   "participants": [
     {
       "name": "Anonymous1",
-      "miles": 109.41,
+      "miles": 133.64,
       "nikeMiles": 0,
       "anonymous": true,
       "manualAdjustments": [
@@ -49,6 +49,14 @@
         {
           "date": "2026-09-22",
           "miles": 11.46
+        },
+        {
+          "date": "2026-09-28",
+          "miles": 11.17
+        },
+        {
+          "date": "2026-09-28",
+          "miles": 13.06
         }
       ]
     },
@@ -108,6 +116,25 @@
       ]
     },
     {
+      "name": "Shaun McCool",
+      "miles": 56.9,
+      "nikeMiles": 21.0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-03",
+          "miles": 8.3
+        },
+        {
+          "date": "2026-09-11",
+          "miles": 11.0
+        },
+        {
+          "date": "2026-09-28",
+          "miles": 16.6
+        }
+      ]
+    },
+    {
       "name": "James Craven",
       "miles": 54.9
     },
@@ -125,21 +152,6 @@
     {
       "name": "Josh Baker",
       "miles": 40.93
-    },
-    {
-      "name": "Shaun McCool",
-      "miles": 40.3,
-      "nikeMiles": 21.0,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-03",
-          "miles": 8.3
-        },
-        {
-          "date": "2026-09-11",
-          "miles": 11.0
-        }
-      ]
     },
     {
       "name": "Charles Buckler",
