@@ -2,10 +2,10 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 882.73,
+  "totalMiles": 947.49,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-28T14:01:14.000Z",
+  "updatedAt": "2026-09-28T14:03:05.000Z",
   "statusNote": "26 runners have logged miles",
   "participants": [
     {
@@ -62,12 +62,12 @@
     },
     {
       "name": "Samat Siwek",
-      "miles": 102.3
+      "miles": 125.3
     },
     {
       "name": "Jose Santaloci",
-      "miles": 90.03,
-      "nikeMiles": 84.03,
+      "miles": 106.5,
+      "nikeMiles": 100.5,
       "manualAdjustments": [
         {
           "date": "2026-09-24",
@@ -139,6 +139,10 @@
       "miles": 54.9
     },
     {
+      "name": "Josh Baker",
+      "miles": 50.88
+    },
+    {
       "name": "Athon Arant",
       "miles": 49.53,
       "nikeMiles": 38.36,
@@ -150,16 +154,12 @@
       ]
     },
     {
-      "name": "Josh Baker",
-      "miles": 40.93
-    },
-    {
       "name": "Charles Buckler",
-      "miles": 37.89
+      "miles": 44.01
     },
     {
       "name": "Justyn Jackson",
-      "miles": 36.52
+      "miles": 43.13
     },
     {
       "name": "Jon",
@@ -188,6 +188,17 @@
       "miles": 27.02
     },
     {
+      "name": "Jason Patla",
+      "miles": 23.07,
+      "nikeMiles": 15.37,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-11",
+          "miles": 7.7
+        }
+      ]
+    },
+    {
       "name": "Austin Gibbons",
       "miles": 20.89,
       "nikeMiles": 0,
@@ -195,17 +206,6 @@
         {
           "date": "2026-09-22",
           "miles": 20.89
-        }
-      ]
-    },
-    {
-      "name": "Jason Patla",
-      "miles": 20.46,
-      "nikeMiles": 12.76,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-11",
-          "miles": 7.7
         }
       ]
     },
