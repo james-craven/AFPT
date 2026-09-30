@@ -1,3 +1,5 @@
+import { celebrate } from './celebrate.mjs';
+
 const DATA_URL = '/14ws-500/data.json';
 const SERVICE_WORKER_URL = '/sw.js';
 
@@ -224,6 +226,9 @@ function render(data) {
   }
   renderLeaderboard(participants);
 
+  const goalReached = total >= goal;
+  if (els.shell) els.shell.dataset.goalReached = String(goalReached);
+
   const updated = data.updatedAt ? new Date(data.updatedAt) : null;
   if (els.updatedAt) {
     els.updatedAt.textContent = updated && !Number.isNaN(updated.getTime())
@@ -243,6 +248,7 @@ async function loadData() {
       delete els.shell.dataset.error;
     }
     if (els.dataStatus) els.dataStatus.textContent = 'Latest leaderboard loaded';
+    if (els.shell?.dataset.goalReached === 'true') celebrate();
   } catch (error) {
     if (els.shell) {
       els.shell.dataset.loading = 'false';
