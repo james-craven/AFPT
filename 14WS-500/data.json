@@ -2,12 +2,16 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 986.9,
+  "totalMiles": 1007.84,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-30T14:16:53.000Z",
+  "updatedAt": "2026-09-30T14:17:52.000Z",
   "statusNote": "26 runners have logged miles",
   "participants": [
+    {
+      "name": "Samat Siwek",
+      "miles": 142.5
+    },
     {
       "name": "Anonymous1",
       "miles": 140.78,
@@ -63,10 +67,6 @@
           "miles": 7.14
         }
       ]
-    },
-    {
-      "name": "Samat Siwek",
-      "miles": 132.4
     },
     {
       "name": "Jose Santaloci",
@@ -159,7 +159,7 @@
     },
     {
       "name": "Justyn Jackson",
-      "miles": 45.51
+      "miles": 48.37
     },
     {
       "name": "Charles Buckler",
@@ -177,6 +177,17 @@
         {
           "date": "2026-09-30",
           "miles": 2.52
+        }
+      ]
+    },
+    {
+      "name": "Jason Patla",
+      "miles": 31.05,
+      "nikeMiles": 23.35,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-11",
+          "miles": 7.7
         }
       ]
     },
@@ -207,17 +218,6 @@
         {
           "date": "2026-09-30",
           "miles": 4.77
-        }
-      ]
-    },
-    {
-      "name": "Jason Patla",
-      "miles": 23.07,
-      "nikeMiles": 15.37,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-11",
-          "miles": 7.7
         }
       ]
     },
