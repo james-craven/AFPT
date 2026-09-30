@@ -2,15 +2,15 @@
   "challengeName": "14WS 1K-Mile Challenge",
   "unitName": "14WS",
   "goalMiles": 1000,
-  "totalMiles": 963.27,
+  "totalMiles": 986.9,
   "startDate": "2026-09-01",
   "endDate": "2026-09-30",
-  "updatedAt": "2026-09-29T12:31:40.000Z",
+  "updatedAt": "2026-09-30T14:16:53.000Z",
   "statusNote": "26 runners have logged miles",
   "participants": [
     {
       "name": "Anonymous1",
-      "miles": 133.64,
+      "miles": 140.78,
       "nikeMiles": 0,
       "anonymous": true,
       "manualAdjustments": [
@@ -57,6 +57,10 @@
         {
           "date": "2026-09-28",
           "miles": 13.06
+        },
+        {
+          "date": "2026-09-30",
+          "miles": 7.14
         }
       ]
     },
@@ -163,12 +167,16 @@
     },
     {
       "name": "Jon",
-      "miles": 35.53,
+      "miles": 38.05,
       "nikeMiles": 3.53,
       "manualAdjustments": [
         {
           "date": "2026-09-23",
           "miles": 32.0
+        },
+        {
+          "date": "2026-09-30",
+          "miles": 2.52
         }
       ]
     },
@@ -188,6 +196,21 @@
       "miles": 27.02
     },
     {
+      "name": "Austin Gibbons",
+      "miles": 25.66,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-22",
+          "miles": 20.89
+        },
+        {
+          "date": "2026-09-30",
+          "miles": 4.77
+        }
+      ]
+    },
+    {
       "name": "Jason Patla",
       "miles": 23.07,
       "nikeMiles": 15.37,
@@ -195,17 +218,6 @@
         {
           "date": "2026-09-11",
           "miles": 7.7
-        }
-      ]
-    },
-    {
-      "name": "Austin Gibbons",
-      "miles": 20.89,
-      "nikeMiles": 0,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-22",
-          "miles": 20.89
         }
       ]
     },
@@ -255,6 +267,21 @@
       ]
     },
     {
+      "name": "David Kofron",
+      "miles": 10.2,
+      "nikeMiles": 0,
+      "manualAdjustments": [
+        {
+          "date": "2026-09-03",
+          "miles": 1.0
+        },
+        {
+          "date": "2026-09-30",
+          "miles": 9.2
+        }
+      ]
+    },
+    {
       "name": "Jeremy Knighton",
       "miles": 7.34
     },
@@ -300,17 +327,6 @@
     {
       "name": "Mark Dunlop",
       "miles": 2.52
-    },
-    {
-      "name": "David Kofron",
-      "miles": 1.0,
-      "nikeMiles": 0,
-      "manualAdjustments": [
-        {
-          "date": "2026-09-03",
-          "miles": 1.0
-        }
-      ]
     }
   ]
 }
