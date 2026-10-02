@@ -38,6 +38,7 @@ under a real name that was meant to be hidden is the one error here that cannot
 be undone once the page is live.
 
 Name matching against existing participants is case-insensitive but otherwise
-exact. If a name is close to but not identical to an existing entry (nickname,
+exact, against each member's `name` and their `aka` list (tally-sheet labels like
+"McCool" or "JJ"). If a name is close to but not identical to an existing entry (nickname,
 middle initial, spelling), ask rather than guess. A wrong match silently moves
 someone's total.

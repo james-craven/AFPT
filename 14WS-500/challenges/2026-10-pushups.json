@@ -17,7 +17,10 @@
   "statusNote": "5 members have logged push-ups",
   "participants": [
     {
-      "name": "McCool",
+      "name": "Shaun McCool",
+      "aka": [
+        "McCool"
+      ],
       "count": 230,
       "entries": [
         {
@@ -27,7 +30,10 @@
       ]
     },
     {
-      "name": "Ski",
+      "name": "Ski with a capital P",
+      "aka": [
+        "Ski"
+      ],
       "count": 154,
       "entries": [
         {
@@ -57,7 +63,10 @@
       ]
     },
     {
-      "name": "JJ",
+      "name": "Jeanette Jimenez",
+      "aka": [
+        "JJ"
+      ],
       "count": 40,
       "entries": [
         {

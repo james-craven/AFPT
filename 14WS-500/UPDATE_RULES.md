@@ -40,8 +40,16 @@ So a total always wins: when a new total arrives it replaces everything before
 it, including earlier adds, because the user's total already counts them.
 
 - **Name already in the file** → append the entry, then recompute `count`.
+  A name matches a member's `name` or any entry in their `aka` list,
+  case-insensitively.
 - **Name not in the file** → add a participant with that one entry. A person
   whose total is 0 is not added.
+- **Sheet labels vs display names.** The tally sheet uses short labels
+  ("McCool", "JJ"). When the user gives a display name, set `name` to it and keep
+  the sheet label in `aka` so later sheets still match:
+  `{ "name": "Shaun McCool", "aka": ["McCool"], ... }`.
+  `aka` is public (the page downloads it), so it must never hold the real name
+  of an anonymous member.
 - **People not in a screenshot** are left alone — never removed or zeroed.
 - **A total lower than the person's current count** is legal (a correction),
   but call it out in the before/after table.
