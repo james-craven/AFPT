@@ -1,7 +1,7 @@
 # 14WS unit challenges — data update rules
 
 The page at https://pfra.app/14ws-500 shows one tab per monthly challenge.
-`14WS-500/challenges.json` lists the tabs, newest first, and `current` names the
+`14WS-500/challenges.json` lists the tabs oldest first (left to right), and `current` names the
 challenge that is live. **Updates go to the current challenge's data file**
 (its `data` path in the manifest), never to an archived month.
 
@@ -40,7 +40,8 @@ The file's `metric` block tells the page what unit to show; leave it alone.
 
 1. Create `challenges/<YYYY-MM>-<metric>.json` with `challengeName`, `metric`,
    `goal`, `startDate`, `endDate`, and an empty `participants` list.
-2. Add it to the top of `challenges.json` and point `current` at it.
+2. Add it to the end of `challenges.json` (tab label "<Month> <YYYY>") and
+   point `current` at it.
 3. Set the finished month's `statusNote` to "Final results — N <participants>".
 4. Update the table above. Adding a file and editing the manifest is a page
    change: run the full test suite before pushing.
