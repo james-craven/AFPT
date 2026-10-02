@@ -2054,7 +2054,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   await page.waitForFunction(() => Boolean(document.getElementById('run-challenge-menu')));
   assert.equal(
     await page.locator('#run-challenge-menu').innerText(),
-    '14WS 1K-Mile Challenge',
+    '14WS Unit Challenges',
     'settings menu includes the 14WS challenge link',
   );
   await page.locator('#run-challenge-menu').click();
@@ -2065,7 +2065,7 @@ async function runSmokeTests(browser, baseUrl, label, contextOptions = {}) {
   );
   assert.equal(
     await page.locator('#challenge-title').innerText(),
-    '14WS 1K-Mile Challenge',
+    (await loadChallenges()).current.content.challengeName,
     'settings menu challenge link opens the challenge page',
   );
 
@@ -2131,7 +2131,7 @@ async function runOfflineSmoke(browser, baseUrl) {
   );
   assert.equal(
     await page.locator('#challenge-title').innerText(),
-    '14WS 1K-Mile Challenge',
+    (await loadChallenges()).current.content.challengeName,
     'service-worker-controlled challenge route renders the challenge page',
   );
 
@@ -2207,6 +2207,105 @@ async function runOfflineSmoke(browser, baseUrl) {
   await context.close();
 }
 
+async function readChallengeFile(urlPath) {
+  const relative = urlPath.replace(/^\/14ws-500\//i, '../14WS-500/');
+  return JSON.parse(await fsp.readFile(new URL(relative, import.meta.url), 'utf8'));
+}
+
+async function loadChallenges() {
+  const manifest = await readChallengeFile('/14ws-500/challenges.json');
+  const challenges = await Promise.all(manifest.challenges.map(async (challenge) => ({
+    ...challenge,
+    content: await readChallengeFile(challenge.data),
+  })));
+  return { current: challenges.find((challenge) => challenge.id === manifest.current), challenges };
+}
+
+// Totals change whenever the unit logs activity, so expectations are derived
+// from the challenge files rather than pinned literals.
+function expectedChallengeState(data) {
+  const metric = {
+    label: 'Miles Logged', unit: 'miles', unitShort: 'mi', decimals: 2, participant: 'runner',
+    ...(data.metric || {}),
+  };
+  const valueOf = (participant) => Number(participant.count ?? participant.miles) || 0;
+  const ranked = data.participants
+    .filter((participant) => valueOf(participant) > 0)
+    .sort((left, right) => valueOf(right) - valueOf(left));
+  const fixed = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: metric.decimals,
+    maximumFractionDigits: metric.decimals,
+  });
+  const whole = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+  const oneDp = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
+  const factor = 10 ** metric.decimals;
+  const total = Math.round(ranked.reduce((sum, participant) => sum + valueOf(participant), 0) * factor) / factor;
+  const goal = data.goal ?? data.goalMiles;
+  const first = ranked[0];
+  const last = ranked[ranked.length - 1];
+
+  return {
+    title: data.challengeName,
+    metricLabel: metric.label,
+    total: fixed.format(total),
+    totalUnit: metric.unitShort,
+    goal: whole.format(goal),
+    remaining: fixed.format(Math.max(0, goal - total)),
+    percent: `${oneDp.format(Math.min(100, (total / goal) * 100))}%`,
+    progressMax: String(goal),
+    progressNow: String(total),
+    leaderboardCount: `${ranked.length} ${metric.participant}${ranked.length === 1 ? '' : 's'} with ${metric.unit} logged`,
+    firstRunner: first ? first.name : null,
+    firstMiles: first ? `${fixed.format(valueOf(first))} ${metric.unitShort}` : null,
+    lastRunner: last ? last.name : null,
+    lastMiles: last ? `${fixed.format(valueOf(last))} ${metric.unitShort}` : null,
+    stamp: 'matched',
+    overflow: [],
+  };
+}
+
+async function readChallengeState(page) {
+  return page.evaluate(() => {
+    const overflow = Array.from(document.querySelectorAll(
+      '.challenge-panel, .challenge-tabs, .total-board, .stat-grid, .stat-card, .total-mileage, .leaderboard-row, .leaderboard-runner',
+    ))
+      .filter((element) => element.scrollWidth > element.clientWidth + 1)
+      .map((element) => element.className || element.tagName);
+    const text = (selector) => document.querySelector(selector)?.textContent?.trim() ?? null;
+
+    return {
+      title: text('#challenge-title'),
+      metricLabel: text('#metric-label'),
+      total: text('#total-miles'),
+      totalUnit: text('#total-unit'),
+      goal: text('#goal-miles'),
+      remaining: text('#remaining-miles'),
+      percent: text('#progress-percent'),
+      progressMax: document.getElementById('progress-ring')?.getAttribute('aria-valuemax'),
+      progressNow: document.getElementById('progress-ring')?.getAttribute('aria-valuenow'),
+      leaderboardCount: text('#leaderboard-count'),
+      firstRunner: text('.leaderboard-row:first-child .leaderboard-runner strong'),
+      firstMiles: text('.leaderboard-row:first-child .leaderboard-miles'),
+      lastRunner: text('.leaderboard-row:last-child .leaderboard-runner strong'),
+      lastMiles: text('.leaderboard-row:last-child .leaderboard-miles'),
+      stamp: text('#updated-at'),
+      overflow,
+    };
+  });
+}
+
+async function waitForChallengeLoaded(page, challengeId) {
+  await page.waitForFunction(
+    (id) => {
+      const shell = document.querySelector('.challenge-shell');
+      return document.getElementById('data-status')?.textContent === 'Latest leaderboard loaded'
+        && (!id || shell?.dataset.challenge === id);
+    },
+    challengeId,
+    { timeout: 10000 },
+  );
+}
+
 async function runChallengePageSmoke(browser, baseUrl) {
   const context = await browser.newContext({
     deviceScaleFactor: 3,
@@ -2224,86 +2323,60 @@ async function runChallengePageSmoke(browser, baseUrl) {
     failures.push(`page error: ${error.message}`);
   });
 
+  const { current, challenges } = await loadChallenges();
+
   await page.goto(`${baseUrl}/14ws-500`, { waitUntil: 'load' });
-  await page.waitForFunction(
-    () => document.getElementById('data-status')?.textContent === 'Latest leaderboard loaded',
-    undefined,
-    { timeout: 10000 },
-  );
+  await waitForChallengeLoaded(page, current.id);
 
-  const state = await page.evaluate(() => {
-    const overflow = Array.from(document.querySelectorAll(
-      '.challenge-panel, .total-board, .stat-grid, .stat-card, .total-mileage, .leaderboard-row, .leaderboard-runner',
-    ))
-      .filter((element) => element.scrollWidth > element.clientWidth + 1)
-      .map((element) => element.className || element.tagName);
-
-    return {
-      title: document.getElementById('challenge-title')?.textContent?.trim(),
-      total: document.getElementById('total-miles')?.textContent?.trim(),
-      goal: document.getElementById('goal-miles')?.textContent?.trim(),
-      remaining: document.getElementById('remaining-miles')?.textContent?.trim(),
-      percent: document.getElementById('progress-percent')?.textContent?.trim(),
-      progressMax: document.getElementById('progress-ring')?.getAttribute('aria-valuemax'),
-      progressNow: document.getElementById('progress-ring')?.getAttribute('aria-valuenow'),
-      leaderboardCount: document.getElementById('leaderboard-count')?.textContent?.trim(),
-      firstRunner: document.querySelector('.leaderboard-row:first-child .leaderboard-runner strong')?.textContent?.trim(),
-      firstMiles: document.querySelector('.leaderboard-row:first-child .leaderboard-miles')?.textContent?.trim(),
-      lastRunner: document.querySelector('.leaderboard-row:last-child .leaderboard-runner strong')?.textContent?.trim(),
-      lastMiles: document.querySelector('.leaderboard-row:last-child .leaderboard-miles')?.textContent?.trim(),
-      stamp: document.getElementById('updated-at')?.textContent?.trim(),
-      overflow,
-    };
-  });
-
-  // Mileage changes whenever the unit logs runs, so derive the expectation from
-  // data.json rather than pinning literals that go stale on every update.
-  const challengeData = JSON.parse(
-    await fsp.readFile(new URL('../14WS-500/data.json', import.meta.url), 'utf8'),
-  );
-  const ranked = challengeData.participants
-    .filter((participant) => participant.miles > 0)
-    .sort((left, right) => right.miles - left.miles);
-  const miles2 = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const whole = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
-  const oneDp = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 });
-  const expectedTotal = Math.round(ranked.reduce((sum, p) => sum + p.miles, 0) * 100) / 100;
-  const expectedGoal = challengeData.goalMiles;
-
-  assert.match(state.stamp, /^Last updated /, '14WS challenge page shows update stamp');
+  const tabs = await page.evaluate(() => Array.from(document.querySelectorAll('#challenge-tabs [role="tab"]'))
+    .map((tab) => ({ id: tab.dataset.challenge, selected: tab.getAttribute('aria-selected') })));
   assert.deepEqual(
-    { ...state, stamp: 'matched' },
-    {
-      title: challengeData.challengeName,
-      total: miles2.format(expectedTotal),
-      goal: whole.format(expectedGoal),
-      remaining: miles2.format(Math.max(0, expectedGoal - expectedTotal)),
-      percent: `${oneDp.format(Math.min(100, (expectedTotal / expectedGoal) * 100))}%`,
-      progressMax: String(expectedGoal),
-      progressNow: String(expectedTotal),
-      leaderboardCount: `${ranked.length} runners with miles logged`,
-      firstRunner: ranked[0].name,
-      firstMiles: `${miles2.format(ranked[0].miles)} mi`,
-      lastRunner: ranked[ranked.length - 1].name,
-      lastMiles: `${miles2.format(ranked[ranked.length - 1].miles)} mi`,
-      stamp: 'matched',
-      overflow: [],
-    },
-    '14WS challenge page renders current leaderboard',
+    tabs,
+    challenges.map((challenge) => ({ id: challenge.id, selected: String(challenge.id === current.id) })),
+    '14WS challenge page shows one tab per challenge with the current one selected',
   );
+
+  for (const challenge of [current, ...challenges.filter((entry) => entry.id !== current.id)]) {
+    if (challenge.id !== current.id) {
+      await page.locator(`#tab-${challenge.id}`).click();
+      await waitForChallengeLoaded(page, challenge.id);
+      assert.equal(
+        await page.evaluate(() => window.location.hash),
+        `#${challenge.id}`,
+        `${challenge.id} tab is reflected in the URL hash`,
+      );
+    }
+    const state = await readChallengeState(page);
+    assert.match(state.stamp, /^Last updated /, `${challenge.id} tab shows update stamp`);
+    assert.deepEqual(
+      { ...state, stamp: 'matched' },
+      expectedChallengeState(challenge.content),
+      `${challenge.id} tab renders its leaderboard`,
+    );
+  }
+
+  const archived = challenges.find((challenge) => challenge.id !== current.id);
+  if (archived) {
+    await page.goto(`${baseUrl}/14ws-500#${archived.id}`, { waitUntil: 'load' });
+    await waitForChallengeLoaded(page, archived.id);
+    assert.equal(
+      await page.locator('#challenge-title').innerText(),
+      archived.content.challengeName,
+      'challenge hash deep-links to an archived tab',
+    );
+  }
 
   await page.goto(`${baseUrl}/14ws-500/index.html`, { waitUntil: 'load' });
-  await page.waitForFunction(
-    () => document.getElementById('data-status')?.textContent === 'Latest leaderboard loaded',
-    undefined,
-    { timeout: 10000 },
-  );
+  await waitForChallengeLoaded(page, current.id);
   assert.equal(
     await page.locator('#challenge-title').innerText(),
-    '14WS 1K-Mile Challenge',
+    current.content.challengeName,
     'lowercase 14WS challenge index URL renders',
   );
 
+  // The hidden admin page predates the tabs and still edits the September file.
+  const adminData = await readChallengeFile('/14ws-500/data.json');
+  const adminTotal = adminData.participants.reduce((sum, participant) => sum + (Number(participant.miles) || 0), 0);
   await page.goto(`${baseUrl}/14ws-500/admin/`, { waitUntil: 'load' });
   await page.waitForFunction(
     () => /Current total loaded|Unable to load current total/i.test(document.getElementById('admin-status')?.textContent || ''),
@@ -2321,12 +2394,12 @@ async function runChallengePageSmoke(browser, baseUrl) {
     adminState,
     {
       title: 'Mileage Admin',
-      milesValue: String(Math.round(expectedTotal * 10) / 10),
+      milesValue: String(Math.round(adminTotal * 10) / 10),
       tokenType: 'password',
       robots: 'noindex,nofollow,noarchive',
       status: 'Current total loaded.',
     },
-    'hidden mileage admin page loads current challenge data without exposing a token',
+    'hidden mileage admin page loads challenge data without exposing a token',
   );
 
   await assertNoBrowserFailures(failures, '14WS challenge page');

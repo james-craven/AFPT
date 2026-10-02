@@ -1,0 +1,18 @@
+{
+  "_comment": "Tabs on the 14WS challenge page, newest first. 'current' is the tab shown by default and the one manual updates go to. September predates this file and stays in data.json.",
+  "current": "2026-10-pushups",
+  "challenges": [
+    {
+      "id": "2026-10-pushups",
+      "tab": "October",
+      "metric": "Push-ups",
+      "data": "/14ws-500/challenges/2026-10-pushups.json"
+    },
+    {
+      "id": "2026-09-miles",
+      "tab": "September",
+      "metric": "Miles",
+      "data": "/14ws-500/data.json"
+    }
+  ]
+}

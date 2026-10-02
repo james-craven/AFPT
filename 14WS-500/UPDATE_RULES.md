@@ -1,7 +1,54 @@
-# 14WS 1K-Mile Challenge — data update rules
+# 14WS unit challenges — data update rules
 
-Only `14WS-500/data.json` changes for mileage updates. No HTML/CSS/JS edits, no
-regression suite, no service-worker rebuild (`data.json` is not precached).
+The page at https://pfra.app/14ws-500 shows one tab per monthly challenge.
+`14WS-500/challenges.json` lists the tabs, newest first, and `current` names the
+challenge that is live. **Updates go to the current challenge's data file**
+(its `data` path in the manifest), never to an archived month.
+
+| Challenge | File | Metric | Status |
+|---|---|---|---|
+| October 2026 — 20K push-ups | `challenges/2026-10-pushups.json` | push-ups | current |
+| September 2026 — 1K miles | `data.json` | miles | final, archived |
+
+Updates change only the challenge's data file. No HTML/CSS/JS edits, no
+regression suite, no service-worker rebuild (challenge files are not
+precached).
+
+## Push-up challenges (all manual)
+
+There is no app for push-ups. Every update is a manual ADD.
+
+Input looks like `manual update: name: John Doe, push-ups: 150` (also `reps:`
+or a bare number). Counts are whole numbers.
+
+Participant shape:
+
+    { "name": "John Doe", "count": 150,
+      "entries": [ { "date": "YYYY-MM-DD", "count": 150 } ] }
+
+- **Name already in the file** → append an entry, then recompute
+  `count = sum(entries[].count)`.
+- **Name not in the file** → add a participant with one entry.
+- Recompute `total` as the sum of every participant's `count`.
+- Set `updatedAt` to the current UTC timestamp.
+- Set `statusNote` to "N members have logged push-ups" (N = members with
+  count > 0).
+
+The file's `metric` block tells the page what unit to show; leave it alone.
+
+## Starting a new month
+
+1. Create `challenges/<YYYY-MM>-<metric>.json` with `challengeName`, `metric`,
+   `goal`, `startDate`, `endDate`, and an empty `participants` list.
+2. Add it to the top of `challenges.json` and point `current` at it.
+3. Set the finished month's `statusNote` to "Final results — N <participants>".
+4. Update the table above. Adding a file and editing the manifest is a page
+   change: run the full test suite before pushing.
+
+# Mileage challenges (September 2026, archived)
+
+The rest of this section describes the September mileage file, `data.json`.
+It is final; keep these rules for reference and for any future mileage month.
 
 ## How a runner's total is computed
 
@@ -51,17 +98,19 @@ entries are permanent and are never removed by a snapshot.
 
 ## Anonymous runners
 
-Some runners ask to be shown as `Anonymous1`, `Anonymous2`, ... on the public
-leaderboard. Their entry in `data.json` carries `"anonymous": true`, and `name`
-holds only the alias. Everything else works the same — a runner can be anonymous
+Some participants ask to be shown as `Anonymous1`, `Anonymous2`, ... on the
+public leaderboard. Their entry in the challenge file carries
+`"anonymous": true`, and `name` holds only the alias. **Aliases carry over
+between challenges:** the same person keeps the same alias every month, so a
+push-up update for a mapped name goes to that alias in the current file. Everything else works the same — a runner can be anonymous
 and still have `nikeMiles` and `manualAdjustments`.
 
-**Never put a real name in `data.json`.** Every visitor to the page downloads
+**Never put a real name in any challenge file.** Every visitor to the page downloads
 that file, so a name there is one devtools tab away even though the rendered
 leaderboard shows only the alias.
 
 Real names live in `14WS-500/_anon-map.json`. The page never fetches it —
-`challenge.mjs` reads only `data.json` — and the leading underscore keeps Jekyll
+`challenge.mjs` reads only `challenges.json` and the files it lists — and the leading underscore keeps Jekyll
 from publishing it to pfra.app.
 
 When the user gives a real name for a mileage update, look it up in
@@ -88,7 +137,7 @@ Never infer a mapping from mileage, timing, or ordering — ask.
 If an anonymous runner shows up in a Nike screenshot under their real name, set
 `nikeMiles` on their alias entry. The real name still never enters `data.json`.
 
-## Every update
+## Every mileage update
 
 - Round all mileage to 2 decimals.
 - Recalculate `totalMiles` as the sum of participants' `miles`.

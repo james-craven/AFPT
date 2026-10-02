@@ -1,0 +1,19 @@
+{
+  "challengeName": "14WS 20K Push-Up Challenge",
+  "unitName": "14WS",
+  "metric": {
+    "label": "Push-ups Logged",
+    "unit": "push-ups",
+    "unitShort": "reps",
+    "decimals": 0,
+    "participant": "member",
+    "icon": "/pushups.webp"
+  },
+  "goal": 20000,
+  "total": 0,
+  "startDate": "2026-10-01",
+  "endDate": "2026-10-31",
+  "updatedAt": "2026-10-02T13:27:12.000Z",
+  "statusNote": "",
+  "participants": []
+}

@@ -12,18 +12,21 @@ standards data → pure scoring functions → app state → slot variant rendere
 
 One calculator engine. Shared state/actions. Named layout slots. Registered variants. Theme presets. Future user overrides.
 
-## 14WS 1K-Mile Challenge (separate workstream)
+## 14WS Unit Challenges (separate workstream)
 
-`14WS-500/` is the unit mileage tracker at https://pfra.app/14ws-500. It is
-independent of the calculator redesign below.
+`14WS-500/` is the unit challenge tracker at https://pfra.app/14ws-500, with one
+tab per monthly challenge (October 2026: 20K push-ups; September 2026: 1K miles,
+archived). It is independent of the calculator redesign below.
 
-**If the user drops a Nike Run Club leaderboard screenshot, or a line like
-`manual update: name: John Doe, miles: 2.34`, that is a mileage update. Read
-`14WS-500/UPDATE_RULES.md` and follow it before touching anything.**
+**If the user sends a line like `manual update: name: John Doe, push-ups: 150`,
+or drops a Nike Run Club leaderboard screenshot, that is a challenge update. Read
+`14WS-500/UPDATE_RULES.md` and follow it before touching anything.** Updates go
+to the `current` challenge listed in `14WS-500/challenges.json`.
 
-Mileage updates change `14WS-500/data.json` only — no HTML/CSS/JS, no
+Challenge updates change one challenge data file only — no HTML/CSS/JS, no
 `npm test`, no service-worker rebuild. The Required Gate below does not apply
-to them; `data.json` is not precached and the page fetches it live.
+to them; challenge files are not precached and the page fetches them live.
+Starting a new month (new file plus manifest edit) does go through the gate.
 
 ## Design Reference
 
