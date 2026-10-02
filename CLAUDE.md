@@ -18,8 +18,9 @@ One calculator engine. Shared state/actions. Named layout slots. Registered vari
 tab per monthly challenge (October 2026: 20K push-ups; September 2026: 1K miles,
 archived). It is independent of the calculator redesign below.
 
-**If the user sends a line like `manual update: name: John Doe, push-ups: 150`,
-or drops a Nike Run Club leaderboard screenshot, that is a challenge update. Read
+**If the user sends lines like `John Doe: 450` or `John Doe: 50 add`, or a
+screenshot of a tally or of the Nike Run Club leaderboard, that is a challenge
+update. Read
 `14WS-500/UPDATE_RULES.md` and follow it before touching anything.** Updates go
 to the `current` challenge listed in `14WS-500/challenges.json`.
 

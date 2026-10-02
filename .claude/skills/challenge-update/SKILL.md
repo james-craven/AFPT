@@ -1,6 +1,6 @@
 ---
 name: challenge-update
-description: Update a 14WS unit challenge leaderboard on pfra.app/14ws-500 (14WS-500/). Use whenever the user sends a manual update line like "manual update: name: John Doe, push-ups: 150" or "manual update: name: John Doe, miles: 2.34", drops a Nike Run Club leaderboard screenshot, or otherwise asks to add or update a participant's push-ups, reps or miles for the 14WS challenge.
+description: Update a 14WS unit challenge leaderboard on pfra.app/14ws-500 (14WS-500/). Use whenever the user sends push-up lines like "John Doe: 450" or "John Doe: 50 add", a screenshot of a push-up tally, a manual mileage line like "manual update: name: John Doe, miles: 2.34", a Nike Run Club leaderboard screenshot, or otherwise asks to add or update a participant's push-ups, reps or miles for the 14WS challenge.
 ---
 
 # 14WS challenge update
@@ -11,9 +11,10 @@ shapes and the SET-vs-ADD logic. This file only covers how to run the task.
 1. Read `14WS-500/UPDATE_RULES.md` and `14WS-500/challenges.json`. The manifest's
    `current` challenge is the file to update. Never write to an archived month.
 2. Apply the update to that file:
-   - **Push-ups (current challenge type)** → every update is a manual ADD:
-     append `{date, count}` to the member's `entries` (or create the member),
-     recompute their `count` and the file's `total`.
+   - **Push-ups (current challenge type)** → `Name: 450` and every number in a
+     screenshot is a total (SET); only a line ending in `add` is an ADD. Append
+     `{date, set}` or `{date, add}` to the member's `entries` (or create the
+     member), then `count = last set + adds after it`, and recompute `total`.
    - **Mileage** (archived September file, `data.json`) → screenshot values
      REPLACE `nikeMiles`; manual lines APPEND to `manualAdjustments`.
 3. Set `updatedAt` to the current UTC timestamp and refresh `statusNote` as the

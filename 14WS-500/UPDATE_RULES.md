@@ -16,19 +16,35 @@ precached).
 
 ## Push-up challenges (all manual)
 
-There is no app for push-ups. Every update is a manual ADD.
+There is no app for push-ups. The user sends either a screenshot of a tally or
+typed lines, one person per line:
 
-Input looks like `manual update: name: John Doe, push-ups: 150` (also `reps:`
-or a bare number). Counts are whole numbers.
+| Input | Meaning |
+|---|---|
+| `John Doe: 450` | **SET** — 450 is John's total so far. Replace his total. |
+| `John Doe: 50 add` | **ADD** — add 50 to John's current total. |
+| Screenshot of totals | **SET** for every person shown. |
 
-Participant shape:
+A line is an ADD only when it ends with `add`. Anything else, including every
+number in a screenshot, is a total. Counts are whole numbers.
 
-    { "name": "John Doe", "count": 150,
-      "entries": [ { "date": "YYYY-MM-DD", "count": 150 } ] }
+Participant shape — `entries` is the log of every update, in the order received:
 
-- **Name already in the file** → append an entry, then recompute
-  `count = sum(entries[].count)`.
-- **Name not in the file** → add a participant with one entry.
+    { "name": "John Doe", "count": 500,
+      "entries": [ { "date": "YYYY-MM-DD", "set": 450 },
+                   { "date": "YYYY-MM-DD", "add": 50 } ] }
+
+    count = (last "set" value, or 0 if none) + sum of "add" values after it
+
+So a total always wins: when a new total arrives it replaces everything before
+it, including earlier adds, because the user's total already counts them.
+
+- **Name already in the file** → append the entry, then recompute `count`.
+- **Name not in the file** → add a participant with that one entry. A person
+  whose total is 0 is not added.
+- **People not in a screenshot** are left alone — never removed or zeroed.
+- **A total lower than the person's current count** is legal (a correction),
+  but call it out in the before/after table.
 - Recompute `total` as the sum of every participant's `count`.
 - Set `updatedAt` to the current UTC timestamp.
 - Set `statusNote` to "N members have logged push-ups" (N = members with
