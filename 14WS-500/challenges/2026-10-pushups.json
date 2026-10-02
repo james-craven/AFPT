@@ -10,10 +10,61 @@
     "icon": "/pushups.webp"
   },
   "goal": 20000,
-  "total": 0,
+  "total": 674,
   "startDate": "2026-10-01",
   "endDate": "2026-10-31",
-  "updatedAt": "2026-10-02T13:27:12.000Z",
-  "statusNote": "",
-  "participants": []
+  "updatedAt": "2026-10-02T13:40:14.000Z",
+  "statusNote": "5 members have logged push-ups",
+  "participants": [
+    {
+      "name": "McCool",
+      "count": 230,
+      "entries": [
+        {
+          "date": "2026-10-02",
+          "set": 230
+        }
+      ]
+    },
+    {
+      "name": "Ski",
+      "count": 154,
+      "entries": [
+        {
+          "date": "2026-10-02",
+          "set": 154
+        }
+      ]
+    },
+    {
+      "name": "Candelario",
+      "count": 150,
+      "entries": [
+        {
+          "date": "2026-10-02",
+          "set": 150
+        }
+      ]
+    },
+    {
+      "name": "Allen",
+      "count": 100,
+      "entries": [
+        {
+          "date": "2026-10-02",
+          "set": 100
+        }
+      ]
+    },
+    {
+      "name": "JJ",
+      "count": 40,
+      "entries": [
+        {
+          "date": "2026-10-02",
+          "set": 40
+        }
+      ]
+    }
+  ]
 }
