@@ -10,22 +10,40 @@
     "icon": "/pushups.webp"
   },
   "goal": 20000,
-  "total": 674,
+  "total": 1936,
   "startDate": "2026-10-01",
   "endDate": "2026-10-31",
-  "updatedAt": "2026-10-02T13:40:14.000Z",
-  "statusNote": "5 members have logged push-ups",
+  "updatedAt": "2026-10-06T12:33:37.000Z",
+  "statusNote": "11 members have logged push-ups",
   "participants": [
     {
       "name": "Shaun McCool",
       "aka": [
         "McCool"
       ],
-      "count": 230,
+      "count": 600,
       "entries": [
         {
           "date": "2026-10-02",
           "set": 230
+        },
+        {
+          "date": "2026-10-06",
+          "set": 600
+        }
+      ]
+    },
+    {
+      "name": "Candelario",
+      "count": 500,
+      "entries": [
+        {
+          "date": "2026-10-02",
+          "set": 150
+        },
+        {
+          "date": "2026-10-06",
+          "set": 500
         }
       ]
     },
@@ -34,21 +52,35 @@
       "aka": [
         "Ski"
       ],
-      "count": 154,
+      "count": 250,
       "entries": [
         {
           "date": "2026-10-02",
           "set": 154
+        },
+        {
+          "date": "2026-10-06",
+          "set": 250
         }
       ]
     },
     {
-      "name": "Candelario",
-      "count": 150,
+      "name": "Dernick",
+      "count": 211,
       "entries": [
         {
-          "date": "2026-10-02",
-          "set": 150
+          "date": "2026-10-06",
+          "set": 211
+        }
+      ]
+    },
+    {
+      "name": "Hurley",
+      "count": 120,
+      "entries": [
+        {
+          "date": "2026-10-06",
+          "set": 120
         }
       ]
     },
@@ -72,6 +104,46 @@
         {
           "date": "2026-10-02",
           "set": 40
+        }
+      ]
+    },
+    {
+      "name": "Smith",
+      "count": 40,
+      "entries": [
+        {
+          "date": "2026-10-06",
+          "set": 40
+        }
+      ]
+    },
+    {
+      "name": "Stark",
+      "count": 34,
+      "entries": [
+        {
+          "date": "2026-10-06",
+          "set": 34
+        }
+      ]
+    },
+    {
+      "name": "Beitler",
+      "count": 30,
+      "entries": [
+        {
+          "date": "2026-10-06",
+          "set": 30
+        }
+      ]
+    },
+    {
+      "name": "Hilliard",
+      "count": 11,
+      "entries": [
+        {
+          "date": "2026-10-06",
+          "set": 11
         }
       ]
     }
