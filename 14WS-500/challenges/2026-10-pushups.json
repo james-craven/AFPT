@@ -10,18 +10,18 @@
     "icon": "/pushups.webp"
   },
   "goal": 20000,
-  "total": 1936,
+  "total": 3859,
   "startDate": "2026-10-01",
   "endDate": "2026-10-31",
-  "updatedAt": "2026-10-06T12:33:37.000Z",
-  "statusNote": "11 members have logged push-ups",
+  "updatedAt": "2026-10-07T17:59:45.000Z",
+  "statusNote": "18 members have logged push-ups",
   "participants": [
     {
       "name": "Shaun McCool",
       "aka": [
         "McCool"
       ],
-      "count": 600,
+      "count": 1000,
       "entries": [
         {
           "date": "2026-10-02",
@@ -30,12 +30,16 @@
         {
           "date": "2026-10-06",
           "set": 600
+        },
+        {
+          "date": "2026-10-07",
+          "set": 1000
         }
       ]
     },
     {
       "name": "Candelario",
-      "count": 500,
+      "count": 800,
       "entries": [
         {
           "date": "2026-10-02",
@@ -44,6 +48,10 @@
         {
           "date": "2026-10-06",
           "set": 500
+        },
+        {
+          "date": "2026-10-07",
+          "set": 800
         }
       ]
     },
@@ -52,7 +60,7 @@
       "aka": [
         "Ski"
       ],
-      "count": 250,
+      "count": 400,
       "entries": [
         {
           "date": "2026-10-02",
@@ -61,36 +69,130 @@
         {
           "date": "2026-10-06",
           "set": 250
+        },
+        {
+          "date": "2026-10-07",
+          "set": 400
         }
       ]
     },
     {
       "name": "Dernick",
-      "count": 211,
+      "count": 353,
       "entries": [
         {
           "date": "2026-10-06",
           "set": 211
+        },
+        {
+          "date": "2026-10-07",
+          "set": 353
         }
       ]
     },
     {
       "name": "Hurley",
-      "count": 120,
+      "count": 220,
       "entries": [
         {
           "date": "2026-10-06",
+          "set": 120
+        },
+        {
+          "date": "2026-10-07",
+          "set": 220
+        }
+      ]
+    },
+    {
+      "name": "Gibbons",
+      "count": 160,
+      "entries": [
+        {
+          "date": "2026-10-07",
+          "set": 160
+        }
+      ]
+    },
+    {
+      "name": "Samolinski",
+      "count": 150,
+      "entries": [
+        {
+          "date": "2026-10-07",
+          "set": 150
+        }
+      ]
+    },
+    {
+      "name": "Knighton",
+      "count": 145,
+      "entries": [
+        {
+          "date": "2026-10-07",
+          "set": 145
+        }
+      ]
+    },
+    {
+      "name": "Smith",
+      "count": 135,
+      "entries": [
+        {
+          "date": "2026-10-06",
+          "set": 40
+        },
+        {
+          "date": "2026-10-07",
+          "set": 135
+        }
+      ]
+    },
+    {
+      "name": "Buckler",
+      "count": 120,
+      "entries": [
+        {
+          "date": "2026-10-07",
           "set": 120
         }
       ]
     },
     {
       "name": "Allen",
-      "count": 100,
+      "count": 111,
       "entries": [
         {
           "date": "2026-10-02",
           "set": 100
+        },
+        {
+          "date": "2026-10-07",
+          "set": 111
+        }
+      ]
+    },
+    {
+      "name": "Beitler",
+      "count": 77,
+      "entries": [
+        {
+          "date": "2026-10-06",
+          "set": 30
+        },
+        {
+          "date": "2026-10-07",
+          "set": 77
+        }
+      ]
+    },
+    {
+      "name": "Craven",
+      "count": 70,
+      "entries": [
+        {
+          "date": "2026-10-07",
+          "set": 70
         }
       ]
     },
@@ -108,16 +210,6 @@
       ]
     },
     {
-      "name": "Smith",
-      "count": 40,
-      "entries": [
-        {
-          "date": "2026-10-06",
-          "set": 40
-        }
-      ]
-    },
-    {
       "name": "Stark",
       "count": 34,
       "entries": [
@@ -128,11 +220,11 @@
       ]
     },
     {
-      "name": "Beitler",
+      "name": "Koch",
       "count": 30,
       "entries": [
         {
-          "date": "2026-10-06",
+          "date": "2026-10-07",
           "set": 30
         }
       ]
@@ -144,6 +236,16 @@
         {
           "date": "2026-10-06",
           "set": 11
+        }
+      ]
+    },
+    {
+      "name": "Kofron",
+      "count": 3,
+      "entries": [
+        {
+          "date": "2026-10-07",
+          "set": 3
         }
       ]
     }
